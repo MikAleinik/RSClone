@@ -1,0 +1,32 @@
+body {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 150px auto 300px;
+  grid-template-rows: 50px calc(100vh - 100px) 50px;
+  grid-template-areas:
+    'header nav auth'
+    'aside main main'
+    'footer footer footer';
+  color: $font-color-dark;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+a {
+  text-decoration: none;
+  color: $font-color-dark;
+}
+a:visited {
+  color: $font-color-dark;
+}
+.index {
+  background-image: url('../assets/images/backgroung-trucks.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-clip: border-box;
+  main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

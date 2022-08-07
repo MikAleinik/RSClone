@@ -1,0 +1,11 @@
+header {
+  grid-area: header;
+  background: $background-color-light;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+h1 {
+  font-size: 20px;
+  text-transform: uppercase;
+}

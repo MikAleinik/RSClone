@@ -1,0 +1,14 @@
+footer {
+  grid-area: footer;
+  display: flex;
+  justify-content: space-around;
+  background: $background-color-light;
+}
+.footer__item {
+  display: flex;
+  align-items: center;
+  img {
+    height: 32px;
+    padding: 0px 10px;
+  }
+}

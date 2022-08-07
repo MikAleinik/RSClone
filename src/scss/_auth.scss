@@ -1,0 +1,34 @@
+.auth {
+  grid-area: auth;
+  background: $background-color-light;
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px;
+}
+.auth__login {
+  background: #9cb9bd;
+  width: 120px;
+}
+.auth__registration {
+  background: #85685f;
+  width: 120px;
+}
+form[name=login]{
+  background: $background-color-light;
+  margin: 40px;
+  padding: 30px 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  input {
+    border: 0px;
+    border-radius: 5px;
+    margin: 10px 0px;
+    padding: 5px;
+    &:invalid{
+      border: 1px solid $border-color-error;
+    }
+  }
+}

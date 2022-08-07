@@ -1,0 +1,11 @@
+.big__button {
+  font-size: 16px;
+  border: 0px;
+  border-radius: 18px;
+  padding: 5px 15px;
+  margin: 10px;
+  &:hover {
+    background: $background-color-accent;
+  }
+  cursor: pointer;
+}
