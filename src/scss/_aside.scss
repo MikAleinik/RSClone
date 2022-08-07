@@ -1,3 +1,23 @@
 aside {
   grid-area: aside;
+  background: $background-color-middle;
+  color: $font-color-light;
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 30px 20px;
+    cursor: pointer;
+    &:hover {
+      background: $background-color-accent;
+    }
+  }
+  img {
+    width: 20px;
+    filter: invert(1);
+  }
 }
