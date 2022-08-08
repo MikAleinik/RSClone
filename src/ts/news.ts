@@ -1,16 +1,5 @@
 const url = 'https://saurav.tech/NewsAPI/'
 
-interface article {
-  author: string,
-  content: string,
-  description: string,
-  publishedAt: string,
-  source: string,
-  title: string,
-  url: string,
-  urlToImage: string
-}
-
 async function getNews(){
   try {
     const response = await fetch(`${url}/top-headlines/category/business/ru.json`, {

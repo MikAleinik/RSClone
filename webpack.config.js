@@ -13,7 +13,7 @@ const config = {
   entry: {
     common: './src/ts/index.ts',
     main: './src/ts/main.ts',
-    help: './src/ts/about.ts',
+    about: './src/ts/about.ts',
     login: './src/ts/login.ts'
 },
   output: {
