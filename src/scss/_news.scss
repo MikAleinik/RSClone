@@ -1,0 +1,10 @@
+.news__item{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  img {
+    max-width: 50vw;
+  }
+  padding: 20px 5px;
+  border-bottom: 2px dotted $border-color-dark;
+}
