@@ -1,7 +1,7 @@
 body {
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 200px auto 300px;
+  grid-template-columns: 220px auto 300px;
   grid-template-rows: 50px calc(100vh - 100px) 50px;
   grid-template-areas:
     'header nav auth'

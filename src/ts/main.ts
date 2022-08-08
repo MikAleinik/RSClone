@@ -2,7 +2,6 @@ import { loadUserData } from './user';
 import { loadMap } from './map';
 import { createNewsItemsList } from './news';
 
-
 // aside menu event listeners holder
 
 const aside = document.querySelector('aside') as HTMLElement;
@@ -10,6 +9,12 @@ aside.addEventListener('click', (e) => {
   const tag = e.target as HTMLElement
   const li = tag.closest('li');
   if (li !== null){
+    if (li.dataset.page === 'cargo'){
+      applyCategoryContent('cargoes');
+    }
+    if (li.dataset.page === 'transport'){
+      applyCategoryContent('transport');
+    }
     if (li.dataset.page === 'news'){
       createNewsItemsList()
     }
@@ -22,6 +27,20 @@ aside.addEventListener('click', (e) => {
 // load user data
 
 const userData = loadUserData();
+
+function applyCategoryContent(category: string){
+  const main = document.querySelector('main') as HTMLElement;
+  main.textContent = ''
+  const userDataContainer = document.createElement('div');
+  userDataContainer.className = `user__${category}`;
+  const userDataTitle = document.createElement('h3');
+  userDataTitle.textContent = category.toUpperCase()
+  const userDataContent = document.createElement('span');
+  userDataContainer.appendChild(userDataTitle);
+  userDataContainer.appendChild(userDataContent);
+  main.appendChild(userDataContainer);
+  applyCategoryData(category)
+}
 
 function applyUserName(){
   const userName = document.querySelectorAll('.user__name') as NodeListOf<HTMLElement>;
@@ -46,7 +65,7 @@ function applyUserRating(){
 
 function applyUserData(){
   applyUserName();
-  applyCategoryData('goods');
+  applyCategoryData('cargoes');
   applyCategoryData('transport');
   applyCategoryData('races');
   applyUserRating()
@@ -54,3 +73,5 @@ function applyUserData(){
 }
 
 applyUserData()
+
+export { applyCategoryData }
