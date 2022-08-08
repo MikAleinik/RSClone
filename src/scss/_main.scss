@@ -2,6 +2,8 @@ main {
   grid-area: main;
   padding: 20px 30px;
   overflow: auto;
+  display: flex;
+  justify-content: space-between;
 }
 h2 {
   font-size: 20px;

@@ -37,8 +37,11 @@ async function createNewsItemsList() {
     newsItem.appendChild(newsItemUrl);
     fragment.append(newsItem)
   }
+  const newsList = document.createElement('div');
+  newsList.className = 'news__list'
+  newsList.appendChild(fragment)
   main.innerHTML = '';
-  main.appendChild(fragment)
+  main.appendChild(newsList)
 }
 
 export { createNewsItemsList }
