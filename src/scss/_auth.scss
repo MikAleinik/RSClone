@@ -21,6 +21,7 @@
   width: 120px;
 }
 form[name=login]{
+  visibility: hidden;
   background: $background-color-middle;
   margin: 40px;
   padding: 30px 20px;
