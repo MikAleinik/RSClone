@@ -11,10 +11,10 @@ const stylesHandler = "style-loader";
 
 const config = {
   entry: {
-    common: './src/ts/index.ts',
-    main: './src/ts/main.ts',
-    about: './src/ts/about.ts',
-    login: './src/ts/login.ts'
+    common: './client/src/ts/index.ts',
+    main: './client/src/ts/main.ts',
+    about: './client/src/ts/about.ts',
+    login: './client/src/ts/login.ts'
 },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -25,23 +25,23 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/pages/index.html',
+      template: './client/src/pages/index.html',
       filename: 'index.html',
       chunks: ['common', 'login']
   }),
   new HtmlWebpackPlugin({
-      template: './src/pages/main.html',
+      template: './client/src/pages/main.html',
       filename: 'main.html',
       chunks: ['common', 'main']
   }),
   new HtmlWebpackPlugin({
-      template: './src/pages/about.html',
+      template: './client/src/pages/about.html',
       filename: 'about.html',
       chunks: ['common', 'about']
   }),
   new CopyWebpackPlugin({
     patterns: [
-      { from: "src/assets/", to: "assets/" },
+      { from: "client/src/assets/", to: "client/assets/" },
     ]
   })
   ],
