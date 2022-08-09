@@ -1,14 +1,15 @@
 footer {
   grid-area: footer;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 40px;
   background: $background-color-dark;
 }
 .footer__item {
   display: flex;
   align-items: center;
   img {
-    height: 32px;
+    height: 20px;
     padding: 0px 10px;
   }
 }
