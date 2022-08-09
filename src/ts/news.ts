@@ -12,8 +12,7 @@ async function getNews(){
   }
 }
 
-async function createNewsItemsList() {
-  const main = document.querySelector('main') as HTMLDivElement;
+async function createNewsItemsList(place: string, embed = 'insert') {
   const data = await getNews();
   const fragment = new DocumentFragment;
   for (const item of data){
@@ -40,7 +39,10 @@ async function createNewsItemsList() {
   const newsList = document.createElement('div');
   newsList.className = 'news__list'
   newsList.appendChild(fragment)
-  main.innerHTML = '';
+  const main = document.querySelector(place) as HTMLDivElement;
+  if (embed === 'replace'){
+    main.innerHTML = '';
+  }
   main.appendChild(newsList)
 }
 

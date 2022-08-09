@@ -16,7 +16,7 @@ aside.addEventListener('click', (e) => {
       applyCategoryContent('transport');
     }
     if (li.dataset.page === 'news'){
-      createNewsItemsList()
+      createNewsItemsList('main', 'replace')
     }
     if (li.dataset.page === 'map'){
       loadMap('99%', '99%', 'replace')
