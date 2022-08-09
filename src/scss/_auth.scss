@@ -1,6 +1,8 @@
 .auth {
   grid-area: auth;
   background: $background-color-dark;
+  position: sticky;
+  top: 0;
   padding: 20px;
   font-size: 16px;
   display: flex;
@@ -25,7 +27,9 @@
   width: 120px;
 }
 form[name=login]{
-  visibility: hidden;
+  position: absolute;
+  right: 0px;
+  top: 30px;
   background: $background-color-middle;
   margin: 40px;
   padding: 30px 20px;

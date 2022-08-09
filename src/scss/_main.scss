@@ -1,15 +1,16 @@
 main {
   grid-area: main;
   padding: 20px 30px;
-  overflow: auto;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 h2 {
   font-size: 20px;
   color: $font-color-light;
 }
 .promo {
+  width: 70%;
+  height: 60vh;
   margin: 40px 20px;
   color: $font-color-light;
   font-size: 25px;
@@ -20,4 +21,19 @@ h2 {
       margin: 15px 5px;
     }
   }
+}
+.news {
+  width: 70%;
+  margin: 40px 20px;
+}
+.user__overview {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+}
+.user__data {
+  width: 30%;
+} 
+.user__map {
+  width: 70%;
 }

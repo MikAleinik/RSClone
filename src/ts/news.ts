@@ -26,6 +26,7 @@ async function createNewsItemsList(place: string, embed = 'insert') {
     newsItemDescription.textContent = item.description;
     const newsItemUrl = document.createElement('a');
     newsItemUrl.href = item.url;
+    newsItemUrl.setAttribute('target', '_blanc')
     newsItemUrl.innerHTML = '<b>Read more</>'
     const newsItemImg = document.createElement('img');
     newsItemImg.src = item.urlToImage;

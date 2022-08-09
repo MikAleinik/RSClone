@@ -2,7 +2,7 @@ body {
   margin: 0 auto;
   display: grid;
   grid-template-columns: 220px auto 300px;
-  grid-template-rows: 50px calc(100vh - 80px) 30px;
+  grid-template-rows: 50px minmax(calc(100vh - 80px), auto) 30px;
   grid-template-areas:
     'header nav auth'
     'aside main main'
@@ -21,13 +21,15 @@ a:visited {
 .index {
   background-image: url('../assets/images/backgroung-trucks.jpg');
   background-repeat: no-repeat;
-  background-size: cover;
-  background-clip: border-box;
+  background-attachment: scroll;
+  background-size: 100% auto;
   header,
   nav,
-  .auth,
-  footer {
+  .auth {
     background: $background-color-light;
+  }
+  footer {
+    background: $background-color-middle;
   }
   main {
     display: flex;
