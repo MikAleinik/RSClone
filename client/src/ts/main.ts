@@ -1,5 +1,5 @@
 import { loadUserData } from './user';
-import { loadMap } from './map';
+import { loadMap, setCurrentPosition } from './map';
 import { createNewsItemsList } from './news';
 
 // aside menu event listeners holder
@@ -70,6 +70,7 @@ function applyUserData(){
   applyCategoryData('races');
   applyUserRating()
   loadMap('99%', '99%', '.user__map', 'insert')
+  setCurrentPosition();
 }
 
 applyUserData()
