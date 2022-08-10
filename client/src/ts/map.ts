@@ -1,4 +1,4 @@
-import L from 'leaflet';
+import L, { geoJSON } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 function getCurrentPosition(): Promise<L.LatLngExpression>{
@@ -34,9 +34,11 @@ function loadMap(width: string, height: string, place: string, embed = 'insert')
   const tiles = L.tileLayer(tilesSrc)
   map.setView(defaultPosition, defaultZoom)
   tiles.addTo(map);
+
+  getPointCoordinates()
 }
 
-async function setCurrentPosition(){
+async function applyCurrentPosition(){
   try {
     const position = await getCurrentPosition()
     map.panTo(position)
@@ -47,4 +49,49 @@ async function setCurrentPosition(){
   }
 }
 
-export { loadMap, setCurrentPosition }
+function getPointCoordinates(){
+  const popup = L.popup();
+  map.on('click', (e) => {
+    getPointInfo(e.latlng.lat, e.latlng.lng)
+      .then((data) => {
+        popup
+            .setLatLng(e.latlng)
+            .setContent(`${data}`)
+            .openOn(map);
+      }) 
+  });
+}
+
+/* interface POI {
+  place_id: number,
+  licence: string,
+  osm_type: string,
+  osm_id: number,
+  lat: string,
+  lon: string,
+  display_name: string,
+  address: {
+      house_number: string,
+      road: string,
+      neighbourhood: string,
+      suburb: string,
+      city_district: string,
+      city: string,
+      state: string,
+      postcode: string,
+      country: string,
+      country_code: string
+  },
+  boundingbox: string[]
+} */
+
+async function getPointInfo(latitude: number, longitude: number){
+  const infoUrl = 'https://nominatim.openstreetmap.org/reverse?';
+  const infoFormat = 'format=json';
+  const infoCoordinates = `lat=${latitude}&lon=${longitude}`
+  const response = await fetch(`${infoUrl}${infoFormat}&${infoCoordinates}`);
+  const data = await response.json();
+  return data.display_name;
+}
+
+export { loadMap, applyCurrentPosition }
