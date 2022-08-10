@@ -19,7 +19,7 @@ aside.addEventListener('click', (e) => {
       createNewsItemsList('main', 'replace')
     }
     if (li.dataset.page === 'map'){
-      loadMap('99%', '99%', 'main', 'replace')
+      loadMap('auto', 'auto', 'main', 'replace')
     }
   }
 })
@@ -69,7 +69,7 @@ function applyUserData(){
   applyCategoryData('transport');
   applyCategoryData('races');
   applyUserRating()
-  loadMap('99%', '99%', '.user__map')
+  loadMap('99%', '99%', '.user__map', 'insert')
 }
 
 applyUserData()
