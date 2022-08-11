@@ -10,6 +10,7 @@ export default class Observer {
     }
     set(listener: IController) {
         this._listeners.push(listener);
+        return this;
     }
     notify() {
         this._listeners.forEach((currentValue, index, array) => {
