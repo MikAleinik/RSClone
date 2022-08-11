@@ -1,6 +1,5 @@
 import IView from "../../interfaces/IView";
-import '../common/color.scss';
-import '../common/common.scss';
+import './index.scss';
 import FooterView from "../common/footer/footer-view";
 import HeaderView from "../common/header/header-view";
 import PageNavigationView from "../common/page-navigation/page-navigation-view";
