@@ -71,7 +71,8 @@ function applyUserData(){
   applyCategoryData('races');
   applyUserRating()
   loadMap('99%', '99%', '.user__map', 'insert');
-  applyItemsLocation();
+  applyItemsLocation('logistic');
+  applyItemsLocation('transport');
 }
 
 applyUserData()

@@ -3,6 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import { getTransportLocation } from './transport';
+import { getLogisticstLocation } from './logistics';
 
 function getCurrentPosition(): Promise<L.LatLngExpression>{
   return new Promise ((resolve, reject) => {
@@ -53,18 +54,33 @@ async function applyCurrentPosition(){
   }
 }
 
-async function applyItemsLocation(){
+async function applyItemsLocation(subject: string){
   try{
-    const items = await getTransportLocation()
+    let items;
+    let itemIcon;
+
+    if (subject === 'transport'){
+      items = await getTransportLocation()
+      itemIcon = L.icon({
+        iconUrl: './client/assets/icons/truck-color.png',
+        iconSize: [22, 22], 
+      });
+    }
+    if (subject === 'logistic'){
+      items = await getLogisticstLocation();
+      itemIcon = L.icon({
+        iconUrl: './client/assets/icons/storage-color.png',
+        iconSize: [22, 22], 
+      });
+    }
     const bounds: any = [] // can' resolve this :(
     for (const i in items){
       const position = items[i] as L.LatLng
-      const marker = L.marker(position).addTo(map);
+      const marker = L.marker(position, {icon: itemIcon}).addTo(map);
       marker.bindPopup(`${i}`).openPopup();
       bounds.push(items[i])
     }
     map.fitBounds(bounds);
-    console.log(bounds)
   } catch(err) {
     console.log(err)
   }
