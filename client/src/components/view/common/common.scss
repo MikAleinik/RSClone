@@ -1,3 +1,5 @@
+@import './color.scss';
+
 body {
     margin: 0 auto;
     display: grid;
@@ -22,7 +24,7 @@ a:visited {
 }
 
 .index {
-    background-image: url('../assets/images/backgroung-trucks.jpg');
+    background-image: url('../../../assets/images/backgroung-trucks.webp');
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-size: 100% auto;
