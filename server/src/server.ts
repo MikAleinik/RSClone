@@ -1,7 +1,11 @@
 import Fastify from 'fastify';
 import app from './app';
+import pino from "pino";
 
-const server = Fastify({ logger: true });
+const server = Fastify({
+  trustProxy: true,
+  logger: pino({ level: "info" }),
+});
 
 server
     .register(app)
