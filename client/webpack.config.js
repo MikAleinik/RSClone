@@ -16,7 +16,7 @@ const config = {
     main: './src/main.ts',
     about: './src/about.ts',
     // login: './src/login.ts'
-},
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
   },
@@ -29,23 +29,23 @@ const config = {
       template: 'src/pages/index.html',
       filename: 'index.html',
       chunks: ['common', 'login']
-  }),
-  new HtmlWebpackPlugin({
+    }),
+    new HtmlWebpackPlugin({
       template: 'src/pages/main.html',
       filename: 'main.html',
       chunks: ['common', 'main']
-  }),
-  new HtmlWebpackPlugin({
+    }),
+    new HtmlWebpackPlugin({
       template: 'src/pages/about.html',
       filename: 'about.html',
       chunks: ['common', 'about']
-  }),
-//   new CopyWebpackPlugin({
-//     patterns: [
-//       { from: "./src/assets/", to: "./dist/assets/" },
-//     ]
-//   }),
-  new CleanWebpackPlugin()
+    }),
+      new CopyWebpackPlugin({
+        patterns: [
+          { from: path.resolve(__dirname, "src", "assets"), to: path.resolve(__dirname, "dist", "assets") },
+        ]
+      }),
+    new CleanWebpackPlugin()
   ],
   module: {
     rules: [
@@ -60,7 +60,19 @@ const config = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [stylesHandler, "css-loader", "sass-loader"],
+        use: [
+          stylesHandler,
+          "css-loader",
+          "sass-loader",
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              resources: [
+                './src/components/view/common/color.scss'
+              ]
+            },
+          },
+        ],
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
