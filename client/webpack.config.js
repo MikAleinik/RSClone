@@ -26,17 +26,17 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: 'src/pages/index.html',
       filename: 'index.html',
       chunks: ['common', 'login']
   }),
   new HtmlWebpackPlugin({
-      template: './src/main.html',
+      template: 'src/pages/main.html',
       filename: 'main.html',
       chunks: ['common', 'main']
   }),
   new HtmlWebpackPlugin({
-      template: './src/about.html',
+      template: 'src/pages/about.html',
       filename: 'about.html',
       chunks: ['common', 'about']
   }),
