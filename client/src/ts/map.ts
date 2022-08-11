@@ -1,5 +1,7 @@
-import L, { geoJSON } from 'leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import * as GeoSearch from 'leaflet-geosearch';
+import 'leaflet-geosearch/dist/geosearch.css';
 
 function getCurrentPosition(): Promise<L.LatLngExpression>{
   return new Promise ((resolve, reject) => {
@@ -35,7 +37,8 @@ function loadMap(width: string, height: string, place: string, embed = 'insert')
   map.setView(defaultPosition, defaultZoom)
   tiles.addTo(map);
 
-  getPointCoordinates()
+  getPointCoordinates();
+  mapSearch();
 }
 
 async function applyCurrentPosition(){
@@ -92,6 +95,16 @@ async function getPointInfo(latitude: number, longitude: number){
   const response = await fetch(`${infoUrl}${infoFormat}&${infoCoordinates}`);
   const data = await response.json();
   return data.display_name;
+}
+
+async function mapSearch(){
+  console.log('search')
+  const search = GeoSearch.GeoSearchControl({
+    provider: new GeoSearch.OpenStreetMapProvider(),
+    notFoundMessage: 'Sorry, that address could not be found.',
+    style: 'bar'
+  })
+  map.addControl(search)
 }
 
 export { loadMap, applyCurrentPosition }
