@@ -9,8 +9,8 @@ export default class FooterView implements IView {
     private readonly CLASS_CONTAINER = 'footer';
     private readonly CLASS_LINK = 'footer__item';
 
-    private readonly IMAGE_PATH_GIT = './assets/icon/github.png';
-    private readonly IMAGE_PATH_RS = './assets/icon/rsschool.png';
+    private readonly IMAGE_PATH_GIT = './assets/icons/github.png';
+    private readonly IMAGE_PATH_RS = './assets/icons/rsschool.png';
     private readonly IMAGE_ALT_TEXT_DEVELOP = 'github';
     private readonly IMAGE_ALT_TEXT_RS = 'RS School';
 
