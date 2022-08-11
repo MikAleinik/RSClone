@@ -1,5 +1,5 @@
 import { loadUserData } from './user';
-import { loadMap, applyCurrentPosition } from './map';
+import { loadMap, applyCurrentPosition, applyItemsLocation } from './map';
 import { createNewsItemsList } from './news';
 
 // aside menu event listeners holder
@@ -20,6 +20,7 @@ aside.addEventListener('click', (e) => {
     }
     if (li.dataset.page === 'map'){
       loadMap('auto', 'auto', 'main', 'replace')
+      applyCurrentPosition();
     }
   }
 })
@@ -69,8 +70,8 @@ function applyUserData(){
   applyCategoryData('transport');
   applyCategoryData('races');
   applyUserRating()
-  loadMap('99%', '99%', '.user__map', 'insert')
-  applyCurrentPosition();
+  loadMap('99%', '99%', '.user__map', 'insert');
+  applyItemsLocation();
 }
 
 applyUserData()

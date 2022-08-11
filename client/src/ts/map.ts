@@ -1,7 +1,8 @@
-import L from 'leaflet';
+import L, { Bounds, LatLngBounds } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
+import { getTransportLocation } from './transport';
 
 function getCurrentPosition(): Promise<L.LatLngExpression>{
   return new Promise ((resolve, reject) => {
@@ -47,6 +48,23 @@ async function applyCurrentPosition(){
     map.panTo(position)
     const marker = L.marker(position).addTo(map);
     marker.bindPopup("You are here!").openPopup();
+  } catch(err) {
+    console.log(err)
+  }
+}
+
+async function applyItemsLocation(){
+  try{
+    const items = await getTransportLocation()
+    const bounds: any = [] // can' resolve this :(
+    for (const i in items){
+      const position = items[i] as L.LatLng
+      const marker = L.marker(position).addTo(map);
+      marker.bindPopup(`${i}`).openPopup();
+      bounds.push(items[i])
+    }
+    map.fitBounds(bounds);
+    console.log(bounds)
   } catch(err) {
     console.log(err)
   }
@@ -98,7 +116,6 @@ async function getPointInfo(latitude: number, longitude: number){
 }
 
 async function mapSearch(){
-  console.log('search')
   const search = GeoSearch.GeoSearchControl({
     provider: new GeoSearch.OpenStreetMapProvider(),
     notFoundMessage: 'Sorry, that address could not be found.',
@@ -107,4 +124,4 @@ async function mapSearch(){
   map.addControl(search)
 }
 
-export { loadMap, applyCurrentPosition }
+export { loadMap, applyCurrentPosition, applyItemsLocation }
