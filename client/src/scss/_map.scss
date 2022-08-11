@@ -1,0 +1,20 @@
+.map__popup_buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.route__wrapper {
+  position: fixed;
+  background: $background-color-light;
+  right: 40px;
+  bottom: 60px;
+  width: 300px;
+  border-radius: 10px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+}

@@ -1,5 +1,5 @@
 import { loadUserData } from './user';
-import { loadMap, applyCurrentPosition, applyItemsLocation } from './map';
+import { loadMap, applyCurrentPosition, applyItemsLocation, getPointCoordinates, routeForm } from './map';
 import { createNewsItemsList } from './news';
 
 // aside menu event listeners holder
@@ -21,6 +21,8 @@ aside.addEventListener('click', (e) => {
     if (li.dataset.page === 'map'){
       loadMap('auto', 'auto', 'main', 'replace')
       applyCurrentPosition();
+      getPointCoordinates();
+      routeForm();
     }
   }
 })

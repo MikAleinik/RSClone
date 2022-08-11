@@ -24,14 +24,19 @@ function loadMap(width: string, height: string, place: string, embed = 'insert')
   });
 
   const block = document.querySelector(place) as HTMLDivElement;
-  
   block.style.height = height;
   block.style.width = width;
+  
   if (embed === 'replace'){
-    block.innerHTML = '';
+    block.textContent = '';
   }
+  
+  const map__wrapper = document.createElement('div'); //resolve replacing css styles of outer block by leaflet
+  map__wrapper.style.width = '100%'
+  map__wrapper.style.height = '100%'
+  block.appendChild(map__wrapper);
 
-  map = L.map(<HTMLElement>block);
+  map = L.map(<HTMLElement>map__wrapper);
   const defaultPosition: L.LatLngTuple = [53.90332, 27.608643];
   const defaultZoom = 16
   const tilesSrc = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -39,7 +44,6 @@ function loadMap(width: string, height: string, place: string, embed = 'insert')
   map.setView(defaultPosition, defaultZoom)
   tiles.addTo(map);
 
-  getPointCoordinates();
   mapSearch();
 }
 
@@ -86,41 +90,64 @@ async function applyItemsLocation(subject: string){
   }
 }
 
+let targetLatitude: number;
+let targetLongitude: number;
+
+function routeForm(){
+  const routeWrapper = document.createElement('div')
+  routeWrapper.className = 'route__wrapper';
+  routeWrapper.style.visibility = 'hidden'
+  const routeFrom = document.createElement('span');
+  routeFrom.className = 'route__from';
+  const routeTo = document.createElement('span');
+  routeTo.className = 'route__to';
+  const routeLength = document.createElement('span');
+  routeLength.className = 'route__length';
+  routeLength.innerHTML = '<b>Distance</b>: ';
+  routeWrapper.appendChild(routeFrom);
+  routeWrapper.appendChild(routeTo);
+  routeWrapper.appendChild(routeLength);
+  const main = document.querySelector('main') as HTMLElement;
+  main.appendChild(routeWrapper)
+
+  const routeBounds: {[index: string]: number[]} = {};
+  
+  window.addEventListener('click', (g) => { // temporary event listener
+    const tag = g.target as HTMLElement;
+    if (tag.id === 'map__button_from'){
+      routeBounds['from'] = [targetLatitude, targetLongitude]
+      getPointInfo(targetLatitude, targetLongitude)
+        .then((data) => {
+          routeWrapper.style.visibility = 'visible'
+          routeFrom.innerHTML = `<b>From</b>: ${data}`
+        })
+    }
+    if (tag.id === 'map__button_to'){
+      routeBounds['to'] = [targetLatitude, targetLongitude]
+      getPointInfo(targetLatitude, targetLongitude)
+        .then((data) => {
+          routeWrapper.style.visibility = 'visible'
+          routeTo.innerHTML = `<b>To</b>: ${data}`
+        })
+    }
+  })
+}
+
 function getPointCoordinates(){
+  const popupButtons = '<div class="map__popup_buttons"><button id="map__button_from">From</button><button id="map__button_to">To</button></div>';
   const popup = L.popup();
   map.on('click', (e) => {
-    getPointInfo(e.latlng.lat, e.latlng.lng)
+    targetLatitude = e.latlng.lat;
+    targetLongitude = e.latlng.lng
+    getPointInfo(targetLatitude, targetLongitude)
       .then((data) => {
         popup
             .setLatLng(e.latlng)
-            .setContent(`${data}`)
+            .setContent(`<div class='map__popup_title'>${data}</div>${popupButtons}`)
             .openOn(map);
-      }) 
+      })
   });
 }
-
-/* interface POI {
-  place_id: number,
-  licence: string,
-  osm_type: string,
-  osm_id: number,
-  lat: string,
-  lon: string,
-  display_name: string,
-  address: {
-      house_number: string,
-      road: string,
-      neighbourhood: string,
-      suburb: string,
-      city_district: string,
-      city: string,
-      state: string,
-      postcode: string,
-      country: string,
-      country_code: string
-  },
-  boundingbox: string[]
-} */
 
 async function getPointInfo(latitude: number, longitude: number){
   const infoUrl = 'https://nominatim.openstreetmap.org/reverse?';
@@ -140,4 +167,4 @@ async function mapSearch(){
   map.addControl(search)
 }
 
-export { loadMap, applyCurrentPosition, applyItemsLocation }
+export { loadMap, applyCurrentPosition, applyItemsLocation, getPointCoordinates, routeForm }
