@@ -1,0 +1,18 @@
+.news {
+    width: 70%;
+    margin: 40px 20px;
+}
+
+.news__item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: $background-color-light;
+
+    img {
+        max-width: 50vw;
+    }
+
+    padding: 20px 10px;
+    border-bottom: 2px dotted $border-color-dark;
+}
