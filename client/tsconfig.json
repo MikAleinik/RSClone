@@ -8,5 +8,5 @@
     "allowJs": true,
     "moduleResolution": "node"
   },
-  "files": ["client/src/ts/index.ts"]
+  "files": ["src/ts/index.ts"]
 }

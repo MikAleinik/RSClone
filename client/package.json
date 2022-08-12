@@ -1,7 +1,7 @@
 {
-  "name": "rs-clone",
+  "name": "rs-clone-client",
   "version": "1.0.0",
-  "description": "rs-clone",
+  "description": "rs-clone-client",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",

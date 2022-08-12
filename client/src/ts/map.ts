@@ -66,14 +66,14 @@ async function applyItemsLocation(subject: string){
     if (subject === 'transport'){
       items = await getTransportLocation()
       itemIcon = L.icon({
-        iconUrl: './client/assets/icons/truck-color.png',
+        iconUrl: './assets/icons/truck-color.png',
         iconSize: [22, 22], 
       });
     }
     if (subject === 'logistic'){
       items = await getLogisticstLocation();
       itemIcon = L.icon({
-        iconUrl: './client/assets/icons/storage-color.png',
+        iconUrl: './assets/icons/storage-color.png',
         iconSize: [22, 22], 
       });
     }
