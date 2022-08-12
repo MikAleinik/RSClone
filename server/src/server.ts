@@ -1,4 +1,4 @@
-import Fastify, { FastifyRequest } from 'fastify';
+import Fastify from 'fastify';
 import app from './app';
 import pino from "pino";
 // import type { FastifyCookieOptions } from "@fastify/cookie";
@@ -7,7 +7,7 @@ import cookie from "@fastify/cookie";
 // import decorators from "./decorators/decorators";
 // import * as fastifyAuth from "@fastify/auth";
 // import jwt from "jsonwebtoken";
-const jwt = require("@fastify/jwt");
+import cors from "@fastify/cors";
 
 const server = Fastify({
   trustProxy: true,
@@ -15,21 +15,10 @@ const server = Fastify({
 });
 
 server
+  .register(cors, {
+    origin: "*",
+  })
   .register(require("@fastify/auth"))
-  .register(jwt,
-    {
-    secret: "secret"
-    ,
-    verify: {
-      extractToken: (req: FastifyRequest) => {
-        //@ts-ignore
-        const tok = "123"//req.body.token;
-        // const tok = req.headers['auth'] as string;
-        return tok;
-      }
-    }
-  }
-  )
   .register(app)
   .register(cookie)
   .then(() => server.ready())
@@ -40,12 +29,5 @@ server
         process.exit(1);
       }
     })
-);
-  
-// server.addHook("onRequest", async (request: any, reply) => {
-//   try {
-//     await request.jwtVerify();
-//   } catch (err) {
-//     reply.send(err);
-//   }
-// });
+  );
+

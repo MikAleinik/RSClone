@@ -1,8 +1,10 @@
+import { ErrorNoSuchUser } from "../errors/ErrorNoSuchUser";
 import { ErrorCreateNewUser } from "../errors/ErrorCreateNewUser";
 // import { registerUserSchema } from "../routes/user.router";
 import { OkCodes } from "../types/enums";
-import { ContentTypeJson, RegisterUser } from "../types/types";
+import { AuthenticateUser, ContentTypeJson, RegisterUser } from "../types/types";
 import { User } from "./vo/user";
+import { ErrorInvalidPassword } from "../errors/ErrorInvalidPassword";
 
 export class UsersModel {
   private static instance: UsersModel;
@@ -15,6 +17,16 @@ export class UsersModel {
   }
 
   async checkUniqueEmail(email: string) {
+    //TODO add check
+    return true;
+  }
+
+  async getUserByEmail(email: string) {
+    //TODO real search
+    return new User();
+  }
+
+  async validatePassword(password: string, user: User) {
     //TODO add check
     return true;
   }
@@ -42,6 +54,18 @@ export class UsersModel {
       throw new ErrorCreateNewUser();
     }
     return new User(email, login, password);
+  }
+
+  async processAuthorizeUser(req: AuthenticateUser) {
+    const { email, password } = req.body;
+    const user = await this.getUserByEmail(email);
+    if (!user) {
+      throw new ErrorNoSuchUser();
+    }
+    if (!this.validatePassword(password, user)) {
+      throw new ErrorInvalidPassword();
+    }
+    return user;
   }
 
   async processGetUserByUUID(req: any, res: any) {

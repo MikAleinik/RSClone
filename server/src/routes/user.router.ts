@@ -3,24 +3,9 @@ import { AuthController } from "../controller/auth.controller";
 import { UsersController } from "../controller/user.controller";
 import { RouterPath } from "../types/enums";
 import { SchemaTypeString } from "../types/types";
+import { errorSchema, userReplySchema } from "../schema/general.schema";
 
-const userSchema = {
-  type: "object",
-  properties: {
-    id: SchemaTypeString,
-    email: SchemaTypeString,
-    login: SchemaTypeString,
-  },
-};
-
-const errorSchema = {
-  type: "object",
-  properties: {
-    message: SchemaTypeString,
-  },
-};
-
-const registerUserSchema = {
+const registerUserBodySchema = {
   type: "object",
   properties: {
     email: SchemaTypeString,
@@ -46,7 +31,7 @@ const getAllUsersOpts = {
     response: {
       200: {
         type: "array",
-        items: userSchema,
+        items: userReplySchema,
       },
     },
   },
@@ -59,16 +44,16 @@ const prehandler = async (req: any, resp: any) => {
 };
 
 const getUserByUUIDOpts = {
-    schema: {
-        response: {
-            200: userSchema,
-            400: errorSchema,
-            404: errorSchema,
-        },
+  schema: {
+    response: {
+      200: userReplySchema,
+      400: errorSchema,
+      404: errorSchema,
     },
-    
-    preHandler: [prehandler],
-    handler: UsersController.getInstance().processGetUserByUUID,
+  },
+
+  preHandler: [prehandler],
+  handler: UsersController.getInstance().processGetUserByUUID,
 };
 
 
@@ -77,7 +62,7 @@ const changeUserByUUIDOpts = {
   schema: {
     body: updateUserSchema,
     response: {
-      200: userSchema,
+      200: userReplySchema,
       400: errorSchema,
       404: errorSchema,
     },
@@ -93,10 +78,10 @@ const deleteUserByUUIDOpts = {
 };
 
 const createUserOpts = {
-    schema: {
-    body: registerUserSchema,
+  schema: {
+    body: registerUserBodySchema,
     response: {
-      201: userSchema,
+      201: userReplySchema,
       401: errorSchema,
       404: errorSchema,
     },
@@ -104,7 +89,7 @@ const createUserOpts = {
   handler: UsersController.getInstance().processCreateNewUser,
 };
 
-const cars: FastifyPluginAsync = async (fastify, options): Promise<void> => {
+const users: FastifyPluginAsync = async (fastify, options): Promise<void> => {
   fastify.get(`/${RouterPath.USERS}`, getAllUsersOpts);
   fastify.post(`/${RouterPath.USERS_REGISTER}`, createUserOpts);
   fastify.get(`/${RouterPath.USERS}/:id`, getUserByUUIDOpts);
@@ -112,4 +97,4 @@ const cars: FastifyPluginAsync = async (fastify, options): Promise<void> => {
   fastify.delete(`/${RouterPath.USERS}/:id`, deleteUserByUUIDOpts);
 };
 
-export default cars;
+export default users;

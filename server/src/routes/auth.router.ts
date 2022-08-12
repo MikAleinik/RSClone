@@ -1,47 +1,37 @@
 import { FastifyPluginAsync } from "fastify";
+import { RouterPath } from "../types/enums";
+import { AuthController } from "../controller/auth.controller";
 // import jwt from "jsonwebtoken";
-// import { SchemaTypeString } from "../types/types";
+import { SchemaTypeString } from "../types/types";
+import { errorSchema, userReplySchema } from "../schema/general.schema";
 // import { AuthController } from "../controller/auth.controller";
 // // import { RouterPath } from "../types/enums";
 
-// const authUserSchema = {
-//   type: "object",
-//   properties: {
-//     name: SchemaTypeString,
-//     email: SchemaTypeString
-//   },
-//   required: ["name", "email"],
-// };
+const authUserSchema = {
+  type: "object",
+  properties: {
+    email: SchemaTypeString,
+    password: SchemaTypeString,
+  },
+  required: ["email", "password"],
+};
 
-// const authUserHeaderSchema = {
-//   type: "object",
-//   properties: {
-//     UserToken: SchemaTypeString
-//   },
-//   required: ["X-access-token"],
-// };
+const authUserOpts = {
+  schema: {
+    body: authUserSchema,
+    response: {
+      200: userReplySchema,
+      400: errorSchema,
+      404: errorSchema,
+    },
+  },
+  handler: AuthController.getInstance().authorizeUser,
+};
 
-// const createUserOpts = {
-//   schema: {
-//     body: authUserSchema,
-//     headers: authUserHeaderSchema
-//     // response: {
-//     //   201: userSchema,
-//     //   400: errorSchema,
-//     //   404: errorSchema,
-//     // },
-//   },
-//   handler: AuthController.getInstance().processUserAuth,
-// };
 
-const auth: FastifyPluginAsync = async (fastify: any, options): Promise<void> => {
-//   fastify.post(`/${RouterPath.AUTH}`, createUserOpts);
-    fastify.post(`/auth`, (req: any, reply: any) => {
-        const token = fastify.jwt.sign({ email: req.body.email });//jwt.sign({ foo: "bar" }, 'sdfasdf');
-        const decoded = fastify.jwt.decode(token);
-        // const isOk = req
-      reply.send({ token, decoded });
-    });
+const auth: FastifyPluginAsync = async (fastify, options): Promise<void> => {
+    fastify.post(`/${RouterPath.AUTH}`, authUserOpts);
 };
 
 export default auth;
+
