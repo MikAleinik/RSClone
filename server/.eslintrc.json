@@ -1,49 +1,32 @@
 {
   "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "prettier",
+    "import",
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "plugin:prettier/recommended",
+    "prettier",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "parserOptions": {
-    "ecmaVersion": 2020
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   },
   "env": {
+    "es6": true,
+    "browser": true,
     "node": true
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+  "ignorePatterns": [
+    "webpack.*config.js"
   ],
   "rules": {
-    "complexity": [
-      "warn",
-      10
-    ],
-    "prefer-const": "error",
-    "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "padding-line-between-statements": [
-      "error",
-      {
-        "blankLine": "always",
-        "prev": "*",
-        "next": "if"
-      },
-      {
-        "blankLine": "always",
-        "prev": "*",
-        "next": "block-like"
-      },
-      {
-        "blankLine": "always",
-        "prev": "*",
-        "next": "block"
-      },
-      {
-        "blankLine": "always",
-        "prev": "*",
-        "next": "return"
-      }
-    ]
+    "no-debugger": "off",
+    "no-console": 0,
+    "class-methods-use-this": "off",
+    "@typescript-eslint/no-explicit-any": 0
   }
 }

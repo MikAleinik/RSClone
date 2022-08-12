@@ -1,5 +1,5 @@
 export class ErrorInvalidPassword extends Error {
-  constructor() {
-    super("Your password is incorrect");
-  }
+    constructor() {
+        super('Your password is incorrect');
+    }
 }

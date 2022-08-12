@@ -1,9 +1,9 @@
-import { FastifyRequest } from "fastify";
+import { FastifyRequest } from 'fastify';
 
 export const SchemaTypeString = { type: ['string', 'null'], nullable: true };
 
 export const ContentTypeJson = ['Content-Type', 'application/json'];
 
+export type RegisterUser = FastifyRequest & { body: { email: string; login: string; password: string } };
 
-export type RegisterUser = FastifyRequest & { body: { email: string, login: string, password: string } };
-export type AuthenticateUser = FastifyRequest & { body: { email: string, password: string}};
+export type AuthenticateUser = FastifyRequest & { body: { email: string; password: string } };

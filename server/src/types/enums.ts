@@ -1,8 +1,8 @@
 export enum RouterPath {
-  CARS = "cars",
-  USERS = "users",
-  USERS_REGISTER = "users/register",
-  AUTH = "auth",
+    CARS = 'cars',
+    USERS = 'users',
+    USERS_REGISTER = 'users/register',
+    AUTH = 'auth',
 }
 
 export enum OkCodes {
@@ -14,5 +14,5 @@ export enum OkCodes {
 export enum ErrorCodes {
     NOT_FOUND = 404,
     BAD_REQUEST = 400,
-    INTERNAL_SERVER_ERROR = 500
+    INTERNAL_SERVER_ERROR = 500,
 }

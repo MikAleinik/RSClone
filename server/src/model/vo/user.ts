@@ -1,34 +1,30 @@
-import { v4 as uuid } from "uuid";
+import { v4 as uuid } from 'uuid';
 
 export class User {
-   id: string;
-   email: string;
-   login: string;
-   password: string;
+    id: string;
+    email: string;
+    login: string;
+    password: string;
 
-  constructor(
-    mail = "USER",
-    login = "user",
-    password = "P@55w0rd",
-  ) {
-    this.id = uuid();
-    this.email = mail;
-    this.login = login;
-    this.password = password;
-  }
+    constructor(mail = 'USER', login = 'user', password = 'P@55w0rd') {
+        this.id = uuid();
+        this.email = mail;
+        this.login = login;
+        this.password = password;
+    }
 
-  toJsonResponse() {
-    const { id, email, login } = this;
-    return { id, email, login };
-  }
+    toJsonResponse() {
+        const { id, email, login } = this;
+        return { id, email, login };
+    }
 
-  async checkExistUserByEmail(email: string) {
-    //TODO add check
-    return false;
-  }
+    async checkExistUserByEmail(email: string) {
+        //TODO add check
+        return false;
+    }
 
-  static toResponse(user: User) {
-    const { id, email: name, login, password } = user;
-    return { id, name, login, password };
-  }
+    static toResponse(user: User) {
+        const { id, email: name, login, password } = user;
+        return { id, name, login, password };
+    }
 }
