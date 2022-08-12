@@ -2,37 +2,24 @@ import { FastifyPluginAsync } from 'fastify';
 import { AuthController } from '../controller/auth.controller';
 import { UsersController } from '../controller/user.controller';
 import { RouterPath } from '../types/enums';
-import { SchemaTypeString } from '../types/types';
-import { errorSchema, userReplySchema } from '../schema/general.schema';
+import { RegisterRequestUserSchemaType, SchemaTypeString } from '../types/types';
+import { ErrorReplySchema, UserReplySchema } from '../schema/general.schema';
+import { Type } from '@sinclair/typebox';
 
-const registerUserBodySchema = {
-    type: 'object',
-    properties: {
-        email: SchemaTypeString,
-        login: SchemaTypeString,
-        password: SchemaTypeString,
-    },
-    required: ['email', 'login', 'password'],
-};
-
-const updateUserSchema = {
-    type: 'object',
-    properties: {
-        email: SchemaTypeString,
-        login: SchemaTypeString,
-        password: SchemaTypeString,
-    },
-    required: ['email', 'login', 'password'],
-};
+export const RegisterUserSchema = Type.Object({
+    email: Type.String({ format: 'email' }),
+    login: Type.String(),
+    password: Type.String(),
+});
 
 const getAllUsersOpts = {
     schema: {
         response: {
             200: {
                 type: 'array',
-                items: userReplySchema,
+                items: UserReplySchema,
             },
-            400: errorSchema,
+            400: ErrorReplySchema,
         },
     },
     preHandler: [AuthController.getInstance().verifyJWT],
@@ -42,9 +29,9 @@ const getAllUsersOpts = {
 const getUserByUUIDOpts = {
     schema: {
         response: {
-            200: userReplySchema,
-            400: errorSchema,
-            404: errorSchema,
+            200: UserReplySchema,
+            400: ErrorReplySchema,
+            404: ErrorReplySchema,
         },
     },
     preHandler: [AuthController.getInstance().verifyJWT],
@@ -53,11 +40,11 @@ const getUserByUUIDOpts = {
 
 const changeUserByUUIDOpts = {
     schema: {
-        body: updateUserSchema,
+        body: RegisterUserSchema,
         response: {
-            200: userReplySchema,
-            400: errorSchema,
-            404: errorSchema,
+            200: UserReplySchema,
+            400: ErrorReplySchema,
+            404: ErrorReplySchema,
         },
     },
     preHandler: [AuthController.getInstance().verifyJWT],
@@ -74,21 +61,22 @@ const deleteUserByUUIDOpts = {
 
 const createUserOpts = {
     schema: {
-        body: registerUserBodySchema,
+        body: RegisterUserSchema,
         response: {
-            201: userReplySchema,
-            401: errorSchema,
-            404: errorSchema,
+            201: UserReplySchema,
+            401: ErrorReplySchema,
+            404: ErrorReplySchema,
         },
     },
     handler: UsersController.getInstance().processCreateNewUser,
 };
 
 const users: FastifyPluginAsync = async (fastify, options): Promise<void> => {
+    options;
     fastify.get(`/${RouterPath.USERS}`, getAllUsersOpts);
-    fastify.post(`/${RouterPath.USERS_REGISTER}`, createUserOpts);
+    fastify.post<{ Body: RegisterRequestUserSchemaType }>(`/${RouterPath.USERS_REGISTER}`, createUserOpts);
     fastify.get(`/${RouterPath.USERS}/:id`, getUserByUUIDOpts);
-    fastify.put(`/${RouterPath.USERS}/:id`, changeUserByUUIDOpts);
+    fastify.put<{ Body: RegisterRequestUserSchemaType }>(`/${RouterPath.USERS}/:id`, changeUserByUUIDOpts);
     fastify.delete(`/${RouterPath.USERS}/:id`, deleteUserByUUIDOpts);
 };
 

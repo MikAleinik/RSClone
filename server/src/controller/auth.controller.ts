@@ -1,9 +1,10 @@
 // import { ContentTypeJson } from "../types/types";
 // import { OkCodes } from "../types/enums";
 import jwt, { SignOptions } from 'jsonwebtoken';
-import { AuthenticateUser, ContentTypeJson } from '../types/types';
+import { AuthRequestType, ContentTypeJson } from '../types/types';
 import { UsersModel } from '../model/user.model';
 import { ErrorCodes, OkCodes } from '../types/enums';
+import { FastifyReply } from 'fastify';
 
 export class AuthController {
     private static SECRET_FOR_JWT = 'testSecret123';
@@ -14,7 +15,9 @@ export class AuthController {
     private static COOKIE_NAME = 'authCookie';
     private static instance: AuthController;
 
-    private constructor() {}
+    private constructor() {
+        //do nothing
+    }
 
     async verifyJWT(req: any, res: any) {
         //, done: any) {
@@ -50,15 +53,16 @@ export class AuthController {
         });
     }
 
-    async authorizeUser(req: any, res: any) {
+    async authenticateUser(req: AuthRequestType, res: FastifyReply) {
         try {
-            const newUser = await UsersModel.getInstance().processAuthorizeUser(req as AuthenticateUser);
+            req.headers;
+            const newUser = await UsersModel.getInstance().processAuthorizeUser(req.body);
             res.code(OkCodes.OK);
             AuthController.instance.setAuthCookie(res, newUser.id);
             res.send(newUser.toJsonResponse());
         } catch (err) {
             res.code(ErrorCodes.BAD_REQUEST);
-            res.header(...ContentTypeJson);
+            res.header(ContentTypeJson[0], ContentTypeJson[1]);
             res.send((err as Error).message);
         }
     }

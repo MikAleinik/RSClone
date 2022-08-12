@@ -1,112 +1,55 @@
-import { ContentTypeJson, RegisterUser } from '../types/types';
+import { ContentTypeJson, RegisterRequestType } from '../types/types';
 import { ErrorCodes, OkCodes } from '../types/enums';
 import { UsersModel } from '../model/user.model';
-// import fastifyJwt from "@fastify/jwt";
 import { AuthController } from './auth.controller';
 import { User } from '../model/vo/user';
-// const { validate: validateUUID } = require("uuid");
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 export class UsersController {
     private static instance: UsersController;
 
-    private constructor() {}
-
-    errorHandler(error: Error, res: any) {
-        res.header(...ContentTypeJson);
-        res.send({ message: error.message });
+    private constructor() {
+        //do nothing
     }
 
-    async preHandler(req: any, res: any) {
+    async processGetAllUsers(req: FastifyRequest, res: FastifyReply) {
         // const users = await usersRepo.getAll();
         // const objUsers = users.map((user) => user.toJsonResponse());
         res.code(OkCodes.OK);
-        res.header(...ContentTypeJson);
+        res.header(ContentTypeJson[0], ContentTypeJson[1]);
         res.send([]);
     }
 
-    async processGetAllUsers(req: any, res: any) {
-        // const users = await usersRepo.getAll();
-        // const objUsers = users.map((user) => user.toJsonResponse());
-        res.code(OkCodes.OK);
-        res.header(...ContentTypeJson);
-        res.send([]);
-    }
-
-    async processCreateNewUser(req: any, res: any) {
+    async processCreateNewUser(req: RegisterRequestType, res: FastifyReply) {
         try {
-            const newUser = await UsersModel.getInstance().processCreateNewUser(req as RegisterUser);
+            const newUser = await UsersModel.getInstance().processCreateNewUser(req.body);
             AuthController.getInstance().setAuthCookie(res, newUser.id);
             res.code(OkCodes.CREATED);
             res.send(newUser.toJsonResponse());
         } catch (err) {
             res.code(ErrorCodes.BAD_REQUEST);
-            res.header(...ContentTypeJson);
+            res.header(ContentTypeJson[0], ContentTypeJson[1]);
             res.send((err as Error).message);
         }
     }
 
-    async processGetUserByUUID(req: any, res: any) {
-        // const { id } = req.params;
-        // try {
-        //   if (!validateUUID(id)) {
-        //     throw new BadRequestError("UUID is invalid");
-        //   }
-        //   const user = await usersRepo.getUserByUUID(id);
-        //   res.code(OkCodes.OK);
-        //   res.header(...ContentTypeJson);
-        //   res.send(user.toJsonResponse());
-        // } catch (error) {
-        //   errorHandler(error, res);
-        // }
-
+    async processGetUserByUUID(req: FastifyRequest, res: FastifyReply) {
         const user = new User(); //await usersRepo.addUser({ name, login, password });
         res.code(OkCodes.CREATED);
-        res.header(...ContentTypeJson);
+        res.header(ContentTypeJson[0], ContentTypeJson[1]);
         res.send(user.toJsonResponse());
     }
 
-    async processChangeUserByUUID(req: any, res: any) {
-        // try {
-        //   const { id: userId } = req.params;
-        //   if (!validateUUID(userId)) {
-        //     throw new BadRequestError("UUID is invalid");
-        //   }
-        //   const user = await usersRepo.getUserByUUID(userId);
-        //   const { name, login, password, id } = req.body;
-        //   user.id = id;
-        //   user.name = name;
-        //   user.login = login;
-        //   user.password = password;
-        //   res.code(OkCodes.OK);
-        //   res.header(...ContentTypeJson);
-        //   res.send(user.toJsonResponse());
-        // } catch (error) {
-        //   errorHandler(error, res);
-        // }
-
+    async processChangeUserByUUID(req: RegisterRequestType, res: FastifyReply) {
         const user = new User(); //await usersRepo.addUser({ name, login, password });
         res.code(OkCodes.CREATED);
-        res.header(...ContentTypeJson);
+        res.header(ContentTypeJson[0], ContentTypeJson[1]);
         res.send(user.toJsonResponse());
     }
 
-    async processDeleteUserByUUID(req: any, res: any) {
-        // try {
-        //   const { id } = req.params;
-        //   if (!validateUUID(id)) {
-        //     throw new BadRequestError("UUID is invalid");
-        //   }
-        //   await usersRepo.deleteUserByUUID(id);
-        //   tasksRepo.clearUserId(id);
-        //   res.code(OkCodes.OK);
-        //   res.header(...ContentTypeJson);
-        //   res.send({});
-        // } catch (error) {
-        //   errorHandler(error, res);
-        // }
-
+    async processDeleteUserByUUID(req: FastifyRequest, res: FastifyReply) {
         res.code(OkCodes.OK);
-        res.header(...ContentTypeJson);
+        res.header(ContentTypeJson[0], ContentTypeJson[1]);
         res.send({});
     }
 

@@ -4,11 +4,12 @@ import pino from 'pino';
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import fastifyAuth from '@fastify/auth';
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 
 const server = Fastify({
     trustProxy: true,
     logger: pino({ level: 'info' }),
-});
+}).withTypeProvider<TypeBoxTypeProvider>();
 
 server
     .register(cors, {

@@ -1,15 +1,16 @@
 import { ErrorNoSuchUser } from '../errors/ErrorNoSuchUser';
 import { ErrorCreateNewUser } from '../errors/ErrorCreateNewUser';
-// import { registerUserSchema } from "../routes/user.router";
 import { OkCodes } from '../types/enums';
-import { AuthenticateUser, ContentTypeJson, RegisterUser } from '../types/types';
+import { AuthRequestUserSchemaType, ContentTypeJson, RegisterRequestUserSchemaType } from '../types/types';
 import { User } from './vo/user';
 import { ErrorInvalidPassword } from '../errors/ErrorInvalidPassword';
 
 export class UsersModel {
     private static instance: UsersModel;
 
-    private constructor() {}
+    private constructor() {
+        //do nothing
+    }
 
     errorHandler(error: Error, res: any) {
         res.header(...ContentTypeJson);
@@ -47,8 +48,8 @@ export class UsersModel {
         res.send([]);
     }
 
-    async processCreateNewUser(req: RegisterUser) {
-        const { email, login, password } = req.body;
+    async processCreateNewUser(body: RegisterRequestUserSchemaType) {
+        const { email, login, password } = body;
         const isUnique = await this.checkUniqueEmail(email);
         if (!isUnique) {
             throw new ErrorCreateNewUser();
@@ -56,8 +57,8 @@ export class UsersModel {
         return new User(email, login, password);
     }
 
-    async processAuthorizeUser(req: AuthenticateUser) {
-        const { email, password } = req.body;
+    async processAuthorizeUser(body: AuthRequestUserSchemaType) {
+        const { email, password } = body;
         const user = await this.getUserByEmail(email);
         if (!user) {
             throw new ErrorNoSuchUser();

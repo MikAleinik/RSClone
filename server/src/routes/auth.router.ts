@@ -1,35 +1,30 @@
 import { FastifyPluginAsync } from 'fastify';
 import { RouterPath } from '../types/enums';
 import { AuthController } from '../controller/auth.controller';
-// import jwt from "jsonwebtoken";
-import { SchemaTypeString } from '../types/types';
-import { errorSchema, userReplySchema } from '../schema/general.schema';
-// import { AuthController } from "../controller/auth.controller";
-// // import { RouterPath } from "../types/enums";
+import { Type } from '@sinclair/typebox';
+import { AuthRequestUserSchemaType } from '../types/types';
+import { ErrorReplySchema, UserReplySchema } from '../schema/general.schema';
 
-const authUserSchema = {
-    type: 'object',
-    properties: {
-        email: SchemaTypeString,
-        password: SchemaTypeString,
-    },
-    required: ['email', 'password'],
-};
+export const AuthRequestUserSchema = Type.Object({
+    email: Type.String({ format: 'email' }),
+    password: Type.String(),
+});
 
 const authUserOpts = {
     schema: {
-        body: authUserSchema,
+        body: AuthRequestUserSchema,
         response: {
-            200: userReplySchema,
-            400: errorSchema,
-            404: errorSchema,
+            200: UserReplySchema,
+            400: ErrorReplySchema,
+            404: ErrorReplySchema,
         },
     },
-    handler: AuthController.getInstance().authorizeUser,
+    handler: AuthController.getInstance().authenticateUser,
 };
 
 const auth: FastifyPluginAsync = async (fastify, options): Promise<void> => {
-    fastify.post(`/${RouterPath.AUTH}`, authUserOpts);
+    options;
+    fastify.post<{ Body: AuthRequestUserSchemaType }>(`/${RouterPath.AUTH}`, authUserOpts);
 };
 
 export default auth;

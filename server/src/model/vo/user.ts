@@ -14,8 +14,8 @@ export class User {
     }
 
     toJsonResponse() {
-        const { id, email, login } = this;
-        return { id, email, login };
+        const { email, login } = this;
+        return { email, login };
     }
 
     async checkExistUserByEmail(email: string) {

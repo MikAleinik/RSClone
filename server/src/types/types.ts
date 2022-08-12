@@ -1,9 +1,17 @@
-import { FastifyRequest } from 'fastify';
+import { Static } from '@sinclair/typebox';
+import { FastifyRequestType } from 'fastify/types/type-provider';
+import { AuthRequestUserSchema } from '../routes/auth.router';
+import { RegisterUserSchema } from '../routes/user.router';
 
 export const SchemaTypeString = { type: ['string', 'null'], nullable: true };
-
 export const ContentTypeJson = ['Content-Type', 'application/json'];
 
-export type RegisterUser = FastifyRequest & { body: { email: string; login: string; password: string } };
+// Schema types
 
-export type AuthenticateUser = FastifyRequest & { body: { email: string; password: string } };
+export type AuthRequestUserSchemaType = Static<typeof AuthRequestUserSchema>;
+export type RegisterRequestUserSchemaType = Static<typeof RegisterUserSchema>;
+
+// Request types
+
+export type AuthRequestType = FastifyRequestType<unknown, unknown, unknown, AuthRequestUserSchemaType>;
+export type RegisterRequestType = FastifyRequestType<unknown, unknown, unknown, RegisterRequestUserSchemaType>;

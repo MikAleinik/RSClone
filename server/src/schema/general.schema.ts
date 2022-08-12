@@ -1,16 +1,10 @@
-import { SchemaTypeString } from '../types/types';
+import { Type } from '@sinclair/typebox';
 
-export const errorSchema = {
-    type: 'object',
-    properties: {
-        message: SchemaTypeString,
-    },
-};
+export const ErrorReplySchema = Type.Object({
+    message: Type.String(),
+});
 
-export const userReplySchema = {
-    type: 'object',
-    properties: {
-        email: SchemaTypeString,
-        login: SchemaTypeString,
-    },
-};
+export const UserReplySchema = Type.Object({
+    email: Type.String({ format: 'email' }),
+    login: Type.String(),
+});
