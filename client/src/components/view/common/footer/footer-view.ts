@@ -1,4 +1,4 @@
-import IView from "../../../interfaces/IView";
+import IView from "../../../interfaces/i-view";
 import './footer.scss';
 
 export default class FooterView implements IView {

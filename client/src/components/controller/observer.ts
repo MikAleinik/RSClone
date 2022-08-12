@@ -1,21 +1,22 @@
-import IController from "../interfaces/IController";
+import IController from "../interfaces/i-controller";
+import IView from "../interfaces/i-view";
+import { AppEvents } from "./app-events";
 /**
  * Класс регистрирующий 
  */
 export default class Observer {
     private _sender;
     private _listeners = new Array<IController>();
-    constructor(sender: Element) {
+    constructor(sender: IView | null) {
         this._sender = sender;
     }
     set(listener: IController) {
         this._listeners.push(listener);
         return this;
     }
-    notify() {
-        this._listeners.forEach((currentValue, index, array) => {
-            //TODO определить/назначить тип данных args
-            // this._listeners[index](this._sender, args);
+    notify(nameEvent: AppEvents) {
+        this._listeners.forEach((controller) => {
+            controller.sendEvent(nameEvent);
         })
     }
 }

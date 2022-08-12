@@ -1,0 +1,21 @@
+.window-register {
+    visibility: hidden;
+
+    position: absolute;
+    left: 35%;
+    top: 40%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 30%;
+    width: 30%;
+
+    background-color: $window_background-color;
+}
+
+.window__button {
+    width: 30%;
+}

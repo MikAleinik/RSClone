@@ -1,12 +1,15 @@
-import IView from "../../interfaces/IView";
+import IView from "../../interfaces/i-view";
 import './index.scss';
 import FooterView from "../common/footer/footer-view";
 import HeaderView from "../common/header/header-view";
 import PageNavigationView from "../common/page-navigation/page-navigation-view";
 import AuthView from "./auth/auth-view";
 import ContentView from "./content/content-view";
+import IModel from "../../interfaces/i-model";
+import { AppModels } from "../../models/index/AppModels";
+import View from "./view";
 
-export default class IndexView implements IView{
+export default class IndexView extends View implements IView {
     private readonly TAG_CONTAINER = 'body';
     private readonly CLASS_CONTAINER = 'index';
 
@@ -14,7 +17,8 @@ export default class IndexView implements IView{
 
     private _indexElement = document.getElementsByTagName(this.TAG_CONTAINER)[0];
 
-    constructor() {
+    constructor(models: Map<AppModels, IModel>) {
+        super(models);
         this.createIndexElement();
     }
     getCurrentElement(): HTMLElement {
@@ -24,8 +28,8 @@ export default class IndexView implements IView{
         this._indexElement.classList.add(this.CLASS_CONTAINER);
         let headerElement = new HeaderView(this.LINK_HEADER);
         let navigationElement = new PageNavigationView();
-        let authElement = new AuthView();
-        let contentElement = new ContentView();
+        let authElement = new AuthView(this._models);
+        let contentElement = new ContentView(this._models);
         let footerElement = new FooterView();
 
         this._indexElement.insertAdjacentElement('beforeend', headerElement.getCurrentElement());

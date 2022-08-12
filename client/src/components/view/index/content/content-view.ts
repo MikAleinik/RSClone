@@ -1,8 +1,13 @@
-import IView from "../../../interfaces/IView";
+import IView from "../../../interfaces/i-view";
 import './content.scss';
 import NewsView from "./news/news-view";
+import AuthWindowView from "./auth-window/auth-window-view";
+import RegisterhWindowView from "./register-window/register-window-view";
+import View from "../view";
+import { AppModels } from "../../../models/index/AppModels";
+import IModel from "../../../interfaces/i-model";
 
-export default class ContentView implements IView {
+export default class ContentView extends View implements IView {
     private readonly TAG_CONTAINER = 'main';
     private readonly TAG_PROMO = 'div';
     private readonly TAG_LIST = 'ul';
@@ -16,7 +21,8 @@ export default class ContentView implements IView {
 
     private _contentElement = document.createElement(this.TAG_CONTAINER);
 
-    constructor() {
+    constructor(models: Map<AppModels, IModel>) {
+        super(models);
         this.createContentElement();
     }
     getCurrentElement(): HTMLElement {
@@ -29,9 +35,12 @@ export default class ContentView implements IView {
         listElement.insertAdjacentElement('beforeend', this.createListItemElement(this.TEXT_INFO_TWO));
         listElement.insertAdjacentElement('beforeend', this.createListItemElement(this.TEXT_INFO_THREE));
         promoElement.insertAdjacentElement('beforeend', listElement);
-        let newsElement = new NewsView();
-        this._contentElement.insertAdjacentElement('beforeend', promoElement);
+        let newsElement = new NewsView(this._models);
+        let authWindow = new AuthWindowView(this._models);
+        let registerWindow = new RegisterhWindowView(this._models);
         this._contentElement.insertAdjacentElement('beforeend', newsElement.getCurrentElement());
+        this._contentElement.insertAdjacentElement('beforeend', authWindow.getCurrentElement());
+        this._contentElement.insertAdjacentElement('beforeend', registerWindow.getCurrentElement());
     }
     private createPromoElement(): HTMLElement {
         let contentElement = document.createElement(this.TAG_PROMO);

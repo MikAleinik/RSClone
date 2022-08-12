@@ -1,7 +1,10 @@
-import IView from "../../../../interfaces/IView";
+import IModel from "../../../../interfaces/i-model";
+import IView from "../../../../interfaces/i-view";
+import { AppModels } from "../../../../models/index/AppModels";
+import View from "../../view";
 import './news.scss';
 
-export default class NewsView implements IView {
+export default class NewsView extends View implements IView {
     private readonly TAG_CONTAINER = 'div';
     private readonly TAG_HEADER = 'h3';
     private readonly CLASS_CONTAINER = 'news';
@@ -10,7 +13,8 @@ export default class NewsView implements IView {
 
     private _newsElement = document.createElement(this.TAG_CONTAINER);
 
-    constructor() {
+    constructor(models: Map<AppModels, IModel>) {
+        super(models);
         this.createNewsElement();
     }
     getCurrentElement(): HTMLElement {

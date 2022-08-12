@@ -1,4 +1,4 @@
-import IView from "../../../interfaces/IView";
+import IView from "../../../interfaces/i-view";
 import './page-navigation.scss';
 
 export default class PageNavigationView implements IView {

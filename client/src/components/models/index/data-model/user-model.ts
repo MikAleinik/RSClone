@@ -1,11 +1,11 @@
-import user from "../../../types/user";
-import Observer from "../../controller/observer";
-import DataMapper from "../common/sender/data-mapper";
+import user from "../../../../types/user";
+import IModel from "../../../interfaces/i-model";
+import DataMapper from "../../common/sender/data-mapper";
 
-export default class UserModel extends Observer {
+export default class UserModel implements IModel {
     private _dataMapper = new DataMapper();
 
-    super() {
+    constructor() {
 
     }
     isRegister(param: user): boolean {
