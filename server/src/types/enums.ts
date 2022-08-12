@@ -1,6 +1,8 @@
 export enum RouterPath {
-    CARS = 'cars',
-    USERS = 'users',
+  CARS = "cars",
+  USERS = "users",
+  USERS_REGISTER = "users/register",
+  AUTH = "auth",
 }
 
 export enum OkCodes {
