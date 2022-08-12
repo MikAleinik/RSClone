@@ -3,6 +3,7 @@ import app from './app';
 import pino from 'pino';
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
+import fastifyAuth from '@fastify/auth';
 
 const server = Fastify({
     trustProxy: true,
@@ -13,7 +14,7 @@ server
     .register(cors, {
         origin: '*',
     })
-    .register(require('@fastify/auth'))
+    .register(fastifyAuth)
     .register(app)
     .register(cookie)
     .then(() => server.ready())
