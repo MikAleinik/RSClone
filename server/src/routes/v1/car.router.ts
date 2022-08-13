@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
-import { CarsController } from '../controller/car.controller';
-import { RouterPath } from '../types/enums';
-import { SchemaTypeString } from '../types/types';
+import { CarsController } from '../../controller/car.controller';
+import { RouterPath } from '../../types/enums';
+import { SchemaTypeString } from '../../types/types';
 
 const carSchema = {
     type: 'object',

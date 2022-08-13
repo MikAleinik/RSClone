@@ -1,9 +1,9 @@
 import { FastifyPluginAsync } from 'fastify';
-import { RouterPath } from '../types/enums';
-import { AuthController } from '../controller/auth.controller';
+import { RouterPath } from '../../types/enums';
+import { AuthController } from '../../controller/auth.controller';
 import { Type } from '@sinclair/typebox';
-import { AuthRequestUserSchemaType } from '../types/types';
-import { ErrorReplySchema, UserReplySchema } from '../schema/general.schema';
+import { AuthRequestUserSchemaType } from '../../types/types';
+import { ErrorReplySchema, UserReplySchema } from '../../schema/general.schema';
 
 export const AuthRequestUserSchema = Type.Object({
     email: Type.String({ format: 'email' }),
