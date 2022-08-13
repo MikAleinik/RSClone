@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from 'fastify';
 import { RouterPath } from '../../types/enums';
 import { AuthController } from '../../controller/auth.controller';
 import { Type } from '@sinclair/typebox';
-import { AuthRequestUserSchemaType } from '../../types/types';
+// import { AuthRequestUserSchemaType } from '../../types/types';
 import { ErrorReplySchema, UserReplySchema } from '../../schema/general.schema';
 
 export const AuthRequestUserSchema = Type.Object({
@@ -24,9 +24,7 @@ const authUserOpts = {
 
 const auth: FastifyPluginAsync = async (fastify, options): Promise<void> => {
     options;
-    fastify.post<{ Body: AuthRequestUserSchemaType }>(`/${RouterPath.AUTH}`, authUserOpts, async (res, rep) => {
-        await AuthController.getInstance().authenticateUser(res, rep);
-    });
+    fastify.post(`/${RouterPath.AUTH}`, authUserOpts, AuthController.getInstance().authorizeUserFunc());
 };
 
 export default auth;
