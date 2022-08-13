@@ -1,10 +1,10 @@
-import { Type } from '@sinclair/typebox';
+import { FromSchema } from 'json-schema-to-ts';
 
-export const ErrorReplySchema = Type.Object({
-    message: Type.String(),
-});
+export type ErrorReplyType = FromSchema<typeof ErrorReplySchema>;
 
-export const UserReplySchema = Type.Object({
-    email: Type.String({ format: 'email' }),
-    login: Type.String(),
-});
+export const ErrorReplySchema = {
+    type: 'object',
+    properties: {
+        message: { type: 'string' },
+    },
+} as const;

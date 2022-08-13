@@ -1,10 +1,11 @@
 // import { ContentTypeJson } from "../types/types";
 // import { OkCodes } from "../types/enums";
 import jwt, { SignOptions } from 'jsonwebtoken';
-import { AuthRequestType, AuthRequestUserSchemaType, ContentTypeJson } from '../types/types';
+import { ContentTypeJson } from '../types/types';
 import { UsersModel } from '../model/user.model';
 import { ErrorCodes, OkCodes } from '../types/enums';
-import { FastifyReply, RouteHandler } from 'fastify';
+import { FastifyReply, FastifyRequest, RouteHandler } from 'fastify';
+import { AuthRequestUserSchemaType } from '../routes/v1/auth.router';
 
 export class AuthController {
     private static SECRET_FOR_JWT = 'testSecret123';
@@ -19,14 +20,20 @@ export class AuthController {
         //do nothing
     }
 
-    async verifyJWT(req: any, res: any) {
+    async verifyJWT(req: FastifyRequest, res: FastifyReply) {
         //, done: any) {
-        const cookie = req.cookies[AuthController.COOKIE_NAME];
         try {
+            const cookie = req.cookies[AuthController.COOKIE_NAME];
+            if (!cookie) {
+                res.code(401);
+                res.send({ message: 'unauthorized msg' });
+                // throw new Error('unauthorized 1');
+                return;
+            }
             jwt.verify(cookie, AuthController.SECRET_FOR_JWT, AuthController.TOKEN_OPTIONS);
         } catch (err) {
             res.code(401);
-            throw new Error('unauthorized');
+            res.send({ message: 'authentication expired, please login again' });
         }
     }
 
@@ -45,26 +52,12 @@ export class AuthController {
         }
     }
 
-    setAuthCookie(resp: any, id: string) {
+    setAuthCookie(resp: FastifyReply, id: string) {
         const token = this.createToken(id); //create a token with custom data
         resp.setCookie(AuthController.COOKIE_NAME, token, {
             httpOnly: true,
             // secure: true,
         });
-    }
-
-    async authorizeUser(req: AuthRequestType, res: FastifyReply) {
-        try {
-            req.headers;
-            const newUser = await UsersModel.getInstance().processAuthorizeUser(req.body);
-            res.code(OkCodes.OK);
-            AuthController.instance.setAuthCookie(res, newUser.id);
-            res.send(newUser.toJsonResponse());
-        } catch (err) {
-            res.code(ErrorCodes.BAD_REQUEST);
-            res.header(ContentTypeJson[0], ContentTypeJson[1]);
-            res.send((err as Error).message);
-        }
     }
 
     authorizeUserFunc(): RouteHandler<{ Body: AuthRequestUserSchemaType }> {

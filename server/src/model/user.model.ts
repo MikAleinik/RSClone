@@ -1,10 +1,12 @@
 import { ErrorNoSuchUser } from '../errors/ErrorNoSuchUser';
 import { ErrorCreateNewUser } from '../errors/ErrorCreateNewUser';
 import { OkCodes } from '../types/enums';
-import { AuthRequestUserSchemaType, ContentTypeJson, RegisterRequestUserSchemaType } from '../types/types';
+import { ContentTypeJson } from '../types/types';
 import { User } from './vo/user';
 import { ErrorInvalidPassword } from '../errors/ErrorInvalidPassword';
 import { hashPassword, matchPassword } from './util/password.manager';
+import { AuthRequestUserSchemaType } from '../routes/v1/auth.router';
+import { RegisterUserSchemaType } from '../routes/v1/user.router';
 
 export class UsersModel {
     private static instance: UsersModel;
@@ -55,7 +57,7 @@ export class UsersModel {
         res.send([]);
     }
 
-    async processCreateNewUser(body: RegisterRequestUserSchemaType) {
+    async processCreateNewUser(body: RegisterUserSchemaType) {
         const { email, login, password } = body;
         const isUnique = await this.checkUniqueEmail(email);
         if (!isUnique) {
