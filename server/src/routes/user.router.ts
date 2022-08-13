@@ -2,7 +2,7 @@ import { FastifyPluginAsync } from 'fastify';
 import { AuthController } from '../controller/auth.controller';
 import { UsersController } from '../controller/user.controller';
 import { RouterPath } from '../types/enums';
-import { RegisterRequestUserSchemaType, SchemaTypeString } from '../types/types';
+import { RegisterRequestUserSchemaType } from '../types/types';
 import { ErrorReplySchema, UserReplySchema } from '../schema/general.schema';
 import { Type } from '@sinclair/typebox';
 

@@ -55,7 +55,6 @@ export class AuthController {
 
     async authenticateUser(req: AuthRequestType, res: FastifyReply) {
         try {
-            req.headers;
             const newUser = await UsersModel.getInstance().processAuthorizeUser(req.body);
             res.code(OkCodes.OK);
             AuthController.instance.setAuthCookie(res, newUser.id);

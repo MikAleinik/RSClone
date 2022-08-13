@@ -4,13 +4,13 @@ export class User {
     id: string;
     email: string;
     login: string;
-    password: string;
+    passwordHash: string;
 
-    constructor(mail = 'USER', login = 'user', password = 'P@55w0rd') {
+    constructor(mail = 'USER', login = 'user', passwordH = 'P@55w0rd') {
         this.id = uuid();
         this.email = mail;
         this.login = login;
-        this.password = password;
+        this.passwordHash = passwordH;
     }
 
     toJsonResponse() {
@@ -24,7 +24,7 @@ export class User {
     }
 
     static toResponse(user: User) {
-        const { id, email: name, login, password } = user;
-        return { id, name, login, password };
+        const { id, email, login, passwordHash } = user;
+        return { id, email, login, passwordHash };
     }
 }
