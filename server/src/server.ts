@@ -1,14 +1,23 @@
 import Fastify from 'fastify';
 import app from './app';
-import pino from 'pino';
+// import pino from 'pino';
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import fastifyAuth from '@fastify/auth';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 
 const server = Fastify({
-    trustProxy: true,
-    logger: pino({ level: 'info' }),
+    logger: {
+        transport: {
+            target: 'pino-pretty',
+            options: {
+                destination: 1,
+                colorize: true,
+                translateTime: 'HH:MM:ss.l',
+                ignore: 'pid,hostname',
+            },
+        },
+    },
 }).withTypeProvider<TypeBoxTypeProvider>();
 
 server
