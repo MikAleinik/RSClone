@@ -19,12 +19,14 @@ const authUserOpts = {
             404: ErrorReplySchema,
         },
     },
-    handler: AuthController.getInstance().authenticateUser,
+    // handler: AuthController.getInstance().authenticateUser,
 };
 
 const auth: FastifyPluginAsync = async (fastify, options): Promise<void> => {
     options;
-    fastify.post<{ Body: AuthRequestUserSchemaType }>(`/${RouterPath.AUTH}`, authUserOpts);
+    fastify.post<{ Body: AuthRequestUserSchemaType }>(`/${RouterPath.AUTH}`, authUserOpts, async (res, rep) => {
+        await AuthController.getInstance().authenticateUser(res, rep);
+    });
 };
 
 export default auth;

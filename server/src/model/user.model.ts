@@ -4,6 +4,7 @@ import { OkCodes } from '../types/enums';
 import { AuthRequestUserSchemaType, ContentTypeJson, RegisterRequestUserSchemaType } from '../types/types';
 import { User } from './vo/user';
 import { ErrorInvalidPassword } from '../errors/ErrorInvalidPassword';
+import { hashPassword, matchPassword } from './util/password.manager';
 
 export class UsersModel {
     private static instance: UsersModel;
@@ -24,12 +25,18 @@ export class UsersModel {
 
     async getUserByEmail(email: string) {
         //TODO real search
-        return new User();
+        const user = new User(); // user.passwordHash on init is P@55w0rd
+        user.passwordHash = hashPassword(user.passwordHash);
+        return user;
     }
 
-    async validatePassword(password: string, user: User) {
+    validatePassword(password: string, user: User) {
         //TODO add check
-        return true;
+
+        // now we get fake user with password P@55w0rd -
+        // so let's validate it
+
+        return matchPassword(password, user.passwordHash);
     }
 
     async preHandler(req: any, res: any) {
@@ -54,7 +61,7 @@ export class UsersModel {
         if (!isUnique) {
             throw new ErrorCreateNewUser();
         }
-        return new User(email, login, password);
+        return new User(email, login, hashPassword(password));
     }
 
     async processAuthorizeUser(body: AuthRequestUserSchemaType) {

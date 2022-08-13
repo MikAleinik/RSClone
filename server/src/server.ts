@@ -15,9 +15,9 @@ server
     .register(cors, {
         origin: '*',
     })
+    .register(cookie)
     .register(fastifyAuth)
     .register(app)
-    .register(cookie)
     .then(() => server.ready())
     .then(() =>
         server.listen({ port: 3000, host: '0.0.0.0' }, (err) => {
