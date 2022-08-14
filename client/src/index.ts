@@ -18,5 +18,6 @@ let registerController = new RegisterController(userModel, registerModel);
 
 observer.addListener(AppEvents.AUTH_CLICK_BUTTON, authController)
     .addListener(AppEvents.AUTH_CHANGE_STATE_WINDOW, authController)
-    .addListener(AppEvents.REGISTER_CLICK_BUTTON, registerController);
+    .addListener(AppEvents.REGISTER_CLICK_BUTTON, registerController)
+    .addListener(AppEvents.REGISTER_CHANGE_STATE_WINDOW, registerController);
 let app = new IndexView(observer);

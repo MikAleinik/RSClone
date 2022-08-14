@@ -1,4 +1,3 @@
-import IView from "../../interfaces/i-view";
 import './index.scss';
 import FooterView from "../common/footer/footer-view";
 import HeaderView from "../common/header/header-view";
@@ -8,7 +7,7 @@ import ContentView from "./content/content-view";
 import View from "./view";
 import Observer from "../../controller/observer";
 
-export default class IndexView extends View implements IView {
+export default class IndexView extends View {
     private readonly TAG_CONTAINER = 'body';
     private readonly CLASS_CONTAINER = 'index';
 

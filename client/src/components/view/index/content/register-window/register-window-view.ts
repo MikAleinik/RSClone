@@ -1,9 +1,10 @@
 import { AppEvents } from "../../../../controller/app-events";
 import Observer from "../../../../controller/observer";
+import INotify from "../../../../interfaces/i-notify";
 import View from "../../view";
 import './register-window.scss';
 
-export default class RegisterhWindowView extends View {
+export default class RegisterWindowView extends View implements INotify {
     private readonly TAG_CONTAINER = 'div';
     private readonly TAG_BUTTON = 'button';
     private readonly CLASS_CONTAINER = 'window-register';
@@ -16,24 +17,30 @@ export default class RegisterhWindowView extends View {
     constructor(observer: Observer) {
         super(observer);
         this.createWindowElement();
-        document.addEventListener(AppEvents.REGISTER_CLICK_BUTTON, this.setWindowState.bind(this));
+        this._observer.addSender(AppEvents.REGISTER_CHANGE_STATE_WINDOW, this);
     }
     getCurrentElement(): HTMLElement {
         return this._windowElement;
     }
-    private createWindowElement(): void {
-        this._windowElement.classList.add(this.CLASS_CONTAINER);
-        let loginButton = document.createElement(this.TAG_BUTTON);
-        loginButton.classList.add(this.CLASS_BUTTON);
-        loginButton.textContent = this.TEXT_BUTTON;
-        this._windowElement.insertAdjacentElement('beforeend', loginButton);
+    notify(nameEvent: AppEvents): AppEvents | void {
+        this._observer.notify(nameEvent, this);
     }
-    private setWindowState(): void {
-        const currentEvent = <CustomEvent>event;
-        if (currentEvent.detail.state) {
+    setWindowVisibilityState(state: boolean): void {
+        if (state) {
             this._windowElement.style.visibility = 'visible';
         } else {
             this._windowElement.style.visibility = 'hidden';
         }
+    }
+    private createWindowElement(): void {
+        this._windowElement.classList.add(this.CLASS_CONTAINER);
+        let registerButton = document.createElement(this.TAG_BUTTON);
+        registerButton.classList.add(this.CLASS_BUTTON);
+        registerButton.textContent = this.TEXT_BUTTON;
+        registerButton.addEventListener('click', this.closeWindow.bind(this));
+        this._windowElement.insertAdjacentElement('beforeend', registerButton);
+    }
+    private closeWindow() {
+        this._observer.notify(AppEvents.REGISTER_CHANGE_STATE_WINDOW, this);
     }
 }
