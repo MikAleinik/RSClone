@@ -5,9 +5,8 @@ import HeaderView from "../common/header/header-view";
 import PageNavigationView from "../common/page-navigation/page-navigation-view";
 import AuthView from "./auth/auth-view";
 import ContentView from "./content/content-view";
-import IModel from "../../interfaces/i-model";
-import { AppModels } from "../../models/index/AppModels";
 import View from "./view";
+import Observer from "../../controller/observer";
 
 export default class IndexView extends View implements IView {
     private readonly TAG_CONTAINER = 'body';
@@ -17,8 +16,8 @@ export default class IndexView extends View implements IView {
 
     private _indexElement = document.getElementsByTagName(this.TAG_CONTAINER)[0];
 
-    constructor(models: Map<AppModels, IModel>) {
-        super(models);
+    constructor(observer: Observer) {
+        super(observer);
         this.createIndexElement();
     }
     getCurrentElement(): HTMLElement {
@@ -28,8 +27,8 @@ export default class IndexView extends View implements IView {
         this._indexElement.classList.add(this.CLASS_CONTAINER);
         let headerElement = new HeaderView(this.LINK_HEADER);
         let navigationElement = new PageNavigationView();
-        let authElement = new AuthView(this._models);
-        let contentElement = new ContentView(this._models);
+        let authElement = new AuthView(this._observer);
+        let contentElement = new ContentView(this._observer);
         let footerElement = new FooterView();
 
         this._indexElement.insertAdjacentElement('beforeend', headerElement.getCurrentElement());

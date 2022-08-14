@@ -1,5 +1,6 @@
-import event from "../../types/event";
+import { AppEvents } from "../controller/app-events";
+import IView from "./i-view";
 
 export default interface INotify {
-    notify(event: event): void;
+    notify(nameEvent: AppEvents, sender: IView | INotify): AppEvents | void;
 }

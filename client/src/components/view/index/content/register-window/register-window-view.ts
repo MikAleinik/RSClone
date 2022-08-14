@@ -1,12 +1,9 @@
-import detail from "../../../../../types/detail";
 import { AppEvents } from "../../../../controller/app-events";
-import IModel from "../../../../interfaces/i-model";
-import IView from "../../../../interfaces/i-view";
-import { AppModels } from "../../../../models/index/AppModels";
+import Observer from "../../../../controller/observer";
 import View from "../../view";
 import './register-window.scss';
 
-export default class RegisterhWindowView extends View implements IView {
+export default class RegisterhWindowView extends View {
     private readonly TAG_CONTAINER = 'div';
     private readonly TAG_BUTTON = 'button';
     private readonly CLASS_CONTAINER = 'window-register';
@@ -16,16 +13,13 @@ export default class RegisterhWindowView extends View implements IView {
 
     private _windowElement = document.createElement(this.TAG_CONTAINER);
 
-    constructor(models: Map<AppModels, IModel>) {
-        super(models);
+    constructor(observer: Observer) {
+        super(observer);
         this.createWindowElement();
-        document.addEventListener(AppEvents.STATE_CHANGE_VISIBILITY_REGISTER, this.setWindowState.bind(this));
+        document.addEventListener(AppEvents.REGISTER_CLICK_BUTTON, this.setWindowState.bind(this));
     }
     getCurrentElement(): HTMLElement {
         return this._windowElement;
-    }
-    notify(eventDetail: detail): void {
-        //TODO реализация
     }
     private createWindowElement(): void {
         this._windowElement.classList.add(this.CLASS_CONTAINER);

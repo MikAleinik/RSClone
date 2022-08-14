@@ -1,7 +1,14 @@
+/**
+ * Содержит все события приложения
+ * Название состоит из:
+ * AUTH_ - краткое название компонента
+ * CHANGE_ - описание действия события
+ * VISIBILTY - описание изменяемого свойства
+ */
 export const enum AppEvents {
     //Index page
-    STATE_CHANGE_VISIBILITY_AUTH = 'changeStateWindowAuth',//изменение состояния видимости окна авторизации
-    STATE_SET_VISIBILITY_AUTH = 'setStateWindowAuth',
-    STATE_CHANGE_VISIBILITY_REGISTER = 'changeStateWindowRegister',//изменение состояния видимости окна авторизации
-    STATE_SET_VISIBILITY_REGISTER = 'setStateWindowRegister',
+    AUTH_CLICK_BUTTON = 'clickAuthButton',
+    AUTH_CHANGE_STATE_WINDOW = 'changeStateAuthWindow',
+    REGISTER_CLICK_BUTTON = 'clickRegisterButton',
+    REGISTER_CHANGE_STATE_WINDOW = 'changeStateRegisterWindow',
 }

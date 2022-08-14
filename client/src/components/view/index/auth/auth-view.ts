@@ -1,15 +1,10 @@
-import detail from "../../../../types/detail";
 import { AppEvents } from "../../../controller/app-events";
-import AuthController from "../../../controller/index/auth-controller";
-import RegisterController from "../../../controller/index/register-controller";
 import Observer from "../../../controller/observer";
-import IModel from "../../../interfaces/i-model";
-import IView from "../../../interfaces/i-view";
-import { AppModels } from "../../../models/index/AppModels";
+import INotify from "../../../interfaces/i-notify";
 import View from "../view";
 import './auth.scss';
 
-export default class AuthView extends View implements IView {
+export default class AuthView extends View implements INotify {
     private readonly TAG_CONTAINER = 'section';
     private readonly TAG_BUTTON = 'button';
     private readonly CLASS_CONTAINER = 'auth';
@@ -21,32 +16,36 @@ export default class AuthView extends View implements IView {
     private readonly TEXT_BUTTON_REGISTRATION = 'Registration';//TODO (local) выносится в локализацию
 
     private _authElement = document.createElement(this.TAG_CONTAINER);
-    private _observer = new Observer(this);
+    private _authButton!: HTMLButtonElement;
+    private _registerButton!: HTMLButtonElement;
 
-    constructor(models: Map<AppModels, IModel>) {
-        super(models);
+    constructor(observer: Observer) {
+        super(observer);
         this.createAuthElement();
-        this._observer.set(new AuthController(this));
-        this._observer.set(new RegisterController(this));
+        this._observer.addSender(AppEvents.AUTH_CHANGE_STATE_WINDOW, this);
     }
     getCurrentElement(): HTMLElement {
         return this._authElement;
     }
-    notify(eventDetail: detail): void {
-        //TODO реализация сокрытия кнопок
-        //TODO при успешной авторизации
-        //TODO при успешной регистрации
+    notify(nameEvent: AppEvents): AppEvents | void {
+        this._observer.notify(nameEvent, this);
+    }
+    setAuthButtonState(state: boolean): void {
+        this._authButton.setAttribute('disabled', state.toString());
+    }
+    setRegisterButtonState(state: boolean): void {
+        this._registerButton.setAttribute('disabled', state.toString());
     }
     private createAuthElement(): void {
         this._authElement.classList.add(this.CLASS_CONTAINER);
-        let authButton = this.createButtonElement(this.CLASS_BUTTON_LOGIN, this.TEXT_BUTTON_LOGIN);
-        authButton.addEventListener('click', this.authButtonClickHandler.bind(this));
-        let registerButton = this.createButtonElement(this.CLASS_BUTTON_REGISTRATION, this.TEXT_BUTTON_REGISTRATION);
-        registerButton.addEventListener('click', this.registerButtonClickHandler.bind(this));
-        this._authElement.insertAdjacentElement('beforeend', authButton);
-        this._authElement.insertAdjacentElement('beforeend', registerButton);
+        this._authButton = this.createButtonElement(this.CLASS_BUTTON_LOGIN, this.TEXT_BUTTON_LOGIN);
+        this._authButton.addEventListener('click', this.authButtonClickHandler.bind(this));
+        this._registerButton = this.createButtonElement(this.CLASS_BUTTON_REGISTRATION, this.TEXT_BUTTON_REGISTRATION);
+        this._registerButton.addEventListener('click', this.registerButtonClickHandler.bind(this));
+        this._authElement.insertAdjacentElement('beforeend', this._authButton);
+        this._authElement.insertAdjacentElement('beforeend', this._registerButton);
     }
-    private createButtonElement(className: string = '', text: string): HTMLElement {
+    private createButtonElement(className: string = '', text: string): HTMLButtonElement {
         let linkElement = document.createElement(this.TAG_BUTTON);
         linkElement.classList.add(this.CLASS_BUTTON);
         linkElement.classList.add(className);
@@ -54,9 +53,9 @@ export default class AuthView extends View implements IView {
         return linkElement;
     }
     private authButtonClickHandler(): void {
-        this._observer.notify(AppEvents.STATE_CHANGE_VISIBILITY_AUTH);
+        this._observer.notify(AppEvents.AUTH_CLICK_BUTTON, this);
     }
     private registerButtonClickHandler(): void {
-        this._observer.notify(AppEvents.STATE_CHANGE_VISIBILITY_REGISTER);
+        this._observer.notify(AppEvents.REGISTER_CLICK_BUTTON, this);
     }
 }

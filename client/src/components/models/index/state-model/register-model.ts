@@ -4,7 +4,7 @@ export default class RegisterModel implements IModel {
     private _stateWindow = false;
     private _stateButton = true;
 
-    isChangeState():boolean {
+    isChangeStateWindow():boolean {
         this._stateWindow = !this._stateWindow;
         return this._stateWindow;
     }

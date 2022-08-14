@@ -1,13 +1,11 @@
-import IView from "../../../interfaces/i-view";
 import './content.scss';
 import NewsView from "./news/news-view";
 import AuthWindowView from "./auth-window/auth-window-view";
 import RegisterhWindowView from "./register-window/register-window-view";
 import View from "../view";
-import { AppModels } from "../../../models/index/AppModels";
-import IModel from "../../../interfaces/i-model";
+import Observer from "../../../controller/observer";
 
-export default class ContentView extends View implements IView {
+export default class ContentView extends View {
     private readonly TAG_CONTAINER = 'main';
     private readonly TAG_PROMO = 'div';
     private readonly TAG_LIST = 'ul';
@@ -21,8 +19,8 @@ export default class ContentView extends View implements IView {
 
     private _contentElement = document.createElement(this.TAG_CONTAINER);
 
-    constructor(models: Map<AppModels, IModel>) {
-        super(models);
+    constructor(observer: Observer) {
+        super(observer);
         this.createContentElement();
     }
     getCurrentElement(): HTMLElement {
@@ -35,9 +33,9 @@ export default class ContentView extends View implements IView {
         listElement.insertAdjacentElement('beforeend', this.createListItemElement(this.TEXT_INFO_TWO));
         listElement.insertAdjacentElement('beforeend', this.createListItemElement(this.TEXT_INFO_THREE));
         promoElement.insertAdjacentElement('beforeend', listElement);
-        let newsElement = new NewsView(this._models);
-        let authWindow = new AuthWindowView(this._models);
-        let registerWindow = new RegisterhWindowView(this._models);
+        let newsElement = new NewsView(this._observer);
+        let authWindow = new AuthWindowView(this._observer);
+        let registerWindow = new RegisterhWindowView(this._observer);
         this._contentElement.insertAdjacentElement('beforeend', newsElement.getCurrentElement());
         this._contentElement.insertAdjacentElement('beforeend', authWindow.getCurrentElement());
         this._contentElement.insertAdjacentElement('beforeend', registerWindow.getCurrentElement());

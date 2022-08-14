@@ -1,32 +1,49 @@
 import UserModel from "../../models/index/data-model/user-model";
 import AuthModel from "../../models/index/state-model/auth-model";
 import { AppEvents } from "../app-events";
-import IController from "../../interfaces/i-controller";
 import INotify from "../../interfaces/i-notify";
+import AuthView from "../../view/index/auth/auth-view";
+import AuthWindowView from "../../view/index/content/auth-window/auth-window-view";
+import View from "../../view/index/view";
 
-export default class AuthController implements IController {
-    private _sender: INotify;
-    private _userModel = new UserModel();
-    private _authModel = new AuthModel();
+export default class AuthController implements INotify {
+    private _userModel: UserModel;
+    private _authModel: AuthModel;
 
-    constructor(sender: INotify) {
-        this._sender = sender;
+    constructor(userModel: UserModel, authModel: AuthModel) {
+        this._authModel = authModel;
+        this._userModel = userModel;
     }
-    sendEvent(nameEvent: AppEvents): void {
+    notify(nameEvent: AppEvents, sender: View): AppEvents | void {
         switch (nameEvent) {
-            case AppEvents.STATE_CHANGE_VISIBILITY_AUTH: {
-                this.changeStateWindowHandler();
+            case AppEvents.AUTH_CLICK_BUTTON: {
+                this.clickButtonHandler(sender);
+                return AppEvents.AUTH_CHANGE_STATE_WINDOW;
+                break;
+            }
+            case AppEvents.AUTH_CHANGE_STATE_WINDOW: {
+                if (sender instanceof AuthWindowView) {
+                    this.changeStateWindowHandler(sender);
+                }
+                if (sender instanceof AuthView) {
+                    this.clickButtonHandler(sender);
+                    // return AppEvents.AUTH_CHANGE_STATE_WINDOW;
+                }
+                break;
             }
             default: {
 
             }
         }
     }
-    private changeStateWindowHandler():void {
-        let result = this._authModel.isChangeStateWindow();
-        this._sender.notify({
-            target: null,
-            state: result,
-        });
+    private clickButtonHandler(sender: View): AppEvents | void {
+        let stateButton = this._authModel.isChangeStateButton();
+        let verifySender = (sender as unknown) as AuthView;
+        verifySender.setAuthButtonState(stateButton);
+    }
+    private changeStateWindowHandler(sender: View): void {
+        let stateWindow = this._authModel.isChangeStateWindow();;
+        let verifySender = (sender as unknown) as AuthWindowView;
+        verifySender.setWindowVisibilityState(stateWindow);
     }
 }
