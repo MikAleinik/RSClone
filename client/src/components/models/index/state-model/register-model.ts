@@ -1,6 +1,4 @@
-import IModel from "../../../interfaces/i-model";
-
-export default class RegisterModel implements IModel {
+export default class RegisterModel {
     private _stateWindow = false;
     private _stateButton = true;
 

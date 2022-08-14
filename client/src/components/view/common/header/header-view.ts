@@ -1,7 +1,8 @@
-import IView from "../../../interfaces/i-view";
+import Observer from '../../../controller/observer';
+import View from '../../index/view';
 import './header.scss';
 
-export default class HeaderView implements IView {
+export default class HeaderView extends View {
     private readonly TAG_CONTAINER = 'h1';
     private readonly TAG_LINK = 'a';
 
@@ -9,7 +10,8 @@ export default class HeaderView implements IView {
 
     private _headerElement = document.createElement(this.TAG_CONTAINER);
 
-    constructor(link: string) {
+    constructor(observer: Observer, link: string) {
+        super(observer);
         this.createHeaderElement(link);
     }
     getCurrentElement(): HTMLElement {

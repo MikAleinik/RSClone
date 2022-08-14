@@ -1,8 +1,7 @@
 import user from "../../../../types/user";
-import IModel from "../../../interfaces/i-model";
 import DataMapper from "../../common/sender/data-mapper";
 
-export default class UserModel implements IModel {
+export default class UserModel {
     private _dataMapper = new DataMapper();
 
     constructor() {

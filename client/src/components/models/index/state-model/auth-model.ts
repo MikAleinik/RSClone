@@ -1,6 +1,4 @@
-import IModel from "../../../interfaces/i-model";
-
-export default class AuthModel implements IModel {
+export default class AuthModel {
     private _stateWindow = false;
     private _stateButton = true;
     

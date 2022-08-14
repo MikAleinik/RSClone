@@ -1,7 +1,8 @@
-import IView from "../../../interfaces/i-view";
+import Observer from '../../../controller/observer';
+import View from '../../index/view';
 import './footer.scss';
 
-export default class FooterView implements IView {
+export default class FooterView extends View {
     private readonly TAG_CONTAINER = 'footer';
     private readonly TAG_LINK = 'a';
     private readonly TAG_TEXT = 'span';
@@ -25,7 +26,8 @@ export default class FooterView implements IView {
 
     private _footerElement = document.createElement(this.TAG_CONTAINER);
 
-    constructor() {
+    constructor(observer: Observer) {
+        super(observer);
         this.createFooterElement();
     }
     getCurrentElement(): HTMLElement {

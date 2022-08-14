@@ -24,11 +24,11 @@ export default class IndexView extends View {
     }
     private createIndexElement(): void {
         this._indexElement.classList.add(this.CLASS_CONTAINER);
-        let headerElement = new HeaderView(this.LINK_HEADER);
-        let navigationElement = new PageNavigationView();
+        let headerElement = new HeaderView(this._observer, this.LINK_HEADER);
+        let navigationElement = new PageNavigationView(this._observer);
         let authElement = new AuthView(this._observer);
         let contentElement = new ContentView(this._observer);
-        let footerElement = new FooterView();
+        let footerElement = new FooterView(this._observer);
 
         this._indexElement.insertAdjacentElement('beforeend', headerElement.getCurrentElement());
         this._indexElement.insertAdjacentElement('beforeend', navigationElement.getCurrentElement());

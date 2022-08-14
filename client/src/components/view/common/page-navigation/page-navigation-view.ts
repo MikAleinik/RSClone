@@ -1,7 +1,8 @@
-import IView from "../../../interfaces/i-view";
+import Observer from '../../../controller/observer';
+import View from '../../index/view';
 import './page-navigation.scss';
 
-export default class PageNavigationView implements IView {
+export default class PageNavigationView extends View {
     private readonly TAG_CONTAINER = 'nav';
     private readonly TAG_LIST = 'ul';
     private readonly TAG_LIST_ITEM = 'li';
@@ -13,7 +14,8 @@ export default class PageNavigationView implements IView {
 
     private _navElement = document.createElement(this.TAG_CONTAINER);
 
-    constructor(link: string = '#') {
+    constructor(observer: Observer, link: string = '#') {
+        super(observer);
         this.createHeaderElement(link);
     }
     getCurrentElement(): HTMLElement {
