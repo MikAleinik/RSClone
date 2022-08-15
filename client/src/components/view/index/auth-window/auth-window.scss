@@ -1,0 +1,63 @@
+.window-auth__wrapper {
+    visibility: hidden;
+
+    position: absolute;
+    z-index : 1000;
+    left    : 0;
+    right   : 0;
+
+    height: 100vh;
+    width : 100vw;
+
+    background: $modal_background-color;
+}
+
+.window-auth {
+    position: absolute;
+    left    : 35%;
+    top     : 40%;
+
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+    align-items    : center;
+
+    height    : 30%;
+    min-height: 200px;
+    width     : 30%;
+
+    background-color: $window_background-color;
+}
+
+.window-auth__header {
+    font-size: 1rem;
+    margin   : 1rem;
+}
+
+.window-auth__row-container {
+    display        : flex;
+    flex-direction : row;
+    align-items    : center;
+    justify-content: center;
+
+    width: 100%;
+
+    box-sizing: border-box;
+    padding: 0% 15%;
+}
+
+.window-auth__info {
+    width: 20%;
+    text-align: end;
+}
+
+.window-auth__field {
+    width: 60%;
+
+    font-size    : 16px;
+    border       : 1px solid;
+    border-radius: 18px;
+    padding      : 5px 15px;
+    margin       : 10px;
+    cursor       : pointer;
+}

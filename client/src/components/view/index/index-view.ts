@@ -6,6 +6,8 @@ import AuthView from "./auth/auth-view";
 import ContentView from "./content/content-view";
 import View from "./view";
 import Observer from "../../controller/observer";
+import AuthWindowView from './auth-window/auth-window-view';
+import RegisterWindowView from './register-window/register-window-view';
 
 export default class IndexView extends View {
     private readonly TAG_CONTAINER = 'body';
@@ -29,11 +31,15 @@ export default class IndexView extends View {
         let authElement = new AuthView(this._observer);
         let contentElement = new ContentView(this._observer);
         let footerElement = new FooterView(this._observer);
+        let authWindow = new AuthWindowView(this._observer);
+        let registerWindow = new RegisterWindowView(this._observer);
 
         this._indexElement.insertAdjacentElement('beforeend', headerElement.getCurrentElement());
         this._indexElement.insertAdjacentElement('beforeend', navigationElement.getCurrentElement());
         this._indexElement.insertAdjacentElement('beforeend', authElement.getCurrentElement());
         this._indexElement.insertAdjacentElement('beforeend', contentElement.getCurrentElement());
         this._indexElement.insertAdjacentElement('beforeend', footerElement.getCurrentElement());
+        this._indexElement.insertAdjacentElement('beforeend', authWindow.getCurrentElement());
+        this._indexElement.insertAdjacentElement('beforeend', registerWindow.getCurrentElement());
     }
 }

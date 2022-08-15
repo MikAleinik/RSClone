@@ -1,7 +1,5 @@
 import './content.scss';
 import NewsView from "./news/news-view";
-import AuthWindowView from "./auth-window/auth-window-view";
-import RegisterhWindowView from "./register-window/register-window-view";
 import View from "../view";
 import Observer from "../../../controller/observer";
 
@@ -34,11 +32,7 @@ export default class ContentView extends View {
         listElement.insertAdjacentElement('beforeend', this.createListItemElement(this.TEXT_INFO_THREE));
         promoElement.insertAdjacentElement('beforeend', listElement);
         let newsElement = new NewsView(this._observer);
-        let authWindow = new AuthWindowView(this._observer);
-        let registerWindow = new RegisterhWindowView(this._observer);
         this._contentElement.insertAdjacentElement('beforeend', newsElement.getCurrentElement());
-        this._contentElement.insertAdjacentElement('beforeend', authWindow.getCurrentElement());
-        this._contentElement.insertAdjacentElement('beforeend', registerWindow.getCurrentElement());
     }
     private createPromoElement(): HTMLElement {
         let contentElement = document.createElement(this.TAG_PROMO);
