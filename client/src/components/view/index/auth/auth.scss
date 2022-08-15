@@ -57,3 +57,14 @@ form[name=login] {
         }
     }
 }
+
+.auth__name {
+    visibility: hidden;
+    position: absolute;
+    top: 31%;
+    left: 10%;
+}
+
+.auth__name_visible {
+    visibility: visible;
+}

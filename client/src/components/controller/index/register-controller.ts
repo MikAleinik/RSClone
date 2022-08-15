@@ -14,7 +14,7 @@ export default class RegisterController implements INotify {
         this._registerModel = registerModel;
         this._userModel = userModel;
     }
-    notify(nameEvent: AppEvents, sender: View): AppEvents | void {
+    notify(nameEvent: AppEvents, sender: View, params?: Map<string, string>): AppEvents | void {
         switch (nameEvent) {
             case AppEvents.REGISTER_CLICK_BUTTON: {
                 this.clickButtonHandler(sender);
@@ -28,6 +28,14 @@ export default class RegisterController implements INotify {
                 this.disableButtonHandler(sender);
                 break;
             }
+            case AppEvents.REGISTER_HIDE_BUTTON: {
+                this.hideButtonHandler(sender);
+                break;
+            }
+            case AppEvents.REGISTER_SHOW_BUTTON: {
+                this.showButtonHandler(sender);
+                break;
+            }
             case AppEvents.REGISTER_SHOW_WINDOW: {
                 this.showWindowHandler(sender);
                 break;
@@ -36,16 +44,42 @@ export default class RegisterController implements INotify {
                 this.hideWindowHandler(sender);
                 break;
             }
+            case AppEvents.REGISTER_USER: {
+                if (params !== undefined) {
+                    this.registerNewUser(nameEvent, sender, params);
+                } else {
+                    //TODO возврат ошибки если не передались параметры? избыточная проверка после view?
+                }
+                break;
+            }
+            case AppEvents.REGISTER_USER: {
+                if (this._registerModel.getStateButton()){
+                    this._registerModel.isChangeStateButton();
+                }
+                if (this._registerModel.getStateWindow()){
+                    this._registerModel.isChangeStateWindow();
+                }
+            }
             default: {
 
             }
         }
     }
+    private registerNewUser(nameEvent: AppEvents, sender: View, params: Map<string, string>): void {
+        this._userModel.registerUser(nameEvent, params)
+            .then((result) => {
+                let verifySender = (sender as unknown) as RegisterWindowView;
+                verifySender.successRegistrationHandler();
+            })
+            .catch((result) => {
+                let verifySender = (sender as unknown) as RegisterWindowView;
+                verifySender.failRegistrationHandler(result as Map<string, string>);
+            });
+    }
     private clickButtonHandler(sender: View): void {
         let result = this._registerModel.isChangeStateButton();
         let verifySender = (sender as unknown) as AuthView;
         verifySender.setRegisterButtonState(result);
-        
     }
     private enableButtonHandler(sender: View): AppEvents | void {
         if (!this._registerModel.getStateButton()) {
@@ -62,6 +96,22 @@ export default class RegisterController implements INotify {
         let stateButton = this._registerModel.getStateButton();
         let verifySender = (sender as unknown) as AuthView;
         verifySender.setRegisterButtonState(stateButton);
+    }
+    private showButtonHandler(sender: View): AppEvents | void {
+        if (!this._registerModel.getVisibilityButton()) {
+            this._registerModel.isChangeVisibilityButton();
+        }
+        let visibiltyButton = this._registerModel.getVisibilityButton();
+        let verifySender = (sender as unknown) as AuthView;
+        verifySender.setRegisterButtonVisibility(visibiltyButton);
+    }
+    private hideButtonHandler(sender: View): AppEvents | void {
+        if (this._registerModel.getVisibilityButton()) {
+            this._registerModel.isChangeVisibilityButton();
+        }
+        let stateButton = this._registerModel.getVisibilityButton();
+        let verifySender = (sender as unknown) as AuthView;
+        verifySender.setRegisterButtonVisibility(stateButton);
     }
     private showWindowHandler(sender: View): void {
         if (!this._registerModel.getStateWindow()) {

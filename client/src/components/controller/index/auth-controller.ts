@@ -36,10 +36,19 @@ export default class AuthController implements INotify {
                 this.hideWindowHandler(sender);
                 break;
             }
+            case AppEvents.AUTH_GET_AUTH_USER: {
+                this.getAuthUserHandler(sender);
+                break;
+            }
             default: {
 
             }
         }
+    }
+    private getAuthUserHandler(sender: View): AppEvents | void {
+        let nameUser = this._userModel.getAuthUser();
+        let verifySender = (sender as unknown) as AuthView;
+        verifySender.showUserName(nameUser);
     }
     private clickButtonHandler(sender: View): AppEvents | void {
         let stateButton = this._authModel.isChangeStateButton();

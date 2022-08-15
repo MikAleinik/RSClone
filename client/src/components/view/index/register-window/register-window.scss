@@ -61,3 +61,7 @@
     margin       : 10px;
     cursor       : pointer;
 }
+
+.window-register__field_invalid {
+    border       : 1px solid $border-color-error;
+}
