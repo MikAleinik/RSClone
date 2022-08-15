@@ -8,7 +8,13 @@
 export const enum AppEvents {
     //Index page
     AUTH_CLICK_BUTTON = 'clickAuthButton',
-    AUTH_CHANGE_STATE_WINDOW = 'changeStateAuthWindow',
+    AUTH_ENABLE_BUTTON = 'enableAuthButton',
+    AUTH_DISABLE_BUTTON = 'disableAuthButton',
+    AUTH_SHOW_WINDOW = 'showAuthWindow',
+    AUTH_HIDE_WINDOW = 'hideAuthWindow',
     REGISTER_CLICK_BUTTON = 'clickRegisterButton',
-    REGISTER_CHANGE_STATE_WINDOW = 'changeStateRegisterWindow',
+    REGISTER_ENABLE_BUTTON = 'enableRegisterButton',
+    REGISTER_DISABLE_BUTTON = 'disableRegisterButton',
+    REGISTER_SHOW_WINDOW = 'showRegisterWindow',
+    REGISTER_HIDE_WINDOW = 'hideRegisterWindow',
 }

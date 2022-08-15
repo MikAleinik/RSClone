@@ -22,19 +22,47 @@ export default class AuthView extends View implements INotify {
     constructor(observer: Observer) {
         super(observer);
         this.createAuthElement();
-        this._observer.addSender(AppEvents.AUTH_CHANGE_STATE_WINDOW, this);
+        this._observer.addSender(AppEvents.AUTH_SHOW_WINDOW, this);
+        this._observer.addSender(AppEvents.AUTH_HIDE_WINDOW, this);
+        this._observer.addSender(AppEvents.REGISTER_SHOW_WINDOW, this);
+        this._observer.addSender(AppEvents.REGISTER_HIDE_WINDOW, this);
     }
     getCurrentElement(): HTMLElement {
         return this._authElement;
     }
-    notify(nameEvent: AppEvents): AppEvents | void {
-        this._observer.notify(nameEvent, this);
+    notify(nameEvent: AppEvents): void {
+        switch (nameEvent) {
+            case AppEvents.AUTH_SHOW_WINDOW: {
+                this._observer.notify(AppEvents.AUTH_DISABLE_BUTTON, this);
+                break;
+            }
+            case AppEvents.AUTH_HIDE_WINDOW: {
+                this._observer.notify(AppEvents.AUTH_ENABLE_BUTTON, this);
+                break;
+            }
+            case AppEvents.REGISTER_SHOW_WINDOW: {
+                this._observer.notify(AppEvents.REGISTER_DISABLE_BUTTON, this);
+                break;
+            }
+            case AppEvents.REGISTER_HIDE_WINDOW: {
+                this._observer.notify(AppEvents.REGISTER_ENABLE_BUTTON, this);
+                break;
+            }
+        }
     }
     setAuthButtonState(state: boolean): void {
-        this._authButton.setAttribute('disabled', state.toString());
+        if (!state) {
+            this._authButton.setAttribute('disabled', state.toString());
+        } else {
+            this._authButton.removeAttribute('disabled');
+        }
     }
     setRegisterButtonState(state: boolean): void {
-        this._registerButton.setAttribute('disabled', state.toString());
+        if (!state) {
+            this._registerButton.setAttribute('disabled', state.toString());
+        } else {
+            this._registerButton.removeAttribute('disabled');
+        }
     }
     private createAuthElement(): void {
         this._authElement.classList.add(this.CLASS_CONTAINER);

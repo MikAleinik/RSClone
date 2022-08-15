@@ -23,22 +23,25 @@ export default class Observer {
             this._senders.set(nameEvent, new Array(sender));
         }
     }
-    notify(nameEvent: AppEvents, sender: View) {
+    notify(nameEvent: AppEvents, sender: View | INotify) {
         let currentListController = this._listeners.get(nameEvent);
         if (currentListController !== undefined) {
             currentListController.forEach((controller) => {
                 let result = controller.notify(nameEvent, sender);
                 if (result !== undefined) {
-                    this.runAdditionalNotify(result);
+                    this.checkSenderNotify(result, <INotify>sender);
                 }
-            })
+            });
         }
+        this.checkSenderNotify(nameEvent, <INotify>sender);
     }
-    private runAdditionalNotify(nameEvent: AppEvents){
+    private checkSenderNotify(nameEvent: AppEvents, eventSender: INotify) {
         let currentListSender = this._senders.get(nameEvent);
         if (currentListSender !== undefined) {
             currentListSender.forEach((sender) => {
-                sender.notify(nameEvent, sender);
+                if (sender !== eventSender) {
+                    sender.notify(nameEvent, sender);
+                }
             })
         }
     }

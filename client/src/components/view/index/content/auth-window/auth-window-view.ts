@@ -17,13 +17,15 @@ export default class AuthWindowView extends View implements INotify {
     constructor(observer: Observer) {
         super(observer);
         this.createWindowElement();
-        this._observer.addSender(AppEvents.AUTH_CHANGE_STATE_WINDOW, this);
+        this._observer.addSender(AppEvents.AUTH_CLICK_BUTTON, this);
     }
     getCurrentElement(): HTMLElement {
         return this._windowElement;
     }
     notify(nameEvent: AppEvents): AppEvents | void {
-        this._observer.notify(nameEvent, this);
+        if(nameEvent === AppEvents.AUTH_CLICK_BUTTON) {
+            this._observer.notify(AppEvents.AUTH_SHOW_WINDOW, this);  
+        }
     }
     setWindowVisibilityState(state: boolean): void {
         if (state) {
@@ -41,6 +43,6 @@ export default class AuthWindowView extends View implements INotify {
         this._windowElement.insertAdjacentElement('beforeend', loginButton);
     }
     private closeWindow() {
-        this._observer.notify(AppEvents.AUTH_CHANGE_STATE_WINDOW, this);
+        this._observer.notify(AppEvents.AUTH_HIDE_WINDOW, this);
     }
 }

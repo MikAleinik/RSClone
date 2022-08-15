@@ -10,4 +10,10 @@ export default class RegisterModel {
         this._stateButton = !this._stateButton;
         return this._stateButton;
     }
+    getStateWindow():boolean {
+        return this._stateWindow;
+    }
+    getStateButton():boolean {
+        return this._stateButton;
+    }
 }

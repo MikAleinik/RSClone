@@ -1,6 +1,6 @@
 export default class AuthModel {
     private _stateWindow = false;
-    private _stateButton = true;
+    private _stateButton = false;
     
     isChangeStateWindow():boolean {
         this._stateWindow = !this._stateWindow;

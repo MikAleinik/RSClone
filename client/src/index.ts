@@ -17,7 +17,13 @@ let authController = new AuthController(userModel, authModel);
 let registerController = new RegisterController(userModel, registerModel);
 
 observer.addListener(AppEvents.AUTH_CLICK_BUTTON, authController)
-    .addListener(AppEvents.AUTH_CHANGE_STATE_WINDOW, authController)
+    .addListener(AppEvents.AUTH_ENABLE_BUTTON, authController)
+    .addListener(AppEvents.AUTH_DISABLE_BUTTON, authController)
+    .addListener(AppEvents.AUTH_SHOW_WINDOW, authController)
+    .addListener(AppEvents.AUTH_HIDE_WINDOW, authController)
     .addListener(AppEvents.REGISTER_CLICK_BUTTON, registerController)
-    .addListener(AppEvents.REGISTER_CHANGE_STATE_WINDOW, registerController);
+    .addListener(AppEvents.REGISTER_ENABLE_BUTTON, registerController)
+    .addListener(AppEvents.REGISTER_DISABLE_BUTTON, registerController)
+    .addListener(AppEvents.REGISTER_SHOW_WINDOW, registerController)
+    .addListener(AppEvents.REGISTER_HIDE_WINDOW, registerController);
 let app = new IndexView(observer);
