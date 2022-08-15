@@ -70,8 +70,8 @@ export default class AuthView extends View implements INotify {
         this._authButton.addEventListener('click', this.authButtonClickHandler.bind(this));
         this._registerButton = this.createButtonElement(this.CLASS_BUTTON_REGISTRATION, this.TEXT_BUTTON_REGISTRATION);
         this._registerButton.addEventListener('click', this.registerButtonClickHandler.bind(this));
-        this._authElement.insertAdjacentElement('beforeend', this._authButton);
         this._authElement.insertAdjacentElement('beforeend', this._registerButton);
+        this._authElement.insertAdjacentElement('beforeend', this._authButton);
     }
     private createButtonElement(className: string = '', text: string): HTMLButtonElement {
         let linkElement = document.createElement(this.TAG_BUTTON);
