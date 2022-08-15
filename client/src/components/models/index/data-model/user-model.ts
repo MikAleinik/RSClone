@@ -19,7 +19,6 @@ export default class UserModel {
                     this._currentUser.name = param.get('login')!;
                     this._currentUser.email = param.get('email')!;
                     this._currentUser.password = param.get('password')!;
-                    // console.log(this._currentUser);
                     resolve(result);
                 })
                 .catch((result) => {
@@ -27,13 +26,33 @@ export default class UserModel {
                 });
         });
     }
-    isLogIn(name: string, pass: string): boolean {
-        //TODO заглушка
-        return true;
+    isLogIn(nameEvents: AppEvents, param: Map<string, string>): Promise<Map<string, string>> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.send(nameEvents, param)
+                .then((result) => {
+                    this._currentUser.name = param.get('login')!;
+                    this._currentUser.email = param.get('email')!;
+                    this._currentUser.password = param.get('password')!;
+                    resolve(result);
+                })
+                .catch((result) => {
+                    reject(result);
+                });
+        });
     }
-    isLogOut(): boolean {
-        //TODO заглушка
-        return true;
+    isLogOut(nameEvent: AppEvents): Promise<Map<string, string>> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.send(nameEvent)
+                .then((result) => {
+                    this._currentUser.name = '';
+                    this._currentUser.email = '';
+                    this._currentUser.password = '';
+                    resolve(result);
+                })
+                .catch((result) => {
+                    reject(result);
+                });
+        });
     }
     getAuthUser(): string {
         return this._currentUser.name;

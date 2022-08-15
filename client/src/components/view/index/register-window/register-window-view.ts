@@ -27,7 +27,6 @@ export default class RegisterWindowView extends View implements INotify {
     private readonly TEXT_FIELD_EMAIL = 'Email';//TODO (local) выносится в локализацию
     private readonly TEXT_BUTTON_LOGIN = 'Register';//TODO (local) выносится в локализацию
     private readonly TEXT_BUTTON_CANCEL = 'Cancel';//TODO (local) выносится в локализацию
-    private readonly ID_FORM = 'form_auth';
     private readonly ID_FIELD_LOGIN = 'login';
     private readonly ID_FIELD_PASS = 'password';
     private readonly ID_FIELD_EMAIL = 'email';
@@ -56,7 +55,7 @@ export default class RegisterWindowView extends View implements INotify {
         }
     }
     successRegistrationHandler() {
-        this.setWindowVisibilityState(false);
+        this.setWindowVisibilityState(false);//TODO убрать прямое изменение состояния
         this._observer.notify(AppEvents.REGISTER_USER_SUCCESS, this);
     }
     failRegistrationHandler(result: Map<string, string>) {

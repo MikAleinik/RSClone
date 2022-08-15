@@ -17,8 +17,15 @@ let authController = new AuthController(userModel, authModel);
 let registerController = new RegisterController(userModel, registerModel);
 
 observer.addListener(AppEvents.AUTH_CLICK_BUTTON, authController)
+    .addListener(AppEvents.AUTH_CLICK_LOGOUT_BUTTON, authController)
+    .addListener(AppEvents.AUTH_LOGOUT_USER, authController)
+    .addListener(AppEvents.AUTH_LOGIN_USER, authController)
+    .addListener(AppEvents.AUTH_LOGIN_USER_SUCCESS, authController)
+    .addListener(AppEvents.AUTH_LOGIN_USER_FAIL, authController)
     .addListener(AppEvents.AUTH_ENABLE_BUTTON, authController)
     .addListener(AppEvents.AUTH_DISABLE_BUTTON, authController)
+    .addListener(AppEvents.AUTH_SHOW_BUTTON, authController)
+    .addListener(AppEvents.AUTH_HIDE_BUTTON, authController)
     .addListener(AppEvents.AUTH_SHOW_WINDOW, authController)
     .addListener(AppEvents.AUTH_HIDE_WINDOW, authController)
     .addListener(AppEvents.AUTH_GET_AUTH_USER, authController)
@@ -31,5 +38,5 @@ observer.addListener(AppEvents.AUTH_CLICK_BUTTON, authController)
     .addListener(AppEvents.REGISTER_HIDE_WINDOW, registerController)
     .addListener(AppEvents.REGISTER_USER, registerController)
     .addListener(AppEvents.REGISTER_USER_SUCCESS, registerController)
-    // .addListener(AppEvents.REGISTER_USER_FAIL, registerController);
+// .addListener(AppEvents.REGISTER_USER_FAIL, registerController);
 let app = new IndexView(observer);

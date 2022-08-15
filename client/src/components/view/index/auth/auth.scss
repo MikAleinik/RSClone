@@ -68,3 +68,9 @@ form[name=login] {
 .auth__name_visible {
     visibility: visible;
 }
+
+.auth__button_logout {
+    position: absolute;
+    top: 0%;
+    left: 50%;
+}
