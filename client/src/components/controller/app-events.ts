@@ -30,4 +30,5 @@ export const enum AppEvents {
     REGISTER_USER = 'registerUser',//пользователь регистрируется
     REGISTER_USER_SUCCESS = 'registerUserSuccess',//пользователь успешно зарегистрировался
     REGISTER_USER_FAIL = 'registerUserFail',//пользователь не зарегистрировался
+    NEWS_GET_DATA = 'newsGetData',//получить данные новостной ленты
 }

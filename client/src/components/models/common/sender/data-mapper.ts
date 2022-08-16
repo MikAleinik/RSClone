@@ -1,28 +1,40 @@
 import answer from "../../../../types/answer";
+import news from "../../../../types/news";
 import user from "../../../../types/user";
 import { AppEvents } from "../../../controller/app-events";
 
 export default class DataMapper {
-    //TODO хранящиеся данные пользователй заглушка
-    private _users = new Array<user>;
-    private _currentUser: user = {
+    private readonly NEWS_URL = 'https://saurav.tech/NewsAPI/top-headlines/category/business/ru.json';
+
+    private _users = new Array<user>;//TODO хранящиеся данные пользователй заглушка
+    private _currentUser: user = {//TODO хранящийся текущий авториз пользователь заглушка
         name: '',
         email: '',
         password: ''
     };
     constructor() {
-        this._users.push({
+        this._users.push({//TODO для проверки хранения пользователй заглушка
             name: 'admin',
             email: 'admin@admin.ru',
             password: 'adm',
         });
     }
-    send(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string>> {
+    send<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
         //TODO заглушка
         //TODO обработка по названиям приходящих событий
         //TODO названия событий жестко ассоциировать с контроллерами сервера
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
+                case AppEvents.NEWS_GET_DATA: {
+                    this.getNews()
+                        .then((data) => {
+                            resolve((data as unknown) as Array<T>);
+                        })
+                        .catch((data) => {
+                            reject(new Map<string, string>());
+                        });
+                        break;
+                }
                 case AppEvents.AUTH_LOGIN_USER: {
                     this.logInUser_TEMP(params)
                         .then((data) => {
@@ -71,6 +83,30 @@ export default class DataMapper {
             }
         });
     }
+    private getNews (): Promise<Array<news>> {
+        return new Promise((resolve, reject) => {
+            fetch(this.NEWS_URL, { method: 'GET' })
+                .then((response) => response.json())
+                .then((data) => {
+                    const answer = (data.articles as unknown) as Array<news>;
+                    const result = new Array<news>;
+                    for(let i = 0; i < answer.length; i += 1) {
+                        result.push({
+                            title: answer[i].title,
+                            author: answer[i].author,
+                            urlToImage: answer[i].urlToImage,
+                            description: answer[i].description,
+                            url: answer[i].url,
+                        });
+                    }
+                    resolve(result);
+                })
+                .catch((data) => {
+                    reject();
+                });
+        });
+    }
+    //TODO заглушка
     private logInUser_TEMP(params: Map<string, string>): Promise<answer> {
         return new Promise((resolve, reject) => {
             if (params.get('login')! === '' || params.get('password')! === '') {
@@ -102,6 +138,7 @@ export default class DataMapper {
             }
         });
     }
+    //TODO заглушка
     private logOutUser_TEMP(): Promise<answer> {
         return new Promise((resolve, reject) => {
             if (this._currentUser.name === '' && this._currentUser.email === '') {
@@ -122,6 +159,7 @@ export default class DataMapper {
             }
         });
     }
+    //TODO заглушка
     private addUser_TEMP(params: Map<string, string>): Promise<answer> {
         return new Promise((resolve, reject) => {
             if (!params.has('login') || !params.has('password') || !params.has('email')) {
