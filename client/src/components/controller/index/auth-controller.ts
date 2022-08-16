@@ -2,7 +2,7 @@ import UserModel from "../../models/index/data-model/user-model";
 import AuthModel from "../../models/index/state-model/auth-model";
 import { AppEvents } from "../app-events";
 import INotify from "../../interfaces/i-notify";
-import AuthView from "../../view/index/auth/auth-view";
+import AuthView from "../../view/common/auth/auth-view";
 import AuthWindowView from "../../view/common/auth-window/auth-window-view";
 import View from "../../view/index/view";
 

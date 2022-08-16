@@ -1,7 +1,7 @@
 import { AppEvents } from "../../../controller/app-events";
 import Observer from "../../../controller/observer";
 import INotify from "../../../interfaces/i-notify";
-import View from "../view";
+import View from "../../index/view";
 import './auth.scss';
 
 export default class AuthView extends View implements INotify {

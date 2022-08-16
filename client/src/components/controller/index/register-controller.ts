@@ -1,7 +1,7 @@
 import INotify from "../../interfaces/i-notify";
 import UserModel from "../../models/index/data-model/user-model";
 import RegisterModel from "../../models/index/state-model/register-model";
-import AuthView from "../../view/index/auth/auth-view";
+import AuthView from "../../view/common/auth/auth-view";
 import RegisterWindowView from "../../view/common/register-window/register-window-view";
 import View from "../../view/index/view";
 import { AppEvents } from "../app-events";

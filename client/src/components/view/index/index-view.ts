@@ -2,7 +2,7 @@ import './index.scss';
 import FooterView from "../common/footer/footer-view";
 import HeaderView from "../common/header/header-view";
 import PageNavigationView from "../common/page-navigation/page-navigation-view";
-import AuthView from "./auth/auth-view";
+import AuthView from "../common/auth/auth-view";
 import ContentView from "./content/content-view";
 import View from "./view";
 import Observer from "../../controller/observer";
