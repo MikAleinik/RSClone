@@ -32,6 +32,7 @@ export default class ContentView extends View {
         listElement.insertAdjacentElement('beforeend', this.createListItemElement(this.TEXT_INFO_THREE));
         promoElement.insertAdjacentElement('beforeend', listElement);
         let newsElement = new NewsView(this._observer);
+        this._contentElement.insertAdjacentElement('beforeend', promoElement);
         this._contentElement.insertAdjacentElement('beforeend', newsElement.getCurrentElement());
     }
     private createPromoElement(): HTMLElement {
