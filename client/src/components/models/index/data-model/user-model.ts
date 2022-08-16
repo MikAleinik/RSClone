@@ -19,7 +19,7 @@ export default class UserModel {
                     this._currentUser.name = param.get('login')!;
                     this._currentUser.email = param.get('email')!;
                     this._currentUser.password = param.get('password')!;
-                    resolve(result);
+                    resolve(result as Map<string, string>);
                 })
                 .catch((result) => {
                     reject(result);
@@ -33,7 +33,7 @@ export default class UserModel {
                     this._currentUser.name = param.get('login')!;
                     this._currentUser.email = param.get('email')!;
                     this._currentUser.password = param.get('password')!;
-                    resolve(result);
+                    resolve(result as Map<string, string>);
                 })
                 .catch((result) => {
                     reject(result);
@@ -47,7 +47,7 @@ export default class UserModel {
                     this._currentUser.name = '';
                     this._currentUser.email = '';
                     this._currentUser.password = '';
-                    resolve(result);
+                    resolve(result as Map<string, string>);
                 })
                 .catch((result) => {
                     reject(result);
