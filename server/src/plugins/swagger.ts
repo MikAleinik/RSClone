@@ -5,7 +5,7 @@ export default fp<FastifyDynamicSwaggerOptions>(async (fastify, opts) => {
     fastify.register(swagger, {
         openapi: {
             info: {
-                title: 'Fastify REST API',
+                title: 'RS Clone (Project Trans) REST API',
                 version: '0.1.0',
                 description: 'Use JSON Schema & TypeScript for better DX',
             },

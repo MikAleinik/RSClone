@@ -48,6 +48,8 @@ export const ReplyAllUsers = {
 
 const getAllUsersOpts = {
     schema: {
+        tags: ['Users'],
+        description: 'Get all users',
         response: {
             200: ReplyAllUsers,
             400: ErrorReplySchema,
@@ -60,6 +62,8 @@ const getAllUsersOpts = {
 
 const getUserByUUIDOpts = {
     schema: {
+        tags: ['Users'],
+        description: 'Get user by Id',
         response: {
             200: UserSchema,
             400: ErrorReplySchema,
@@ -72,6 +76,8 @@ const getUserByUUIDOpts = {
 
 const changeUserByUUIDOpts = {
     schema: {
+        tags: ['Users'],
+        description: 'Change user by Id',
         body: RegisterUserSchema,
         response: {
             200: UserSchema,
@@ -85,6 +91,8 @@ const changeUserByUUIDOpts = {
 
 const deleteUserByUUIDOpts = {
     schema: {
+        tags: ['Users'],
+        description: 'Delete user by Id',
         response: {
             200: {},
             400: ErrorReplySchema,
@@ -96,6 +104,8 @@ const deleteUserByUUIDOpts = {
 
 const createUserOpts = {
     schema: {
+        tags: ['Users'],
+        description: 'Register a new user',
         body: RegisterUserSchema,
         response: {
             201: UserSchema,

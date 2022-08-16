@@ -25,6 +25,8 @@ const AuthRequestUserSchema = {
 
 const authUserOpts = {
     schema: {
+        tags: ['Authorization'],
+        description: 'Passing authorization',
         body: AuthRequestUserSchema,
         response: {
             200: UserSchema,
