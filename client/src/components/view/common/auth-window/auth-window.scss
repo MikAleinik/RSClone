@@ -1,4 +1,4 @@
-.window-register__wrapper {
+.window-auth__wrapper {
     visibility: hidden;
 
     position: absolute;
@@ -7,12 +7,12 @@
     right   : 0;
 
     height: 100vh;
-    width : 100vw;
+    // width : 100vw;
 
     background: $modal_background-color;
 }
 
-.window-register {
+.window-auth {
     position: absolute;
     left    : 35%;
     top     : 40%;
@@ -23,18 +23,18 @@
     align-items    : center;
 
     height    : 30%;
-    min-height: 260px;
+    min-height: 200px;
     width     : 30%;
 
     background-color: $window_background-color;
 }
 
-.window-register__header {
+.window-auth__header {
     font-size: 1rem;
     margin   : 1rem;
 }
 
-.window-register__row-container {
+.window-auth__row-container {
     display        : flex;
     flex-direction : row;
     align-items    : center;
@@ -46,12 +46,12 @@
     padding: 0% 15%;
 }
 
-.window-register__info {
+.window-auth__info {
     width: 20%;
     text-align: end;
 }
 
-.window-register__field {
+.window-auth__field {
     width: 60%;
 
     font-size    : 16px;
@@ -62,6 +62,6 @@
     cursor       : pointer;
 }
 
-.window-register__field_invalid {
+.window-auth__field_invalid {
     border       : 1px solid $border-color-error;
 }

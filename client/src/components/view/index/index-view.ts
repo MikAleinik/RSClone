@@ -6,8 +6,8 @@ import AuthView from "./auth/auth-view";
 import ContentView from "./content/content-view";
 import View from "./view";
 import Observer from "../../controller/observer";
-import AuthWindowView from './auth-window/auth-window-view';
-import RegisterWindowView from './register-window/register-window-view';
+import AuthWindowView from '../common/auth-window/auth-window-view';
+import RegisterWindowView from '../common/register-window/register-window-view';
 
 export default class IndexView extends View {
     private readonly TAG_CONTAINER = 'body';

@@ -3,7 +3,7 @@ import AuthModel from "../../models/index/state-model/auth-model";
 import { AppEvents } from "../app-events";
 import INotify from "../../interfaces/i-notify";
 import AuthView from "../../view/index/auth/auth-view";
-import AuthWindowView from "../../view/index/auth-window/auth-window-view";
+import AuthWindowView from "../../view/common/auth-window/auth-window-view";
 import View from "../../view/index/view";
 
 export default class AuthController implements INotify {

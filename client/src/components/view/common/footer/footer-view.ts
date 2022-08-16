@@ -35,7 +35,7 @@ export default class FooterView extends View {
     }
     private createFooterElement(): void {
         this._footerElement.classList.add(this.CLASS_CONTAINER);
-        this._footerElement.setAttribute('id', this.TAG_CONTAINER);//TODO зачем в футере id?
+        this._footerElement.setAttribute('id', this.TAG_CONTAINER);
 
         let linkElement = this.createLinkElement(this.LINK_ALEINIK)
         linkElement.insertAdjacentElement('beforeend', this.createImageElement(this.IMAGE_PATH_GIT, this.IMAGE_ALT_TEXT_DEVELOP));
