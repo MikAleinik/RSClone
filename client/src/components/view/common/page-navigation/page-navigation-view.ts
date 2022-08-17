@@ -10,6 +10,7 @@ export default class PageNavigationView extends View {
 
     private readonly LINK_FOOTER = '#footer';
     private readonly TEXT_CONTACT = 'Contact';//TODO (local) выносится в локализацию
+    private readonly LINK_ABOUT = 'about.html'
     private readonly TEXT_ABOUT = 'About';//TODO (local) выносится в локализацию
 
     private _navElement = document.createElement(this.TAG_CONTAINER);
@@ -23,7 +24,7 @@ export default class PageNavigationView extends View {
     }
     private createHeaderElement(link: string): void {
         let listElement = document.createElement(this.TAG_LIST);
-        listElement.insertAdjacentElement('beforeend', this.createListItemElement(link, this.TEXT_ABOUT));
+        listElement.insertAdjacentElement('beforeend', this.createListItemElement(this.LINK_ABOUT, this.TEXT_ABOUT));
         listElement.insertAdjacentElement('beforeend', this.createListItemElement(this.LINK_FOOTER, this.TEXT_CONTACT));
         this._navElement.insertAdjacentElement('beforeend', listElement);
     }
