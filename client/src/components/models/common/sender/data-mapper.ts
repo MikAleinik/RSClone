@@ -10,13 +10,15 @@ export default class DataMapper {
     private _currentUser: user = {//TODO хранящийся текущий авториз пользователь заглушка
         name: '',
         email: '',
-        password: ''
+        password: '',
+        role: ''
     };
     constructor() {
         this._users.push({//TODO для проверки хранения пользователй заглушка
             name: 'admin',
             email: 'admin@admin.ru',
             password: 'adm',
+            role: 'customer'//carrier
         });
     }
     send<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
@@ -185,11 +187,13 @@ export default class DataMapper {
                     name: params.get('login')!,
                     email: params.get('email')!,
                     password: params.get('password')!,
+                    role: params.get('role')!
                 });
                 this._currentUser = {
                     name: params.get('login')!,
                     email: params.get('email')!,
                     password: params.get('password')!,
+                    role: params.get('role')!
                 };
                 resolve({
                     code: 200,

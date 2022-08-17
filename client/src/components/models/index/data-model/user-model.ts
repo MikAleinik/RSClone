@@ -7,7 +7,8 @@ export default class UserModel {
     private _currentUser: user = {
         name: '',
         email: '',
-        password: ''
+        password: '',
+        role: '',
     };
     constructor() {
 
