@@ -1,5 +1,12 @@
 import View from "../view";
 import Observer from "../../../controller/observer";
+import { loadCargo } from "./cargo/cargo-view";
+import { loadCompany } from "./company/company-view";
+import { loadMap } from "./map/map-view";
+import { loadNews } from "./news/news-view";
+import { loadTruck } from "./truck/truck-view";
+import { loadOverview } from "./overview/overview-view";
+import { userRoleActions } from "./overview/user";
 
 export default class ContentView extends View {
     private _rootContainer = document.body;
@@ -10,7 +17,6 @@ export default class ContentView extends View {
     private _asideElement = document.createElement(this.ASIDE_CONTAINER);
 
     private readonly MAIN_CONTAINER = 'main';
-    private readonly CONTENT_CONTAINER = 'div';
     private _contentElement = document.createElement(this.MAIN_CONTAINER);
 
     constructor(observer: Observer) {
@@ -25,15 +31,6 @@ export default class ContentView extends View {
         this._rootContainer.appendChild(this._asideElement);
         this._rootContainer.appendChild(this._contentElement);
         const asideList = document.createElement(this.ASIDE_LIST);
-        const content = document.createElement(this.CONTENT_CONTAINER);
-        const userRoleActions: {[index: string]: string} = { // fake user role actions
-            'user': 'Overview', // i use key also like an image name
-            'truck': 'Transport',
-            'cargo': 'Cargoes',
-            'company': 'Companies',
-            'map': 'Calculate routes',
-            'news': 'News'
-        };
         for (const el in userRoleActions){
             const asideItem = document.createElement(this.ASIDE_LIST_ITEM);
             const asideItemImg = document.createElement('img');
@@ -45,12 +42,34 @@ export default class ContentView extends View {
             asideItem.appendChild(asideItemSpan);
             asideList.appendChild(asideItem);
         }
-        content.innerHTML = '<h3>Test content</h3>'
+        this._contentElement.appendChild(loadOverview())
         this._asideElement.appendChild(asideList);
-        this._contentElement.appendChild(content);
+
         asideList.addEventListener('click', (event) => {
             const tag = event.target as HTMLElement;
-            console.log(tag)
+            const li = tag.closest('li');
+            if (li !== null) {
+                switch (li.dataset.link) {
+                    case 'cargo':
+                        loadCargo();
+                        break;
+                    case 'company':
+                        loadCompany();
+                        break;
+                    case 'map':
+                        loadMap();
+                        break;
+                    case 'news':
+                        loadNews();
+                        break;
+                    case 'overview':
+                        loadOverview();
+                        break;
+                    case 'truck':
+                        loadTruck();
+                        break;
+                }
+            }
         })
     }
 }
