@@ -32,7 +32,8 @@ export default class ContentView extends View {
         .then((data) => {
           data.forEach((el: {[index: string]: string}, index: number) => {
               const asideItem = document.createElement(this.ASIDE_LIST_ITEM);
-              asideItem.innerHTML = `<a href="#${index}">${el.title}</a>`;
+              asideItem.textContent = el.title;
+              asideItem.dataset.link = index.toString()
               asideList.appendChild(asideItem);
               const articleHeader = document.createElement('h3');
               articleHeader.textContent = el.title;
@@ -45,5 +46,9 @@ export default class ContentView extends View {
           })
         this._asideElement.appendChild(asideList);
         this._contentElement.appendChild(article);
+        asideList.addEventListener('click', (event) => {
+            const tag = event.target as HTMLElement;
+            window.open(`#${tag.dataset.link}`, '_top')
+        })
     }
 }

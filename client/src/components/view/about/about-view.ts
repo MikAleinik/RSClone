@@ -25,8 +25,8 @@ export default class AboutView extends View {
         return this._aboutElement;
     }
     private createAboutElement(): void {
-        this._aboutElement.innerHTML = ''; // remove all previous content
-        this._aboutElement.className = this.CLASS_CONTAINER; // user clasName instead of classList to prevent accumulating of classes
+        this._aboutElement.innerHTML = '';
+        this._aboutElement.className = this.CLASS_CONTAINER;
         let headerElement = new HeaderView(this._observer, this.LINK_HEADER);
         let navigationElement = new PageNavigationView(this._observer);
         let authElement = new AuthView(this._observer);
