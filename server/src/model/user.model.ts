@@ -7,9 +7,12 @@ import { ErrorInvalidPassword } from '../errors/ErrorInvalidPassword';
 import { hashPassword, matchPassword } from './util/password.manager';
 import { AuthRequestUserSchemaType } from '../routes/v1/auth.router';
 import { RegisterUserSchemaType } from '../routes/v1/user.router';
+import { UsersMapper } from './mappers/user.mapper';
+import { ErrorNoMapper } from '../errors/ErrorNoMapper';
 
 export class UsersModel {
     private static instance: UsersModel;
+    private static mapper: UsersMapper;
 
     private constructor() {
         //do nothing
@@ -27,8 +30,8 @@ export class UsersModel {
 
     async getUserByEmail(email: string) {
         //TODO real search
-        const user = new User(); // user.passwordHash on init is P@55w0rd
-        user.passwordHash = hashPassword(user.passwordHash);
+        const user = await UsersModel.getMapperWithWarning().getUserByEmail(email);
+        user.passwordHash = hashPassword(user.id);
         return user;
     }
 
@@ -58,12 +61,30 @@ export class UsersModel {
     }
 
     async processCreateNewUser(body: RegisterUserSchemaType) {
-        const { email, login, password } = body;
-        const isUnique = await this.checkUniqueEmail(email);
-        if (!isUnique) {
+        const { email, login, password, first_name, last_name, role_id, company, address, point_lat, point_lon } = body;
+        const oldUser = await UsersModel.getMapperWithWarning().getUserByEmail(email);
+        if (oldUser) {
             throw new ErrorCreateNewUser();
         }
-        return new User(email, login, hashPassword(password));
+        return await UsersModel.mapper.createUser(
+            login,
+            password,
+            email,
+            first_name,
+            last_name,
+            role_id,
+            company,
+            address,
+            0,
+            point_lat,
+            point_lon
+        );
+    }
+
+    checkMapper() {
+        if (!UsersModel.mapper) {
+            throw new ErrorNoMapper();
+        }
     }
 
     async processAuthorizeUser(body: AuthRequestUserSchemaType) {
@@ -92,7 +113,7 @@ export class UsersModel {
         //   errorHandler(error, res);
         // }
 
-        const user = new User(); //await usersRepo.addUser({ name, login, password });
+        const user = new User('adf'); //await usersRepo.addUser({ name, login, password });
         res.code(OkCodes.CREATED);
         res.header(...ContentTypeJson);
         res.send(user.toJsonResponse());
@@ -117,7 +138,7 @@ export class UsersModel {
         //   errorHandler(error, res);
         // }
 
-        const user = new User(); //await usersRepo.addUser({ name, login, password });
+        const user = new User('adf'); //await usersRepo.addUser({ name, login, password });
         res.code(OkCodes.CREATED);
         res.header(...ContentTypeJson);
         res.send(user.toJsonResponse());
@@ -148,5 +169,17 @@ export class UsersModel {
             UsersModel.instance = new UsersModel();
         }
         return UsersModel.instance;
+    }
+
+    private static getMapperWithWarning() {
+        if (!UsersModel.mapper) {
+            throw new ErrorNoMapper();
+        }
+        return UsersModel.mapper;
+    }
+
+    static setMapper(mapper: UsersMapper) {
+        UsersModel.mapper = mapper;
+        UsersModel.mapper;
     }
 }

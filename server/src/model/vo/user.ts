@@ -1,16 +1,37 @@
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 
 export class User {
-    id: string;
+    id: number;
     email: string;
     login: string;
     passwordHash: string;
 
-    constructor(mail = 'USER', login = 'user', passwordH = 'P@55w0rd') {
-        this.id = uuid();
-        this.email = mail;
+    constructor(
+        passwordHash: string,
+        id = 0,
+        login = 'login',
+        email = 'email@email.com',
+        first_name = 'fName',
+        last_name = 'lName',
+        role_id = 1,
+        company = '',
+        address = '',
+        rating = 0,
+        point_lat = 0,
+        point_lon = 0
+    ) {
+        first_name;
+        last_name;
+        role_id;
+        company;
+        address;
+        rating;
+        point_lat;
+        point_lon;
+        this.passwordHash = passwordHash;
+        this.id = id;
+        this.email = email;
         this.login = login;
-        this.passwordHash = passwordH;
     }
 
     toJsonResponse() {
@@ -24,7 +45,7 @@ export class User {
     }
 
     static toResponse(user: User) {
-        const { id, email, login, passwordHash } = user;
-        return { id, email, login, passwordHash };
+        const { id, email, login } = user;
+        return { id, email, login };
     }
 }

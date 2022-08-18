@@ -3,6 +3,9 @@ import app from './app';
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import fastifyAuth from '@fastify/auth';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const server = Fastify({
     logger: {

@@ -5,6 +5,8 @@ import { RouterPath } from '../../types/enums';
 import { ErrorReplySchema } from '../../schema/general.schema';
 // import { Type } from '@sinclair/typebox';
 import { FromSchema } from 'json-schema-to-ts';
+import { UsersModel } from '../../model/user.model';
+import { UsersMapper } from '../../model/mappers/user.mapper';
 
 // export Schema types
 
@@ -20,8 +22,15 @@ export const RegisterUserSchema = {
         email: { type: 'string', format: 'email' },
         login: { type: 'string' },
         password: { type: 'string' },
+        first_name: { type: 'string' },
+        last_name: { type: 'string' },
+        role_id: { type: 'number' },
+        company: { type: 'string' },
+        address: { type: 'string' },
+        point_lat: { type: 'number' },
+        point_lon: { type: 'number' },
     },
-    required: ['email', 'login', 'password'],
+    required: ['email', 'login', 'password', 'first_name', 'last_name', 'role_id'],
     additionalProperties: false,
 } as const;
 
@@ -118,6 +127,7 @@ const createUserOpts = {
 
 const users: FastifyPluginAsync = async (fastify, options): Promise<void> => {
     options;
+    UsersModel.setMapper(new UsersMapper(fastify.db));
     fastify.get(`/${RouterPath.USERS}`, getAllUsersOpts);
     fastify.post(`/${RouterPath.USERS_REGISTER}`, createUserOpts);
     fastify.get(`/${RouterPath.USERS}/:id`, getUserByUUIDOpts);
