@@ -9,6 +9,7 @@
         "outDir": "./dist",
         "rootDir": "./src",
         "sourceMap": true,
+        "moduleResolution": "node"
     },
     "include": [
         "src/**/*"

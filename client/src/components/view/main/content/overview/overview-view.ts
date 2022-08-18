@@ -1,8 +1,5 @@
 import { loadUserData, userRoleContent } from './user'
-
-function loadOverview(){
-  return createOverview()
-}
+import { loadMap, applyItemsLocation } from '../map/map-view'
 
 /*  user__overview
       user__data
@@ -12,6 +9,14 @@ function loadOverview(){
         user__cargoes --> cargo
       user__map
 */
+
+function loadOverview(place: HTMLElement){
+  place.innerHTML = '';
+  place.appendChild(createOverview())
+  loadMap('99%', '99%', '.user__map', 'insert');
+  applyItemsLocation('transport');
+  applyItemsLocation('logistic');
+}
 
 function userDataBlocks() {
   const user__data = document.createElement('div');
@@ -23,12 +28,6 @@ function userDataBlocks() {
     user__data.appendChild(block)
   }
   return user__data;
-}
-
-function userMapBlock() {
-  const block = document.createElement('div');
-  block.className = 'user__map'
-  return block;
 }
 
 function generateItemsList(obj: {[index: string]: number}){
@@ -68,11 +67,12 @@ function createOverview(){
   user__company.innerHTML = '<h4>Your companies</h4>'
   user__company.appendChild(generateItemsList(userData.company))
   
-  const user__map = userMapBlock()
+  const user__map = document.createElement('div');
+  user__map.className = 'user__map';
+ 
   user__overview.appendChild(user__map);
 
   return user__overview
 }
-
 
 export { loadOverview }

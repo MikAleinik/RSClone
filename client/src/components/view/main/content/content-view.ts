@@ -2,7 +2,8 @@ import View from "../view";
 import Observer from "../../../controller/observer";
 import { loadCargo } from "./cargo/cargo-view";
 import { loadCompany } from "./company/company-view";
-import { loadMap } from "./map/map-view";
+import { loadMap, applyCurrentPosition, getPointCoordinates } from "./map/map-view";
+import { routeStart } from "./map/map-routes";
 import { loadNews } from "./news/news-view";
 import { loadTruck } from "./truck/truck-view";
 import { loadOverview } from "./overview/overview-view";
@@ -42,8 +43,8 @@ export default class ContentView extends View {
             asideItem.appendChild(asideItemSpan);
             asideList.appendChild(asideItem);
         }
-        this._contentElement.appendChild(loadOverview())
         this._asideElement.appendChild(asideList);
+        loadOverview(this._contentElement)
 
         asideList.addEventListener('click', (event) => {
             const tag = event.target as HTMLElement;
@@ -57,13 +58,16 @@ export default class ContentView extends View {
                         loadCompany();
                         break;
                     case 'map':
-                        loadMap();
+                        loadMap('auto', 'auto', this.MAIN_CONTAINER, 'replace')
+                        applyCurrentPosition();
+                        getPointCoordinates();
+                        routeStart();
                         break;
                     case 'news':
                         loadNews();
                         break;
                     case 'overview':
-                        loadOverview();
+                        loadOverview(this._contentElement)
                         break;
                     case 'truck':
                         loadTruck();
