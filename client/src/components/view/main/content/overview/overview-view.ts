@@ -1,4 +1,4 @@
-import { loadUserData, userRoleContent } from './user'
+import { loadUserData, userRoleContent } from '../../user-adapter'
 import { loadMap, applyItemsLocation } from '../map/map-view'
 
 /*  user__overview

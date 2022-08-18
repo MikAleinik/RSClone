@@ -1,0 +1,44 @@
+.table_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.table_row {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid $border-color-dark;
+  border-radius: 10px;
+  gap: 5px;
+}
+.table_header {
+  color: $background-color-light;
+  background: $background-color-middle;
+}
+.table_cell_small {
+  padding: 5px;
+  flex: 1 0 8%;
+}
+.table_cell_edit {
+  padding: 5px;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.table_cell_big {
+  padding: 5px;
+  flex: 2 1 26%;
+}
+
+.cargo_form {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin: 10px 0px;
+}
+.cargo_form-buttons {
+  display: flex;
+  gap: 5px;
+
+}

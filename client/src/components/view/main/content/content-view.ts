@@ -7,7 +7,7 @@ import { routeStart } from "./map/map-routes";
 import { loadNews } from "./news/news-view";
 import { loadTruck } from "./truck/truck-view";
 import { loadOverview } from "./overview/overview-view";
-import { userRoleActions } from "./overview/user";
+import { userRoleActions } from "../user-adapter";
 
 export default class ContentView extends View {
     private _rootContainer = document.body;
@@ -52,7 +52,7 @@ export default class ContentView extends View {
             if (li !== null) {
                 switch (li.dataset.link) {
                     case 'cargo':
-                        loadCargo();
+                        loadCargo(this._contentElement);
                         break;
                     case 'company':
                         loadCompany();

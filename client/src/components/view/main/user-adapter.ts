@@ -6,7 +6,6 @@ function loadUserData(){
     email: 'fake@mail.com',
     cargo: {bundle1: 200, bundle2: 100}, // {bundleName: size}
     transport: {truck1: 100, truck2: 150, truck3: 100}, // {trackName: capacity}
-    races: {finished: 22, current: 1, planned: 0},
     company: {'Horns and Howes': 1, 'Bigfoots': 1},
     rating: 5,
     role: 'customer'

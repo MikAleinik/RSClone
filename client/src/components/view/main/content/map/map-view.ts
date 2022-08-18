@@ -128,4 +128,4 @@ async function mapSearch(){
   map.addControl(search)
 }
 
-export { map, loadMap, applyCurrentPosition, applyItemsLocation, getPointCoordinates }
+export { map, loadMap, applyCurrentPosition, applyItemsLocation, getPointCoordinates, getPointInfo  }
