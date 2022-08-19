@@ -54,7 +54,7 @@ export class UsersController {
     getUserByUUIDFunc(): RouteHandler<{ Reply: UserSchemaType | ErrorReplyType }> {
         return async (req, res) => {
             //TODO add implementation
-            const user = new User('asdf'); //await usersRepo.addUser({ name, login, password });
+            const user = new User(0); //await usersRepo.addUser({ name, login, password });
             res.code(OkCodes.CREATED);
             res.header(ContentTypeJson[0], ContentTypeJson[1]);
             res.send(user.toJsonResponse());
@@ -64,7 +64,7 @@ export class UsersController {
     changeUserByUUIDFunc(): RouteHandler<{ Body: UserSchemaType; Reply: UserSchemaType | ErrorReplyType }> {
         return async (req, res) => {
             //TODO add implementation
-            const user = new User('asdf'); //await usersRepo.addUser({ name, login, password });
+            const user = new User(0); //await usersRepo.addUser({ name, login, password });
             res.code(OkCodes.CREATED);
             res.header(ContentTypeJson[0], ContentTypeJson[1]);
             res.send(user.toJsonResponse());

@@ -61,7 +61,19 @@ export class UsersModel {
     }
 
     async processCreateNewUser(body: RegisterUserSchemaType) {
-        const { email, login, password, first_name, last_name, role_id, company, address, point_lat, point_lon } = body;
+        const {
+            email,
+            login,
+            password,
+            first_name,
+            last_name,
+            role_id,
+            company,
+            address,
+            point_lat,
+            point_lon,
+            phone,
+        } = body;
         const oldUser = await UsersModel.getMapperWithWarning().getUserByEmail(email);
         if (oldUser) {
             throw new ErrorCreateNewUser();
@@ -70,9 +82,10 @@ export class UsersModel {
             login,
             password,
             email,
+            role_id,
             first_name,
             last_name,
-            role_id,
+            phone,
             company,
             address,
             0,
@@ -113,7 +126,7 @@ export class UsersModel {
         //   errorHandler(error, res);
         // }
 
-        const user = new User('adf'); //await usersRepo.addUser({ name, login, password });
+        const user = new User(0); //await usersRepo.addUser({ name, login, password });
         res.code(OkCodes.CREATED);
         res.header(...ContentTypeJson);
         res.send(user.toJsonResponse());
@@ -138,7 +151,7 @@ export class UsersModel {
         //   errorHandler(error, res);
         // }
 
-        const user = new User('adf'); //await usersRepo.addUser({ name, login, password });
+        const user = new User(0); //await usersRepo.addUser({ name, login, password });
         res.code(OkCodes.CREATED);
         res.header(...ContentTypeJson);
         res.send(user.toJsonResponse());

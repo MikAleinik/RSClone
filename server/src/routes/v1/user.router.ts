@@ -24,6 +24,7 @@ export const RegisterUserSchema = {
         password: { type: 'string' },
         first_name: { type: 'string' },
         last_name: { type: 'string' },
+        phone: { type: 'string' },
         role_id: { type: 'number' },
         company: { type: 'string' },
         address: { type: 'string' },
@@ -37,8 +38,17 @@ export const RegisterUserSchema = {
 export const UserSchema = {
     type: 'object',
     properties: {
+        id: { type: 'number' },
         email: { type: 'string', format: 'email' },
         login: { type: 'string' },
+        first_name: { type: 'string' },
+        last_name: { type: 'string' },
+        phone: { type: 'string' },
+        role_id: { type: 'number' },
+        company: { type: 'string' },
+        address: { type: 'string' },
+        point_lat: { type: 'number' },
+        point_lon: { type: 'number' },
     },
 } as const;
 
