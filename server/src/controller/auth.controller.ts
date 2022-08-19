@@ -6,6 +6,7 @@ import { UsersModel } from '../model/user.model';
 import { ErrorCodes, OkCodes } from '../types/enums';
 import { FastifyReply, FastifyRequest, RouteHandler } from 'fastify';
 import { AuthRequestUserSchemaType } from '../routes/v1/auth.router';
+import { BodyWithJWT, JWTTokenData, JWTTokenDataWithTimestamps } from '../types/interfaces';
 
 export class AuthController {
     private static SECRET_FOR_JWT = 'testSecret123';
@@ -21,7 +22,6 @@ export class AuthController {
     }
 
     async verifyJWT(req: FastifyRequest, res: FastifyReply) {
-        //, done: any) {
         try {
             const cookie = req.cookies[AuthController.COOKIE_NAME];
             if (!cookie) {
@@ -31,29 +31,56 @@ export class AuthController {
                 return;
             }
             jwt.verify(cookie, AuthController.SECRET_FOR_JWT, AuthController.TOKEN_OPTIONS);
+            const decoded = jwt.decode(cookie, { complete: true, json: false });
+            decoded;
+            req;
         } catch (err) {
             res.code(401);
             res.send({ message: 'authentication expired, please login again' });
         }
     }
 
-    createToken(id: string) {
+    verifyJWTFunc(): RouteHandler {
+        return async (req, res) => {
+            try {
+                const cookie = req.cookies[AuthController.COOKIE_NAME];
+                if (!cookie) {
+                    res.code(401);
+                    res.send({ message: 'unauthorized msg' });
+                    // throw new Error('unauthorized 1');
+                    return;
+                }
+                jwt.verify(cookie, AuthController.SECRET_FOR_JWT, AuthController.TOKEN_OPTIONS);
+                const decoded = jwt.decode(cookie, { complete: true, json: false });
+                if (!req.body) {
+                    req.body = {};
+                }
+                (req.body as BodyWithJWT).jwtDecoded = decoded?.payload as JWTTokenDataWithTimestamps;
+            } catch (err) {
+                res.code(401);
+                res.send({ message: 'authentication expired, please login again' });
+            }
+        };
+    }
+
+    createToken(tokenData: JWTTokenData) {
         try {
-            const tok = jwt.sign(
-                {
-                    id,
-                },
-                AuthController.SECRET_FOR_JWT,
-                AuthController.TOKEN_OPTIONS
-            );
+            const tok = jwt.sign(tokenData, AuthController.SECRET_FOR_JWT, AuthController.TOKEN_OPTIONS);
             return tok;
         } catch (err) {
             throw new Error('cant create token');
         }
     }
 
-    setAuthCookie(resp: FastifyReply, id: string) {
-        const token = this.createToken(id); //create a token with custom data
+    setAuthCookie(resp: FastifyReply, token: string) {
+        resp.setCookie(AuthController.COOKIE_NAME, token, {
+            httpOnly: true,
+            // secure: true,
+        });
+    }
+
+    createTokenAndSetAuthCookie(resp: FastifyReply, tokenData: JWTTokenData) {
+        const token = AuthController.getInstance().createToken(tokenData);
         resp.setCookie(AuthController.COOKIE_NAME, token, {
             httpOnly: true,
             // secure: true,
@@ -63,11 +90,10 @@ export class AuthController {
     authorizeUserFunc(): RouteHandler<{ Body: AuthRequestUserSchemaType }> {
         return async (req, res) => {
             try {
-                req.headers;
-                const newUser = await UsersModel.getInstance().processAuthorizeUser(req.body);
+                const oldUser = await UsersModel.getInstance().processAuthorizeUser(req.body);
+                AuthController.getInstance().createTokenAndSetAuthCookie(res, { id: oldUser.id, email: oldUser.email });
                 res.code(OkCodes.OK);
-                AuthController.instance.setAuthCookie(res, newUser.id);
-                res.send(newUser.toJsonResponse());
+                res.send(oldUser.toJsonResponse());
             } catch (err) {
                 res.code(ErrorCodes.BAD_REQUEST);
                 res.header(ContentTypeJson[0], ContentTypeJson[1]);

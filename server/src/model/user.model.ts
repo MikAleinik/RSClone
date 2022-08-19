@@ -4,7 +4,7 @@ import { OkCodes } from '../types/enums';
 import { ContentTypeJson } from '../types/types';
 import { User } from './vo/user';
 import { ErrorInvalidPassword } from '../errors/ErrorInvalidPassword';
-import { hashPassword, matchPassword } from './util/password.manager';
+import { matchPassword } from './util/password.manager';
 import { AuthRequestUserSchemaType } from '../routes/v1/auth.router';
 import { RegisterUserSchemaType } from '../routes/v1/user.router';
 import { UsersMapper } from './mappers/user.mapper';
@@ -29,27 +29,19 @@ export class UsersModel {
     }
 
     async getUserByEmail(email: string) {
-        //TODO real search
         const user = await UsersModel.getMapperWithWarning().getUserByEmail(email);
-        user.passwordHash = hashPassword(user.id);
+        if (!user) {
+            return null;
+        }
         return user;
     }
 
-    validatePassword(password: string, user: User) {
-        //TODO add check
-
-        // now we get fake user with password P@55w0rd -
-        // so let's validate it
-
-        return matchPassword(password, user.passwordHash);
+    async getUserById(id: number) {
+        return await UsersModel.getMapperWithWarning().getUserById(id);
     }
 
-    async preHandler(req: any, res: any) {
-        // const users = await usersRepo.getAll();
-        // const objUsers = users.map((user) => user.toJsonResponse());
-        res.code(OkCodes.OK);
-        res.header(...ContentTypeJson);
-        res.send([]);
+    validatePassword(password: string, user: User) {
+        return matchPassword(password, user.password);
     }
 
     async processGetAllUsers(req: any, res: any) {
@@ -102,7 +94,7 @@ export class UsersModel {
 
     async processAuthorizeUser(body: AuthRequestUserSchemaType) {
         const { email, password } = body;
-        const user = await this.getUserByEmail(email);
+        const user = await UsersModel.getMapperWithWarning().getUserByEmail(email);
         if (!user) {
             throw new ErrorNoSuchUser();
         }

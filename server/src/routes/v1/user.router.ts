@@ -75,7 +75,7 @@ const getAllUsersOpts = {
             401: ErrorReplySchema,
         },
     },
-    preHandler: [AuthController.getInstance().verifyJWT],
+    preHandler: [AuthController.getInstance().verifyJWTFunc()],
     handler: UsersController.getInstance().getAllUsersFunc(),
 };
 
@@ -89,7 +89,7 @@ const getUserByUUIDOpts = {
             404: ErrorReplySchema,
         },
     },
-    preHandler: [AuthController.getInstance().verifyJWT],
+    preHandler: [AuthController.getInstance().verifyJWTFunc()],
     handler: UsersController.getInstance().getUserByUUIDFunc(),
 };
 
@@ -104,7 +104,7 @@ const changeUserByUUIDOpts = {
             404: ErrorReplySchema,
         },
     },
-    preHandler: [AuthController.getInstance().verifyJWT],
+    preHandler: [AuthController.getInstance().verifyJWTFunc()],
     handler: UsersController.getInstance().changeUserByUUIDFunc(),
 };
 
@@ -117,7 +117,7 @@ const deleteUserByUUIDOpts = {
             400: ErrorReplySchema,
         },
     },
-    preHandler: [AuthController.getInstance().verifyJWT],
+    preHandler: [AuthController.getInstance().verifyJWTFunc()],
     handler: UsersController.getInstance().deleteUserByUUIDFunc(),
 };
 

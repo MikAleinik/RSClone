@@ -5,3 +5,8 @@
 export const SchemaTypeString = { type: ['string', 'null'], nullable: true };
 export const SchemaTypeStringNonNullable = { type: ['string'] };
 export const ContentTypeJson = ['Content-Type', 'application/json'];
+
+export type JWTDEcodedData = {
+    id: string;
+    email: string;
+};

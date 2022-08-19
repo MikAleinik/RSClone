@@ -16,6 +16,7 @@ export class UsersController {
 
     getAllUsersFunc(): RouteHandler<{ Reply: ReplyAllUsersType }> {
         return async (req, res) => {
+            req;
             try {
                 res.code(OkCodes.OK);
                 const rp = {
@@ -51,13 +52,22 @@ export class UsersController {
         };
     }
 
-    getUserByUUIDFunc(): RouteHandler<{ Reply: UserSchemaType | ErrorReplyType }> {
+    getUserByUUIDFunc(): RouteHandler<{ Params: { id: number }; Reply: UserSchemaType | ErrorReplyType }> {
         return async (req, res) => {
-            //TODO add implementation
-            const user = new User(0); //await usersRepo.addUser({ name, login, password });
-            res.code(OkCodes.CREATED);
-            res.header(ContentTypeJson[0], ContentTypeJson[1]);
-            res.send(user.toJsonResponse());
+            try {
+                const { id } = req.params;
+                const oldUser = await UsersModel.getInstance().getUserById(id);
+                if (!oldUser) {
+                    throw new Error(`User with id = ${id} not found`);
+                }
+                res.code(OkCodes.OK);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send(oldUser.toJsonResponse());
+            } catch (err) {
+                res.code(ErrorCodes.BAD_REQUEST);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send({ message: (err as Error).message });
+            }
         };
     }
 

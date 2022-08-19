@@ -3,7 +3,7 @@
 export class User {
     id = 0;
     login: string;
-    passwordHash: string;
+    password: string;
     email: string;
     role_id = 1;
     first_name = '';
@@ -12,13 +12,14 @@ export class User {
     company = '';
     address = '';
     rating = 0;
+    rating_count = 0;
     point_lat = 0;
     point_lon = 0;
 
     constructor(
         id = 0,
         login = '',
-        passwordHash = '',
+        password = '',
         email = '',
         role_id = 1,
         first_name = '',
@@ -27,10 +28,11 @@ export class User {
         company = '',
         address = '',
         rating = 0,
+        rating_count = 0,
         point_lat = 0,
         point_lon = 0
     ) {
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.id = id;
         this.email = email;
         this.login = login;
@@ -41,6 +43,7 @@ export class User {
         this.company = company;
         this.address = address;
         this.rating = rating;
+        this.rating_count = rating_count;
         this.point_lat = point_lat;
         this.point_lon = point_lon;
     }
@@ -57,6 +60,7 @@ export class User {
             company,
             address,
             rating,
+            rating_count,
             point_lat,
             point_lon,
         } = this;
@@ -71,6 +75,7 @@ export class User {
             company,
             address,
             rating,
+            rating_count,
             point_lat,
             point_lon,
         };
