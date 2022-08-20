@@ -22,13 +22,12 @@ export default class AuthWindowView extends View implements INotify {
     private readonly CLASS_BUTTON = 'big__button';
 
     private readonly TEXT_HEADER = 'User authorization';//TODO (local) выносится в локализацию
-    private readonly TEXT_FIELD_LOGIN = 'Login';//TODO (local) выносится в локализацию
+    private readonly TEXT_FIELD_EMAIL = 'Email';//TODO (local) выносится в локализацию
     private readonly TEXT_FIELD_PASS = 'Password';//TODO (local) выносится в локализацию
     private readonly TEXT_BUTTON_LOGIN = 'Login user';//TODO (local) выносится в локализацию
     private readonly TEXT_BUTTON_CANCEL = 'Cancel';//TODO (local) выносится в локализацию
-    private readonly ID_FIELD_LOGIN = 'login';
-    private readonly ID_FIELD_PASS = 'password';
-    private readonly ID_FIELD_EMAIL = 'email';
+    private readonly ID_FIELD_EMAIL = 'auth_email';
+    private readonly ID_FIELD_PASS = 'auth_password';
 
     private _windowElement = document.createElement(this.TAG_CONTAINER);
     private _formElement = document.createElement(this.TAG_WINDOW);
@@ -65,24 +64,24 @@ export default class AuthWindowView extends View implements INotify {
         event?.preventDefault();
         if(this.checkFormData()) {
             let params = new Map<string, string>();
-            params.set(this.ID_FIELD_LOGIN, this._formElement.login.value);
-            params.set(this.ID_FIELD_PASS, this._formElement.password.value);
+            params.set(this.ID_FIELD_EMAIL, this._formElement.auth_email.value);
+            params.set(this.ID_FIELD_PASS, this._formElement.auth_password.value);
             this._observer.notify(AppEvents.AUTH_LOGIN_USER, this, params);
         }
     }
     private checkFormData(): boolean {
         let result = true;
-        if (this._formElement.login.value == '') {
-            this._formElement.login.classList.add(this.CLASS_FIELD_INVALID);
+        if (this._formElement.auth_email.value == '') {
+            this._formElement.auth_email.classList.add(this.CLASS_FIELD_INVALID);
             result = false;
         } else {
-            this._formElement.login.classList.remove(this.CLASS_FIELD_INVALID);
+            this._formElement.auth_email.classList.remove(this.CLASS_FIELD_INVALID);
         }
-        if (this._formElement.password.value == '') {
-            this._formElement.password.classList.add(this.CLASS_FIELD_INVALID);
+        if (this._formElement.auth_password.value == '') {
+            this._formElement.auth_password.classList.add(this.CLASS_FIELD_INVALID);
             result = false;
         } else {
-            this._formElement.password.classList.remove(this.CLASS_FIELD_INVALID);
+            this._formElement.auth_password.classList.remove(this.CLASS_FIELD_INVALID);
         }
         return result;
     }
@@ -103,10 +102,10 @@ export default class AuthWindowView extends View implements INotify {
         rowElement.classList.add(this.CLASS_ROW_CONTAINER);
         const textLogin = document.createElement(this.TAG_LABEL);
         textLogin.classList.add(this.CLASS_LABEL);
-        textLogin.textContent = this.TEXT_FIELD_LOGIN;
+        textLogin.textContent = this.TEXT_FIELD_EMAIL;
         const fieldLogin = document.createElement(this.TAG_FIELD);
         fieldLogin.classList.add(this.CLASS_FIELD);
-        fieldLogin.setAttribute('id', this.ID_FIELD_LOGIN);
+        fieldLogin.setAttribute('id', this.ID_FIELD_EMAIL);
         rowElement.insertAdjacentElement('beforeend', textLogin);
         rowElement.insertAdjacentElement('beforeend', fieldLogin);
         this._formElement.insertAdjacentElement('beforeend', rowElement);
