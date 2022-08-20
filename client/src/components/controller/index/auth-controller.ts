@@ -69,7 +69,7 @@ export default class AuthController implements INotify {
         }
     }
     private logInUserHandler(nameEvent: AppEvents, sender: View, params: Map<string, string>): AppEvents | void {
-        this._userModel.isLogIn(nameEvent, params)
+        this._userModel.logIn(nameEvent, params)
             .then((result) => {
                 let verifySender = (sender as unknown) as AuthWindowView;
                 verifySender.successLogInHandler();
@@ -93,7 +93,7 @@ export default class AuthController implements INotify {
         verifySender.setAuthButtonState(stateButton);
     }
     private clickLogOutButtonHandler(nameEvent: AppEvents, sender: View): void {
-        this._userModel.isLogOut(nameEvent)
+        this._userModel.logOut(nameEvent)
             .then((result) => {
                 let verifySender = (sender as unknown) as AuthView;
                 verifySender.successLogOutHandler();
