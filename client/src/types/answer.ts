@@ -3,7 +3,8 @@
  */
 type answer = {
     code: number;
-    status: string;
+    statusCode?: number;
+    error: string;
     message: string;
     body?: Map<string, string>
 };
