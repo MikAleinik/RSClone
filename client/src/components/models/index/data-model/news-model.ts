@@ -9,7 +9,7 @@ export default class NewsModel {
     }
     getNews(nameEvent: AppEvents): Promise<Array<news>> {
         return new Promise((resolve, reject) => {
-            this._dataMapper.send(nameEvent)
+            this._dataMapper.read(nameEvent)
                 .then((data) => {
                     resolve(data as Array<news>);
                 })
