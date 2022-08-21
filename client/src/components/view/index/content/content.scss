@@ -15,6 +15,9 @@ h2 {
     height: 80vh;
     margin: 40px 20px;
     color: $font-color-light;
+    background: $background-color-ultra-light;
+    box-sizing: border-box;
+    padding: 0% 5%;
     font-size: 25px;
 
     ul {
