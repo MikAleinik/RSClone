@@ -4,7 +4,10 @@ import INotify from "../../../interfaces/i-notify";
 import View from "../../index/view";
 import './auth-window.scss';
 import '../../common/button.scss';
-export default class AuthWindowView extends View implements INotify {
+import ILocale from "../../../interfaces/i-locale";
+import LocaleModel from "../../../models/common/localization/locale-model";
+import { LocaleKeys } from "../../../models/common/localization/locale-keys";
+export default class AuthWindowView extends View implements INotify, ILocale {
     private readonly TAG_CONTAINER = 'section';
     private readonly TAG_WINDOW = 'form';
     private readonly TAG_HEADER = 'h5';
@@ -21,29 +24,48 @@ export default class AuthWindowView extends View implements INotify {
     private readonly CLASS_FIELD_INVALID = 'window-auth__field_invalid';
     private readonly CLASS_BUTTON = 'big__button';
 
-    private readonly TEXT_HEADER = 'User authorization';//TODO (local) выносится в локализацию
-    private readonly TEXT_FIELD_EMAIL = 'Email';//TODO (local) выносится в локализацию
-    private readonly TEXT_FIELD_PASS = 'Password';//TODO (local) выносится в локализацию
-    private readonly TEXT_BUTTON_LOGIN = 'Login user';//TODO (local) выносится в локализацию
-    private readonly TEXT_BUTTON_CANCEL = 'Cancel';//TODO (local) выносится в локализацию
     private readonly ID_FIELD_EMAIL = 'auth_email';
     private readonly ID_FIELD_PASS = 'auth_password';
 
     private _windowElement = document.createElement(this.TAG_CONTAINER);
     private _formElement = document.createElement(this.TAG_WINDOW);
+    private _header = document.createElement(this.TAG_HEADER);
+    private _textLogin = document.createElement(this.TAG_LABEL);
+    private _textPassword = document.createElement(this.TAG_LABEL);
+    private _loginButton = document.createElement(this.TAG_BUTTON);
+    private _cancelButton = document.createElement(this.TAG_BUTTON);
 
     constructor(observer: Observer) {
         super(observer);
         this.createWindowElement();
         this._observer.addSender(AppEvents.AUTH_CLICK_BUTTON, this);
+        this._observer.addSender(AppEvents.LOCALE_SET, this);
+        this._observer.notify(AppEvents.LOCALE_GET, this);
     }
     getCurrentElement(): HTMLElement {
         return this._windowElement;
     }
     notify(nameEvent: AppEvents): AppEvents | void {
-        if(nameEvent === AppEvents.AUTH_CLICK_BUTTON) {
-            this._observer.notify(AppEvents.AUTH_SHOW_WINDOW, this);  
+        switch (nameEvent) {
+            case AppEvents.AUTH_CLICK_BUTTON: {
+                this._observer.notify(AppEvents.AUTH_SHOW_WINDOW, this);
+                break;
+            }
+            case AppEvents.LOCALE_SET: {
+                this._observer.notify(AppEvents.LOCALE_GET, this);
+                break;
+            }
+            default: {
+                break;
+            }
         }
+    }
+    setLocale(locale: LocaleModel): void {
+        this._header.textContent = locale.getPhrase(LocaleKeys.AUTH_HEADER);
+        this._textLogin.textContent = locale.getPhrase(LocaleKeys.AUTH_EMAIL);
+        this._textPassword.textContent = locale.getPhrase(LocaleKeys.AUTH_PASSWORD);
+        this._loginButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_LOGIN);
+        this._cancelButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_CANCEL);
     }
     setWindowVisibilityState(state: boolean): void {
         if (state) {
@@ -93,48 +115,38 @@ export default class AuthWindowView extends View implements INotify {
         this._windowElement.classList.add(this.CLASS_CONTAINER);
         this._formElement.classList.add(this.CLASS_WINDOW);
 
-        const header = document.createElement(this.TAG_HEADER);
-        header.classList.add(this.CLASS_HEADER);
-        header.textContent = this.TEXT_HEADER;
-        this._formElement.insertAdjacentElement('beforeend', header);
+        this._header.classList.add(this.CLASS_HEADER);
+        this._formElement.insertAdjacentElement('beforeend', this._header);
 
         let rowElement = document.createElement(this.TAG_ROW_CONTAINER);
         rowElement.classList.add(this.CLASS_ROW_CONTAINER);
-        const textLogin = document.createElement(this.TAG_LABEL);
-        textLogin.classList.add(this.CLASS_LABEL);
-        textLogin.textContent = this.TEXT_FIELD_EMAIL;
+        this._textLogin.classList.add(this.CLASS_LABEL);
         const fieldLogin = document.createElement(this.TAG_FIELD);
         fieldLogin.classList.add(this.CLASS_FIELD);
         fieldLogin.setAttribute('id', this.ID_FIELD_EMAIL);
-        rowElement.insertAdjacentElement('beforeend', textLogin);
+        rowElement.insertAdjacentElement('beforeend', this._textLogin);
         rowElement.insertAdjacentElement('beforeend', fieldLogin);
         this._formElement.insertAdjacentElement('beforeend', rowElement);
 
         rowElement = document.createElement(this.TAG_ROW_CONTAINER);
         rowElement.classList.add(this.CLASS_ROW_CONTAINER);
-        const textPassword = document.createElement(this.TAG_LABEL);
-        textPassword.classList.add(this.CLASS_LABEL);
-        textPassword.textContent = this.TEXT_FIELD_PASS;
+        this._textPassword.classList.add(this.CLASS_LABEL);
         const fieldPassword = document.createElement(this.TAG_FIELD);
         fieldPassword.classList.add(this.CLASS_FIELD);
         fieldPassword.setAttribute('type', 'password');
         fieldPassword.setAttribute('id', this.ID_FIELD_PASS);
-        rowElement.insertAdjacentElement('beforeend', textPassword);
+        rowElement.insertAdjacentElement('beforeend', this._textPassword);
         rowElement.insertAdjacentElement('beforeend', fieldPassword);
         this._formElement.insertAdjacentElement('beforeend', rowElement);
 
         rowElement = document.createElement(this.TAG_ROW_CONTAINER);
         rowElement.classList.add(this.CLASS_ROW_CONTAINER);
-        const loginButton = document.createElement(this.TAG_BUTTON);
-        loginButton.classList.add(this.CLASS_BUTTON);
-        loginButton.textContent = this.TEXT_BUTTON_LOGIN;
-        loginButton.addEventListener('click', this.logInUser.bind(this));
-        const cancelButton = document.createElement(this.TAG_BUTTON);
-        cancelButton.classList.add(this.CLASS_BUTTON);
-        cancelButton.textContent = this.TEXT_BUTTON_CANCEL;
-        cancelButton.addEventListener('click', this.closeWindow.bind(this));
-        rowElement.insertAdjacentElement('beforeend', loginButton);
-        rowElement.insertAdjacentElement('beforeend', cancelButton);
+        this._loginButton.classList.add(this.CLASS_BUTTON);
+        this._loginButton.addEventListener('click', this.logInUser.bind(this));
+        this._cancelButton.classList.add(this.CLASS_BUTTON);
+        this._cancelButton.addEventListener('click', this.closeWindow.bind(this));
+        rowElement.insertAdjacentElement('beforeend', this._loginButton);
+        rowElement.insertAdjacentElement('beforeend', this._cancelButton);
         this._formElement.insertAdjacentElement('beforeend', rowElement);
 
         this._windowElement.insertAdjacentElement('beforeend', this._formElement);

@@ -1,10 +1,13 @@
 import { AppEvents } from "../../../controller/app-events";
 import Observer from "../../../controller/observer";
+import ILocale from "../../../interfaces/i-locale";
 import INotify from "../../../interfaces/i-notify";
+import { LocaleKeys } from "../../../models/common/localization/locale-keys";
+import LocaleModel from "../../../models/common/localization/locale-model";
 import View from "../../index/view";
 import './auth.scss';
 
-export default class AuthView extends View implements INotify {
+export default class AuthView extends View implements INotify, ILocale {
     private readonly TAG_CONTAINER = 'section';
     private readonly TAG_BUTTON = 'button';
     private readonly TAG_TEXT = 'label';
@@ -14,17 +17,15 @@ export default class AuthView extends View implements INotify {
     private readonly CLASS_BUTTON_LOGIN = 'auth__login';
     private readonly CLASS_BUTTON_LOGOUT = 'auth__button_logout';
     private readonly CLASS_BUTTON_REGISTRATION = 'auth__registration';
+    private readonly CLASS_BUTTON_LOCALE = 'auth__button_locale';
     private readonly CLASS_NAME = 'auth__name';
     private readonly CLASS_NAME_VISIBLE = 'auth__name_visible';
-
-    private readonly TEXT_BUTTON_LOGIN = 'LogIn';//TODO (local) выносится в локализацию
-    private readonly TEXT_BUTTON_LOGOUT = 'LogOut';//TODO (local) выносится в локализацию
-    private readonly TEXT_BUTTON_REGISTRATION = 'Registration';//TODO (local) выносится в локализацию
 
     private _authElement = document.createElement(this.TAG_CONTAINER);
     private _logInButton!: HTMLButtonElement;
     private _logOutButton!: HTMLButtonElement;
     private _registerButton!: HTMLButtonElement;
+    private _localeButton!: HTMLButtonElement;
     private _nameElement = document.createElement(this.TAG_TEXT);
 
     constructor(observer: Observer) {
@@ -36,6 +37,7 @@ export default class AuthView extends View implements INotify {
         this._observer.addSender(AppEvents.REGISTER_HIDE_WINDOW, this);
         this._observer.addSender(AppEvents.REGISTER_USER_SUCCESS, this);
         this._observer.addSender(AppEvents.AUTH_LOGIN_USER_SUCCESS, this);
+        this._observer.notify(AppEvents.LOCALE_SET, this);
         //TODO после запуска сервера сделать проверку на текущего авторизованного пользователя
     }
     getCurrentElement(): HTMLElement {
@@ -69,6 +71,15 @@ export default class AuthView extends View implements INotify {
                 break;
             }
         }
+    }
+    localeChanged(){
+        this._observer.notify(AppEvents.LOCALE_SET, this);
+    }
+    setLocale(locale: LocaleModel): void {
+        this._logInButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_LOGIN);
+        this._logOutButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_LOGOUT);
+        this._registerButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_REGISTER);
+        this._localeButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_LOCALE);
     }
     setAuthButtonState(state: boolean): void {
         if (!state) {
@@ -124,26 +135,31 @@ export default class AuthView extends View implements INotify {
     }
     private createAuthElement(): void {
         this._authElement.classList.add(this.CLASS_CONTAINER);
-        this._logInButton = this.createButtonElement(this.CLASS_BUTTON_LOGIN, this.TEXT_BUTTON_LOGIN);
+        this._logInButton = this.createButtonElement(this.CLASS_BUTTON_LOGIN);
         this._logInButton.addEventListener('click', this.logInButtonClickHandler.bind(this));
-        this._registerButton = this.createButtonElement(this.CLASS_BUTTON_REGISTRATION, this.TEXT_BUTTON_REGISTRATION);
+        this._registerButton = this.createButtonElement(this.CLASS_BUTTON_REGISTRATION);
         this._registerButton.addEventListener('click', this.registerButtonClickHandler.bind(this));
         this._nameElement.classList.add(this.CLASS_NAME);
-        this._logOutButton = this.createButtonElement(this.CLASS_BUTTON_LOGIN, this.TEXT_BUTTON_LOGOUT);
+        this._logOutButton = this.createButtonElement(this.CLASS_BUTTON_LOGIN);
         this._logOutButton.classList.add(this.CLASS_BUTTON_HIDDEN);
         this._logOutButton.classList.add(this.CLASS_BUTTON_LOGOUT);
         this._logOutButton.addEventListener('click', this.logOutButtonClickHandler.bind(this));
+        this._localeButton = this.createButtonElement(this.CLASS_BUTTON_LOCALE);
+        this._localeButton.addEventListener('click', this.localeButtonClickHandler.bind(this));
         this._authElement.insertAdjacentElement('beforeend', this._nameElement);
         this._authElement.insertAdjacentElement('beforeend', this._registerButton);
         this._authElement.insertAdjacentElement('beforeend', this._logOutButton);
         this._authElement.insertAdjacentElement('beforeend', this._logInButton);
+        this._authElement.insertAdjacentElement('beforeend', this._localeButton);
     }
-    private createButtonElement(className: string = '', text: string): HTMLButtonElement {
+    private createButtonElement(className: string = ''): HTMLButtonElement {
         let linkElement = document.createElement(this.TAG_BUTTON);
         linkElement.classList.add(this.CLASS_BUTTON);
         linkElement.classList.add(className);
-        linkElement.textContent = text;
         return linkElement;
+    }
+    private localeButtonClickHandler(): void {
+        this._observer.notify(AppEvents.LOCALE_CHANGE, this);
     }
     private logInButtonClickHandler(): void {
         this._observer.notify(AppEvents.AUTH_CLICK_BUTTON, this);
