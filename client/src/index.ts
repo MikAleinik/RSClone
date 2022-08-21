@@ -1,7 +1,7 @@
 import { AppEvents } from "./components/controller/app-events";
-import AuthController from "./components/controller/index/auth-controller";
+import AuthController from "./components/controller/common/auth-controller";
 import NewsController from "./components/controller/index/news-controller";
-import RegisterController from "./components/controller/index/register-controller";
+import RegisterController from "./components/controller/common/register-controller";
 import Observer from "./components/controller/observer";
 import NewsModel from "./components/models/index/data-model/news-model";
 import UserModel from "./components/models/index/data-model/user-model";
