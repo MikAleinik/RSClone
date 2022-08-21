@@ -31,4 +31,7 @@ export const enum AppEvents {
     REGISTER_USER_SUCCESS = 'registerUserSuccess',//пользователь успешно зарегистрировался
     REGISTER_USER_FAIL = 'registerUserFail',//пользователь не зарегистрировался
     NEWS_GET_DATA = 'newsGetData',//получить данные новостной ленты
+    LOCALE_CHANGE = 'localeChange',//изменить язык локализации
+    LOCALE_SET = 'localeSet',//установлен язык локализации
+    LOCALE_GET = 'localeGet',//получить язык локализации
 }
