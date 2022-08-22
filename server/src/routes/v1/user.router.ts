@@ -31,7 +31,7 @@ export const RegisterUserSchema = {
         point_lat: { type: 'number' },
         point_lon: { type: 'number' },
     },
-    required: ['email', 'login', 'password', 'first_name', 'last_name', 'role_id'],
+    required: ['email', 'login', 'password'],
     additionalProperties: false,
 } as const;
 
