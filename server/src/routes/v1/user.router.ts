@@ -3,7 +3,6 @@ import { AuthController } from '../../controller/auth.controller';
 import { UsersController } from '../../controller/user.controller';
 import { RouterPath } from '../../types/enums';
 import { ErrorReplySchema } from '../../schema/general.schema';
-// import { Type } from '@sinclair/typebox';
 import { FromSchema } from 'json-schema-to-ts';
 import { UsersModel } from '../../model/user.model';
 import { UsersMapper } from '../../model/mappers/user.mapper';
@@ -31,7 +30,7 @@ export const RegisterUserSchema = {
         point_lat: { type: 'number' },
         point_lon: { type: 'number' },
     },
-    required: ['email', 'login', 'password'],
+    required: ['email', 'login', 'password', 'role_id'],
     additionalProperties: false,
 } as const;
 
