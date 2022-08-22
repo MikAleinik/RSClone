@@ -3,6 +3,7 @@ export enum RouterPath {
     USERS = 'users',
     USERS_REGISTER = 'users/register',
     AUTH = 'auth',
+    UNAUTH = 'unauth',
 }
 
 export enum OkCodes {

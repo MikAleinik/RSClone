@@ -37,9 +37,23 @@ const authUserOpts = {
     handler: AuthController.getInstance().authorizeUserFunc(),
 };
 
+const unAuthUserOpts = {
+    schema: {
+        tags: ['UNauthorization'],
+        description: 'User preses exit btn',
+        response: {
+            200: UserSchema,
+            401: ErrorReplySchema,
+        },
+    },
+    preHandler: [AuthController.getInstance().verifyJWTFunc()],
+    handler: AuthController.getInstance().unAuthorizeUserFunc(),
+};
+
 const auth: FastifyPluginAsync = async (fastify, options): Promise<void> => {
     options;
     fastify.post(`/${RouterPath.AUTH}`, authUserOpts);
+    fastify.get(`/${RouterPath.UNAUTH}`, unAuthUserOpts);
 };
 
 export default auth;

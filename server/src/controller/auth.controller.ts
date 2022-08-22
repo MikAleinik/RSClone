@@ -14,7 +14,12 @@ export class AuthController {
         algorithm: 'HS256',
         expiresIn: '1d',
     } as SignOptions;
+    private static COOKIE_OPTIONS = {
+        httpOnly: true,
+        // secure: true,
+    };
     private static COOKIE_NAME = 'authCookie';
+    private static COOKIE_UNAUTH = '-1';
     private static instance: AuthController;
 
     private constructor() {
@@ -44,7 +49,8 @@ export class AuthController {
         return async (req, res) => {
             try {
                 const cookie = req.cookies[AuthController.COOKIE_NAME];
-                if (!cookie) {
+                // -1 is set to cookie when user exits from account. It's because there is no way to delete the cookie
+                if (!cookie || cookie === '-1') {
                     res.code(401);
                     res.send({ message: 'unauthorized msg' });
                     // throw new Error('unauthorized 1');
@@ -73,18 +79,12 @@ export class AuthController {
     }
 
     setAuthCookie(resp: FastifyReply, token: string) {
-        resp.setCookie(AuthController.COOKIE_NAME, token, {
-            httpOnly: true,
-            // secure: true,
-        });
+        resp.setCookie(AuthController.COOKIE_NAME, token, AuthController.COOKIE_OPTIONS);
     }
 
     createTokenAndSetAuthCookie(resp: FastifyReply, tokenData: JWTTokenData) {
         const token = AuthController.getInstance().createToken(tokenData);
-        resp.setCookie(AuthController.COOKIE_NAME, token, {
-            httpOnly: true,
-            // secure: true,
-        });
+        resp.setCookie(AuthController.COOKIE_NAME, token, AuthController.COOKIE_OPTIONS);
     }
 
     authorizeUserFunc(): RouteHandler<{ Body: AuthRequestUserSchemaType }> {
@@ -94,6 +94,20 @@ export class AuthController {
                 AuthController.getInstance().createTokenAndSetAuthCookie(res, { id: oldUser.id, email: oldUser.email });
                 res.code(OkCodes.OK);
                 res.send(oldUser.toJsonResponse());
+            } catch (err) {
+                res.code(ErrorCodes.BAD_REQUEST);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send((err as Error).message);
+            }
+        };
+    }
+
+    unAuthorizeUserFunc(): RouteHandler {
+        return async (req, res) => {
+            try {
+                res.setCookie(AuthController.COOKIE_NAME, AuthController.COOKIE_UNAUTH, AuthController.COOKIE_OPTIONS);
+                res.code(OkCodes.OK);
+                res.send({});
             } catch (err) {
                 res.code(ErrorCodes.BAD_REQUEST);
                 res.header(ContentTypeJson[0], ContentTypeJson[1]);
