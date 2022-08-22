@@ -27,4 +27,65 @@ const userRoleActions: {[index: string]: string} = { // fake user role actions
   'news': 'News'
 };
 
-export { loadUserData, userRoleContent, userRoleActions }
+interface Cargo {
+  name: string;
+  size: number;
+  from: number[];
+  to: number[];
+  date: string;
+  status: string;
+}
+
+const userCargo: Cargo[] = [
+  {
+    name: 'Horns',
+    size: 200,
+    from: [53.90, 27.55],
+    to: [52.43, 30.99],
+    date: '2022-10-01',
+    status: 'pending'
+  },
+  {
+    name: 'Hooves',
+    size: 200,
+    from: [53.90, 27.55],
+    to: [52.43, 30.99],
+    date: '2022-10-01',
+    status: 'truck2'
+  },
+  {
+    name: 'Skin',
+    size: 100,
+    from: [ 53.90, 27.55],
+    to: [52.43, 30.99],
+    date: '2022-10-01',
+    status: 'truck3'
+  }
+]
+
+interface Truck {
+  name: string;
+  capacity: number;
+  location: number[];
+  status: string
+  filling: number;
+}
+
+const userTruck: Truck[] = [
+  {
+    name: 'Volvo',
+    capacity: 2000,
+    location: [53.90, 27.55],
+    status: 'filling',
+    filling: 100
+  },
+  {
+    name: 'Iveca',
+    capacity: 1500,
+    location: [52.43, 30.99],
+    status: 'pending',
+    filling: 0
+  }
+]
+
+export { loadUserData, userRoleContent, userRoleActions, userCargo, userTruck }

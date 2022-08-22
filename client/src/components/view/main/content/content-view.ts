@@ -55,7 +55,7 @@ export default class ContentView extends View {
                         loadCargo(this._contentElement);
                         break;
                     case 'company':
-                        loadCompany();
+                        loadCompany(this._contentElement);
                         break;
                     case 'map':
                         loadMap('auto', 'auto', this.MAIN_CONTAINER, 'replace')
@@ -70,7 +70,7 @@ export default class ContentView extends View {
                         loadOverview(this._contentElement)
                         break;
                     case 'truck':
-                        loadTruck();
+                        loadTruck(this._contentElement);
                         break;
                 }
             }
