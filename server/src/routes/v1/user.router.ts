@@ -92,6 +92,20 @@ const getUserByUUIDOpts = {
     handler: UsersController.getInstance().getUserByUUIDFunc(),
 };
 
+const getUserByHandshakeOpts = {
+    schema: {
+        tags: ['Users'],
+        description: 'Get user by handshake request (data from token)',
+        response: {
+            200: UserSchema,
+            400: ErrorReplySchema,
+            404: ErrorReplySchema,
+        },
+    },
+    preHandler: [AuthController.getInstance().verifyJWTFunc()],
+    handler: UsersController.getInstance().getUserByHandshakeFunc(),
+};
+
 const changeUserByUUIDOpts = {
     schema: {
         tags: ['Users'],
@@ -140,6 +154,7 @@ const users: FastifyPluginAsync = async (fastify, options): Promise<void> => {
     fastify.get(`/${RouterPath.USERS}`, getAllUsersOpts);
     fastify.post(`/${RouterPath.USERS_REGISTER}`, createUserOpts);
     fastify.get(`/${RouterPath.USERS}/:id`, getUserByUUIDOpts);
+    fastify.get(`/${RouterPath.USERS_HANDSHAKE}`, getUserByHandshakeOpts);
     fastify.put(`/${RouterPath.USERS}/:id`, changeUserByUUIDOpts);
     fastify.delete(`/${RouterPath.USERS}/:id`, deleteUserByUUIDOpts);
 };

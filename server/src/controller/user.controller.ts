@@ -6,6 +6,7 @@ import { User } from '../model/vo/user';
 import { RouteHandler } from 'fastify';
 import { RegisterUserSchemaType, ReplyAllUsersType, UserSchemaType } from '../routes/v1/user.router';
 import { ErrorReplyType } from '../schema/general.schema';
+import { IBodyWithJWT } from '../types/interfaces';
 
 export class UsersController {
     private static instance: UsersController;
@@ -59,6 +60,25 @@ export class UsersController {
                 const oldUser = await UsersModel.getInstance().getUserById(id);
                 if (!oldUser) {
                     throw new Error(`User with id = ${id} not found`);
+                }
+                res.code(OkCodes.OK);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send(oldUser.toJsonResponse());
+            } catch (err) {
+                res.code(ErrorCodes.BAD_REQUEST);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send({ message: (err as Error).message });
+            }
+        };
+    }
+
+    getUserByHandshakeFunc(): RouteHandler<{ Body: IBodyWithJWT; Reply: UserSchemaType | ErrorReplyType }> {
+        return async (req, res) => {
+            try {
+                const { jwtDecoded } = req.body;
+                const oldUser = await UsersModel.getInstance().getUserById(jwtDecoded.id);
+                if (!oldUser) {
+                    throw new Error(`User with id = ${jwtDecoded.id} not found`);
                 }
                 res.code(OkCodes.OK);
                 res.header(ContentTypeJson[0], ContentTypeJson[1]);
