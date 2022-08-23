@@ -1,3 +1,4 @@
+import user from "../../../../types/user";
 import { AppEvents } from "../../../controller/app-events";
 import Observer from "../../../controller/observer";
 import ILocale from "../../../interfaces/i-locale";
@@ -38,7 +39,7 @@ export default class AuthView extends View implements INotify, ILocale {
         this._observer.addSender(AppEvents.REGISTER_USER_SUCCESS, this);
         this._observer.addSender(AppEvents.AUTH_LOGIN_USER_SUCCESS, this);
         this._observer.notify(AppEvents.LOCALE_SET, this);
-        //TODO после запуска сервера сделать проверку на текущего авторизованного пользователя
+        this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
     }
     getCurrentElement(): HTMLElement {
         return this._authElement;
@@ -113,8 +114,15 @@ export default class AuthView extends View implements INotify, ILocale {
             this._nameElement.classList.remove(this.CLASS_NAME_VISIBLE);
         }
     }
-    showUserName(nameUser: string) {
-        this._nameElement.textContent = nameUser;
+    setAuthorizedUser(authUser: user) {
+        this._observer.notify(AppEvents.REGISTER_ENABLE_BUTTON, this);
+        this._observer.notify(AppEvents.REGISTER_HIDE_BUTTON, this);
+        this._observer.notify(AppEvents.AUTH_ENABLE_BUTTON, this);
+        this._observer.notify(AppEvents.AUTH_HIDE_BUTTON, this);
+        this.showUserName(authUser);
+    }
+    showUserName(authUser: user) {
+        this._nameElement.textContent = authUser.login;
         this._nameElement.classList.add(this.CLASS_NAME_VISIBLE);
     }
     hideUserName() {

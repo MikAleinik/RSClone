@@ -5,6 +5,7 @@ import INotify from "../../interfaces/i-notify";
 import AuthView from "../../view/common/auth/auth-view";
 import AuthWindowView from "../../view/common/auth-window/auth-window-view";
 import View from "../../view/index/view";
+import user from "../../../types/user";
 
 export default class AuthController implements INotify {
     private _userModel: UserModel;
@@ -78,14 +79,17 @@ export default class AuthController implements INotify {
                 let verifySender = (sender as unknown) as AuthWindowView;
                 verifySender.failLogInHandler(result as Map<string, string>);
             });
-        // let nameUser = this._userModel.getAuthUser();
-        // let verifySender = (sender as unknown) as AuthView;
-        // verifySender.showUserName(nameUser);
     }
     private getAuthUserHandler(sender: View): AppEvents | void {
-        let nameUser = this._userModel.getAuthUser();
-        let verifySender = (sender as unknown) as AuthView;
-        verifySender.showUserName(nameUser);
+        this._userModel.getAuthUser()
+            .then((data) => {
+                let verifySender = (sender as unknown) as AuthView;
+                verifySender.setAuthorizedUser(data);
+            })
+            .catch((data) => {
+                //TODO
+                console.log('Error get authorized user.');
+            });
     }
     private clickButtonHandler(sender: View): AppEvents | void {
         let stateButton = this._authModel.isChangeStateButton();

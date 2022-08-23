@@ -3,8 +3,10 @@ import news from "../../../../types/news";
 import user from "../../../../types/user";
 import { AppEvents } from "../../../controller/app-events";
 import CreateUserHandler from "./handler/create/create-user";
+import GetUserHandler from "./handler/read/get-user";
 import ReadNewsHandler from "./handler/read/read-news";
 import LogInUserHandler from "./handler/update/login";
+import LogOutUserHandler from "./handler/update/logout";
 import { HttpCodes } from "./http-codes";
 
 export default class DataMapper {
@@ -65,6 +67,37 @@ export default class DataMapper {
                         });
                     break;
                 }
+                case AppEvents.AUTH_GET_AUTH_USER: {
+                    const handler = new GetUserHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    delete ((data as unknown) as answer).statusCode;
+                                    const result = new Map<string, string>();
+                                    for (const [key, value] of Object.entries(((data as unknown) as user))) {
+                                        result.set(key, value.toString());
+                                    }
+                                    resolve(result);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_UNAUTHORIZED:
+                                case HttpCodes.CODE_FORBIDDEN: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка авторизации');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            const result = new Map<string, string>();
+                            result.set('message', data.message);
+                            reject(result);
+                        });
+                    break;
+                }
                 default: {
                     const result = new Map<string, string>();
                     result.set('message', 'TODO Не известная ошибка');
@@ -108,7 +141,35 @@ export default class DataMapper {
                     break;
                 }
                 case AppEvents.AUTH_CLICK_LOGOUT_BUTTON: {
-                    throw new Error('not implemented');
+                    const handler = new LogOutUserHandler();
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    console.log(data);
+                                    delete ((data as unknown) as answer).statusCode;
+                                    const result = new Map<string, string>();
+                                    for (const [key, value] of Object.entries(((data as unknown) as user))) {
+                                        result.set(key, value.toString());
+                                    }
+                                    resolve(result);
+                                    break;
+                                }
+                                case HttpCodes.CODE_UNAUTHORIZED: {
+                                    console.log(data);
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка выхода пользователя');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            const result = new Map<string, string>();
+                            result.set('message', data.message);
+                            reject(result);
+                        });
+                    break;
                 }
                 default: {
                     const result = new Map<string, string>();

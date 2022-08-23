@@ -66,8 +66,28 @@ export default class UserModel {
                 });
         });
     }
-    getAuthUser(): string {
-        return this._currentUser.login;
+    getAuthUser(): Promise<user> {
+        return new Promise((resolve, reject) => {
+            if (this._currentUser.login !== '') {
+                resolve(this._currentUser);
+            } else {
+                let param = new Map<string, string>();
+                //TODO согласовать с Денисом отправку нуля для получения текущего юзера
+                param.set('id', '1');
+                this._dataMapper.read(AppEvents.AUTH_GET_AUTH_USER, param)
+                .then((result) => {
+                    console.log(result);
+                    this.clearUser();
+                    result = (result as unknown) as Map<string, string>;
+                    this.setUser(result);
+                    resolve(this._currentUser);
+                })
+                .catch((result) => {
+                    reject(result);
+                });
+            }
+        });
+
     }
     private setUser (result: Map<string, string>): void {
         this._currentUser.id = Number(result.get('id')!);

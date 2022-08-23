@@ -1,6 +1,6 @@
 import Handler from "../handler";
 
-export default class LogInUserHandler extends Handler {
+export default class GetUserHandler extends Handler {
 
     constructor(params: Map<string, string>) {
         super(params);
@@ -8,19 +8,14 @@ export default class LogInUserHandler extends Handler {
 
     send<T>(): Promise<T> {
         return new Promise((resolve, reject) => {
-            const URL = this.SERVER_URL + this.AUTH_END_POINT;
-            const userData = {
-                email: this._params.get('auth_email')!,
-                password: this._params.get('auth_password')!,
-            };
+            const URL = this.SERVER_URL + this.USER_END_POINT + '/' + this._params.get('id')!;
             fetch(URL, {
-                method: 'POST',
+                method: 'GET',
                 credentials: 'include',
                 mode: 'cors',
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
+                    'Content-Type': 'application/json;charset=utf-8'
                 },
-                body: JSON.stringify(userData)
             })
                 .then((response) => {
                     return response.json()
