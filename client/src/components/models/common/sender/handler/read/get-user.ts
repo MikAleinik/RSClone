@@ -8,7 +8,13 @@ export default class GetUserHandler extends Handler {
 
     send<T>(): Promise<T> {
         return new Promise((resolve, reject) => {
-            const URL = this.SERVER_URL + this.USER_END_POINT + '/' + this._params.get('id')!;
+            let id = '';
+            if (this._params.has('id')) {
+                id = this.USER_END_POINT + '/' + this._params.get('id')!;
+            } else {
+                id = this.HANDSHAKE_END_POINT;
+            }
+            const URL = this.SERVER_URL + id;
             fetch(URL, {
                 method: 'GET',
                 credentials: 'include',

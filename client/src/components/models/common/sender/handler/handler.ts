@@ -6,6 +6,7 @@ export default abstract class Handler {
     protected readonly AUTH_END_POINT = '/auth';
     protected readonly UNAUTH_END_POINT = '/unauth';
     protected readonly USER_END_POINT = '/users';
+    protected readonly HANDSHAKE_END_POINT = '/users/handshake';
     protected readonly USER_REGISTER_END_POINT = '/register';
 
     protected _params: Map<string, string>;

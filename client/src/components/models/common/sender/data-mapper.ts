@@ -10,8 +10,6 @@ import LogOutUserHandler from "./handler/update/logout";
 import { HttpCodes } from "./http-codes";
 
 export default class DataMapper {
-    //TODO Внести в локализацию все ответы сервера
-
     constructor() {
 
     }
@@ -19,14 +17,12 @@ export default class DataMapper {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
                 case AppEvents.REGISTER_USER: {
-                    params.set('role_id', '1');
                     const handler = new CreateUserHandler(params);
                     handler.send()
                         .then((data) => {
                             switch (((data as unknown) as answer).statusCode) {
                                 case HttpCodes.CODE_CREATED: {
                                     delete ((data as unknown) as answer).statusCode;
-                                    //TODO уточнить после реги юзер становится залогинившимся или нет 
                                     resolve(params);
                                     break;
                                 }
@@ -146,7 +142,6 @@ export default class DataMapper {
                         .then((data) => {
                             switch (((data as unknown) as answer).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    console.log(data);
                                     delete ((data as unknown) as answer).statusCode;
                                     const result = new Map<string, string>();
                                     for (const [key, value] of Object.entries(((data as unknown) as user))) {
@@ -156,7 +151,6 @@ export default class DataMapper {
                                     break;
                                 }
                                 case HttpCodes.CODE_UNAUTHORIZED: {
-                                    console.log(data);
                                     const result = new Map<string, string>();
                                     result.set('message', 'TODO Ошибка выхода пользователя');
                                     reject(result);

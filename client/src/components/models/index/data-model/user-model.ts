@@ -5,8 +5,8 @@ import DataMapper from "../../common/sender/data-mapper";
 export default class UserModel {
     private ID_ROLE_CUSTOMER = '1';
     private ID_ROLE_CARRIER = '2';
-    private NAME_ROLE_CUSTOMER = 'customer';
-    private NAME_ROLE_CARRIER = 'carrier';
+    private NAME_ROLE_CUSTOMER_EN = 'Customer';
+    private NAME_ROLE_CUSTOMER_RU = 'Заказчик';
 
     private _dataMapper = new DataMapper();
     private _currentUser: user = {
@@ -30,6 +30,12 @@ export default class UserModel {
     }
     registerUser(nameEvents: AppEvents, param: Map<string, string>): Promise<Map<string, string>> {
         return new Promise((resolve, reject) => {
+            if (param.get('role')! === this.NAME_ROLE_CUSTOMER_EN || param.get('role')! === this.NAME_ROLE_CUSTOMER_RU) {
+                param.set('role_id', this.ID_ROLE_CUSTOMER);
+            } else {
+                param.set('role_id', this.ID_ROLE_CARRIER);
+            }
+            param.delete('role');
             this._dataMapper.create(nameEvents, param)
                 .then((result) => {
                     result = (result as unknown) as Map<string, string>;
@@ -71,12 +77,8 @@ export default class UserModel {
             if (this._currentUser.login !== '') {
                 resolve(this._currentUser);
             } else {
-                let param = new Map<string, string>();
-                //TODO согласовать с Денисом отправку нуля для получения текущего юзера
-                param.set('id', '1');
-                this._dataMapper.read(AppEvents.AUTH_GET_AUTH_USER, param)
+                this._dataMapper.read(AppEvents.AUTH_GET_AUTH_USER)
                 .then((result) => {
-                    console.log(result);
                     this.clearUser();
                     result = (result as unknown) as Map<string, string>;
                     this.setUser(result);
@@ -103,7 +105,7 @@ export default class UserModel {
         this._currentUser.rating_count = Number(result.get('rating_count')!);
         this._currentUser.point_lat = Number(result.get('point_lat')!);
         this._currentUser.point_lon = Number(result.get('point_lon')!);
-        if (result.get('role_id')! === this.NAME_ROLE_CUSTOMER) {
+        if (result.get('role_id')! === this.NAME_ROLE_CUSTOMER_EN || this.NAME_ROLE_CUSTOMER_RU) {
             this._currentUser.role_id = this.ID_ROLE_CUSTOMER;
         } else {
             this._currentUser.role_id = this.ID_ROLE_CARRIER;

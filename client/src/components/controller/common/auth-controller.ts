@@ -87,8 +87,7 @@ export default class AuthController implements INotify {
                 verifySender.setAuthorizedUser(data);
             })
             .catch((data) => {
-                //TODO
-                console.log('Error get authorized user.');
+                // console.log('Authorized user not found.');
             });
     }
     private clickButtonHandler(sender: View): AppEvents | void {

@@ -14,18 +14,11 @@ export default class CreateUserHandler extends Handler {
                 email: this._params.get('email')!,
                 password: this._params.get('password')!,
                 role_id: this._params.get('role_id')!,
-                first_name: '',
-                last_name: '',
-                phone: '',
-                company: '',
-                address: '',
-                rating: 0,
-                rating_count: 0,
-                point_lat: 0,
-                point_lon: 0
             };
             fetch(URL, {
                 method: 'POST',
+                credentials: 'include',
+                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
