@@ -42,7 +42,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.REGISTER_PASSWORD, new Array('Password', 'Пароль'));
         this._localeDictionary.set(LocaleKeys.PAGE_LINK_CONTACT, new Array('Contact', 'Контакты'));
         this._localeDictionary.set(LocaleKeys.PAGE_LINK_ABOUT, new Array('About', 'О проекте'));
-        this._localeDictionary.set(LocaleKeys.PROMO_HEADER, new Array('Freight exchange', 'Биржа грузоперевозок'));
+        this._localeDictionary.set(LocaleKeys.PROMO_HEADER, new Array('Freight exchange', 'Портал грузоперевозок'));
         this._localeDictionary.set(LocaleKeys.PROMO_FIRST, new Array('unite carriers and cargo owners', 'объединяем перевозчиков и грузовладельцев'));
         this._localeDictionary.set(LocaleKeys.PROMO_SECOND, new Array('show the position of transport and cargo', 'показываем положение транспорта и груза'));
         this._localeDictionary.set(LocaleKeys.PROMO_THIRD, new Array('provide a platform for communication', 'предоставляем площадку для общения'));
