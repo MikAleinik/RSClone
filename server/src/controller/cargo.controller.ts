@@ -10,6 +10,7 @@ import {
 } from '../routes/v1/cargo.router';
 import { CargosModel } from '../model/cargo.model';
 import { Cargo } from '../model/vo/cargo';
+import { IBodyWithJWT } from '../types/interfaces';
 
 export class CargoController {
     private static instance: CargoController;
@@ -103,12 +104,20 @@ export class CargoController {
         return oldCargo;
     }
 
-    deleteCargoByUUIDFunc(): RouteHandler {
+    deleteCargoByUUIDFunc(): RouteHandler<{ Params: { id: number } }> {
         return async (req, res) => {
-            //TODO add implementation
-            res.code(OkCodes.CREATED);
-            res.header(ContentTypeJson[0], ContentTypeJson[1]);
-            res.send({});
+            try {
+                const { id } = req.params;
+                const { jwtDecoded } = req.body as IBodyWithJWT;
+                await CargosModel.getInstance().deleteCargoByUUID(id, jwtDecoded.id);
+                res.code(OkCodes.OK);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send({});
+            } catch (err) {
+                res.code(ErrorCodes.BAD_REQUEST);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send({ message: (err as Error).message });
+            }
         };
     }
 

@@ -71,14 +71,8 @@ export class CargosModel {
     }
 
     async updateCargo(body: CreateCargoSchemaType, id: number) {
-        const cargo = await CargosModel.mapper.getById(id);
-        if (!cargo) {
-            throw new Error(`No cargo with id = ${id}`);
-        }
         const { jwtDecoded } = body;
-        if (jwtDecoded.id !== cargo.user_id) {
-            throw new Error(`Cargo ${id} doesn't belong to user ${jwtDecoded.id}`);
-        }
+        await CargosModel.getInstance().checkCargoByIdAndUser(id, jwtDecoded.id);
         return await CargosModel.mapper.changeCargo(id, body);
     }
 
@@ -88,69 +82,19 @@ export class CargosModel {
         }
     }
 
-    async processGetUserByUUID(req: any, res: any) {
-        // const { id } = req.params;
-        // try {
-        //   if (!validateUUID(id)) {
-        //     throw new BadRequestError("UUID is invalid");
-        //   }
-        //   const user = await usersRepo.getUserByUUID(id);
-        //   res.code(OkCodes.OK);
-        //   res.header(...ContentTypeJson);
-        //   res.send(user.toJsonResponse());
-        // } catch (error) {
-        //   errorHandler(error, res);
-        // }
-
-        const user = new User(0); //await usersRepo.addUser({ name, login, password });
-        res.code(OkCodes.CREATED);
-        res.header(...ContentTypeJson);
-        res.send(user.toJsonResponse());
+    async checkCargoByIdAndUser(id: number, userId: number) {
+        const cargo = await CargosModel.mapper.getById(id);
+        if (!cargo) {
+            throw new Error(`No cargo with id = ${id}`);
+        }
+        if (userId !== cargo.user_id) {
+            throw new Error(`Cargo ${id} doesn't belong to user ${userId}`);
+        }
     }
 
-    async processChangeUserByUUID(req: any, res: any) {
-        // try {
-        //   const { id: userId } = req.params;
-        //   if (!validateUUID(userId)) {
-        //     throw new BadRequestError("UUID is invalid");
-        //   }
-        //   const user = await usersRepo.getUserByUUID(userId);
-        //   const { name, login, password, id } = req.body;
-        //   user.id = id;
-        //   user.name = name;
-        //   user.login = login;
-        //   user.password = password;
-        //   res.code(OkCodes.OK);
-        //   res.header(...ContentTypeJson);
-        //   res.send(user.toJsonResponse());
-        // } catch (error) {
-        //   errorHandler(error, res);
-        // }
-
-        const user = new User(0); //await usersRepo.addUser({ name, login, password });
-        res.code(OkCodes.CREATED);
-        res.header(...ContentTypeJson);
-        res.send(user.toJsonResponse());
-    }
-
-    async processDeleteUserByUUID(req: any, res: any) {
-        // try {
-        //   const { id } = req.params;
-        //   if (!validateUUID(id)) {
-        //     throw new BadRequestError("UUID is invalid");
-        //   }
-        //   await usersRepo.deleteUserByUUID(id);
-        //   tasksRepo.clearUserId(id);
-        //   res.code(OkCodes.OK);
-        //   res.header(...ContentTypeJson);
-        //   res.send({});
-        // } catch (error) {
-        //   errorHandler(error, res);
-        // }
-
-        res.code(OkCodes.OK);
-        res.header(...ContentTypeJson);
-        res.send({});
+    async deleteCargoByUUID(id: number, userId: number) {
+        await CargosModel.getInstance().checkCargoByIdAndUser(id, userId);
+        await CargosModel.mapper.deleteCargo(id);
     }
 
     static getInstance() {

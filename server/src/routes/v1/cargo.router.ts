@@ -4,13 +4,13 @@ import { RouterPath } from '../../types/enums';
 import { ErrorReplySchema } from '../../schema/general.schema';
 import { FromSchema } from 'json-schema-to-ts';
 import { CargoController } from '../../controller/cargo.controller';
-import { BodyWithJWT } from '../../types/interfaces';
+import { IBodyWithJWT } from '../../types/interfaces';
 import { CargosModel } from '../../model/cargo.model';
 import { CargoMapper } from '../../model/mappers/cargo.mapper';
 
 // export Schema types
 
-export type CreateCargoSchemaType = FromSchema<typeof CreateCargoSchema> & BodyWithJWT;
+export type CreateCargoSchemaType = FromSchema<typeof CreateCargoSchema> & IBodyWithJWT;
 export type CargoSchemaType = FromSchema<typeof CargoSchema>;
 export type ReplyAllCargosType = FromSchema<typeof ReplyAllCargos>;
 

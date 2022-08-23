@@ -10,6 +10,6 @@ export interface JWTTokenDataWithTimestamps {
     exp: number;
 }
 
-export interface BodyWithJWT {
+export interface IBodyWithJWT {
     jwtDecoded: JWTTokenDataWithTimestamps;
 }

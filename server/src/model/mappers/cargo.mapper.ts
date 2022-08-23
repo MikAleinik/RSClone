@@ -128,6 +128,10 @@ export class CargoMapper {
         }
     }
 
+    async deleteCargo(cargoId: number) {
+        await this._db.none(`DELETE FROM ${this.TABLE_NAME} WHERE id = ${cargoId};`);
+    }
+
     async getById(idNum: number) {
         const item = await this._db.oneOrNone(`SELECT ${this.ALL_FIELDS_GET} FROM ${this.TABLE_NAME} WHERE id = $1`, [
             idNum,

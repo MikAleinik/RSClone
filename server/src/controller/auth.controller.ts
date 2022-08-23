@@ -6,7 +6,7 @@ import { UsersModel } from '../model/user.model';
 import { ErrorCodes, OkCodes } from '../types/enums';
 import { FastifyReply, FastifyRequest, RouteHandler } from 'fastify';
 import { AuthRequestUserSchemaType } from '../routes/v1/auth.router';
-import { BodyWithJWT, JWTTokenData, JWTTokenDataWithTimestamps } from '../types/interfaces';
+import { IBodyWithJWT, JWTTokenData, JWTTokenDataWithTimestamps } from '../types/interfaces';
 
 export class AuthController {
     private static SECRET_FOR_JWT = 'testSecret123';
@@ -61,7 +61,7 @@ export class AuthController {
                 if (!req.body) {
                     req.body = {};
                 }
-                (req.body as BodyWithJWT).jwtDecoded = decoded?.payload as JWTTokenDataWithTimestamps;
+                (req.body as IBodyWithJWT).jwtDecoded = decoded?.payload as JWTTokenDataWithTimestamps;
             } catch (err) {
                 res.code(401);
                 res.send({ message: 'authentication expired, please login again' });
