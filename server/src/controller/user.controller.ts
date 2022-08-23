@@ -42,7 +42,7 @@ export class UsersController {
         return async (req, res) => {
             try {
                 const newUser = await UsersModel.getInstance().processCreateNewUser(req.body);
-                AuthController.getInstance().setAuthCookie(res, newUser.email);
+                AuthController.getInstance().createTokenAndSetAuthCookie(res, { id: newUser.id, email: newUser.email });
                 res.code(OkCodes.CREATED);
                 res.send(newUser.toJsonResponse());
             } catch (err) {
