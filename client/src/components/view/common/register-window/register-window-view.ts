@@ -21,18 +21,14 @@ export default class RegisterWindowView extends View implements INotify, ILocale
     private readonly CLASS_ROW_CONTAINER = 'window-register__row-container';
     private readonly CLASS_LABEL = 'window-register__info';
     private readonly CLASS_FIELD = 'window-register__field';
+    private readonly CLASS_FIELD_SELECT = 'window-register__field_select';
     private readonly CLASS_FIELD_INVALID = 'window-register__field_invalid';
     private readonly CLASS_BUTTON = 'big__button';
 
-    // private readonly TEXT_HEADER = 'Registration new user';//TODO (local) выносится в локализацию
-    // private readonly TEXT_FIELD_LOGIN = 'Login';//TODO (local) выносится в локализацию
-    // private readonly TEXT_FIELD_PASS = 'Password';//TODO (local) выносится в локализацию
-    // private readonly TEXT_FIELD_EMAIL = 'Email';//TODO (local) выносится в локализацию
-    // private readonly TEXT_BUTTON_LOGIN = 'Register';//TODO (local) выносится в локализацию
-    // private readonly TEXT_BUTTON_CANCEL = 'Cancel';//TODO (local) выносится в локализацию
     private readonly ID_FIELD_LOGIN = 'login';
     private readonly ID_FIELD_PASS = 'password';
     private readonly ID_FIELD_EMAIL = 'email';
+    private readonly ID_FIELD_ROLE = 'role';
 
     private _windowElement = document.createElement(this.TAG_CONTAINER);
     private _formElement = document.createElement(this.TAG_WINDOW);
@@ -40,8 +36,12 @@ export default class RegisterWindowView extends View implements INotify, ILocale
     private _textLogin = document.createElement(this.TAG_LABEL);
     private _textEmail = document.createElement(this.TAG_LABEL);
     private _textPassword = document.createElement(this.TAG_LABEL);
+    private _textRole = document.createElement(this.TAG_LABEL);
+    private _textFieldRole = document.createElement(this.TAG_LABEL);
     private _loginButton = document.createElement(this.TAG_BUTTON);
     private _cancelButton = document.createElement(this.TAG_BUTTON);
+    private _indexSelectedRole = 0;
+    private _roles = new Array<string>();
 
     constructor(observer: Observer) {
         super(observer);
@@ -73,6 +73,11 @@ export default class RegisterWindowView extends View implements INotify, ILocale
         this._textLogin.textContent = locale.getPhrase(LocaleKeys.REGISTER_LOGIN);
         this._textEmail.textContent = locale.getPhrase(LocaleKeys.REGISTER_EMAIL);
         this._textPassword.textContent = locale.getPhrase(LocaleKeys.REGISTER_PASSWORD);
+        this._textRole.textContent = locale.getPhrase(LocaleKeys.REGISTER_ROLE);
+        this._roles = new Array();
+        this._roles.push(locale.getPhrase(LocaleKeys.ROLE_CUSTOMER));
+        this._roles.push(locale.getPhrase(LocaleKeys.ROLE_CARRIER));
+        this._textFieldRole.textContent = this._roles[this._indexSelectedRole];
         this._loginButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_REGISTER);
         this._cancelButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_CANCEL);
     }
@@ -97,11 +102,13 @@ export default class RegisterWindowView extends View implements INotify, ILocale
     }
     private registerUser() {
         event?.preventDefault();
-        if(this.checkFormData()) {
+        if (this.checkFormData()) {
             let params = new Map<string, string>();
             params.set(this.ID_FIELD_LOGIN, this._formElement.login.value);
             params.set(this.ID_FIELD_EMAIL, this._formElement.email.value);
             params.set(this.ID_FIELD_PASS, this._formElement.password.value);
+            const role = this._formElement.getElementsByClassName(this.CLASS_FIELD_SELECT)[0].textContent;
+            params.set(this.ID_FIELD_ROLE, (role !== null ? role : ''));
             this._observer.notify(AppEvents.REGISTER_USER, this, params);
         }
     }
@@ -126,6 +133,14 @@ export default class RegisterWindowView extends View implements INotify, ILocale
             this._formElement.email.classList.remove(this.CLASS_FIELD_INVALID);
         }
         return result;
+    }
+    private changeRole() {
+        if (this._indexSelectedRole === 0) {
+            this._indexSelectedRole = 1;
+        } else {
+            this._indexSelectedRole = 0;
+        }
+        this._textFieldRole.textContent = this._roles[this._indexSelectedRole];
     }
     private createWindowElement(): void {
         this._windowElement.classList.add(this.CLASS_CONTAINER);
@@ -152,6 +167,16 @@ export default class RegisterWindowView extends View implements INotify, ILocale
         fieldEmail.setAttribute('id', this.ID_FIELD_EMAIL);
         rowElement.insertAdjacentElement('beforeend', this._textEmail);
         rowElement.insertAdjacentElement('beforeend', fieldEmail);
+        this._formElement.insertAdjacentElement('beforeend', rowElement);
+
+        rowElement = document.createElement(this.TAG_ROW_CONTAINER);
+        rowElement.classList.add(this.CLASS_ROW_CONTAINER);
+        this._textRole.classList.add(this.CLASS_LABEL);
+        this._textFieldRole.classList.add(this.CLASS_FIELD_SELECT);
+        this._textFieldRole.setAttribute('id', this.ID_FIELD_ROLE);
+        this._textFieldRole.addEventListener('click', this.changeRole.bind(this));
+        rowElement.insertAdjacentElement('beforeend', this._textRole);
+        rowElement.insertAdjacentElement('beforeend', this._textFieldRole);
         this._formElement.insertAdjacentElement('beforeend', rowElement);
 
         rowElement = document.createElement(this.TAG_ROW_CONTAINER);

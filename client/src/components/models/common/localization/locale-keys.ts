@@ -10,9 +10,13 @@ export const enum LocaleKeys {
     AUTH_PASSWORD = 'authPassword',
 
     REGISTER_HEADER = 'registerHeader',
-    REGISTER_LOGIN = 'authLogin',
-    REGISTER_EMAIL = 'authEmail',
-    REGISTER_PASSWORD = 'authPassword',
+    REGISTER_LOGIN = 'registerLogin',
+    REGISTER_EMAIL = 'registerEmail',
+    REGISTER_PASSWORD = 'registerPassword',
+    REGISTER_ROLE = 'registerRole',
+
+    ROLE_CARRIER = 'roleCarrier',
+    ROLE_CUSTOMER = 'roleCustomer',
 
     PAGE_LINK_CONTACT = 'pageLinkContact',
     PAGE_LINK_ABOUT = 'pageLinkAbout',

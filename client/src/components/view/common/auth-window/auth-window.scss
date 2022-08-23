@@ -43,22 +43,23 @@
     width: 100%;
 
     box-sizing: border-box;
-    padding: 0% 15%;
+    padding: 0% 10%;
 }
 
 .window-auth__info {
-    width: 20%;
-    text-align: end;
+    width: 40%;
+    text-align: right;
 }
 
 .window-auth__field {
-    width: 60%;
+    height: 12px;
+    width: 40%;
 
     font-size    : 16px;
     border       : 1px solid;
     border-radius: 18px;
     padding      : 5px 15px;
-    margin       : 10px;
+    margin       : 5px 10px;
     cursor       : pointer;
 }
 

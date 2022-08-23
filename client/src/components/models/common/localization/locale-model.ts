@@ -40,6 +40,9 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.REGISTER_LOGIN, new Array('Login', 'Логин'));
         this._localeDictionary.set(LocaleKeys.REGISTER_EMAIL, new Array('Email', 'Эл.почта'));
         this._localeDictionary.set(LocaleKeys.REGISTER_PASSWORD, new Array('Password', 'Пароль'));
+        this._localeDictionary.set(LocaleKeys.REGISTER_ROLE, new Array('Role', 'Роль'));
+        this._localeDictionary.set(LocaleKeys.ROLE_CARRIER, new Array('Carrier', 'Перевозчик'));
+        this._localeDictionary.set(LocaleKeys.ROLE_CUSTOMER, new Array('Customer', 'Заказчик'));
         this._localeDictionary.set(LocaleKeys.PAGE_LINK_CONTACT, new Array('Contact', 'Контакты'));
         this._localeDictionary.set(LocaleKeys.PAGE_LINK_ABOUT, new Array('About', 'О проекте'));
         this._localeDictionary.set(LocaleKeys.PROMO_HEADER, new Array('Freight exchange', 'Портал грузоперевозок'));
