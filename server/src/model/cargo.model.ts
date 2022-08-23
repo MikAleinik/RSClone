@@ -70,6 +70,18 @@ export class CargosModel {
         );
     }
 
+    async updateCargo(body: CreateCargoSchemaType, id: number) {
+        const cargo = await CargosModel.mapper.getById(id);
+        if (!cargo) {
+            throw new Error(`No cargo with id = ${id}`);
+        }
+        const { jwtDecoded } = body;
+        if (jwtDecoded.id !== cargo.user_id) {
+            throw new Error(`Cargo ${id} doesn't belong to user ${jwtDecoded.id}`);
+        }
+        return await CargosModel.mapper.changeCargo(id, body);
+    }
+
     checkMapper() {
         if (!CargosModel.mapper) {
             throw new ErrorNoMapper();

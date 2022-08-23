@@ -1,6 +1,5 @@
 import { ContentTypeJson } from '../types/types';
 import { ErrorCodes, OkCodes } from '../types/enums';
-import { User } from '../model/vo/user';
 import { RouteHandler } from 'fastify';
 import { ErrorReplyType } from '../schema/general.schema';
 import {
@@ -65,10 +64,7 @@ export class CargoController {
         return async (req, res) => {
             try {
                 const { id } = req.params;
-                const oldCargo = await CargosModel.getInstance().getById(id);
-                if (!oldCargo) {
-                    throw new Error(`Cargo with id = ${id} not found`);
-                }
+                const oldCargo = await CargoController.getInstance().getById(id);
                 res.code(OkCodes.OK);
                 res.header(ContentTypeJson[0], ContentTypeJson[1]);
                 res.send(oldCargo.toJsonResponse());
@@ -80,17 +76,34 @@ export class CargoController {
         };
     }
 
-    changeUserByUUIDFunc(): RouteHandler<{ Body: CargoSchemaType; Reply: CargoSchemaType | ErrorReplyType }> {
+    changeCargoByUUIDFunc(): RouteHandler<{
+        Params: { id: number };
+        Body: CreateCargoSchemaType;
+        Reply: CargoSchemaType;
+    }> {
         return async (req, res) => {
-            //TODO add implementation
-            const user = new User(0); //await usersRepo.addUser({ name, login, password });
-            res.code(OkCodes.CREATED);
-            res.header(ContentTypeJson[0], ContentTypeJson[1]);
-            res.send(user.toJsonResponse());
+            try {
+                const { id } = req.params;
+                const cargo = await CargosModel.getInstance().updateCargo(req.body, id);
+                res.code(OkCodes.OK);
+                res.send(cargo?.toJsonResponse());
+            } catch (err) {
+                res.code(ErrorCodes.BAD_REQUEST);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send({ message: (err as Error).message });
+            }
         };
     }
 
-    deleteUserByUUIDFunc(): RouteHandler<{ Body: CargoSchemaType }> {
+    async getById(id: number) {
+        const oldCargo = await CargosModel.getInstance().getById(id);
+        if (!oldCargo) {
+            throw new Error(`Cargo with id = ${id} not found`);
+        }
+        return oldCargo;
+    }
+
+    deleteCargoByUUIDFunc(): RouteHandler {
         return async (req, res) => {
             //TODO add implementation
             res.code(OkCodes.CREATED);

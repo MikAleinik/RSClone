@@ -1,11 +1,8 @@
 import { FastifyPluginAsync } from 'fastify';
 import { AuthController } from '../../controller/auth.controller';
-import { UsersController } from '../../controller/user.controller';
 import { RouterPath } from '../../types/enums';
 import { ErrorReplySchema } from '../../schema/general.schema';
 import { FromSchema } from 'json-schema-to-ts';
-// import { UsersModel } from '../../model/user.model';
-// import { UsersMapper } from '../../model/mappers/user.mapper';
 import { CargoController } from '../../controller/cargo.controller';
 import { BodyWithJWT } from '../../types/interfaces';
 import { CargosModel } from '../../model/cargo.model';
@@ -114,7 +111,7 @@ const getCargoByUUIDOpts = {
     handler: CargoController.getInstance().getCargoByUUIDFunc(),
 };
 
-const changeUserByUUIDOpts = {
+const changeCargoByUUIDOpts = {
     schema: {
         tags: ['Cargo'],
         description: 'Change cargo by Id',
@@ -126,20 +123,20 @@ const changeUserByUUIDOpts = {
         },
     },
     preHandler: [AuthController.getInstance().verifyJWTFunc()],
-    handler: UsersController.getInstance().changeUserByUUIDFunc(),
+    handler: CargoController.getInstance().changeCargoByUUIDFunc(),
 };
 
-const deleteUserByUUIDOpts = {
+const deleteCargoByUUIDOpts = {
     schema: {
-        tags: ['Users'],
-        description: 'Delete user by Id',
+        tags: ['Cargo'],
+        description: 'Delete cargo by Id',
         response: {
             200: {},
             400: ErrorReplySchema,
         },
     },
     preHandler: [AuthController.getInstance().verifyJWTFunc()],
-    handler: UsersController.getInstance().deleteUserByUUIDFunc(),
+    handler: CargoController.getInstance().deleteCargoByUUIDFunc(),
 };
 
 const createCargoOpts = {
@@ -166,8 +163,8 @@ const cargo: FastifyPluginAsync = async (fastify, options): Promise<void> => {
     );
     fastify.post(`/${RouterPath.CARGO_REGISTER}`, createCargoOpts);
     fastify.get(`/${RouterPath.CARGO}/:id`, getCargoByUUIDOpts);
-    fastify.put(`/${RouterPath.CARGO}/:id`, changeUserByUUIDOpts);
-    fastify.delete(`/${RouterPath.CARGO}/:id`, deleteUserByUUIDOpts);
+    fastify.put(`/${RouterPath.CARGO}/:id`, changeCargoByUUIDOpts);
+    fastify.delete(`/${RouterPath.CARGO}/:id`, deleteCargoByUUIDOpts);
 };
 
 export default cargo;

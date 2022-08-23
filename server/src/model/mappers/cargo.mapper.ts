@@ -1,5 +1,7 @@
 import pgPromise from 'pg-promise';
 import pg from 'pg-promise/typescript/pg-subset';
+import { CreateCargoSchemaType } from '../../routes/v1/cargo.router';
+import { createColumnSet } from '../util/pg.helper';
 import { Cargo } from '../vo/cargo';
 
 export interface CargoData {
@@ -28,10 +30,31 @@ export class CargoMapper {
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     private _db: pgPromise.IDatabase<{}, pg.IClient>;
+    private _columnSet: pgPromise.ColumnSet<unknown>;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    private _pgp: pgPromise.IMain<{}, pg.IClient>;
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     constructor(db: pgPromise.IDatabase<{}, pg.IClient>) {
         this._db = db;
+        this._pgp = pgPromise();
+
+        this._columnSet = createColumnSet(
+            this.TABLE_NAME,
+            ['point_start_name', 'point_end_name'],
+            [
+                'type_id',
+                'car_id',
+                'point_start_lat',
+                'point_start_lon',
+                'point_end_lat',
+                'point_end_lon',
+                'weigth',
+                'price',
+                'currency_id',
+                'volume',
+            ]
+        );
     }
 
     async createCargo(
@@ -91,6 +114,18 @@ export class CargoMapper {
             currency_id,
             volume
         );
+    }
+
+    async changeCargo(cargoId: number, body: CreateCargoSchemaType) {
+        const update = `${this._pgp.helpers.update(body, this._columnSet)}, "date_change" = ${this._pgp.as.date(
+            new Date()
+        )} WHERE id = ${cargoId}`;
+        try {
+            await this._db.none(update);
+            return this.getById(cargoId);
+        } catch (err) {
+            throw new Error((err as Error).message);
+        }
     }
 
     async getById(idNum: number) {
