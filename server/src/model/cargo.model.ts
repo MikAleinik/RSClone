@@ -1,7 +1,4 @@
-import { OkCodes } from '../types/enums';
 import { ContentTypeJson } from '../types/types';
-import { User } from './vo/user';
-import { matchPassword } from './util/password.manager';
 import { ErrorNoMapper } from '../errors/ErrorNoMapper';
 import { CreateCargoSchemaType } from '../routes/v1/cargo.router';
 import { CargoMapper } from './mappers/cargo.mapper';
@@ -25,18 +22,6 @@ export class CargosModel {
 
     async getAllCargosByUser(id: number) {
         return await CargosModel.getMapperWithWarning().getByPropValue('user_id', id);
-    }
-
-    validatePassword(password: string, user: User) {
-        return matchPassword(password, user.password);
-    }
-
-    async processGetAllUsers(req: any, res: any) {
-        // const users = await usersRepo.getAll();
-        // const objUsers = users.map((user) => user.toJsonResponse());
-        res.code(OkCodes.OK);
-        res.header(...ContentTypeJson);
-        res.send([]);
     }
 
     async createNewCargo(body: CreateCargoSchemaType) {

@@ -15,6 +15,7 @@ export class AuthController {
         expiresIn: '1d',
     } as SignOptions;
     private static COOKIE_OPTIONS = {
+        path: '/',
         httpOnly: true,
         // secure: true,
     };
