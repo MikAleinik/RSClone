@@ -3,7 +3,7 @@ import FooterView from "../common/footer/footer-view";
 import HeaderView from "../common/header/header-view";
 import PageNavigationView from "../common/page-navigation/page-navigation-view";
 import AuthView from "../common/auth/auth-view";
-// import ContentView from "./content/content-view";
+import ContentView from "./content/content-view";
 import View from "./view";
 import Observer from "../../controller/observer";
 
@@ -28,7 +28,7 @@ export default class MainView extends View {
         let headerElement = new HeaderView(this._observer, this.LINK_HEADER);
         let navigationElement = new PageNavigationView(this._observer);
         let authElement = new AuthView(this._observer);
-        // let contentElement = new ContentView(this._observer);
+        let contentElement = new ContentView(this._observer);
         let footerElement = new FooterView(this._observer);
 
         this._mainElement.appendChild(headerElement.getCurrentElement());
