@@ -11,18 +11,18 @@ import IndexView from "./components/view/index/index-view";
 import LocaleModel from "./components/models/common/localization/locale-model";
 import LocaleController from "./components/controller/common/locale-controller";
 
-let observer = new Observer();
+const observer = new Observer();
 
-let authModel = new AuthModel();
-let registerModel = new RegisterModel();
-let userModel = new UserModel();
-let newsModel = new NewsModel();
-let localeModel = new LocaleModel();
+const authModel = new AuthModel();
+const registerModel = new RegisterModel();
+const userModel = new UserModel();
+const newsModel = new NewsModel();
+const localeModel = new LocaleModel();
 
-let authController = new AuthController(userModel, authModel);
-let registerController = new RegisterController(userModel, registerModel);
-let newsController = new NewsController(newsModel);
-let localeController = new LocaleController(localeModel);
+const authController = new AuthController(userModel, authModel);
+const registerController = new RegisterController(userModel, registerModel);
+const newsController = new NewsController(newsModel);
+const localeController = new LocaleController(localeModel);
 
 observer.addListener(AppEvents.AUTH_CLICK_BUTTON, authController)
     .addListener(AppEvents.AUTH_CLICK_LOGOUT_BUTTON, authController)
@@ -51,4 +51,4 @@ observer.addListener(AppEvents.AUTH_CLICK_BUTTON, authController)
     .addListener(AppEvents.LOCALE_SET, localeController)
     .addListener(AppEvents.LOCALE_GET, localeController)
 // .addListener(AppEvents.REGISTER_USER_FAIL, registerController);
-let app = new IndexView(observer);
+const app = new IndexView(observer);

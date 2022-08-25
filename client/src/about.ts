@@ -9,16 +9,16 @@ import AuthModel from "./components/models/index/state-model/auth-model";
 import RegisterModel from "./components/models/index/state-model/register-model";
 import AboutView from "./components/view/about/about-view";
 
-let observer = new Observer();
+const observer = new Observer();
 
-let authModel = new AuthModel();
-let registerModel = new RegisterModel();
-let userModel = new UserModel();
-let localeModel = new LocaleModel();
+const authModel = new AuthModel();
+const registerModel = new RegisterModel();
+const userModel = new UserModel();
+const localeModel = new LocaleModel();
 
-let authController = new AuthController(userModel, authModel);
-let registerController = new RegisterController(userModel, registerModel);
-let localeController = new LocaleController(localeModel);
+const authController = new AuthController(userModel, authModel);
+const registerController = new RegisterController(userModel, registerModel);
+const localeController = new LocaleController(localeModel);
 
 observer.addListener(AppEvents.AUTH_CLICK_BUTTON, authController)
     .addListener(AppEvents.AUTH_CLICK_LOGOUT_BUTTON, authController)
@@ -45,4 +45,4 @@ observer.addListener(AppEvents.AUTH_CLICK_BUTTON, authController)
     .addListener(AppEvents.LOCALE_CHANGE, localeController)
     .addListener(AppEvents.LOCALE_SET, localeController)
     .addListener(AppEvents.LOCALE_GET, localeController)
-let app = new AboutView(observer);
+const app = new AboutView(observer);
