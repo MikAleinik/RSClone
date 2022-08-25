@@ -83,7 +83,7 @@ export default class AuthController implements INotify {
                 document.location.href = this.LINK_MAIN_PAGE;
             })
             .catch((result) => {
-                let verifySender = (sender as unknown) as AuthWindowView;
+                let verifySender = sender as AuthWindowView;
                 verifySender.failLogInHandler(result as Map<string, string>);
             });
     }
@@ -93,7 +93,7 @@ export default class AuthController implements INotify {
                 if (document.location.pathname === this.LINK_INDEX_PAGE) {
                     document.location.href = this.LINK_MAIN_PAGE;
                 }
-                let verifySender = (sender as unknown) as AuthView;
+                let verifySender = sender as AuthView;
                 verifySender.setAuthorizedUser(data);
             })
             .catch((data) => {
@@ -104,17 +104,17 @@ export default class AuthController implements INotify {
     }
     private clickButtonHandler(sender: View): AppEvents | void {
         let stateButton = this._authModel.isChangeStateButton();
-        let verifySender = (sender as unknown) as AuthView;
+        let verifySender = sender as AuthView;
         verifySender.setAuthButtonState(stateButton);
     }
     private clickLogOutButtonHandler(nameEvent: AppEvents, sender: View): void {
         this._userModel.logOut(nameEvent)
             .then((result) => {
-                let verifySender = (sender as unknown) as AuthView;
+                let verifySender = sender as AuthView;
                 verifySender.successLogOutHandler();
             })
             .catch((result) => {
-                let verifySender = (sender as unknown) as AuthView;
+                let verifySender = sender as AuthView;
                 verifySender.failLogOutHandler(result);
             });
     }
@@ -123,7 +123,7 @@ export default class AuthController implements INotify {
             this._authModel.isChangeStateButton();
         }
         let stateButton = this._authModel.getStateButton();
-        let verifySender = (sender as unknown) as AuthView;
+        let verifySender = sender as AuthView;
         verifySender.setAuthButtonState(stateButton);
     }
     private disableButtonHandler(sender: View): AppEvents | void {
@@ -131,7 +131,7 @@ export default class AuthController implements INotify {
             this._authModel.isChangeStateButton();
         }
         let stateButton = this._authModel.getStateButton();
-        let verifySender = (sender as unknown) as AuthView;
+        let verifySender = sender as AuthView;
         verifySender.setAuthButtonState(stateButton);
     }
     private showButtonHandler(sender: View): AppEvents | void {
@@ -139,7 +139,7 @@ export default class AuthController implements INotify {
             this._authModel.isChangeVisibilityButton();
         }
         let visibiltyButton = this._authModel.getVisibilityButton();
-        let verifySender = (sender as unknown) as AuthView;
+        let verifySender = sender as AuthView;
         verifySender.setAuthButtonVisibility(visibiltyButton);
     }
     private hideButtonHandler(sender: View): AppEvents | void {
@@ -147,7 +147,7 @@ export default class AuthController implements INotify {
             this._authModel.isChangeVisibilityButton();
         }
         let stateButton = this._authModel.getVisibilityButton();
-        let verifySender = (sender as unknown) as AuthView;
+        let verifySender = sender as AuthView;
         verifySender.setAuthButtonVisibility(stateButton);
     }
     private showWindowHandler(sender: View): void {
@@ -155,7 +155,7 @@ export default class AuthController implements INotify {
             this._authModel.isChangeStateWindow();
         }
         let stateWindow = this._authModel.getStateWindow();;
-        let verifySender = (sender as unknown) as AuthWindowView;
+        let verifySender = sender as AuthWindowView;
         verifySender.setWindowVisibilityState(stateWindow);
     }
     private hideWindowHandler(sender: View): void {
@@ -163,7 +163,7 @@ export default class AuthController implements INotify {
             this._authModel.isChangeStateWindow();
         }
         let stateWindow = this._authModel.getStateWindow();;
-        let verifySender = (sender as unknown) as AuthWindowView;
+        let verifySender = sender as AuthWindowView;
         verifySender.setWindowVisibilityState(stateWindow);
     }
 }

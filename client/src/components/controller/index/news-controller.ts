@@ -24,7 +24,7 @@ export default class NewsController implements INotify {
     private getNews(nameEvent: AppEvents, sender: View): void {
         this._newsModel.getNews(nameEvent)
             .then((data) => {
-                let verifySender = (sender as unknown) as NewsView;
+                let verifySender = sender as NewsView;
                 verifySender.createNews(data);
             })
             .catch((data) => {

@@ -15,7 +15,6 @@ const config = {
     common: './src/index.ts',
     main: './src/main.ts',
     about: './src/about.ts',
-    // login: './src/login.ts'
   },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -28,7 +27,7 @@ const config = {
     new HtmlWebpackPlugin({
       template: 'src/pages/index.html',
       filename: 'index.html',
-      chunks: ['common', 'login']
+      chunks: ['common', 'index']
     }),
     new HtmlWebpackPlugin({
       template: 'src/pages/main.html',

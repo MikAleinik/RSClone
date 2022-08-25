@@ -1,7 +1,7 @@
 /**
  * Тип данных содержащий поля пользователя
  */
-type user = {
+type User = {
     id: number;
     login: string;
     email: string;
@@ -18,4 +18,4 @@ type user = {
     point_lon: number;
 };
 
-export default user;
+export default User;

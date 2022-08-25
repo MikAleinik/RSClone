@@ -29,7 +29,7 @@ export default class LocaleController implements INotify {
     }
     private changeLocaleHandler(sender: View): void {
         this._localeModel.changeLocale();
-        let verifySender = (sender as unknown) as AuthView;
+        let verifySender = sender as AuthView;
         verifySender.localeChanged();
     }
     private getLocaleHandler(sender: View): void {
