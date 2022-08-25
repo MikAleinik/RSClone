@@ -8,6 +8,8 @@ import View from "../../view/index/view";
 import user from "../../../types/user";
 
 export default class AuthController implements INotify {
+    private readonly URL_MAIN_PAGE = 'main.html';
+
     private _userModel: UserModel;
     private _authModel: AuthModel;
 
@@ -61,7 +63,9 @@ export default class AuthController implements INotify {
                 break;
             }
             case AppEvents.AUTH_LOGOUT_USER: {
-                //TODO возможно не потребуется обработчик в контроллере
+                if(document.location.href.includes(this.URL_MAIN_PAGE)) {
+                    document.location.href = 'index.html';
+                }
                 break;
             }
             default: {
@@ -72,8 +76,9 @@ export default class AuthController implements INotify {
     private logInUserHandler(nameEvent: AppEvents, sender: View, params: Map<string, string>): AppEvents | void {
         this._userModel.logIn(nameEvent, params)
             .then((result) => {
-                let verifySender = (sender as unknown) as AuthWindowView;
-                verifySender.successLogInHandler();
+                // let verifySender = (sender as unknown) as AuthWindowView;
+                // verifySender.successLogInHandler();
+                document.location.href = 'main.html';
             })
             .catch((result) => {
                 let verifySender = (sender as unknown) as AuthWindowView;
@@ -87,7 +92,9 @@ export default class AuthController implements INotify {
                 verifySender.setAuthorizedUser(data);
             })
             .catch((data) => {
-                // console.log('Authorized user not found.');
+                if(document.location.href.includes(this.URL_MAIN_PAGE)) {
+                    document.location.href = 'index.html';
+                }
             });
     }
     private clickButtonHandler(sender: View): AppEvents | void {
