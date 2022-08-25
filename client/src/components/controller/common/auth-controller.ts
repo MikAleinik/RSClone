@@ -8,9 +8,9 @@ import View from "../../view/index/view";
 import user from "../../../types/user";
 
 export default class AuthController implements INotify {
-    private readonly PATH_INDEX_PAGE = '/';
-    private readonly PATH_MAIN_PAGE = '/main.html';
-    private readonly PATH_ABOUT_PAGE = '/about.html';
+    private readonly LINK_INDEX_PAGE = '/';
+    private readonly LINK_MAIN_PAGE = '/main.html';
+    private readonly LINK_ABOUT_PAGE = '/about.html';
 
     private _userModel: UserModel;
     private _authModel: AuthModel;
@@ -65,8 +65,8 @@ export default class AuthController implements INotify {
                 break;
             }
             case AppEvents.AUTH_LOGOUT_USER: {
-                if (document.location.pathname === this.PATH_MAIN_PAGE) {
-                    document.location.href = this.PATH_INDEX_PAGE;
+                if (document.location.pathname === this.LINK_MAIN_PAGE) {
+                    document.location.href = this.LINK_INDEX_PAGE;
                 }
                 break;
             }
@@ -80,7 +80,7 @@ export default class AuthController implements INotify {
             .then((result) => {
                 // let verifySender = (sender as unknown) as AuthWindowView;
                 // verifySender.successLogInHandler();
-                document.location.href = this.PATH_MAIN_PAGE;
+                document.location.href = this.LINK_MAIN_PAGE;
             })
             .catch((result) => {
                 let verifySender = (sender as unknown) as AuthWindowView;
@@ -90,15 +90,15 @@ export default class AuthController implements INotify {
     private getAuthUserHandler(sender: View): AppEvents | void {
         this._userModel.getAuthUser()
             .then((data) => {
-                if (document.location.pathname === this.PATH_INDEX_PAGE) {
-                    document.location.href = this.PATH_MAIN_PAGE;
+                if (document.location.pathname === this.LINK_INDEX_PAGE) {
+                    document.location.href = this.LINK_MAIN_PAGE;
                 }
                 let verifySender = (sender as unknown) as AuthView;
                 verifySender.setAuthorizedUser(data);
             })
             .catch((data) => {
-                if (document.location.pathname === this.PATH_MAIN_PAGE) {
-                    document.location.href = this.PATH_INDEX_PAGE;
+                if (document.location.pathname === this.LINK_MAIN_PAGE) {
+                    document.location.href = this.LINK_INDEX_PAGE;
                 }
             });
     }

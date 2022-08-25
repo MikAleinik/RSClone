@@ -45,6 +45,8 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.ROLE_CUSTOMER, new Array('Customer', 'Заказчик'));
         this._localeDictionary.set(LocaleKeys.PAGE_LINK_CONTACT, new Array('Contact', 'Контакты'));
         this._localeDictionary.set(LocaleKeys.PAGE_LINK_ABOUT, new Array('About', 'О проекте'));
+        this._localeDictionary.set(LocaleKeys.PAGE_LINK_MAIN, new Array('Personal area', 'Личный кабинет'));
+        this._localeDictionary.set(LocaleKeys.PAGE_LINK_INDEX, new Array('Main page', 'На главную'));
         this._localeDictionary.set(LocaleKeys.PROMO_HEADER, new Array('Freight exchange', 'Портал грузоперевозок'));
         this._localeDictionary.set(LocaleKeys.PROMO_FIRST, new Array('unite carriers and cargo owners', 'объединяем перевозчиков и грузовладельцев'));
         this._localeDictionary.set(LocaleKeys.PROMO_SECOND, new Array('show the position of transport and cargo', 'показываем положение транспорта и груза'));

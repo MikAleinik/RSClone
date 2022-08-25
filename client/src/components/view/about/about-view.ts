@@ -13,7 +13,7 @@ export default class AboutView extends View {
     private readonly TAG_CONTAINER = 'body';
     private readonly CLASS_CONTAINER = 'about';
 
-    private readonly LINK_HEADER = 'index.html';
+    private readonly LINK_HEADER = '#';
 
     private _aboutElement = document.querySelector('body') as HTMLElement;
 

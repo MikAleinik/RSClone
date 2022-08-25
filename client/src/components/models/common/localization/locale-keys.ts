@@ -20,6 +20,8 @@ export const enum LocaleKeys {
 
     PAGE_LINK_CONTACT = 'pageLinkContact',
     PAGE_LINK_ABOUT = 'pageLinkAbout',
+    PAGE_LINK_MAIN = 'pageLinkMain',
+    PAGE_LINK_INDEX = 'pageLinkIndex',
 
     PROMO_HEADER = 'promoHeader',
     PROMO_FIRST = 'promoFirst',
