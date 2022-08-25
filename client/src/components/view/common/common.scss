@@ -1,0 +1,85 @@
+@import './color.scss';
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 220px auto 300px;
+    grid-template-rows: 50px minmax(calc(100vh - 80px), auto) 30px;
+    grid-template-areas:
+        'header nav auth'
+        'aside main main'
+        'footer footer footer';
+    color: $font-color-dark;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: $font-color-dark;
+}
+
+a:visited {
+    color: $font-color-dark;
+}
+
+.index {
+    background-image: url('../../../assets/images/backgroung-trucks.webp');
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-size: 100% auto;
+
+    header,
+    nav,
+    .auth {
+        background: $background-color-light;
+    }
+
+    footer {
+        background: $background-color-middle;
+    }
+
+    main {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    aside {
+        background: transparent;
+    }
+}
+aside {
+    grid-area: aside;
+    color: $font-color-light;
+    background: $background-color-middle;
+    a {
+      color: $font-color-light;
+      &:visited {
+        color: $font-color-light;
+      }
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 30px 20px;
+      cursor: pointer;
+      &:hover {
+        background: $background-color-accent;
+      }
+    }
+    img {
+      width: 20px;
+      filter: invert(1);
+    }
+  }

@@ -1,0 +1,31 @@
+.table_wrapper {
+  border-spacing: 0px;
+  thead {
+    font-weight: bold;
+  }
+  tr {
+    background: $background-color-light;
+    &:nth-last-child(odd){
+      background: $background-color-middle;
+    }
+  }
+  td {
+    padding: 10px;
+  }
+  button {
+    font-size: 16px;
+    border: 0px;
+    background: transparent;
+    cursor: pointer;
+    margin: 10px 0px;
+  }
+}
+.item_form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid $border-color-dark;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 20px 0px;
+}
