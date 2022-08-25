@@ -1,6 +1,5 @@
 import './cargo-view.scss'
 import { getPointInfo } from '../map/map-view'
-import { loadUserData } from '../../user-adapter';
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import { userCargo } from '../../user-adapter';
@@ -10,8 +9,6 @@ function loadCargo(place: HTMLElement){
   place.appendChild(createForm());
   place.appendChild(createTable());
 } 
-
-const data = loadUserData();
 
 function createTable() {
   const table_wrapper = document.createElement('table');

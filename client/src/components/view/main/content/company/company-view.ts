@@ -1,6 +1,5 @@
 import { getPointInfo } from '../map/map-view';
 import { userTruck, userCargo } from '../../user-adapter';
-import { userInfo } from 'os';
 
 function loadCompany(place: HTMLElement){
   place.innerHTML = '';
@@ -94,6 +93,5 @@ function updateTable(){
   parent.removeChild(table_wrapper);
   parent.appendChild(createTable());
 }
-
 
 export { loadCompany } 

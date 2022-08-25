@@ -1,3 +1,5 @@
+import { userTruck } from "../../user-adapter";
+
 function getTransportLocation(){ //fake transport location
   const transport: {[index: string]: any} = {
     truck1: [53.6688, 23.8223],
@@ -7,4 +9,12 @@ function getTransportLocation(){ //fake transport location
   return transport;
 }
 
-export {getTransportLocation}
+function getTruck(){
+  for (const t of userTruck){
+    if (t.status !== 'pending'){
+      console.log(t)
+    }
+  }
+} 
+
+export {getTransportLocation, getTruck}
