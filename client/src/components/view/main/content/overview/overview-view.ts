@@ -15,6 +15,7 @@ function loadOverview(place: HTMLElement){
   place.appendChild(createOverview())
   loadMap('99%', '99%', '.user__map', 'insert');
   applyItemsLocation('transport');
+  // setInterval(applyItemsLocation, 1000, 'transport')
   applyItemsLocation('logistic');
 }
 

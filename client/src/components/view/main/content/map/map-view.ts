@@ -1,10 +1,10 @@
-import L from 'leaflet';
+import L, { LatLng, LatLngTuple, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import { getTransportLocation } from './map-transport';
 import { getLogisticsLocation } from './map-logistics';
-import { routeStart } from './map-routes';
+import { userCargo, userTruck } from '../../user-adapter';
 
 function getCurrentPosition(): Promise<L.LatLngExpression>{
   return new Promise ((resolve, reject) => {
@@ -59,6 +59,8 @@ async function applyCurrentPosition(){
   }
 }
 
+let markers:{[index: string]: Marker} = {};
+
 async function applyItemsLocation(subject: string){
   try{
     let items;
@@ -78,16 +80,35 @@ async function applyItemsLocation(subject: string){
         iconSize: [22, 22], 
       });
     }
-    const bounds: any = [] // can' resolve this :(
+    const bounds = [];
     for (const i in items){
-      const position = items[i] as L.LatLng
-      const marker = L.marker(position, {icon: itemIcon}).addTo(map);
-      marker.bindPopup(`${i}`).openPopup();
-      bounds.push(items[i])
+      const position = items[i] as LatLngTuple;
+      markers[i] = L.marker(position, {icon: itemIcon}).addTo(map)
+      // const marker = L.marker(position, {icon: itemIcon}).addTo(map);
+      markers[i].bindPopup(`${i}`).openPopup();
+      bounds.push(position)
     }
     map.fitBounds(bounds);
+    setInterval(updateMarkerPosition, 50)
   } catch(err) {
     console.log(err)
+  }
+}
+
+async function updateMarkerPosition(){
+  let newPosition;
+  for (const t of userTruck){
+    if (t.track !== undefined){
+      t.track?.splice(0,1);
+        newPosition = t.track[0];
+    }
+  }
+  const items = await getTransportLocation()
+  for (const i in items){
+    let position = newPosition as LatLngTuple
+    if (position !== undefined){
+      markers[i].setLatLng(position)
+    }
   }
 }
 

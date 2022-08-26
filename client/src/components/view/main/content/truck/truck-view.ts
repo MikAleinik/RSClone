@@ -3,7 +3,6 @@ import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import { Truck, userTruck, userCargo } from '../../user-adapter';
 import { routeCalc } from '../map/map-routes'
-import { getTruck } from '../map/map-transport'
 
 function loadTruck(place: HTMLElement){
   place.innerHTML = '';
@@ -151,7 +150,7 @@ async function getCoordinates(address: string) {
 }
 
 function race(truck: Truck){
-  const trackPoints = [];
+  const trackPoints: number[][] = [];
   trackPoints.push(truck.location); // truck location
   for (const cargo of userCargo){ // assigned cargoes location
     if (cargo.status === truck.name){
@@ -160,7 +159,6 @@ function race(truck: Truck){
     }
   }
   routeCalc(trackPoints, truck);
-  getTruck();
 }
 
 export { loadTruck, race } 
