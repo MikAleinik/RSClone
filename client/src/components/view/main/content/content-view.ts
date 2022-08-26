@@ -49,27 +49,43 @@ export default class ContentView extends View {
         asideList.addEventListener('click', (event) => {
             const tag = event.target as HTMLElement;
             const li = tag.closest('li');
+            
+            function switchActive(target: HTMLElement){
+                const list = asideList.querySelectorAll('li') as NodeListOf<HTMLElement>;
+                for (const l of list){
+                    l.classList.remove('active')
+                }
+                target.classList.add('active')
+            }
+            
             if (li !== null) {
                 switch (li.dataset.link) {
                     case 'cargo':
+                        switchActive(li);
                         loadCargo(this._contentElement);
                         break;
                     case 'company':
+                        switchActive(li)
+                        li.classList.add('active')
                         loadCompany(this._contentElement);
                         break;
                     case 'map':
+                        switchActive(li)
                         loadMap('auto', 'auto', this.MAIN_CONTAINER, 'replace')
                         applyCurrentPosition();
                         getPointCoordinates();
                         routeStart();
                         break;
                     case 'news':
+                        switchActive(li)
                         loadNews();
                         break;
                     case 'overview':
+                        switchActive(li)
                         loadOverview(this._contentElement)
                         break;
                     case 'truck':
+                        switchActive(li)
                         loadTruck(this._contentElement);
                         break;
                 }
