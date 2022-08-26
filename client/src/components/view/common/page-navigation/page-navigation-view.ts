@@ -30,6 +30,7 @@ export default class PageNavigationView extends View implements INotify, ILocale
         this.createHeaderElement(link);
         this._observer.addSender(AppEvents.LOCALE_SET, this);
         this._observer.addSender(AppEvents.AUTH_LOGOUT_USER, this);
+        this._observer.addSender(AppEvents.REGISTER_USER_SUCCESS, this);
         this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
     }
     getCurrentElement(): HTMLElement {
@@ -48,6 +49,14 @@ export default class PageNavigationView extends View implements INotify, ILocale
                 } else {
                     this._pageLink = this.LINK_INDEX_PAGE;
                     this._linkPageElement.setAttribute('href', this.LINK_INDEX_PAGE);
+                }
+                this._observer.notify(AppEvents.LOCALE_GET, this);
+                break;
+            }
+            case AppEvents.REGISTER_USER_SUCCESS: {
+                if (document.location.pathname === this.LINK_ABOUT_PAGE) {
+                    this._pageLink = this.LINK_MAIN_PAGE;
+                    this._linkPageElement.setAttribute('href', this.LINK_MAIN_PAGE);
                 }
                 this._observer.notify(AppEvents.LOCALE_GET, this);
                 break;

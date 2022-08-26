@@ -32,7 +32,6 @@ export default class CreateUserHandler extends Handler {
                         });
                 })
                 .then((data) => {
-                    console.log(data);
                     resolve(data);
                 })
                 .catch((data) => {
