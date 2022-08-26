@@ -108,8 +108,8 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_OVERVIEW, new Array('Overview', 'Обзор'));
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_TRANSPORT, new Array('Transport', 'Транспорт'));
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_CARGO, new Array('Cargo', 'Грузы'));
-        this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_EXCHANGE_TRANSPORT, new Array('Exchange transport', 'Биржа транспорта'));
-        this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_EXCHANGE_CARGO, new Array('Exchange cargo', 'Биржа грузов'));
+        this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_EXCHANGE_TRANSPORT, new Array('Carrier exchange', 'Биржа транспорта'));
+        this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_EXCHANGE_CARGO, new Array('Cargo exchange', 'Биржа грузов'));
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_COMPANIES, new Array('Companies', 'Компании'));
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_ROUTES, new Array('Routes', 'Маршруты'));
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_CHAT, new Array('Message', 'Сообщения'));
