@@ -4,7 +4,7 @@ import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import { getTransportLocation } from './map-transport';
 import { getLogisticsLocation } from './map-logistics';
-import { routeStart } from './map-routes';
+// import { routeStart } from './map-routes';
 
 function getCurrentPosition(): Promise<L.LatLngExpression>{
   return new Promise ((resolve, reject) => {
@@ -44,7 +44,6 @@ function loadMap(width: string, height: string, place: string, embed = 'insert')
   const tiles = L.tileLayer(tilesSrc)
   map.setView(defaultPosition, defaultZoom)
   tiles.addTo(map);
-
   mapSearch();
 }
 
@@ -114,7 +113,9 @@ async function getPointInfo(latitude: number, longitude: number){
   const infoUrl = 'https://nominatim.openstreetmap.org/reverse?';
   const infoFormat = 'format=json';
   const infoCoordinates = `lat=${latitude}&lon=${longitude}`
-  const response = await fetch(`${infoUrl}${infoFormat}&${infoCoordinates}`);
+  const currentLanguage = localStorage.rsTransLocale === '0' ? 'en' : 'ru'
+  const infoLanguage = `accept-language="${currentLanguage}"`;
+  const response = await fetch(`${infoUrl}${infoFormat}&${infoCoordinates}&${infoLanguage}`);
   const data = await response.json();
   return data.display_name;
 }
