@@ -44,6 +44,11 @@ export const enum AppEvents {
     MAIN_CARGO_GET_BY_ID = 'mainCargoGetById',//получить груз по ID груза
     // MAIN_CARGO_UPDATE = 'mainCargoUpdate',//обновить список грузов
 
-    // MAIN_CARGO_GET_CURRENT_USER = 'mainCargoGetCurrentUser',//получить грузы текущего пользователя
+    MAIN_CAR_CREATE = 'mainCarCreate',//создать машину
+    MAIN_CAR_DELETE = 'mainCarDelete',//удалить машину
+    MAIN_CAR_CHANGE = 'mainCarChange',//редактировать машину
+    MAIN_CAR_GET_ALL = 'mainCarGetAll',//получить все доступные машину
+    MAIN_CAR_GET_BY_ID = 'mainCarGetById',//получить машину по ID машины
+    // MAIN_CAR_UPDATE = 'mainCarUpdate',//обновить список машин
 
 }
