@@ -82,4 +82,9 @@ aside {
       width: 20px;
       filter: invert(1);
     }
+    .active {
+      background: $background-color-accent;
+      font-weight: 600;
+      text-shadow: .5px .5px $background-color-middle;
+    }
   }
