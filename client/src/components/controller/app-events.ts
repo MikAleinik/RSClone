@@ -34,4 +34,5 @@ export const enum AppEvents {
     LOCALE_CHANGE = 'localeChange',//изменить язык локализации
     LOCALE_SET = 'localeSet',//установлен язык локализации
     LOCALE_GET = 'localeGet',//получить язык локализации
+    LOCALE_GET_NAME = 'localeGetName',//получить название языка локализации
 }

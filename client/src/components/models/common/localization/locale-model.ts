@@ -27,6 +27,9 @@ export default class LocaleModel {
         }
         return '';
     }
+    getLocaleName() {
+        return this._localeDictionary.get(LocaleKeys.BUTTON_LOCALE)![this._currentLocaleIndex];
+    }
     private createDictionary() {
         this._localeDictionary.set(LocaleKeys.BUTTON_LOCALE, new Array('En', 'Ru'));
         this._localeDictionary.set(LocaleKeys.BUTTON_LOGIN, new Array('LogIn', 'Вход'));
