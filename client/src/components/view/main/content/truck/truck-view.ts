@@ -1,7 +1,8 @@
 import { getPointInfo } from '../map/map-view'
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
-import { userTruck } from '../../user-adapter';
+import { Truck, userTruck, userCargo } from '../../user-adapter';
+import { routeCalc } from '../map/map-routes'
 
 function loadTruck(place: HTMLElement){
   place.innerHTML = '';
@@ -40,7 +41,6 @@ function createTable() {
 
   for (const el of userTruck){
     const table_row = document.createElement('tr');
-    table_row.className = 'table_row';
     table_row.dataset.id = userTruck.indexOf(el).toString();
     
     const table_cell_name = document.createElement('td');
@@ -66,6 +66,10 @@ function createTable() {
     button_remove.innerHTML = '&#10005';
     button_remove.name = 'remove';
     table_cell_buttons.appendChild(button_remove);
+    const button_race = document.createElement('button');
+    button_race.innerHTML = '&#9872;';
+    button_race.name = 'race'
+    table_cell_buttons.appendChild(button_race);
     
     table_row.appendChild(table_cell_name);
     table_row.appendChild(table_cell_capacity);
@@ -77,12 +81,17 @@ function createTable() {
   }
   table_wrapper.addEventListener('click', (event) => {
     const target = event.target as HTMLInputElement;
-    if (target.name === 'remove') {
-      const id = Number(target.closest('tr')?.dataset.id);
-      if (id !== undefined){
-        userTruck.splice(id, 1)
+    const id = Number(target.closest('tr')?.dataset.id);
+    if (id !== undefined){
+      switch (target.name){
+        case 'remove':
+          userTruck.splice(id, 1)
+          updateTable();
+          break;
+        case 'race':
+          race(userTruck[id]);
+          break;
       }
-      updateTable();
     }
   })
   return table_wrapper;
@@ -164,4 +173,16 @@ async function getCoordinates(address: string) {
   return [results[0].y, results[0].x];
 }
 
-export { loadTruck }
+function race(truck: Truck){
+  const trackPoints: number[][] = [];
+  trackPoints.push(truck.location); // truck location
+  for (const cargo of userCargo){ // assigned cargoes location
+    if (cargo.status === truck.name){
+      trackPoints.push(cargo.from);
+      trackPoints.push(cargo.to);
+    }
+  }
+  routeCalc(trackPoints, truck);
+}
+
+export { loadTruck, race }

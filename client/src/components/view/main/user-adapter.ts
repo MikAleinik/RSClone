@@ -1,6 +1,3 @@
-import LocaleModel from "../../models/common/localization/locale-model";
-import { LocaleKeys } from "../../models/common/localization/locale-keys";
-
 function loadUserData(){
   const user:{[index: string]: any} = {
     id: 0,
@@ -55,7 +52,7 @@ const userCargo: Cargo[] = [
     from: [53.90, 27.55],
     to: [52.43, 30.99],
     date: '2022-10-01',
-    status: 'truck2'
+    status: 'Volvo'
   },
   {
     name: 'Skin',
@@ -63,7 +60,7 @@ const userCargo: Cargo[] = [
     from: [ 53.90, 27.55],
     to: [52.43, 30.99],
     date: '2022-10-01',
-    status: 'truck3'
+    status: 'Volvo'
   }
 ]
 
@@ -71,7 +68,8 @@ interface Truck {
   name: string;
   capacity: number;
   location: number[];
-  status: string
+  track?: [LatLng:{}],
+  status: string;
   filling: number;
 }
 
@@ -81,7 +79,7 @@ const userTruck: Truck[] = [
     capacity: 2000,
     location: [53.90, 27.55],
     status: 'filling',
-    filling: 100
+    filling: 300
   },
   {
     name: 'Iveca',
@@ -92,4 +90,4 @@ const userTruck: Truck[] = [
   }
 ]
 
-export { loadUserData, userRoleContent, userRoleActions, userCargo, userTruck }
+export { loadUserData, userRoleContent, userRoleActions, userCargo, userTruck, Truck }

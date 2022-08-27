@@ -1,6 +1,4 @@
-import './cargo-view.scss'
 import { getPointInfo } from '../map/map-view'
-import { loadUserData } from '../../user-adapter';
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import { userCargo } from '../../user-adapter';
@@ -10,8 +8,6 @@ function loadCargo(place: HTMLElement){
   place.appendChild(createForm());
   place.appendChild(createTable());
 } 
-
-const data = loadUserData();
 
 const table_headers: {[index: string]: string} = {
   mainCargoName:'Name',
@@ -47,7 +43,6 @@ function createTable() {
 
   for (const el of userCargo){
     const table_row = document.createElement('tr');
-    table_row.className = 'table_row';
     table_row.dataset.id = userCargo.indexOf(el).toString();
     
     const table_cell_name = document.createElement('td');
@@ -158,7 +153,6 @@ function createForm() {
   date_label.dataset.ln = 'mainCargoDate';
   
   const buttons = document.createElement('div');
-  buttons.className = 'cargo_form-buttons'
   const save = document.createElement('button');
   save.id = 'cargo_save'
   save.innerHTML = '&check;'

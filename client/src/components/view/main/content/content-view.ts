@@ -1,3 +1,4 @@
+import './content.scss'
 import View from "../view";
 import Observer from "../../../controller/observer";
 import INotify from "../../../interfaces/i-notify";
@@ -7,7 +8,6 @@ import { loadMap, applyCurrentPosition, getPointCoordinates } from "./map/map-vi
 import { routeStart } from "./map/map-routes";
 import { loadNews } from "./news/news-view";
 import { loadTruck } from "./truck/truck-view";
-// import { TruckContentView } from "./truck/truck-view";
 import { loadOverview } from "./overview/overview-view";
 import { userRoleActions } from "../user-adapter";
 import ILocale from "../../../interfaces/i-locale";
