@@ -123,6 +123,7 @@ export const enum LocaleKeys {
     MAIN_EXCHANGE_TRANSPORT_LOCATION = 'mainExchangeTransportLocation',
 
     MAIN_EXCHANGE_CARGO_COMPANY = 'mainExchangeCargoCompany',
+    MAIN_EXCHANGE_CARGO_NAME = 'mainExchangeCargoName',
     MAIN_EXCHANGE_CARGO_WEIGTH = 'mainExchangeCargoWeigth',
     MAIN_EXCHANGE_CARGO_VOLUME = 'mainExchangeCargoVolume',
     MAIN_EXCHANGE_CARGO_PRICE = 'mainExchangeCargoPrice',
