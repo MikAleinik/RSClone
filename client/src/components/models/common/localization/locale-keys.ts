@@ -86,7 +86,7 @@ export const enum LocaleKeys {
     MAIN_TRANSPORT_NUMBER = 'mainTransportNumber',
     MAIN_TRANSPORT_COMPANY = 'mainTransportCompany',
     MAIN_TRANSPORT_VOLUME = 'mainTransportVolume',
-    MAIN_TRANSPORT_WEIGTH = 'mainTransportWeigth',
+    MAIN_TRANSPORT_WEIGTH = 'mainTransportWeigth', // weight
     MAIN_TRANSPORT_PRICE = 'mainTransportPrice',
     MAIN_TRANSPORT_CURRENCY = 'mainTransportCurrency',
     MAIN_TRANSPORT_DESCRIPTION = 'mainTransportDescription',
@@ -98,8 +98,9 @@ export const enum LocaleKeys {
 
     MAIN_CARGO_NEW = 'mainCargoNew',
     MAIN_CARGO_CHANGE = 'mainCargoChange',
+    MAIN_CARGO_NAME = 'mainCargoName',
     MAIN_CARGO_COMPANY = 'mainCargoCompany',
-    MAIN_CARGO_WEIGTH = 'mainCargoWeigth',
+    MAIN_CARGO_WEIGTH = 'mainCargoWeigth', // weight
     MAIN_CARGO_VOLUME = 'mainCargoVolume',
     MAIN_CARGO_PRICE = 'mainCargoPrice',
     MAIN_CARGO_CURRENCY = 'mainCargoCurrency',

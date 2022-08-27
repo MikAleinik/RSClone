@@ -13,13 +13,37 @@ function loadCargo(place: HTMLElement){
 
 const data = loadUserData();
 
+const table_headers: {[index: string]: string} = {
+  mainCargoName:'Name',
+  mainCargoWeigth: 'Weight',
+  mainCargoLocationFrom: 'From',
+  mainCargoLocationTo: 'To',
+  mainCargoDate: 'Date',
+  mainCargoStatus: 'Status',
+  null: ''
+};
+
+const form_headers = {
+  mainCargoNew: 'Add new',
+  mainCargoName: 'Name',
+  mainCargoWeigth: 'Weight',
+  mainCargoLocationFrom: 'From',
+  mainCargoLocationTo: 'To',
+  mainCargoDate: 'Date'
+}
+
 function createTable() {
   const table_wrapper = document.createElement('table');
   table_wrapper.className = 'table_wrapper';
 
   const table_header = document.createElement('tr');
-  table_header.innerHTML = '<th>Name</th><th>Size</th><th>From</th><th>To</th><th>Date</th><th>Status</th><th></th>'
-  table_wrapper.appendChild(table_header);
+  for (const h in table_headers){
+    const th = document.createElement('th');
+    th.dataset.ln = h;
+    th.textContent = table_headers[h];
+    table_header.appendChild(th)
+  }
+  table_wrapper.appendChild(table_header)
 
   for (const el of userCargo){
     const table_row = document.createElement('tr');
@@ -89,7 +113,8 @@ function createForm() {
   const form = document.createElement('fieldset');
   form.className = 'item_form';
   const form_legend = document.createElement('legend')
-  form_legend.textContent = 'Add new'
+  form_legend.textContent = form_headers.mainCargoNew;
+  form_legend.dataset.ln = 'mainCargoNew'
   form.appendChild(form_legend);
   
   const name = document.createElement('input');
@@ -97,35 +122,40 @@ function createForm() {
   name.id = 'cargo_name'
   name.required = true;
   const name_label = document.createElement('label')
-  name_label.textContent = 'Name'
+  name_label.textContent = form_headers.mainCargoName;
+  name_label.dataset.ln = 'mainCargoName';
   
   const size = document.createElement('input');
   size.type = 'number';
   size.id = 'cargo_size';
   size.required = true;
   const size_label = document.createElement('label')
-  size_label.textContent = 'Size'
+  size_label.textContent = form_headers.mainCargoWeigth;
+  size_label.dataset.ln = 'mainCargoWeigth';
   
   const from = document.createElement('input');
   from.type = 'search';
   from.id = 'cargo_from';
   from.required = true;
   const from_label = document.createElement('label')
-  from_label.textContent = 'From'
+  from_label.textContent = form_headers.mainCargoLocationFrom;
+  from_label.dataset.ln = 'mainCargoLocationFrom';
 
   const to = document.createElement('input');
   to.type = 'search';
   to.id = 'cargo_to';
   to.required = true;
   const to_label = document.createElement('label')
-  to_label.textContent = 'To'
+  to_label.textContent = form_headers.mainCargoLocationTo;
+  to_label.dataset.ln = 'mainCargoLocationTo';
  
   const date = document.createElement('input');
   date.type = 'date'
   date.id = 'cargo_date'
   date.required = true;
   const date_label = document.createElement('label')
-  date_label.textContent = 'Date'
+  date_label.textContent = form_headers.mainCargoDate;
+  date_label.dataset.ln = 'mainCargoDate';
   
   const buttons = document.createElement('div');
   buttons.className = 'cargo_form-buttons'
@@ -141,7 +171,7 @@ function createForm() {
           from: crds[0],
           to: crds[1],
           date: date.value,
-          status: 'pending'
+          status: 'pending' // have to add translate
         });
         updateTable();
       })

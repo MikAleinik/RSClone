@@ -146,6 +146,7 @@ export default class LocaleModel {
 
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_NEW, new Array('Add new cargo', 'Добавить груз'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_CHANGE, new Array('Change cargo', 'Изменить груз'));
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_NAME, new Array('Name', 'Название'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_COMPANY, new Array('Cargo owner', 'Владелец груза'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_WEIGTH, new Array('Weigth', 'Вес'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_VOLUME, new Array('Volume', 'Объем'));
