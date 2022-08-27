@@ -68,6 +68,7 @@ export const enum LocaleKeys {
     MAIN_ASIDE_COMPANIES = 'mainAsideCompanies',
     MAIN_ASIDE_ROUTES = 'mainAsideRoutes',
     MAIN_ASIDE_CHAT = 'mainAsideChat',
+    MAIN_ASIDE_NEWS = 'mainAsideNews',
 
     MAIN_OVERVIEW_HEADER_RATING = 'mainOverviewRating',
     MAIN_OVERVIEW_HEADER_TRANSPORT = 'mainOverviewTransport',

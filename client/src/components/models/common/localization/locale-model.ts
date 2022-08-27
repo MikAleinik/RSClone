@@ -116,6 +116,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_COMPANIES, new Array('Companies', 'Компании'));
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_ROUTES, new Array('Routes', 'Маршруты'));
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_CHAT, new Array('Message', 'Сообщения'));
+        this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_NEWS, new Array('News', 'Новости'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING, new Array('Rating', 'Рейтинг'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO, new Array('Your cargoes', 'Ваши грузы'));

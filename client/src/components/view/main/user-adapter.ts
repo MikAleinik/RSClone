@@ -1,3 +1,6 @@
+import LocaleModel from "../../models/common/localization/locale-model";
+import { LocaleKeys } from "../../models/common/localization/locale-keys";
+
 function loadUserData(){
   const user:{[index: string]: any} = {
     id: 0,
@@ -18,14 +21,15 @@ const userRoleContent: {[index: string]: string[]} = { // fake user role content
   'user__map': ['user__locations']
 };
 
-const userRoleActions: {[index: string]: string} = { // fake user role actions
-  'overview': 'Overview', // i use key also like an image name
-  'truck': 'Transport',
-  'cargo': 'Cargoes',
-  'company': 'Companies',
-  'map': 'Calculate routes',
-  'news': 'News'
+const userRoleActions: {[index: string]: string} = {
+  mainAsideOverview: 'Overview',
+  mainAsideTransport: 'Transport',
+  mainAsideCargo: 'Cargoes',
+  mainAsideCompanies: 'Companies',
+  mainAsideRoutes: 'Calculate routes',
+  mainAsideNews: 'News'
 };
+
 
 interface Cargo {
   name: string;
