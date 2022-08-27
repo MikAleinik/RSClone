@@ -2,91 +2,82 @@
 
 export class Cargo {
     id = 0;
-    type_id = 0;
     user_id = 0;
-    car_id = 0;
     point_start_lat = 0;
     point_start_lon = 0;
-    point_start_name = '';
     point_end_lat = 0;
     point_end_lon = 0;
-    point_end_name = '';
+    volume = 0;
     weigth = 0;
     price = 0;
-    currency_id = 0;
-    volume = 0;
+    currency = '';
+    finished = 'false';
+    description = '';
     date_changed: Date;
 
     constructor(
         id = 0,
-        type_id = 0,
         user_id = 0,
-        car_id = 0,
         point_start_lat = 0,
         point_start_lon = 0,
-        point_start_name = '',
         point_end_lat = 0,
         point_end_lon = 0,
-        point_end_name = '',
-        weigth = 0,
         price = 0,
-        currency_id = 0,
-        volume = 0
+        currency = '',
+        volume = 0,
+        weigth = 0,
+        finished = '',
+        description = ''
     ) {
         this.id = id;
-        this.type_id = type_id;
         this.user_id = user_id;
-        this.car_id = car_id;
         this.point_start_lat = point_start_lat;
         this.point_start_lon = point_start_lon;
-        this.point_start_name = point_start_name;
         this.point_end_lat = point_end_lat;
         this.point_end_lon = point_end_lon;
-        this.point_end_name = point_end_name;
+        this.volume = volume;
         this.weigth = weigth;
         this.price = price;
-        this.currency_id = currency_id;
-        this.volume = volume;
+        this.currency = currency;
+        this.finished = finished;
+        this.description = description;
         this.date_changed = new Date(); // for test
+
     }
 
     toJsonResponse() {
         const {
             id,
-            type_id,
             user_id,
-            car_id,
             point_start_lat,
             point_start_lon,
-            point_start_name,
             point_end_lat,
             point_end_lon,
-            point_end_name,
-            weigth,
             price,
-            currency_id,
+            currency,
             volume,
+            weigth,
+            finished,
+            description
         } = this;
         return {
             id,
-            type_id,
             user_id,
-            car_id,
             point_start_lat,
             point_start_lon,
-            point_start_name,
             point_end_lat,
             point_end_lon,
-            point_end_name,
-            weigth,
             price,
-            currency_id,
+            currency,
             volume,
+            weigth,
+            finished,
+            description
         };
     }
 
     static toResponse(cargo: Cargo) {
-        const { id, user_id, car_id } = cargo;
-        return { id, user_id, car_id };
+        const { id, user_id } = cargo;
+        return { id, user_id };
     }
 }

@@ -25,26 +25,24 @@ export interface IQueryCargoByUser {
 export const CreateCargoSchema = {
     type: 'object',
     properties: {
-        type_id: { type: 'number' },
+        user_id: { type: 'number' },
         point_start_lat: { type: 'number' },
         point_start_lon: { type: 'number' },
-        point_start_name: { type: 'string' },
         point_end_lat: { type: 'number' },
         point_end_lon: { type: 'number' },
-        point_end_name: { type: 'string' },
-        weigth: { type: 'number' },
         price: { type: 'number' },
-        currency_id: { type: 'number' },
+        currency: { type: 'string' },
         volume: { type: 'number' },
+        weigth: { type: 'number' },
+        finished: { type: 'string' },
+        description: { type: 'string' }
     },
     required: [
-        'type_id',
         'point_start_lat',
         'point_start_lon',
-        'point_start_name',
         'point_end_lat',
         'point_end_lon',
-        'point_end_name',
+        'volume',
         'weigth',
     ],
     additionalProperties: false,
@@ -54,19 +52,17 @@ export const CargoSchema = {
     type: 'object',
     properties: {
         id: { type: 'number' },
-        type_id: { type: 'number' },
         user_id: { type: 'number' },
-        car_id: { type: 'number' },
         point_start_lat: { type: 'number' },
         point_start_lon: { type: 'number' },
-        point_start_name: { type: 'string' },
         point_end_lat: { type: 'number' },
         point_end_lon: { type: 'number' },
-        point_end_name: { type: 'string' },
-        weigth: { type: 'number' },
         price: { type: 'number' },
-        currency_id: { type: 'number' },
+        currency: { type: 'string' },
         volume: { type: 'number' },
+        weigth: { type: 'number' },
+        finished: { type: 'string' },
+        description: { type: 'string' }
     },
 } as const;
 
@@ -141,7 +137,7 @@ const deleteCargoByUUIDOpts = {
 
 const createCargoOpts = {
     schema: {
-        tags: ['Cargos'],
+        tags: ['Cargo'],
         description: 'Create new cargo to carry/truck',
         body: CreateCargoSchema,
         response: {
