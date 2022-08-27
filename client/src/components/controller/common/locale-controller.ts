@@ -22,6 +22,10 @@ export default class LocaleController implements INotify {
                 this.getLocaleHandler(sender);
                 break;
             }
+            case AppEvents.LOCALE_GET_NAME: {
+                this.getLocaleHandler(sender);
+                break;
+            }
             default: {
                 break;
             }
