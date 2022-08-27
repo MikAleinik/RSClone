@@ -10,6 +10,8 @@ export default abstract class Handler {
     protected readonly USER_REGISTER_END_POINT = '/register';
     protected readonly CARGO_END_POINT = '/cargo';
     protected readonly CARGO_CREATE_END_POINT = '/cargo/create';
+    protected readonly CAR_END_POINT = '/car';
+    protected readonly CAR_CREATE_END_POINT = '/car/create';
 
     protected _params: Map<string, string>;
     protected _headers: Headers;

@@ -2,13 +2,18 @@ import answer from "../../../../types/answer";
 import news from "../../../../types/news";
 import user from "../../../../types/user";
 import { AppEvents } from "../../../controller/app-events";
+import CreateCarHandler from "./handler/create/create-car";
 import CreateCargoHandler from "./handler/create/create-cargo";
 import CreateUserHandler from "./handler/create/create-user";
+import DeleteCarHandler from "./handler/delete/delete-car";
 import DeleteCargoHandler from "./handler/delete/delete-cargo";
+import GetAllCarHandler from "./handler/read/get-all-car";
 import GetAllCargoHandler from "./handler/read/get-all-cargo";
+import GetCarHandler from "./handler/read/get-car";
 import GetCargoHandler from "./handler/read/get-cargo";
 import GetUserHandler from "./handler/read/get-user";
 import ReadNewsHandler from "./handler/read/read-news";
+import ChangeCarHandler from "./handler/update/change-car";
 import ChangeCargoHandler from "./handler/update/change-cargo";
 import LogInUserHandler from "./handler/update/login";
 import LogOutUserHandler from "./handler/update/logout";
@@ -21,6 +26,31 @@ export default class DataMapper {
     create<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
+                case AppEvents.MAIN_CAR_CREATE: {
+                    const handler = new CreateCarHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer).statusCode) {
+                                case HttpCodes.CODE_CREATED: {
+                                    delete ((data as unknown) as answer).statusCode;
+                                    resolve(params);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_UNAUTHORIZED:
+                                case HttpCodes.CODE_NOT_ALLOWED: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка создания машины');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
                 case AppEvents.MAIN_CARGO_CREATE: {
                     const handler = new CreateCargoHandler(params);
                     handler.send()
@@ -82,6 +112,55 @@ export default class DataMapper {
     read<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
+                case AppEvents.MAIN_CAR_GET_ALL: {
+                    console.log('1');
+                    const handler = new GetAllCarHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    delete ((data as unknown) as answer).statusCode;
+                                    resolve(params);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_NOT_FOUND: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка получения всех машин');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
+                case AppEvents.MAIN_CAR_GET_BY_ID: {
+                    const handler = new GetCarHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    delete ((data as unknown) as answer).statusCode;
+                                    resolve(params);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_NOT_FOUND: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка получения машины по ID');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
                 case AppEvents.MAIN_CARGO_GET_ALL: {
                     console.log('1');
                     const handler = new GetAllCargoHandler(params);
@@ -185,6 +264,30 @@ export default class DataMapper {
     update<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
+                case AppEvents.MAIN_CAR_CHANGE: {
+                    const handler = new ChangeCarHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    delete ((data as unknown) as answer).statusCode;
+                                    resolve(params);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_NOT_FOUND: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка редактирования машины');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
                 case AppEvents.MAIN_CARGO_CHANGE: {
                     const handler = new ChangeCargoHandler(params);
                     handler.send()
@@ -280,6 +383,29 @@ export default class DataMapper {
     delete<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
+                case AppEvents.MAIN_CAR_DELETE: {
+                    const handler = new DeleteCarHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    delete ((data as unknown) as answer).statusCode;
+                                    resolve(params);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка удаления машины');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
                 case AppEvents.MAIN_CARGO_DELETE: {
                     const handler = new DeleteCargoHandler(params);
                     handler.send()
