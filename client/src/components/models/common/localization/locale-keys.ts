@@ -94,6 +94,7 @@ export const enum LocaleKeys {
     MAIN_TRANSPORT_STATUS = 'mainTransportStatus',
     MAIN_TRANSPORT_STATUS_STOPPED = 'mainTransportStatusStopped',
     MAIN_TRANSPORT_STATUS_DRIVED = 'mainTransportStatusDrived',
+    MAIN_TRANSPORT_FILLING = 'mainTransportFilling',
 
     MAIN_CARGO_NEW = 'mainCargoNew',
     MAIN_CARGO_CHANGE = 'mainCargoChange',

@@ -7,6 +7,7 @@ import { loadMap, applyCurrentPosition, getPointCoordinates } from "./map/map-vi
 import { routeStart } from "./map/map-routes";
 import { loadNews } from "./news/news-view";
 import { loadTruck } from "./truck/truck-view";
+// import { TruckContentView } from "./truck/truck-view";
 import { loadOverview } from "./overview/overview-view";
 import { userRoleActions } from "../user-adapter";
 import ILocale from "../../../interfaces/i-locale";
@@ -102,15 +103,21 @@ export default class ContentView extends View implements INotify, ILocale {
                     case 'mainAsideTransport':
                         switchActive(li)
                         loadTruck(this._contentElement);
+                        // const trucks = new TruckContentView(this._observer)
                         break;
                 }
             }
         })
     }
     setLocale(locale: LocaleModel): void {
-        const list = this._asideElement.querySelectorAll('li') as NodeListOf<HTMLElement>;
-        for (const i of list){
+        const asideList = this._asideElement.querySelectorAll('li') as NodeListOf<HTMLElement>;
+        for (const i of asideList){
             i.textContent = locale.getPhrase(i.dataset.link as LocaleKeys)
+        }
+        
+        const mainList = this._contentElement.querySelectorAll('[data-ln]') as NodeListOf<HTMLElement>;
+        for (const ln of mainList){
+            ln.textContent = locale.getPhrase(ln.dataset.ln as LocaleKeys);
         }
     }
 }

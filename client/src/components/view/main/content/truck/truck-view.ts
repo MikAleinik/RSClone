@@ -7,15 +7,36 @@ function loadTruck(place: HTMLElement){
   place.innerHTML = '';
   place.appendChild(createForm());
   place.appendChild(createTable());
-} 
+}
+
+const table_headers: {[index: string]: string} = {
+  mainTransportNumber:'Plate number',
+  mainTransportWeigth: 'Capacity',
+  mainTransportLocation: 'Location',
+  mainTransportFilling: 'Filling',
+  mainTransportStatus: 'Status',
+  null: ''
+};
+
+const form_headers = {
+  mainTransportAddNew: 'Add new',
+  mainTransportNumber: 'Plate number',
+  mainTransportWeigth: 'Capacity',
+  mainTransportLocation: 'Location'
+}
 
 function createTable() {
   const table_wrapper = document.createElement('table');
   table_wrapper.className = 'table_wrapper';
 
   const table_header = document.createElement('tr');
-  table_header.innerHTML = '<th>Name</th><th>Capacity</th><th>Location</th><th>Filling</th><th>Status</th><th></th>'
-  table_wrapper.appendChild(table_header);
+  for (const h in table_headers){
+    const th = document.createElement('th');
+    th.dataset.ln = h;
+    th.textContent = table_headers[h];
+    table_header.appendChild(th)
+  }
+  table_wrapper.appendChild(table_header)
 
   for (const el of userTruck){
     const table_row = document.createElement('tr');
@@ -78,7 +99,8 @@ function createForm() {
   const form = document.createElement('fieldset');
   form.className = 'item_form';
   const form_legend = document.createElement('legend')
-  form_legend.textContent = 'Add new'
+  form_legend.textContent = form_headers.mainTransportAddNew;
+  form_legend.dataset.ln = 'mainTransportAddNew';
   form.appendChild(form_legend);
   
   const name = document.createElement('input');
@@ -86,21 +108,24 @@ function createForm() {
   name.id = 'truck_name'
   name.required = true;
   const name_label = document.createElement('label')
-  name_label.textContent = 'Name'
+  name_label.textContent = form_headers.mainTransportNumber;
+  name_label.dataset.ln = 'mainTransportNumber';
   
   const capacity = document.createElement('input');
   capacity.type = 'number';
   capacity.id = 'truck_size';
   capacity.required = true;
   const capacity_label = document.createElement('label')
-  capacity_label.textContent = 'Capacity'
+  capacity_label.textContent = form_headers.mainTransportWeigth;
+  capacity_label.dataset.ln = 'mainTransportWeigth';
   
   const location = document.createElement('input');
   location.type = 'search';
   location.id = 'truck_location';
   location.required = true;
   const location_label = document.createElement('label')
-  location_label.textContent = 'Location'
+  location_label.textContent = form_headers.mainTransportLocation;
+  location_label.dataset.ln = 'mainTransportLocation';
   
   const buttons = document.createElement('div');
   buttons.className = 'truck_form-buttons'
@@ -114,7 +139,7 @@ function createForm() {
           name: name.value,
           capacity: JSON.parse(capacity.value),
           location: crds,
-          status: 'pending',
+          status: 'pending', // have to add translation of status
           filling: 0
         });
         updateTable();
@@ -139,4 +164,4 @@ async function getCoordinates(address: string) {
   return [results[0].y, results[0].x];
 }
 
-export { loadTruck } 
+export { loadTruck }
