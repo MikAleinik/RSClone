@@ -11,7 +11,7 @@ function loadTruck(place: HTMLElement){
 
 const table_headers: {[index: string]: string} = {
   mainTransportNumber:'Plate number',
-  mainTransportWeigth: 'Capacity',
+  mainTransportWeight: 'Capacity',
   mainTransportLocation: 'Location',
   mainTransportFilling: 'Filling',
   mainTransportStatus: 'Status',
@@ -21,7 +21,7 @@ const table_headers: {[index: string]: string} = {
 const form_headers = {
   mainTransportAddNew: 'Add new',
   mainTransportNumber: 'Plate number',
-  mainTransportWeigth: 'Capacity',
+  mainTransportWeight: 'Capacity',
   mainTransportLocation: 'Location'
 }
 
@@ -116,8 +116,8 @@ function createForm() {
   capacity.id = 'truck_size';
   capacity.required = true;
   const capacity_label = document.createElement('label')
-  capacity_label.textContent = form_headers.mainTransportWeigth;
-  capacity_label.dataset.ln = 'mainTransportWeigth';
+  capacity_label.textContent = form_headers.mainTransportWeight;
+  capacity_label.dataset.ln = 'mainTransportWeight';
   
   const location = document.createElement('input');
   location.type = 'search';

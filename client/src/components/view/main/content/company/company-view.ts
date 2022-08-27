@@ -9,7 +9,7 @@ function loadCompany(place: HTMLElement){
 
 const table_headers: {[index: string]: string} = {
   mainExchangeCargoName:'Name',
-  mainExchangeCargoWeigth: 'Weight',
+  mainExchangeCargoWeight: 'Weight',
   mainExchangeCargoLocationFrom: 'From',
   mainExchangeCargoLocationTo: 'To',
   mainExchangeCargoDate: 'Date',

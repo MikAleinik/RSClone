@@ -86,7 +86,7 @@ export const enum LocaleKeys {
     MAIN_TRANSPORT_NUMBER = 'mainTransportNumber',
     MAIN_TRANSPORT_COMPANY = 'mainTransportCompany',
     MAIN_TRANSPORT_VOLUME = 'mainTransportVolume',
-    MAIN_TRANSPORT_WEIGTH = 'mainTransportWeigth', // weight
+    MAIN_TRANSPORT_Weight = 'mainTransportWeight',
     MAIN_TRANSPORT_PRICE = 'mainTransportPrice',
     MAIN_TRANSPORT_CURRENCY = 'mainTransportCurrency',
     MAIN_TRANSPORT_DESCRIPTION = 'mainTransportDescription',
@@ -100,7 +100,7 @@ export const enum LocaleKeys {
     MAIN_CARGO_CHANGE = 'mainCargoChange',
     MAIN_CARGO_NAME = 'mainCargoName',
     MAIN_CARGO_COMPANY = 'mainCargoCompany',
-    MAIN_CARGO_WEIGTH = 'mainCargoWeigth', // weight
+    MAIN_CARGO_Weight = 'mainCargoWeight',
     MAIN_CARGO_VOLUME = 'mainCargoVolume',
     MAIN_CARGO_PRICE = 'mainCargoPrice',
     MAIN_CARGO_CURRENCY = 'mainCargoCurrency',
@@ -116,7 +116,7 @@ export const enum LocaleKeys {
     MAIN_EXCHANGE_TRANSPORT_NUMBER = 'mainExchangeTransportNumber',
     MAIN_EXCHANGE_TRANSPORT_COMPANY = 'mainExchangeTransportCompany',
     MAIN_EXCHANGE_TRANSPORT_VOLUME = 'mainExchangeTransportVolume',
-    MAIN_EXCHANGE_TRANSPORT_WEIGTH = 'mainExchangeTransportWeigth',
+    MAIN_EXCHANGE_TRANSPORT_Weight = 'mainExchangeTransportWeight',
     MAIN_EXCHANGE_TRANSPORT_PRICE = 'mainExchangeTransportPrice',
     MAIN_EXCHANGE_TRANSPORT_CURRENCY = 'mainExchangeTransportCurrency',
     MAIN_EXCHANGE_TRANSPORT_DESCRIPTION = 'mainExchangeTransportDescription',
@@ -124,7 +124,7 @@ export const enum LocaleKeys {
 
     MAIN_EXCHANGE_CARGO_COMPANY = 'mainExchangeCargoCompany',
     MAIN_EXCHANGE_CARGO_NAME = 'mainExchangeCargoName',
-    MAIN_EXCHANGE_CARGO_WEIGTH = 'mainExchangeCargoWeigth',
+    MAIN_EXCHANGE_CARGO_Weight = 'mainExchangeCargoWeight',
     MAIN_EXCHANGE_CARGO_VOLUME = 'mainExchangeCargoVolume',
     MAIN_EXCHANGE_CARGO_PRICE = 'mainExchangeCargoPrice',
     MAIN_EXCHANGE_CARGO_CURRENCY = 'mainExchangeCargoCurrency',

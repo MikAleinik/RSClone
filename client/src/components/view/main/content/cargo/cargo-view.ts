@@ -15,7 +15,7 @@ const data = loadUserData();
 
 const table_headers: {[index: string]: string} = {
   mainCargoName:'Name',
-  mainCargoWeigth: 'Weight',
+  mainCargoWeight: 'Weight',
   mainCargoLocationFrom: 'From',
   mainCargoLocationTo: 'To',
   mainCargoDate: 'Date',
@@ -26,7 +26,7 @@ const table_headers: {[index: string]: string} = {
 const form_headers = {
   mainCargoNew: 'Add new',
   mainCargoName: 'Name',
-  mainCargoWeigth: 'Weight',
+  mainCargoWeight: 'Weight',
   mainCargoLocationFrom: 'From',
   mainCargoLocationTo: 'To',
   mainCargoDate: 'Date'
@@ -130,8 +130,8 @@ function createForm() {
   size.id = 'cargo_size';
   size.required = true;
   const size_label = document.createElement('label')
-  size_label.textContent = form_headers.mainCargoWeigth;
-  size_label.dataset.ln = 'mainCargoWeigth';
+  size_label.textContent = form_headers.mainCargoWeight;
+  size_label.dataset.ln = 'mainCargoWeight';
   
   const from = document.createElement('input');
   from.type = 'search';
