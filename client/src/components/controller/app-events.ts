@@ -41,7 +41,8 @@ export const enum AppEvents {
     MAIN_CARGO_DELETE = 'mainCargoDelete',//удалить груз
     MAIN_CARGO_CHANGE = 'mainCargoChange',//редактировать груз
     MAIN_CARGO_GET_ALL = 'mainCargoGetAll',//получить все доступные грузы
-    // MAIN_CARGO_GET_ALL_USER = 'mainCargoGetAllUser',//получить все доступные грузы пользователя
+    MAIN_CARGO_GET_BY_USER = 'mainCargoGetByUser',//получить все доступные грузы пользователя
+    MAIN_CARGO_GET_BY_CAR = 'mainCargoGetByCar',//получить все доступные грузы в машине
     MAIN_CARGO_GET_BY_ID = 'mainCargoGetById',//получить груз по ID груза
     // MAIN_CARGO_UPDATE = 'mainCargoUpdate',//обновить список грузов
 

@@ -87,7 +87,28 @@ export default class CargoModel {
                 });
         });
     }
-
+    getCargoByUser(nameEvent: AppEvents, param: Map<string, string>): Promise<Array<Cargo>> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.read(nameEvent, param)
+                .then((result) => {
+                    resolve(result as Array<Cargo>);
+                })
+                .catch((result) => {
+                    reject(false);
+                });
+        });
+    }
+    getCargoByCar(nameEvent: AppEvents, param: Map<string, string>): Promise<Array<Cargo>> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.read(nameEvent, param)
+                .then((result) => {
+                    resolve(result as Array<Cargo>);
+                })
+                .catch((result) => {
+                    reject(false);
+                });
+        });
+    }
     private setMapToCagro(result: Map<string, string>): Cargo {
         return {
             id: Number(result.get('id')!),

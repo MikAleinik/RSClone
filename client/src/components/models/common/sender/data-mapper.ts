@@ -11,6 +11,7 @@ import GetAllCarHandler from "./handler/read/get-all-car";
 import GetAllCargoHandler from "./handler/read/get-all-cargo";
 import GetCarHandler from "./handler/read/get-car";
 import GetCargoHandler from "./handler/read/get-cargo";
+import GetCargoByUserCarHandler from "./handler/read/get-cargo-by-user-car";
 import GetUserHandler from "./handler/read/get-user";
 import ReadNewsHandler from "./handler/read/read-news";
 import ChangeCarHandler from "./handler/update/change-car";
@@ -20,6 +21,7 @@ import LogOutUserHandler from "./handler/update/logout";
 import { HttpCodes } from "./http-codes";
 
 export default class DataMapper {
+    private readonly KEY_EVENT = 'event';
     constructor() {
 
     }
@@ -206,6 +208,31 @@ export default class DataMapper {
                                 case HttpCodes.CODE_NOT_FOUND: {
                                     const result = new Map<string, string>();
                                     result.set('message', 'TODO Ошибка получения груза по ID');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
+                case AppEvents.MAIN_CARGO_GET_BY_CAR:
+                case AppEvents.MAIN_CARGO_GET_BY_USER: {
+                    params.set(this.KEY_EVENT, nameEvent);
+                    const handler = new GetCargoByUserCarHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    resolve(((data as unknown) as answer<T>).items!);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_UNAUTHORIZED: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка получения всех грузов по id пользователя или машины');
                                     reject(result);
                                     break;
                                 }

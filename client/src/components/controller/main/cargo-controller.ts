@@ -13,18 +13,18 @@ export default class CargoController implements INotify {
         this._userModel = userModel;
         this._cargoModel = cargoModel;
     }
-    notify(nameEvent: AppEvents, sender: View, cargo: Cargo): AppEvents | void {
+    notify(nameEvent: AppEvents, sender: View, param: Cargo | Map<string, string>): AppEvents | void {
         switch (nameEvent) {
             case AppEvents.MAIN_CARGO_CREATE: {
-                this.createCargoHandler(nameEvent, sender, cargo);
+                this.createCargoHandler(nameEvent, sender, param as Cargo);
                 break;
             }
             case AppEvents.MAIN_CARGO_DELETE: {
-                this.deleteCargoHandler(nameEvent, sender, cargo);
+                this.deleteCargoHandler(nameEvent, sender, param as Cargo);
                 break;
             }
             case AppEvents.MAIN_CARGO_CHANGE: {
-                this.changeCargoHandler(nameEvent, sender, cargo);
+                this.changeCargoHandler(nameEvent, sender, param as Cargo);
                 break;
             }
             case AppEvents.MAIN_CARGO_GET_ALL: {
@@ -32,7 +32,15 @@ export default class CargoController implements INotify {
                 break;
             }
             case AppEvents.MAIN_CARGO_GET_BY_ID: {
-                this.getByIdCargoHandler(nameEvent, sender, cargo);
+                this.getByIdCargoHandler(nameEvent, sender, param as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_GET_BY_USER: {
+                this.getByUserCargoHandler(nameEvent, sender, param as Map<string, string>);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_GET_BY_CAR: {
+                this.getByCarCargoHandler(nameEvent, sender, param as Map<string, string>);
                 break;
             }
             default: {
@@ -90,13 +98,39 @@ export default class CargoController implements INotify {
     }
     private getByIdCargoHandler(nameEvent: AppEvents, sender: View, cargo: Cargo): void {
         this._cargoModel.getCargoById(nameEvent, cargo)
-        .then((result) => {
-            console.log(result);
-        })
-        .catch((result) => {
-            //TODO окно сообщения (?)
-            console.log(result);
-        });
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((result) => {
+                //TODO окно сообщения (?)
+                console.log(result);
+            });
+        // let result = this._registerModel.isChangeStateButton();
+        // let verifySender = sender as AuthView;
+        // verifySender.setRegisterButtonState(result);
+    }
+    private getByUserCargoHandler(nameEvent: AppEvents, sender: View, param: Map<string, string>): void {
+        this._cargoModel.getCargoByUser(nameEvent, param)
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((result) => {
+                //TODO окно сообщения (?)
+                console.log(result);
+            });
+        // let result = this._registerModel.isChangeStateButton();
+        // let verifySender = sender as AuthView;
+        // verifySender.setRegisterButtonState(result);
+    }
+    private getByCarCargoHandler(nameEvent: AppEvents, sender: View, param: Map<string, string>): void {
+        this._cargoModel.getCargoByCar(nameEvent, param)
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((result) => {
+                //TODO окно сообщения (?)
+                console.log(result);
+            });
         // let result = this._registerModel.isChangeStateButton();
         // let verifySender = sender as AuthView;
         // verifySender.setRegisterButtonState(result);
