@@ -78,9 +78,8 @@ export default class AuthController implements INotify {
     private logInUserHandler(nameEvent: AppEvents, sender: View, params: Map<string, string>): AppEvents | void {
         this._userModel.logIn(nameEvent, params)
             .then((result) => {
-                // let verifySender = (sender as unknown) as AuthWindowView;
-                // verifySender.successLogInHandler();
-                document.location.href = this.LINK_MAIN_PAGE;
+                let verifySender = (sender as unknown) as AuthWindowView;
+                verifySender.successLogInHandler();
             })
             .catch((result) => {
                 let verifySender = sender as AuthWindowView;
@@ -90,9 +89,6 @@ export default class AuthController implements INotify {
     private getAuthUserHandler(sender: View): AppEvents | void {
         this._userModel.getAuthUser()
             .then((data) => {
-                if (document.location.pathname === this.LINK_INDEX_PAGE) {
-                    document.location.href = this.LINK_MAIN_PAGE;
-                }
                 let verifySender = sender as AuthView;
                 verifySender.setAuthorizedUser(data);
             })
@@ -100,6 +96,8 @@ export default class AuthController implements INotify {
                 if (document.location.pathname === this.LINK_MAIN_PAGE) {
                     document.location.href = this.LINK_INDEX_PAGE;
                 }
+                let verifySender = sender as AuthView;
+                verifySender.setAuthorizedUser(false);
             });
     }
     private clickButtonHandler(sender: View): AppEvents | void {

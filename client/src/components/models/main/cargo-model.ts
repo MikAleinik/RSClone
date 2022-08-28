@@ -31,6 +31,7 @@ export default class CargoModel {
                             break;
                         }
                     }
+                    console.log(true);
                     resolve(true);
                 })
                 .catch((result) => {
