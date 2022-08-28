@@ -13,9 +13,8 @@ export default class CarModel {
         return new Promise((resolve, reject) => {
             this._dataMapper.create(nameEvent, this.setCarToMap(car))
                 .then((result) => {
-                    let newCar = this.setMapToCar(result as Map<string, string>);
-                    this._car.push(newCar);
-                    resolve(newCar);
+                    this._car.push(result as Car);
+                    resolve(result as Car);
                 })
                 .catch((result) => {
                     reject(false);
@@ -61,9 +60,8 @@ export default class CarModel {
         return new Promise((resolve, reject) => {
             this._dataMapper.read(nameEvent)
                 .then((result) => {
-                    result = result as Array<Car>;
-                    this._car = new Array<Car>();
-                    resolve(result as Array<Car>);
+                    this._car = result as Array<Car>;
+                    resolve(this._car);
                 })
                 .catch((result) => {
                     reject(false);
