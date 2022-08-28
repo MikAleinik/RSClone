@@ -1,3 +1,4 @@
+import Cargo from "../../types/cargo";
 import INotify from "../interfaces/i-notify";
 import View from "../view/index/view";
 import { AppEvents } from "./app-events";
@@ -23,7 +24,7 @@ export default class Observer {
             this._senders.set(nameEvent, new Array(sender));
         }
     }
-    notify(nameEvent: AppEvents, sender: View | INotify, params?: Map<string, string>) {
+    notify(nameEvent: AppEvents, sender: View | INotify, params?: Map<string, string> | Cargo) {
         let currentListController = this._listeners.get(nameEvent);
         if (currentListController !== undefined) {
             currentListController.forEach((controller) => {
@@ -35,7 +36,7 @@ export default class Observer {
         }
         this.checkSenderNotify(nameEvent, <INotify>sender, params);
     }
-    private checkSenderNotify(nameEvent: AppEvents, eventSender: INotify, params?: Map<string, string>) {
+    private checkSenderNotify(nameEvent: AppEvents, eventSender: INotify, params?: Map<string, string> | Cargo) {
         let currentListSender = this._senders.get(nameEvent);
         if (currentListSender !== undefined) {
             currentListSender.forEach((sender) => {

@@ -1,3 +1,4 @@
+import Cargo from '../../../../types/cargo';
 import user from '../../../../types/user';
 import { AppEvents } from '../../../controller/app-events';
 import Observer from '../../../controller/observer';

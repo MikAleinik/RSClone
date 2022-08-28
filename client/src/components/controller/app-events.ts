@@ -6,7 +6,12 @@
  * VISIBILTY - описание изменяемого свойства
  */
 export const enum AppEvents {
-    //Index page
+    //Common events
+    LOCALE_CHANGE = 'localeChange',//изменить язык локализации
+    LOCALE_SET = 'localeSet',//установлен язык локализации
+    LOCALE_GET = 'localeGet',//получить язык локализации
+    LOCALE_GET_NAME = 'localeGetName',//получить название языка локализации
+    //Index page events
     AUTH_CLICK_BUTTON = 'clickAuthButton',//клик кнопки LogIn
     AUTH_CLICK_LOGOUT_BUTTON = 'clickLogOutButton',//клик кнопки LogOut
     AUTH_ENABLE_BUTTON = 'enableAuthButton',//enable кнопки LogIn
@@ -31,8 +36,21 @@ export const enum AppEvents {
     REGISTER_USER_SUCCESS = 'registerUserSuccess',//пользователь успешно зарегистрировался
     REGISTER_USER_FAIL = 'registerUserFail',//пользователь не зарегистрировался
     NEWS_GET_DATA = 'newsGetData',//получить данные новостной ленты
-    LOCALE_CHANGE = 'localeChange',//изменить язык локализации
-    LOCALE_SET = 'localeSet',//установлен язык локализации
-    LOCALE_GET = 'localeGet',//получить язык локализации
-    LOCALE_GET_NAME = 'localeGetName',//получить название языка локализации
+    //Main page events
+    MAIN_CARGO_CREATE = 'mainCargoCreate',//создать груз
+    MAIN_CARGO_DELETE = 'mainCargoDelete',//удалить груз
+    MAIN_CARGO_CHANGE = 'mainCargoChange',//редактировать груз
+    MAIN_CARGO_GET_ALL = 'mainCargoGetAll',//получить все доступные грузы
+    // MAIN_CARGO_GET_ALL_USER = 'mainCargoGetAllUser',//получить все доступные грузы пользователя
+    MAIN_CARGO_GET_BY_ID = 'mainCargoGetById',//получить груз по ID груза
+    // MAIN_CARGO_UPDATE = 'mainCargoUpdate',//обновить список грузов
+
+    MAIN_CAR_CREATE = 'mainCarCreate',//создать машину
+    MAIN_CAR_DELETE = 'mainCarDelete',//удалить машину
+    MAIN_CAR_CHANGE = 'mainCarChange',//редактировать машину
+    MAIN_CAR_GET_ALL = 'mainCarGetAll',//получить все доступные машину
+    // MAIN_CAR_GET_ALL_USER = 'mainCarGetAllUser',//получить все доступные машину пользователя
+    MAIN_CAR_GET_BY_ID = 'mainCarGetById',//получить машину по ID машины
+    // MAIN_CAR_UPDATE = 'mainCarUpdate',//обновить список машин
+
 }
