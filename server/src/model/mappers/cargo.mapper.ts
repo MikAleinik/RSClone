@@ -6,21 +6,6 @@ import { createColumnSet } from '../util/pg.helper';
 import { Cargo } from '../vo/cargo';
 import { DBDataVO } from '../vo/db.data';
 
-export interface CargoData {
-    id: number;
-    user_id: number;
-    point_start_lat: number;
-    point_start_lon: number;
-    point_end_lat: number;
-    point_end_lon: number;
-    price: number;
-    currency: string;
-    volume: number;
-    weigth: number;
-    finished: boolean;
-    description: string;
-}
-
 export class CargoMapper {
     private TABLE_NAME = 'cargos';
     private ALL_FIELDS_GET =

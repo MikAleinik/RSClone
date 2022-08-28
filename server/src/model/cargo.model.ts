@@ -32,37 +32,6 @@ export class CargosModel {
         return await CargosModel.getMapperWithWarning().getByCar(id);
     }
 
-    // async createNewCargo(body: CreateCargoSchemaType) {
-    //     const {
-    //         point_start_lat,
-    //         point_start_lon,
-    //         point_end_lat,
-    //         point_end_lon,
-    //         price,
-    //         currency,
-    //         volume,
-    //         weigth,
-    //         finished,
-    //         description,
-    //         jwtDecoded,
-    //     } = body;
-    //     const data = new DBDataVO(Cargo, body);
-
-    //     return await CargosModel.mapper.createCargo(
-    //         jwtDecoded.id,
-    //         point_start_lat,
-    //         point_start_lon,
-    //         point_end_lat,
-    //         point_end_lon,
-    //         price,
-    //         currency,
-    //         volume,
-    //         weigth,
-    //         finished,
-    //         description
-    //     );
-    // }
-
     async createNewCargo(body: CreateCargoSchemaType) {
         return await CargosModel.mapper.createCargo({ ...body, user_id: body.jwtDecoded.id });
     }

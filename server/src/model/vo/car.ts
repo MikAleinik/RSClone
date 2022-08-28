@@ -1,23 +1,15 @@
-import { v4 as uuid } from 'uuid';
-
 export class Car {
-    id: string;
-    name: string;
-    data: unknown;
-
-    constructor({ id = uuid(), name = 'CAR1', data = {} } = {}) {
-        this.id = id;
-        this.name = name;
-        this.data = {};
-    }
-
-    toJsonResponse() {
-        const { id, name, data } = this;
-        return { id, name, data };
-    }
-
-    static toResponse(car: Car) {
-        const { id, name, data } = car;
-        return { id, name, data };
-    }
+    id = 0;
+    date_change = new Date();
+    user_id = 0;
+    model = 'MAZ';
+    point_current_lat = 0;
+    point_current_lon = 0;
+    route_lat: number[] | null = [];
+    route_lon: number[] | null = [];
+    date_start: Date | null = null;
+    price = 0;
+    currency = 'USD';
+    volume_max = 0;
+    weight_max = 0;
 }

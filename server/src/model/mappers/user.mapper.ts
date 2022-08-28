@@ -5,23 +5,6 @@ import { hashPassword } from '../util/password.manager';
 import { DBDataVO } from '../vo/db.data';
 import { User } from '../vo/user';
 
-export interface UserData {
-    id: number;
-    login: string;
-    password: string;
-    email: string;
-    role_id: number;
-    first_name: string;
-    last_name: string;
-    phone: string;
-    company: string;
-    address: string;
-    rating: number;
-    rating_count: number;
-    point_lat: number;
-    point_lon: number;
-}
-
 export class UsersMapper {
     private ALL_FIELDS_GET =
         'id, date_change, login, email, password, phone, first_name, last_name, role_id, company, address, rating, rating_count, point_lat, point_lon';

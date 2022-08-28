@@ -1,9 +1,10 @@
 import { GenericInterface } from '../../types/interfaces';
 import { RecordStringUnknown } from '../../types/types';
+import { Car } from './car';
 import { Cargo } from './cargo';
 import { User } from './user';
 
-export class DBDataVO<TClass extends User | Cargo, TData extends RecordStringUnknown> {
+export class DBDataVO<TClass extends User | Cargo | Car, TData extends RecordStringUnknown> {
     private dbData: TClass;
 
     constructor(className: GenericInterface<TClass>, data: TData) {
