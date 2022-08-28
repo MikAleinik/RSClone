@@ -23,6 +23,8 @@ export class CargoMapper {
     private TABLE_NAME = 'cargos';
     private ALL_FIELDS_GET =
         'id, date_change, user_id, point_start_lat, point_start_lon, point_end_lat, point_end_lon, weigth, price, currency, volume, finished, description';
+    private ALL_FIELDS_GET_BUT_NO_ID =
+        'date_change, user_id, point_start_lat, point_start_lon, point_end_lat, point_end_lon, weigth, price, currency, volume, finished, description';
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     private _db: pgPromise.IDatabase<{}, pg.IClient>;
@@ -129,6 +131,16 @@ export class CargoMapper {
             `SELECT ${this.ALL_FIELDS_GET} FROM ${this.TABLE_NAME} WHERE ${prop} = $1`,
             [value]
         );
+        if (!items) {
+            return null;
+        }
+        return items.map((item) => this.dataToVO(item));
+    }
+
+    async getByCar(id: number) {
+        const items = await this._db.manyOrNone(`SELECT cargos.id, ${this.ALL_FIELDS_GET_BUT_NO_ID}
+FROM ${this.TABLE_NAME} INNER JOIN cargos_to_cars ON cargos.id = cargos_to_cars.id_cargo
+WHERE id_cars = ${id};`);
         if (!items) {
             return null;
         }

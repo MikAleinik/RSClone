@@ -28,6 +28,10 @@ export class CargosModel {
         return await CargosModel.getMapperWithWarning().getAllCargo();
     }
 
+    async getAllCargosByCar(id: number) {
+        return await CargosModel.getMapperWithWarning().getByCar(id);
+    }
+
     async createNewCargo(body: CreateCargoSchemaType) {
         const {
             point_start_lat,

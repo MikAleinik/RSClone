@@ -21,11 +21,15 @@ export class CargoController {
 
     getAllCargosByUserFunc(): RouteHandler<{ Querystring: IQueryCargoByUser; Reply: ReplyAllCargosType }> {
         return async (req, res) => {
-            const { userId } = req.query;
+            const { userId, carId } = req.query;
             try {
                 let cargos: (Cargo | null)[] | null;
                 if (!userId) {
-                    cargos = await CargosModel.getInstance().getAllCargos();
+                    if (carId) {
+                        cargos = await CargosModel.getInstance().getAllCargosByCar(carId);
+                    } else {
+                        cargos = await CargosModel.getInstance().getAllCargos();
+                    }
                 } else {
                     cargos = await CargosModel.getInstance().getAllCargosByUser(userId);
                 }

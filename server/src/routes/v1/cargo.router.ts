@@ -18,6 +18,7 @@ export type ReplyAllCargosType = FromSchema<typeof ReplyAllCargos>;
 
 export interface IQueryCargoByUser {
     userId: number;
+    carId: number;
 }
 
 // Schemas
@@ -78,6 +79,7 @@ const getAllCargosByUserOpts = {
         description: 'Get all user`s cargos',
         querystring: {
             userId: { type: 'number' },
+            carId: { type: 'number' },
         },
         response: {
             200: ReplyAllCargos,
@@ -88,20 +90,6 @@ const getAllCargosByUserOpts = {
     preHandler: [AuthController.getInstance().verifyJWTFunc()],
     handler: CargoController.getInstance().getAllCargosByUserFunc(),
 };
-
-// const getAllCargosOpts = {
-//     schema: {
-//         tags: ['Cargo'],
-//         description: 'Get all user`s cargos',
-//         response: {
-//             200: ReplyAllCargos,
-//             400: ErrorReplySchema,
-//             401: ErrorReplySchema,
-//         },
-//     },
-//     preHandler: [AuthController.getInstance().verifyJWTFunc()],
-//     handler: CargoController.getInstance().getAllCargosFunc(),
-// };
 
 const getCargoByUUIDOpts = {
     schema: {
