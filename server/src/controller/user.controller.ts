@@ -42,7 +42,11 @@ export class UsersController {
         return async (req, res) => {
             try {
                 const newUser = await UsersModel.getInstance().processCreateNewUser(req.body);
-                AuthController.getInstance().createTokenAndSetAuthCookie(res, { id: newUser.id, email: newUser.email });
+                const userData = newUser.getData();
+                AuthController.getInstance().createTokenAndSetAuthCookie(res, {
+                    id: userData.id,
+                    email: userData.email,
+                });
                 res.code(OkCodes.CREATED);
                 res.send(newUser.toJsonResponse());
             } catch (err) {
@@ -94,10 +98,10 @@ export class UsersController {
     changeUserByUUIDFunc(): RouteHandler<{ Body: UserSchemaType; Reply: UserSchemaType | ErrorReplyType }> {
         return async (req, res) => {
             //TODO add implementation
-            const user = new User(0); //await usersRepo.addUser({ name, login, password });
+            const user = new User(); //await usersRepo.addUser({ name, login, password });
             res.code(OkCodes.CREATED);
             res.header(ContentTypeJson[0], ContentTypeJson[1]);
-            res.send(user.toJsonResponse());
+            res.send({ ...user });
         };
     }
 

@@ -1,6 +1,8 @@
 import pgPromise from 'pg-promise';
 import pg from 'pg-promise/typescript/pg-subset';
+import { RecordStringUnknown } from '../../types/types';
 import { hashPassword } from '../util/password.manager';
+import { DBDataVO } from '../vo/db.data';
 import { User } from '../vo/user';
 
 export interface UserData {
@@ -32,65 +34,40 @@ export class UsersMapper {
         this._db = db;
     }
 
-    async createUser(
-        login: string,
-        password: string,
-        email: string,
-        role_id: number,
-        first_name = '',
-        last_name = '',
-        phone = '',
-        company = '',
-        address = '',
-        rating = 0,
-        rating_count = 0,
-        point_lat = 0,
-        point_lon = 0
-    ) {
-        const hPassword = hashPassword(password);
+    async createUser<T extends RecordStringUnknown>(userData: T) {
+        const dbData = new DBDataVO(User, userData);
+        const dataUser = dbData.getData();
+        dbData.setProp('password', hashPassword(dataUser.password));
+        dbData.setProp('date_change', new Date());
         const {
             id,
         } = await this._db.one(
             'INSERT INTO users (login, password, email, first_name, last_name, role_id, company, address, rating, point_lat, point_lon, phone, date_change, rating_count) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING id',
             [
-                login,
-                hPassword,
-                email,
-                first_name,
-                last_name,
-                role_id,
-                company,
-                address,
-                rating,
-                point_lat,
-                point_lon,
-                phone,
-                new Date(),
-                rating_count,
+                dataUser.login,
+                dataUser.password,
+                dataUser.email,
+                dataUser.first_name,
+                dataUser.last_name,
+                dataUser.role_id,
+                dataUser.company,
+                dataUser.address,
+                dataUser.rating,
+                dataUser.point_lat,
+                dataUser.point_lon,
+                dataUser.phone,
+                dataUser.date_change,
+                dataUser.rating_count,
             ]
         );
-        return new User(
-            id,
-            login,
-            hPassword,
-            email,
-            role_id,
-            first_name,
-            last_name,
-            phone,
-            company,
-            address,
-            rating,
-            0,
-            point_lat,
-            point_lon
-        );
+        dbData.setProp('id', id);
+        return dbData;
     }
 
     async getUserByEmail(emailStr: string) {
         const user = await this._db.oneOrNone(`SELECT ${this.ALL_FIELDS_GET} FROM users WHERE email = $1`, [emailStr]);
         if (!user) return null;
-        return this.dataToUser(user);
+        return new DBDataVO(User, user);
     }
 
     async getUserById(id: number) {
@@ -98,43 +75,6 @@ export class UsersMapper {
         if (!user) {
             return null;
         }
-        return this.dataToUser(user);
-    }
-
-    dataToUser(data: UserData) {
-        if (!data) return null;
-        const {
-            id,
-            login,
-            password,
-            email,
-            role_id,
-            first_name,
-            last_name,
-            phone,
-            company,
-            address,
-            rating,
-            point_lat,
-            point_lon,
-            rating_count,
-        } = data;
-
-        return new User(
-            id,
-            login,
-            password,
-            email,
-            role_id,
-            first_name,
-            last_name,
-            phone,
-            company,
-            address,
-            rating,
-            rating_count,
-            point_lat,
-            point_lon
-        );
+        return new DBDataVO(User, user);
     }
 }

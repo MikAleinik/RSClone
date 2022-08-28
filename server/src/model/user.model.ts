@@ -1,5 +1,4 @@
 import { ErrorNoSuchUser } from '../errors/ErrorNoSuchUser';
-import { ErrorCreateNewUser } from '../errors/ErrorCreateNewUser';
 import { OkCodes } from '../types/enums';
 import { ContentTypeJson } from '../types/types';
 import { User } from './vo/user';
@@ -53,37 +52,7 @@ export class UsersModel {
     }
 
     async processCreateNewUser(body: RegisterUserSchemaType) {
-        const {
-            email,
-            login,
-            password,
-            first_name,
-            last_name,
-            role_id,
-            company,
-            address,
-            point_lat,
-            point_lon,
-            phone,
-        } = body;
-        const oldUser = await UsersModel.getMapperWithWarning().getUserByEmail(email);
-        if (oldUser) {
-            throw new ErrorCreateNewUser();
-        }
-        return await UsersModel.mapper.createUser(
-            login,
-            password,
-            email,
-            role_id,
-            first_name,
-            last_name,
-            phone,
-            company,
-            address,
-            0,
-            point_lat,
-            point_lon
-        );
+        return await UsersModel.mapper.createUser(body);
     }
 
     checkMapper() {
@@ -95,10 +64,11 @@ export class UsersModel {
     async processAuthorizeUser(body: AuthRequestUserSchemaType) {
         const { email, password } = body;
         const user = await UsersModel.getMapperWithWarning().getUserByEmail(email);
-        if (!user) {
+        const userData = user?.getData();
+        if (!userData) {
             throw new ErrorNoSuchUser();
         }
-        if (!this.validatePassword(password, user)) {
+        if (!this.validatePassword(password, userData)) {
             throw new ErrorInvalidPassword();
         }
         return user;

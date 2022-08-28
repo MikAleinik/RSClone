@@ -137,38 +137,4 @@ WHERE id_cars = ${id};`);
         }
         return (items as RecordStringUnknown[]).map((item) => new DBDataVO(Cargo, item));
     }
-
-    dataToVO(data: CargoData) {
-        if (!data) return null;
-        // const {
-        //     id,
-        //     user_id,
-        //     point_start_lat,
-        //     point_start_lon,
-        //     point_end_lat,
-        //     point_end_lon,
-        //     price,
-        //     currency,
-        //     volume,
-        //     weigth,
-        //     finished,
-        //     description,
-        // } = data;
-        const cargo = new Cargo();
-        return cargo;
-        // return new Cargo(
-        //     id,
-        //     user_id,
-        //     point_start_lat,
-        //     point_start_lon,
-        //     point_end_lat,
-        //     point_end_lon,
-        //     price,
-        //     currency,
-        //     volume,
-        //     weigth,
-        //     finished,
-        //     description
-        // );
-    }
 }

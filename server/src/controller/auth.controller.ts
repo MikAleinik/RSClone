@@ -7,6 +7,7 @@ import { ErrorCodes, OkCodes } from '../types/enums';
 import { FastifyReply, FastifyRequest, RouteHandler } from 'fastify';
 import { AuthRequestUserSchemaType } from '../routes/v1/auth.router';
 import { IBodyWithJWT, JWTTokenData, JWTTokenDataWithTimestamps } from '../types/interfaces';
+import { ErrorNoSuchUser } from '../errors/ErrorNoSuchUser';
 
 export class AuthController {
     private static SECRET_FOR_JWT = 'testSecret123';
@@ -92,7 +93,14 @@ export class AuthController {
         return async (req, res) => {
             try {
                 const oldUser = await UsersModel.getInstance().processAuthorizeUser(req.body);
-                AuthController.getInstance().createTokenAndSetAuthCookie(res, { id: oldUser.id, email: oldUser.email });
+                const userData = oldUser?.getData();
+                if (!oldUser || !userData) {
+                    throw new ErrorNoSuchUser();
+                }
+                AuthController.getInstance().createTokenAndSetAuthCookie(res, {
+                    id: userData.id,
+                    email: userData.email,
+                });
                 res.code(OkCodes.OK);
                 res.send(oldUser.toJsonResponse());
             } catch (err) {
