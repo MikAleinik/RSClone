@@ -17,16 +17,19 @@ export class UsersController {
 
     getAllUsersFunc(): RouteHandler<{ Reply: ReplyAllUsersType }> {
         return async (req, res) => {
-            req;
             try {
+                const cargos = await UsersModel.getInstance().getAllUsers();
                 res.code(OkCodes.OK);
+                let items: Array<UserSchemaType>;
+                if (!cargos) {
+                    items = new Array<UserSchemaType>();
+                } else {
+                    items = cargos
+                        .filter((item1) => item1.getData() != undefined && item1.getData() !== null)
+                        .map((item3) => item3.toJsonResponse());
+                }
                 const rp = {
-                    users: [
-                        {
-                            email: 'asdf@lll.com',
-                            login: 'login1',
-                        },
-                    ],
+                    items: items,
                 };
                 res.header(ContentTypeJson[0], ContentTypeJson[1]);
                 res.send(rp);

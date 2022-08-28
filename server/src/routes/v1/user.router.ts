@@ -54,7 +54,7 @@ export const UserSchema = {
 export const ReplyAllUsers = {
     type: 'object',
     properties: {
-        users: {
+        items: {
             type: 'array',
             items: UserSchema,
         },

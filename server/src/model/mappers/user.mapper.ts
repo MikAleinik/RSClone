@@ -25,6 +25,7 @@ export interface UserData {
 export class UsersMapper {
     private ALL_FIELDS_GET =
         'id, date_change, login, email, password, phone, first_name, last_name, role_id, company, address, rating, rating_count, point_lat, point_lon';
+    private TABLE_NAME = 'users';
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     private _db: pgPromise.IDatabase<{}, pg.IClient>;
@@ -76,5 +77,13 @@ export class UsersMapper {
             return null;
         }
         return new DBDataVO(User, user);
+    }
+
+    async getAllUsers() {
+        const items = await this._db.manyOrNone(`SELECT ${this.ALL_FIELDS_GET} FROM ${this.TABLE_NAME}`);
+        if (!items) {
+            return null;
+        }
+        return (items as RecordStringUnknown[]).map((item) => new DBDataVO(User, item));
     }
 }

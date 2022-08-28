@@ -3,7 +3,6 @@ import { RecordStringUnknown } from '../../types/types';
 import { Cargo } from './cargo';
 import { User } from './user';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export class DBDataVO<TClass extends User | Cargo, TData extends RecordStringUnknown> {
     private dbData: TClass;
 
