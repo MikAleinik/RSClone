@@ -23,17 +23,17 @@ export default class DataMapper {
     constructor() {
 
     }
-    create<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
+    create<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | T> {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
                 case AppEvents.MAIN_CAR_CREATE: {
                     const handler = new CreateCarHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_CREATED: {
-                                    delete ((data as unknown) as answer).statusCode;
-                                    resolve(params);
+                                    delete ((data as unknown) as answer<T>).statusCode;
+                                    resolve((data as unknown) as T);
                                     break;
                                 }
                                 case HttpCodes.CODE_BAD_REQUEST:
@@ -55,10 +55,10 @@ export default class DataMapper {
                     const handler = new CreateCargoHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_CREATED: {
-                                    delete ((data as unknown) as answer).statusCode;
-                                    resolve(params);
+                                    delete ((data as unknown) as answer<T>).statusCode;
+                                    resolve((data as unknown) as T);
                                     break;
                                 }
                                 case HttpCodes.CODE_BAD_REQUEST:
@@ -80,9 +80,9 @@ export default class DataMapper {
                     const handler = new CreateUserHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_CREATED: {
-                                    delete ((data as unknown) as answer).statusCode;
+                                    delete ((data as unknown) as answer<T>).statusCode;
                                     resolve(params);
                                     break;
                                 }
@@ -113,14 +113,12 @@ export default class DataMapper {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
                 case AppEvents.MAIN_CAR_GET_ALL: {
-                    console.log('1');
                     const handler = new GetAllCarHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
-                                    resolve(params);
+                                    resolve(((data as unknown) as answer<T>).items!);
                                     break;
                                 }
                                 case HttpCodes.CODE_BAD_REQUEST:
@@ -141,9 +139,14 @@ export default class DataMapper {
                     const handler = new GetCarHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
+                                    delete ((data as unknown) as answer<T>).statusCode;
+                                    const result = ((data as unknown) as answer<T>).body;
+                                    if (result !== undefined) {
+                                        resolve(result);
+                                        break;
+                                    }
                                     resolve(params);
                                     break;
                                 }
@@ -162,14 +165,12 @@ export default class DataMapper {
                     break;
                 }
                 case AppEvents.MAIN_CARGO_GET_ALL: {
-                    console.log('1');
                     const handler = new GetAllCargoHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
-                                    resolve(params);
+                                    resolve(((data as unknown) as answer<T>).items!);
                                     break;
                                 }
                                 case HttpCodes.CODE_BAD_REQUEST:
@@ -190,9 +191,14 @@ export default class DataMapper {
                     const handler = new GetCargoHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
+                                    delete ((data as unknown) as answer<T>).statusCode;
+                                    const result = ((data as unknown) as answer<T>).body;
+                                    if (result !== undefined) {
+                                        resolve(result);
+                                        break;
+                                    }
                                     resolve(params);
                                     break;
                                 }
@@ -225,9 +231,9 @@ export default class DataMapper {
                     const handler = new GetUserHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
+                                    delete ((data as unknown) as answer<T>).statusCode;
                                     const result = new Map<string, string>();
                                     for (const [key, value] of Object.entries(((data as unknown) as user))) {
                                         result.set(key, value.toString());
@@ -268,9 +274,8 @@ export default class DataMapper {
                     const handler = new ChangeCarHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
                                     resolve(params);
                                     break;
                                 }
@@ -292,9 +297,8 @@ export default class DataMapper {
                     const handler = new ChangeCargoHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
                                     resolve(params);
                                     break;
                                 }
@@ -316,9 +320,9 @@ export default class DataMapper {
                     const handler = new LogInUserHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
+                                    delete ((data as unknown) as answer<T>).statusCode;
                                     const result = new Map<string, string>();
                                     for (const [key, value] of Object.entries(((data as unknown) as user))) {
                                         result.set(key, value.toString());
@@ -346,9 +350,9 @@ export default class DataMapper {
                     const handler = new LogOutUserHandler();
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
+                                    delete ((data as unknown) as answer<T>).statusCode;
                                     const result = new Map<string, string>();
                                     for (const [key, value] of Object.entries(((data as unknown) as user))) {
                                         result.set(key, value.toString());
@@ -387,9 +391,8 @@ export default class DataMapper {
                     const handler = new DeleteCarHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
                                     resolve(params);
                                     break;
                                 }
@@ -410,9 +413,8 @@ export default class DataMapper {
                     const handler = new DeleteCargoHandler(params);
                     handler.send()
                         .then((data) => {
-                            switch (((data as unknown) as answer).statusCode) {
+                            switch (((data as unknown) as answer<T>).statusCode) {
                                 case HttpCodes.CODE_OK: {
-                                    delete ((data as unknown) as answer).statusCode;
                                     resolve(params);
                                     break;
                                 }

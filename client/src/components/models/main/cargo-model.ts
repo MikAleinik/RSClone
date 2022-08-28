@@ -13,9 +13,8 @@ export default class CargoModel {
         return new Promise((resolve, reject) => {
             this._dataMapper.create(nameEvent, this.setCargoToMap(cargo))
                 .then((result) => {
-                    let newCargo = this.setMapToCagro(result as Map<string, string>);
-                    this._cargo.push(newCargo);
-                    resolve(newCargo);
+                    this._cargo.push(result as Cargo);
+                    resolve(result as Cargo);
                 })
                 .catch((result) => {
                     reject(false);
@@ -61,9 +60,8 @@ export default class CargoModel {
         return new Promise((resolve, reject) => {
             this._dataMapper.read(nameEvent)
                 .then((result) => {
-                    result = result as Array<Cargo>;
-                    this._cargo = new Array<Cargo>();
-                    resolve(result as Array<Cargo>);
+                    this._cargo = result as Array<Cargo>;
+                    resolve(this._cargo);
                 })
                 .catch((result) => {
                     reject(false);

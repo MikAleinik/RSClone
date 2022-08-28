@@ -1,3 +1,4 @@
+import Cargo from '../../../../types/cargo';
 import user from '../../../../types/user';
 import { AppEvents } from '../../../controller/app-events';
 import Observer from '../../../controller/observer';
@@ -115,6 +116,36 @@ export default class PageNavigationView extends View implements INotify, ILocale
         listItemElement = document.createElement(this.TAG_LIST_ITEM);
         listItemElement.insertAdjacentElement('beforeend', this._linkContactElement);
         listElement.insertAdjacentElement('beforeend', listItemElement);
+
+        /** TODO временно для проверки запросов*/
+        let button = document.createElement('button');
+        button.textContent = 'Request main page';
+        button.addEventListener('click', ()=> {
+            let param = new Map<string, string>();
+            param.set('id', '1');
+            let cargo = {
+                id: 1,
+                user_id: 21,
+                point_start_lat: 22,
+                point_start_lon: 22,
+                point_end_lat: 22,
+                point_end_lon: 22,
+                price: 1,
+                currency: 'EUR',
+                date_from: new Date(),
+                volume: 1,
+                weigth: 1,
+                finished: false,
+                description: 'desc',
+            }
+            // this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
+            // this._observer.notify(AppEvents.MAIN_CARGO_GET_BY_ID, this, cargo);
+            this._observer.notify(AppEvents.MAIN_CARGO_CREATE, this, cargo);
+            // this._observer.notify(AppEvents.MAIN_CARGO_CHANGE, this, cargo);
+            // this._observer.notify(AppEvents.MAIN_CARGO_DELETE, this, cargo);
+        });
+        listElement.insertAdjacentElement('beforeend', button);
+        /** TODO */
 
         this._navElement.insertAdjacentElement('beforeend', listElement);
     }

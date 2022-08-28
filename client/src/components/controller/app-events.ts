@@ -41,6 +41,7 @@ export const enum AppEvents {
     MAIN_CARGO_DELETE = 'mainCargoDelete',//удалить груз
     MAIN_CARGO_CHANGE = 'mainCargoChange',//редактировать груз
     MAIN_CARGO_GET_ALL = 'mainCargoGetAll',//получить все доступные грузы
+    // MAIN_CARGO_GET_ALL_USER = 'mainCargoGetAllUser',//получить все доступные грузы пользователя
     MAIN_CARGO_GET_BY_ID = 'mainCargoGetById',//получить груз по ID груза
     // MAIN_CARGO_UPDATE = 'mainCargoUpdate',//обновить список грузов
 
@@ -48,6 +49,7 @@ export const enum AppEvents {
     MAIN_CAR_DELETE = 'mainCarDelete',//удалить машину
     MAIN_CAR_CHANGE = 'mainCarChange',//редактировать машину
     MAIN_CAR_GET_ALL = 'mainCarGetAll',//получить все доступные машину
+    // MAIN_CAR_GET_ALL_USER = 'mainCarGetAllUser',//получить все доступные машину пользователя
     MAIN_CAR_GET_BY_ID = 'mainCarGetById',//получить машину по ID машины
     // MAIN_CAR_UPDATE = 'mainCarUpdate',//обновить список машин
 

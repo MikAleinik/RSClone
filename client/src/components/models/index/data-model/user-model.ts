@@ -38,8 +38,7 @@ export default class UserModel {
             param.delete('role');
             this._dataMapper.create(nameEvents, param)
                 .then((result) => {
-                    result = (result as unknown) as Map<string, string>;
-                    this.setUser(result);
+                    this.setUser(result as Map<string, string>);
                     resolve(result as Map<string, string>);
                 })
                 .catch((result) => {
