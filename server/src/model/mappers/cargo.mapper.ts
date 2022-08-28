@@ -46,9 +46,10 @@ export class CargoMapper {
         );
     }
 
-    async createCargo<TData extends RecordStringUnknown>(data: DBDataVO<Cargo, TData>) {
-        const dataCargo = data.getData();
-        data.setProp('date_changed', new Date());
+    async createCargo<T extends RecordStringUnknown>(cargoData: T) {
+        const dbData = new DBDataVO(Cargo, cargoData);
+        const dataCargo = dbData.getData();
+        dbData.setProp('date_changed', new Date());
         const { id } = await this._db.one(
             `INSERT INTO ${this.TABLE_NAME} (
                 user_id,
@@ -78,8 +79,8 @@ export class CargoMapper {
                 dataCargo.date_changed,
             ]
         );
-        data.setProp('id', id);
-        return data;
+        dbData.setProp('id', id);
+        return dbData;
     }
 
     async changeCargo(cargoId: number, body: CreateCargoSchemaType) {

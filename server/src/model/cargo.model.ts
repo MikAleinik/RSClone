@@ -2,8 +2,6 @@ import { ContentTypeJson } from '../types/types';
 import { ErrorNoMapper } from '../errors/ErrorNoMapper';
 import { CreateCargoSchemaType } from '../routes/v1/cargo.router';
 import { CargoMapper } from './mappers/cargo.mapper';
-import { DBDataVO } from './vo/db.data';
-import { Cargo } from './vo/cargo';
 
 export class CargosModel {
     private static instance: CargosModel;
@@ -66,8 +64,7 @@ export class CargosModel {
     // }
 
     async createNewCargo(body: CreateCargoSchemaType) {
-        const data = new DBDataVO(Cargo, { ...body, user_id: body.jwtDecoded.id });
-        return await CargosModel.mapper.createCargo(data);
+        return await CargosModel.mapper.createCargo({ ...body, user_id: body.jwtDecoded.id });
     }
 
     async updateCargo(body: CreateCargoSchemaType, id: number) {
