@@ -10,3 +10,5 @@ export type JWTDEcodedData = {
     id: string;
     email: string;
 };
+
+export type RecordStringUnknown = Record<string, unknown>;

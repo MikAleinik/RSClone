@@ -88,6 +88,7 @@ export class CargoController {
             try {
                 const newCargo = await CargosModel.getInstance().createNewCargo(req.body);
                 res.code(OkCodes.CREATED);
+                // res.send((newCargo.toJsonResponse() as unknown) as Record<string, unknown>);
                 res.send(newCargo.toJsonResponse());
             } catch (err) {
                 res.code(ErrorCodes.BAD_REQUEST);

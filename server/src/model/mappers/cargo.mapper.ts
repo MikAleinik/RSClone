@@ -1,8 +1,10 @@
 import pgPromise from 'pg-promise';
 import pg from 'pg-promise/typescript/pg-subset';
 import { CreateCargoSchemaType } from '../../routes/v1/cargo.router';
+import { RecordStringUnknown } from '../../types/types';
 import { createColumnSet } from '../util/pg.helper';
 import { Cargo } from '../vo/cargo';
+import { DBDataVO } from '../vo/db.data';
 
 export interface CargoData {
     id: number;
@@ -15,7 +17,7 @@ export interface CargoData {
     currency: string;
     volume: number;
     weigth: number;
-    finished: string;
+    finished: boolean;
     description: string;
 }
 
@@ -44,19 +46,9 @@ export class CargoMapper {
         );
     }
 
-    async createCargo(
-        user_id = 0,
-        point_start_lat = 0,
-        point_start_lon = 0,
-        point_end_lat = 0,
-        point_end_lon = 0,
-        price = 0,
-        currency = 'USD',
-        volume = 0,
-        weigth = 0,
-        finished = 'false',
-        description = ''
-    ) {
+    async createCargo<TData extends RecordStringUnknown>(data: DBDataVO<Cargo, TData>) {
+        const dataCargo = data.getData();
+        data.setProp('date_changed', new Date());
         const { id } = await this._db.one(
             `INSERT INTO ${this.TABLE_NAME} (
                 user_id,
@@ -72,34 +64,22 @@ export class CargoMapper {
                 description,
                 date_change) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`,
             [
-                user_id,
-                point_start_lat,
-                point_start_lon,
-                point_end_lat,
-                point_end_lon,
-                price,
-                currency,
-                volume,
-                weigth,
-                finished,
-                description,
-                new Date(),
+                dataCargo.user_id,
+                dataCargo.point_start_lat,
+                dataCargo.point_start_lon,
+                dataCargo.point_end_lat,
+                dataCargo.point_end_lon,
+                dataCargo.price,
+                dataCargo.currency,
+                dataCargo.volume,
+                dataCargo.weigth,
+                dataCargo.finished,
+                dataCargo.description,
+                dataCargo.date_changed,
             ]
         );
-        return new Cargo(
-            id,
-            user_id,
-            point_start_lat,
-            point_start_lon,
-            point_end_lat,
-            point_end_lon,
-            price,
-            currency,
-            volume,
-            weigth,
-            finished,
-            description
-        );
+        data.setProp('id', id);
+        return data;
     }
 
     async changeCargo(cargoId: number, body: CreateCargoSchemaType) {
@@ -159,33 +139,35 @@ WHERE id_cars = ${id};`);
 
     dataToVO(data: CargoData) {
         if (!data) return null;
-        const {
-            id,
-            user_id,
-            point_start_lat,
-            point_start_lon,
-            point_end_lat,
-            point_end_lon,
-            price,
-            currency,
-            volume,
-            weigth,
-            finished,
-            description,
-        } = data;
-        return new Cargo(
-            id,
-            user_id,
-            point_start_lat,
-            point_start_lon,
-            point_end_lat,
-            point_end_lon,
-            price,
-            currency,
-            volume,
-            weigth,
-            finished,
-            description
-        );
+        // const {
+        //     id,
+        //     user_id,
+        //     point_start_lat,
+        //     point_start_lon,
+        //     point_end_lat,
+        //     point_end_lon,
+        //     price,
+        //     currency,
+        //     volume,
+        //     weigth,
+        //     finished,
+        //     description,
+        // } = data;
+        const cargo = new Cargo();
+        return cargo;
+        // return new Cargo(
+        //     id,
+        //     user_id,
+        //     point_start_lat,
+        //     point_start_lon,
+        //     point_end_lat,
+        //     point_end_lon,
+        //     price,
+        //     currency,
+        //     volume,
+        //     weigth,
+        //     finished,
+        //     description
+        // );
     }
 }

@@ -2,6 +2,8 @@ import { ContentTypeJson } from '../types/types';
 import { ErrorNoMapper } from '../errors/ErrorNoMapper';
 import { CreateCargoSchemaType } from '../routes/v1/cargo.router';
 import { CargoMapper } from './mappers/cargo.mapper';
+import { DBDataVO } from './vo/db.data';
+import { Cargo } from './vo/cargo';
 
 export class CargosModel {
     private static instance: CargosModel;
@@ -32,33 +34,40 @@ export class CargosModel {
         return await CargosModel.getMapperWithWarning().getByCar(id);
     }
 
+    // async createNewCargo(body: CreateCargoSchemaType) {
+    //     const {
+    //         point_start_lat,
+    //         point_start_lon,
+    //         point_end_lat,
+    //         point_end_lon,
+    //         price,
+    //         currency,
+    //         volume,
+    //         weigth,
+    //         finished,
+    //         description,
+    //         jwtDecoded,
+    //     } = body;
+    //     const data = new DBDataVO(Cargo, body);
+
+    //     return await CargosModel.mapper.createCargo(
+    //         jwtDecoded.id,
+    //         point_start_lat,
+    //         point_start_lon,
+    //         point_end_lat,
+    //         point_end_lon,
+    //         price,
+    //         currency,
+    //         volume,
+    //         weigth,
+    //         finished,
+    //         description
+    //     );
+    // }
+
     async createNewCargo(body: CreateCargoSchemaType) {
-        const {
-            point_start_lat,
-            point_start_lon,
-            point_end_lat,
-            point_end_lon,
-            price,
-            currency,
-            volume,
-            weigth,
-            finished,
-            description,
-            jwtDecoded,
-        } = body;
-        return await CargosModel.mapper.createCargo(
-            jwtDecoded.id,
-            point_start_lat,
-            point_start_lon,
-            point_end_lat,
-            point_end_lon,
-            price,
-            currency,
-            volume,
-            weigth,
-            finished,
-            description
-        );
+        const data = new DBDataVO(Cargo, { ...body, user_id: body.jwtDecoded.id });
+        return await CargosModel.mapper.createCargo(data);
     }
 
     async updateCargo(body: CreateCargoSchemaType, id: number) {

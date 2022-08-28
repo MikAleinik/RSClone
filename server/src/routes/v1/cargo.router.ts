@@ -55,7 +55,7 @@ export const CargoSchema = {
         currency: { type: 'string' },
         volume: { type: 'number' },
         weigth: { type: 'number' },
-        finished: { type: 'string' },
+        finished: { type: 'boolean' },
         description: { type: 'string' },
     },
 } as const;

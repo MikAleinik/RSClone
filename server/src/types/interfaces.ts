@@ -13,3 +13,7 @@ export interface JWTTokenDataWithTimestamps {
 export interface IBodyWithJWT {
     jwtDecoded: JWTTokenDataWithTimestamps;
 }
+
+export interface GenericInterface<T> {
+    new (): T;
+}
