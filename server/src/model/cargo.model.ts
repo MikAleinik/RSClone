@@ -24,34 +24,36 @@ export class CargosModel {
         return await CargosModel.getMapperWithWarning().getByPropValue('user_id', id);
     }
 
+    async getAllCargos() {
+        return await CargosModel.getMapperWithWarning().getAllCargo();
+    }
+
     async createNewCargo(body: CreateCargoSchemaType) {
         const {
-            type_id,
             point_start_lat,
             point_start_lon,
-            point_start_name,
             point_end_lat,
             point_end_lon,
-            point_end_name,
-            weigth,
             price,
-            currency_id,
+            currency,
             volume,
+            weigth,
+            finished,
+            description,
             jwtDecoded,
         } = body;
         return await CargosModel.mapper.createCargo(
-            type_id,
             jwtDecoded.id,
             point_start_lat,
             point_start_lon,
-            point_start_name,
             point_end_lat,
             point_end_lon,
-            point_end_name,
-            weigth,
             price,
-            currency_id,
-            volume
+            currency,
+            volume,
+            weigth,
+            finished,
+            description
         );
     }
 

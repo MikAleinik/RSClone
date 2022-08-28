@@ -23,7 +23,39 @@ export class CargoController {
         return async (req, res) => {
             const { userId } = req.query;
             try {
-                const cargos = await CargosModel.getInstance().getAllCargosByUser(userId);
+                let cargos: (Cargo | null)[] | null;
+                if (!userId) {
+                    cargos = await CargosModel.getInstance().getAllCargos();
+                } else {
+                    cargos = await CargosModel.getInstance().getAllCargosByUser(userId);
+                }
+                res.code(OkCodes.OK);
+                let items: Array<CargoSchemaType>;
+                if (!cargos) {
+                    items = new Array<CargoSchemaType>();
+                } else {
+                    items = cargos
+                        .filter((item1) => item1 != undefined)
+                        .filter((item2) => item2 !== null)
+                        .map((item3) => (item3 as Cargo).toJsonResponse());
+                }
+                const rp = {
+                    items: items,
+                };
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send(rp);
+            } catch (err) {
+                res.code(ErrorCodes.BAD_REQUEST);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send();
+            }
+        };
+    }
+
+    getAllCargosFunc(): RouteHandler<{ Reply: ReplyAllCargosType }> {
+        return async (req, res) => {
+            try {
+                const cargos = await CargosModel.getInstance().getAllCargos();
                 res.code(OkCodes.OK);
                 let items: Array<CargoSchemaType>;
                 if (!cargos) {

@@ -25,28 +25,19 @@ export interface IQueryCargoByUser {
 export const CreateCargoSchema = {
     type: 'object',
     properties: {
-        type_id: { type: 'number' },
+        user_id: { type: 'number' },
         point_start_lat: { type: 'number' },
         point_start_lon: { type: 'number' },
-        point_start_name: { type: 'string' },
         point_end_lat: { type: 'number' },
         point_end_lon: { type: 'number' },
-        point_end_name: { type: 'string' },
-        weigth: { type: 'number' },
         price: { type: 'number' },
-        currency_id: { type: 'number' },
+        currency: { type: 'string' },
         volume: { type: 'number' },
+        weigth: { type: 'number' },
+        finished: { type: 'string' },
+        description: { type: 'string' },
     },
-    required: [
-        'type_id',
-        'point_start_lat',
-        'point_start_lon',
-        'point_start_name',
-        'point_end_lat',
-        'point_end_lon',
-        'point_end_name',
-        'weigth',
-    ],
+    required: ['point_start_lat', 'point_start_lon', 'point_end_lat', 'point_end_lon', 'volume', 'weigth'],
     additionalProperties: false,
 } as const;
 
@@ -54,19 +45,17 @@ export const CargoSchema = {
     type: 'object',
     properties: {
         id: { type: 'number' },
-        type_id: { type: 'number' },
         user_id: { type: 'number' },
-        car_id: { type: 'number' },
         point_start_lat: { type: 'number' },
         point_start_lon: { type: 'number' },
-        point_start_name: { type: 'string' },
         point_end_lat: { type: 'number' },
         point_end_lon: { type: 'number' },
-        point_end_name: { type: 'string' },
-        weigth: { type: 'number' },
         price: { type: 'number' },
-        currency_id: { type: 'number' },
+        currency: { type: 'string' },
         volume: { type: 'number' },
+        weigth: { type: 'number' },
+        finished: { type: 'string' },
+        description: { type: 'string' },
     },
 } as const;
 
@@ -87,6 +76,9 @@ const getAllCargosByUserOpts = {
     schema: {
         tags: ['Cargo'],
         description: 'Get all user`s cargos',
+        querystring: {
+            userId: { type: 'number' },
+        },
         response: {
             200: ReplyAllCargos,
             400: ErrorReplySchema,
@@ -96,6 +88,20 @@ const getAllCargosByUserOpts = {
     preHandler: [AuthController.getInstance().verifyJWTFunc()],
     handler: CargoController.getInstance().getAllCargosByUserFunc(),
 };
+
+// const getAllCargosOpts = {
+//     schema: {
+//         tags: ['Cargo'],
+//         description: 'Get all user`s cargos',
+//         response: {
+//             200: ReplyAllCargos,
+//             400: ErrorReplySchema,
+//             401: ErrorReplySchema,
+//         },
+//     },
+//     preHandler: [AuthController.getInstance().verifyJWTFunc()],
+//     handler: CargoController.getInstance().getAllCargosFunc(),
+// };
 
 const getCargoByUUIDOpts = {
     schema: {
@@ -141,7 +147,7 @@ const deleteCargoByUUIDOpts = {
 
 const createCargoOpts = {
     schema: {
-        tags: ['Cargos'],
+        tags: ['Cargo'],
         description: 'Create new cargo to carry/truck',
         body: CreateCargoSchema,
         response: {
@@ -161,6 +167,7 @@ const cargo: FastifyPluginAsync = async (fastify, options): Promise<void> => {
         `/${RouterPath.CARGO}`,
         getAllCargosByUserOpts
     );
+    // fastify.get<{ Reply: ReplyAllCargosType }>(`/${RouterPath.CARGO}`, getAllCargosOpts);
     fastify.post(`/${RouterPath.CARGO_REGISTER}`, createCargoOpts);
     fastify.get(`/${RouterPath.CARGO}/:id`, getCargoByUUIDOpts);
     fastify.put(`/${RouterPath.CARGO}/:id`, changeCargoByUUIDOpts);

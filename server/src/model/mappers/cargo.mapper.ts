@@ -6,27 +6,23 @@ import { Cargo } from '../vo/cargo';
 
 export interface CargoData {
     id: number;
-    type_id: number;
     user_id: number;
-    car_id: number;
     point_start_lat: number;
     point_start_lon: number;
-    point_start_name: string;
     point_end_lat: number;
     point_end_lon: number;
-    point_end_name: string;
-    weigth: number;
-    point_lat: number;
-    point_lon: number;
     price: number;
-    currency_id: number;
+    currency: string;
     volume: number;
+    weigth: number;
+    finished: string;
+    description: string;
 }
 
 export class CargoMapper {
     private TABLE_NAME = 'cargos';
     private ALL_FIELDS_GET =
-        'id, date_change, type_id, user_id, car_id, point_start_lat, point_start_lon, point_start_name, point_end_name, weigth, price, currency_id, volume';
+        'id, date_change, user_id, point_start_lat, point_start_lon, point_end_lat, point_end_lon, weigth, price, currency, volume, finished, description';
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     private _db: pgPromise.IDatabase<{}, pg.IClient>;
@@ -41,78 +37,66 @@ export class CargoMapper {
 
         this._columnSet = createColumnSet(
             this.TABLE_NAME,
-            ['point_start_name', 'point_end_name'],
-            [
-                'type_id',
-                'car_id',
-                'point_start_lat',
-                'point_start_lon',
-                'point_end_lat',
-                'point_end_lon',
-                'weigth',
-                'price',
-                'currency_id',
-                'volume',
-            ]
+            ['currency', 'finished', 'description'],
+            ['point_start_lat', 'point_start_lon', 'point_end_lat', 'point_end_lon', 'volume', 'weigth', 'price']
         );
     }
 
     async createCargo(
-        type_id = 0,
         user_id = 0,
         point_start_lat = 0,
         point_start_lon = 0,
-        point_start_name = '',
         point_end_lat = 0,
         point_end_lon = 0,
-        point_end_name = '',
-        weigth = 0,
         price = 0,
-        currency_id = 0,
-        volume = 0
+        currency = 'USD',
+        volume = 0,
+        weigth = 0,
+        finished = 'false',
+        description = ''
     ) {
         const { id } = await this._db.one(
-            `INSERT INTO ${this.TABLE_NAME} (type_id,
+            `INSERT INTO ${this.TABLE_NAME} (
                 user_id,
                 point_start_lat,
                 point_start_lon,
-                point_start_name,
                 point_end_lat,
                 point_end_lon,
-                point_end_name,
-                weigth,
                 price,
-                volume, date_change) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`,
-            [
-                type_id,
-                user_id,
-                point_start_lat,
-                point_start_lon,
-                point_start_name,
-                point_end_lat,
-                point_end_lon,
-                point_end_name,
-                weigth,
-                price,
+                currency,
                 volume,
+                weigth,
+                finished,
+                description,
+                date_change) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`,
+            [
+                user_id,
+                point_start_lat,
+                point_start_lon,
+                point_end_lat,
+                point_end_lon,
+                price,
+                currency,
+                volume,
+                weigth,
+                finished,
+                description,
                 new Date(),
             ]
         );
         return new Cargo(
             id,
-            type_id,
             user_id,
-            0,
             point_start_lat,
             point_start_lon,
-            point_start_name,
             point_end_lat,
             point_end_lon,
-            point_end_name,
-            weigth,
             price,
-            currency_id,
-            volume
+            currency,
+            volume,
+            weigth,
+            finished,
+            description
         );
     }
 
@@ -151,40 +135,45 @@ export class CargoMapper {
         return items.map((item) => this.dataToVO(item));
     }
 
+    async getAllCargo() {
+        const items = await this._db.manyOrNone(
+            `SELECT ${this.ALL_FIELDS_GET} FROM ${this.TABLE_NAME} WHERE finished = 'false'`
+        );
+        if (!items) {
+            return null;
+        }
+        return items.map((item) => this.dataToVO(item));
+    }
+
     dataToVO(data: CargoData) {
         if (!data) return null;
         const {
             id,
-            type_id,
             user_id,
-            car_id,
             point_start_lat,
             point_start_lon,
-            point_start_name,
             point_end_lat,
             point_end_lon,
-            point_end_name,
-            weigth,
             price,
-            currency_id,
+            currency,
             volume,
+            weigth,
+            finished,
+            description,
         } = data;
-
         return new Cargo(
             id,
-            type_id,
             user_id,
-            car_id,
             point_start_lat,
             point_start_lon,
-            point_start_name,
             point_end_lat,
             point_end_lon,
-            point_end_name,
-            weigth,
             price,
-            currency_id,
-            volume
+            currency,
+            volume,
+            weigth,
+            finished,
+            description
         );
     }
 }
