@@ -1,4 +1,4 @@
-import { ContentTypeJson } from '../types/types';
+import { ContentTypeJson, RecordStringUnknown } from '../types/types';
 import { ErrorCodes, OkCodes } from '../types/enums';
 import { RouteHandler } from 'fastify';
 import { ErrorReplyType } from '../schema/general.schema';
@@ -11,6 +11,7 @@ import {
 import { CargosModel } from '../model/cargo.model';
 import { Cargo } from '../model/vo/cargo';
 import { IBodyWithJWT } from '../types/interfaces';
+import { DBDataVO } from '../model/vo/db.data';
 
 export class CargoController {
     private static instance: CargoController;
@@ -23,7 +24,7 @@ export class CargoController {
         return async (req, res) => {
             const { userId, carId } = req.query;
             try {
-                let cargos: (Cargo | null)[] | null;
+                let cargos: DBDataVO<Cargo, RecordStringUnknown>[] | null;
                 if (!userId) {
                     if (carId) {
                         cargos = await CargosModel.getInstance().getAllCargosByCar(carId);
@@ -39,9 +40,8 @@ export class CargoController {
                     items = new Array<CargoSchemaType>();
                 } else {
                     items = cargos
-                        .filter((item1) => item1 != undefined)
-                        .filter((item2) => item2 !== null)
-                        .map((item3) => (item3 as Cargo).toJsonResponse());
+                        .filter((item1) => item1.getData() != undefined && item1.getData() !== null)
+                        .map((item3) => item3.toJsonResponse());
                 }
                 const rp = {
                     items: items,
@@ -66,9 +66,8 @@ export class CargoController {
                     items = new Array<CargoSchemaType>();
                 } else {
                     items = cargos
-                        .filter((item1) => item1 != undefined)
-                        .filter((item2) => item2 !== null)
-                        .map((item3) => (item3 as Cargo).toJsonResponse());
+                        .filter((item1) => item1.getData() != undefined && item1.getData() !== null)
+                        .map((item3) => item3.toJsonResponse());
                 }
                 const rp = {
                     items: items,

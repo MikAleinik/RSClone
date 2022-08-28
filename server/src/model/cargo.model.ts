@@ -84,7 +84,7 @@ export class CargosModel {
         if (!cargo) {
             throw new Error(`No cargo with id = ${id}`);
         }
-        if (userId !== cargo.user_id) {
+        if (userId !== cargo.getData().user_id) {
             throw new Error(`Cargo ${id} doesn't belong to user ${userId}`);
         }
     }

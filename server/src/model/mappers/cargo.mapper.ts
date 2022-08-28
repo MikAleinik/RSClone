@@ -104,7 +104,7 @@ export class CargoMapper {
             idNum,
         ]);
         if (!item) return null;
-        return this.dataToVO(item);
+        return new DBDataVO(Cargo, item);
     }
 
     async getByPropValue<T>(prop: string, value: T) {
@@ -115,7 +115,7 @@ export class CargoMapper {
         if (!items) {
             return null;
         }
-        return items.map((item) => this.dataToVO(item));
+        return (items as RecordStringUnknown[]).map((item) => new DBDataVO(Cargo, item));
     }
 
     async getByCar(id: number) {
@@ -125,7 +125,7 @@ WHERE id_cars = ${id};`);
         if (!items) {
             return null;
         }
-        return items.map((item) => this.dataToVO(item));
+        return (items as RecordStringUnknown[]).map((item) => new DBDataVO(Cargo, item));
     }
 
     async getAllCargo() {
@@ -135,7 +135,7 @@ WHERE id_cars = ${id};`);
         if (!items) {
             return null;
         }
-        return items.map((item) => this.dataToVO(item));
+        return (items as RecordStringUnknown[]).map((item) => new DBDataVO(Cargo, item));
     }
 
     dataToVO(data: CargoData) {
