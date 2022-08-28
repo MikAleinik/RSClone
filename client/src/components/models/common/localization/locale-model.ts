@@ -116,6 +116,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_COMPANIES, new Array('Companies', 'Компании'));
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_ROUTES, new Array('Routes', 'Маршруты'));
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_CHAT, new Array('Message', 'Сообщения'));
+        this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_NEWS, new Array('News', 'Новости'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING, new Array('Rating', 'Рейтинг'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO, new Array('Your cargoes', 'Ваши грузы'));
@@ -133,7 +134,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_COMPANY, new Array('Car owner', 'Владелец машины'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_NUMBER, new Array('Plate number', 'Номерной знак'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_VOLUME, new Array('Volume capacity', 'Объем кузова'));
-        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_WEIGTH, new Array('Load capacity', 'Грузоподьемность'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_Weight, new Array('Load capacity', 'Грузоподьемность'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_PRICE, new Array('Price', 'Цена'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_CURRENCY, new Array('Currency', 'Валюта'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION, new Array('Description', 'Описание машины'));
@@ -141,11 +142,13 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_STATUS, new Array('Status', 'Состояние'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_STATUS_DRIVED, new Array('On the way', 'В пути'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_STATUS_STOPPED, new Array('Waiting', 'Ожидает загрузки'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_FILLING, new Array('Filling', 'Заполнение'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_NEW, new Array('Add new cargo', 'Добавить груз'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_CHANGE, new Array('Change cargo', 'Изменить груз'));
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_NAME, new Array('Name', 'Название'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_COMPANY, new Array('Cargo owner', 'Владелец груза'));
-        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_WEIGTH, new Array('Weigth', 'Вес'));
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_Weight, new Array('Weight', 'Вес'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_VOLUME, new Array('Volume', 'Объем'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_PRICE, new Array('Price', 'Цена'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_CURRENCY, new Array('Currency', 'Валюта'));
@@ -159,7 +162,8 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_STATUS_DELIVERED, new Array('Delivered', 'Доставлен'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_COMPANY, new Array('Cargo owner', 'Владелец груза'));
-        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_WEIGTH, new Array('Weigth', 'Вес'));
+        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_NAME, new Array('Name', 'Название'));
+        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_Weight, new Array('Weight', 'Вес'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_VOLUME, new Array('Volume', 'Объем'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_PRICE, new Array('Price', 'Цена'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_CURRENCY, new Array('Currency', 'Валюта'));
@@ -169,7 +173,8 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION, new Array('Description', 'Описание груза'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_COMPANY, new Array('Car owner', 'Владелец машины'));
-        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_WEIGTH, new Array('Load capacity', 'Грузоподьемность'));
+        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_NUMBER, new Array('Plate number', 'Номерной знак'));
+        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_Weight, new Array('Load capacity', 'Грузоподьемность'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_VOLUME, new Array('Volume capacity', 'Объем кузова'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_PRICE, new Array('Price', 'Цена'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_CURRENCY, new Array('Currency', 'Валюта'));

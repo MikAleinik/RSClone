@@ -1,5 +1,7 @@
+import './content.scss'
 import View from "../view";
 import Observer from "../../../controller/observer";
+import INotify from "../../../interfaces/i-notify";
 import { loadCargo } from "./cargo/cargo-view";
 import { loadCompany } from "./company/company-view";
 import { loadMap, applyCurrentPosition, getPointCoordinates } from "./map/map-view";
@@ -8,8 +10,12 @@ import { loadNews } from "./news/news-view";
 import { loadTruck } from "./truck/truck-view";
 import { loadOverview } from "./overview/overview-view";
 import { userRoleActions } from "../user-adapter";
+import ILocale from "../../../interfaces/i-locale";
+import { AppEvents } from "../../../controller/app-events";
+import LocaleModel from "../../../models/common/localization/locale-model";
+import { LocaleKeys } from "../../../models/common/localization/locale-keys";
 
-export default class ContentView extends View {
+export default class ContentView extends View implements INotify, ILocale {
     private _rootContainer = document.body;
 
     private readonly ASIDE_CONTAINER = 'aside';
@@ -22,13 +28,23 @@ export default class ContentView extends View {
 
     constructor(observer: Observer) {
         super(observer);
-        this.createAboutContent();
+        this.createMainContent();
+        this._observer.addSender(AppEvents.LOCALE_SET, this);
+        this._observer.notify(AppEvents.LOCALE_GET, this);
     }
     
     getCurrentElement(): HTMLElement {
         return this._rootContainer;
     }
-    private createAboutContent(): void {
+    notify(nameEvent: AppEvents): AppEvents | void {
+        switch (nameEvent) {
+            case AppEvents.LOCALE_SET: {
+                this._observer.notify(AppEvents.LOCALE_GET, this);
+                break;
+            }
+        }
+    }
+    private createMainContent(): void {
         this._rootContainer.appendChild(this._asideElement);
         this._rootContainer.appendChild(this._contentElement);
         const asideList = document.createElement(this.ASIDE_LIST);
@@ -60,36 +76,48 @@ export default class ContentView extends View {
             
             if (li !== null) {
                 switch (li.dataset.link) {
-                    case 'cargo':
+                    case 'mainAsideCargo':
                         switchActive(li);
                         loadCargo(this._contentElement);
                         break;
-                    case 'company':
+                    case 'mainAsideCompanies':
                         switchActive(li)
                         li.classList.add('active')
                         loadCompany(this._contentElement);
                         break;
-                    case 'map':
+                    case 'mainAsideRoutes':
                         switchActive(li)
                         loadMap('auto', 'auto', this.MAIN_CONTAINER, 'replace')
                         applyCurrentPosition();
                         getPointCoordinates();
                         routeStart();
                         break;
-                    case 'news':
+                    case 'mainAsideNews':
                         switchActive(li)
                         loadNews();
                         break;
-                    case 'overview':
+                    case 'mainAsideOverview':
                         switchActive(li)
                         loadOverview(this._contentElement)
                         break;
-                    case 'truck':
+                    case 'mainAsideTransport':
                         switchActive(li)
                         loadTruck(this._contentElement);
+                        // const trucks = new TruckContentView(this._observer)
                         break;
                 }
             }
         })
+    }
+    setLocale(locale: LocaleModel): void {
+        const asideList = this._asideElement.querySelectorAll('li') as NodeListOf<HTMLElement>;
+        for (const i of asideList){
+            i.textContent = locale.getPhrase(i.dataset.link as LocaleKeys)
+        }
+        
+        const mainList = this._contentElement.querySelectorAll('[data-ln]') as NodeListOf<HTMLElement>;
+        for (const ln of mainList){
+            ln.textContent = locale.getPhrase(ln.dataset.ln as LocaleKeys);
+        }
     }
 }
