@@ -7,13 +7,28 @@ function loadCompany(place: HTMLElement){
   place.appendChild(createTable());
 }
 
+const table_headers: {[index: string]: string} = {
+  mainExchangeCargoName:'Name',
+  mainExchangeCargoWeight: 'Weight',
+  mainExchangeCargoLocationFrom: 'From',
+  mainExchangeCargoLocationTo: 'To',
+  mainExchangeCargoDate: 'Date',
+  mainExchangeTransportNumber: 'Plate number',
+  null: ''
+};
+
 function createTable() {
   const table_wrapper = document.createElement('table');
   table_wrapper.className = 'table_wrapper';
 
   const table_header = document.createElement('tr');
-  table_header.innerHTML = '<th>Name</th><th>Size</th><th>From</th><th>To</th><th>Date</th><th>Career</th><th></th>'
-  table_wrapper.appendChild(table_header);
+  for (const h in table_headers){
+    const th = document.createElement('th');
+    th.dataset.ln = h;
+    th.textContent = table_headers[h];
+    table_header.appendChild(th)
+  }
+  table_wrapper.appendChild(table_header)
 
   for (const el of userCargo){
     if (el.status === 'pending'){
