@@ -9,7 +9,16 @@ nav {
 
     li {
         display: inline-block;
-        padding: 0px 10px;
-        font-size: 16px;
+        padding: 0px 5px;
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 640px){
+    nav {
+        li {
+            display: inline-block;
+            padding: 0px 3px;
+            font-size: 12px;
+        }
     }
 }

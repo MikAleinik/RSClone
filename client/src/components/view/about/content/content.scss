@@ -8,6 +8,8 @@
 
 .team__image {
     height: 150px;
+    margin: 5px;
+    border-radius: 10px;
 }
 
 .team__info {
@@ -20,4 +22,20 @@
 
     box-sizing: border-box;
     padding: 0% 5%;
+}
+@media screen and (max-width: 640px){
+    body {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            'header auth'
+            'nav nav'
+            'main main'
+            'footer footer';
+      }
+    .team__image {
+        height: 100px;
+    }
+    aside {
+        display: none;
+    }
 }

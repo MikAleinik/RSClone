@@ -3,8 +3,6 @@
     background: $background-color-dark;
     position: sticky;
     top: 0;
-    padding: 20px;
-    font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -75,9 +73,14 @@ form[name=login] {
     left: 25%;
 }
 
-.auth__button_locale {
-    // position: absolute;
-    // top: 0%;
-    // left: 50%;
+@media screen and (max-width: 640px){
+    .auth__login {
+        background: #9cb9bd;
+        width: 100px;
+    }
     
+    .auth__registration {
+        background: #85685f;
+        width: 100px;
+    }
 }
