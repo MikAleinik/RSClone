@@ -95,7 +95,7 @@ aside {
     grid-template-columns: 40px 1fr 1fr;
     grid-template-rows: 30px 30px auto 30px;
     grid-template-areas:
-        'header auth auth'
+        'header header auth'
         'nav nav nav'
         'aside main main'
         'footer footer footer';
