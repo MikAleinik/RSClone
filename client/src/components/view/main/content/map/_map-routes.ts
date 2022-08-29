@@ -2,8 +2,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css'
-import { map } from './map-view';
-import { Truck, userTruck } from '../../user-adapter';
+import { map } from './_map-view';
+import { Truck, userTruck } from '../../_user-adapter';
 
 const mapboxKey = 'pk.eyJ1IjoiaXZhbmZlZG9yb3YiLCJhIjoiY2w2bWV0d2gyMGZpNTNlbXJvdjQ2c2pvNyJ9.JsbGZNi2e7pBwvSQze-cYQ'
 

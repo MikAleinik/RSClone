@@ -9,6 +9,7 @@ import DeleteCarHandler from "./handler/delete/delete-car";
 import DeleteCargoHandler from "./handler/delete/delete-cargo";
 import GetAllCarHandler from "./handler/read/get-all-car";
 import GetAllCargoHandler from "./handler/read/get-all-cargo";
+import GetAllUserHandler from "./handler/read/get-all-user";
 import GetCarHandler from "./handler/read/get-car";
 import GetCargoHandler from "./handler/read/get-cargo";
 import GetCargoByUserCarHandler from "./handler/read/get-cargo-by-user-car";
@@ -114,6 +115,68 @@ export default class DataMapper {
     read<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
+                case AppEvents.USER_GET_ALL: {
+                    const handler = new GetAllUserHandler();
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    // delete ((data as unknown) as answer<T>).statusCode;
+                                    // const result = new Map<string, string>();
+                                    // for (const [key, value] of Object.entries(((data as unknown) as user))) {
+                                    //     result.set(key, value.toString());
+                                    // }
+                                    // resolve(result);
+                                    resolve(((data as unknown) as answer<T>).users!);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_UNAUTHORIZED: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка получения всех пользователей');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            const result = new Map<string, string>();
+                            result.set('message', data.message);
+                            reject(result);
+                        });
+                    break;
+                }
+                case AppEvents.USER_GET_BY_ID: {
+                    const handler = new GetUserHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    delete ((data as unknown) as answer<T>).statusCode;
+                                    const result = new Map<string, string>();
+                                    for (const [key, value] of Object.entries(((data as unknown) as user))) {
+                                        result.set(key, value.toString());
+                                    }
+                                    resolve(result);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_UNAUTHORIZED:
+                                case HttpCodes.CODE_FORBIDDEN: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка получения пользователя по id');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            const result = new Map<string, string>();
+                            result.set('message', data.message);
+                            reject(result);
+                        });
+                    break;
+                }
                 case AppEvents.MAIN_CAR_GET_ALL: {
                     const handler = new GetAllCarHandler(params);
                     handler.send()

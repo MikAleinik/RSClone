@@ -3,6 +3,7 @@ import INotify from "../../interfaces/i-notify";
 import UserModel from "../../models/index/data-model/user-model";
 import CarModel from "../../models/main/car-model";
 import View from "../../view/index/view";
+import ExchangeTruckView from "../../view/main/content/exchange-truck/exchange-truck-view";
 import { AppEvents } from "../app-events";
 
 export default class CarController implements INotify {
@@ -79,24 +80,23 @@ export default class CarController implements INotify {
     private getAllCarHandler(nameEvent: AppEvents, sender: View): void {
         this._carModel.getAllCar(nameEvent)
             .then((result) => {
+                let verifySender = sender as ExchangeTruckView;
+                verifySender.setAllCar(result);
+            })
+            .catch((result) => {
+                let verifySender = sender as ExchangeTruckView;
+                verifySender.showErrorMessage(result);
+            });
+    }
+    private getByIdCarHandler(nameEvent: AppEvents, sender: View, car: Car): void {
+        this._carModel.getCarById(nameEvent, car)
+            .then((result) => {
                 console.log(result);
             })
             .catch((result) => {
                 //TODO окно сообщения (?)
                 console.log(result);
             });
-        // let verifySender = sender as AuthView;
-        // verifySender.setRegisterButtonState(result);
-    }
-    private getByIdCarHandler(nameEvent: AppEvents, sender: View, car: Car): void {
-        this._carModel.getCarById(nameEvent, car)
-        .then((result) => {
-            console.log(result);
-        })
-        .catch((result) => {
-            //TODO окно сообщения (?)
-            console.log(result);
-        });
         // let result = this._registerModel.isChangeStateButton();
         // let verifySender = sender as AuthView;
         // verifySender.setRegisterButtonState(result);

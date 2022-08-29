@@ -1,8 +1,10 @@
 import Cargo from "../../../types/cargo";
+import User from "../../../types/user";
 import INotify from "../../interfaces/i-notify";
 import UserModel from "../../models/index/data-model/user-model";
 import CargoModel from "../../models/main/cargo-model";
 import View from "../../view/index/view";
+import ExchangeCargoView from "../../view/main/content/exchange-cargo/exchange-cargo-view";
 import { AppEvents } from "../app-events";
 
 export default class CargoController implements INotify {
@@ -87,11 +89,27 @@ export default class CargoController implements INotify {
     private getAllCargoHandler(nameEvent: AppEvents, sender: View): void {
         this._cargoModel.getAllCargo(nameEvent)
             .then((result) => {
-                console.log(result);
+                // const promisesUser = new Array<Promise<User>>();
+                // result.forEach((cargo) => {
+                //     const param = new Map();
+                //     param.set('id', cargo.user_id);
+                //     promisesUser.push(this._userModel.getUserById(AppEvents.USER_GET_BY_ID, param));
+                // });
+                // Promise.allSettled(promisesUser)
+                //     .then((resultPromise) => {
+                //         resultPromise.forEach((promise) => {
+
+                //         })
+                //         console.log(result);
+                //         console.log(resultPromise);
+                //     });
+
+                let verifySender = sender as ExchangeCargoView;
+                verifySender.setAllCargo(result);
             })
             .catch((result) => {
-                //TODO окно сообщения (?)
-                console.log(result);
+                let verifySender = sender as ExchangeCargoView;
+                verifySender.showErrorMessage(result);
             });
         // let verifySender = sender as AuthView;
         // verifySender.setRegisterButtonState(result);

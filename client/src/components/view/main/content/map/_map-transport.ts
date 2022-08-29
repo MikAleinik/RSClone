@@ -1,4 +1,4 @@
-import { Truck, userTruck } from "../../user-adapter";
+import { Truck, userTruck } from "../../_user-adapter";
 
 function getTrack(truck: Truck){
   return new Promise((resolve, reject) => {

@@ -1,4 +1,4 @@
-import user from "../../../../types/user";
+import User from "../../../../types/user";
 import { AppEvents } from "../../../controller/app-events";
 import DataMapper from "../../common/sender/data-mapper";
 
@@ -9,7 +9,7 @@ export default class UserModel {
     private NAME_ROLE_CUSTOMER_RU = 'Заказчик';
 
     private _dataMapper = new DataMapper();
-    private _currentUser: user = {
+    private _currentUser: User = {
         id: 0,
         login: '',
         email: '',
@@ -25,8 +25,33 @@ export default class UserModel {
         point_lat: 0,
         point_lon: 0,
     };
-    constructor() {
+    private _users = new Array<User>();
 
+    constructor() {
+        this.getUserAll(AppEvents.USER_GET_ALL);
+    }
+    getUserAll(nameEvents: AppEvents): Promise<Array<User>> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.read(nameEvents)
+                .then((result) => {
+                    this._users = result as Array<User>;
+                    resolve(this._users);
+                })
+                .catch((result) => {
+                    reject(result);
+                });
+        });
+    }
+    getUserById(nameEvents: AppEvents, param: Map<string, string>): Promise<User> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.read(nameEvents, param)
+                .then((result) => {
+                    resolve(this.setMapToUser(result as Map<string, string>));
+                })
+                .catch((result) => {
+                    reject(result);
+                });
+        });
     }
     registerUser(nameEvents: AppEvents, param: Map<string, string>): Promise<Map<string, string>> {
         return new Promise((resolve, reject) => {
@@ -71,31 +96,30 @@ export default class UserModel {
                 });
         });
     }
-    getAuthUser(): Promise<user> {
+    getAuthUser(): Promise<User> {
         return new Promise((resolve, reject) => {
             if (this._currentUser.login !== '') {
                 resolve(this._currentUser);
             } else {
                 this._dataMapper.read(AppEvents.AUTH_GET_AUTH_USER)
-                .then((result) => {
-                    this.clearUser();
-                    result = (result as unknown) as Map<string, string>;
-                    this.setUser(result);
-                    resolve(this._currentUser);
-                })
-                .catch((result) => {
-                    reject(result);
-                });
+                    .then((result) => {
+                        this.clearUser();
+                        result = (result as unknown) as Map<string, string>;
+                        this.setUser(result);
+                        resolve(this._currentUser);
+                    })
+                    .catch((result) => {
+                        reject(result);
+                    });
             }
         });
-
     }
-    private setUser (result: Map<string, string>): void {
+    private setUser(result: Map<string, string>): void {
         this._currentUser.id = Number(result.get('id')!);
         this._currentUser.login = result.get('login')!;
         this._currentUser.email = result.get('email')!;
         this._currentUser.password = '',
-        this._currentUser.first_name = result.get('first_name')!;
+            this._currentUser.first_name = result.get('first_name')!;
         this._currentUser.last_name = result.get('last_name')!;
         this._currentUser.phone = result.get('phone')!;
         this._currentUser.company = result.get('company')!;
@@ -110,12 +134,30 @@ export default class UserModel {
             this._currentUser.role_id = this.ID_ROLE_CARRIER;
         }
     }
-    private clearUser (): void {
+    private setMapToUser(result: Map<string, string>): User {
+        return {
+            id: Number(result.get('id')!),
+            login: result.get('login')!,
+            email: result.get('email')!,
+            password: result.get('password')!,
+            first_name: result.get('first_name')!,
+            last_name: result.get('last_name')!,
+            phone: result.get('phone')!,
+            company: result.get('company')!,
+            address: result.get('address')!,
+            rating: Number(result.get('rating')!),
+            rating_count: Number(result.get('rating_count')!),
+            point_lat: Number(result.get('point_lat')!),
+            point_lon: Number(result.get('point_lon')!),
+            role_id: result.get('role_id')!,
+        }
+    }
+    private clearUser(): void {
         this._currentUser.id = 0;
         this._currentUser.login = '';
         this._currentUser.email = '';
         this._currentUser.password = '',
-        this._currentUser.first_name = '';
+            this._currentUser.first_name = '';
         this._currentUser.last_name = '';
         this._currentUser.phone = '';
         this._currentUser.company = '';

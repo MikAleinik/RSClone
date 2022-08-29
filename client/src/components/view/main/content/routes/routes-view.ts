@@ -6,17 +6,7 @@ import view from "../../view";
 import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 
-export default class CargoView extends AsideItemView {
-    private readonly TAG_FIELDSET = 'legend';
-    private readonly TAG_FIELDSET_INPUT = 'input';
-    private readonly TAG_FIELDSET_LABEL = 'label';
-
-    private _formItemModel = document.createElement(this.TAG_FIELDSET_INPUT);
-    private _formItemPrice = document.createElement(this.TAG_FIELDSET_INPUT);
-    private _formItemCurrency = document.createElement(this.TAG_FIELDSET_INPUT);
-    private _formItemWeight = document.createElement(this.TAG_FIELDSET_INPUT);
-    private _formItemVolume = document.createElement(this.TAG_FIELDSET_INPUT);
-    private _formItemDescription = document.createElement(this.TAG_FIELDSET_INPUT);
+export default class RoutesView extends AsideItemView {
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
@@ -34,9 +24,9 @@ export default class CargoView extends AsideItemView {
         }
     }
     setLocale(localeModel: localeModel): void {
-        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_CARGO);
+        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_ROUTES);;        
     }
     protected createMainElement(): void {
-        this._mainElement.textContent = 'CargoView';
+        this._mainElement.textContent = 'RoutesView';
     }
 }

@@ -11,6 +11,8 @@ export const enum AppEvents {
     LOCALE_SET = 'localeSet',//установлен язык локализации
     LOCALE_GET = 'localeGet',//получить язык локализации
     LOCALE_GET_NAME = 'localeGetName',//получить название языка локализации
+    USER_GET_ALL = 'userGetAll',//получить всех пользователей
+    USER_GET_BY_ID = 'userGetById',//получить пользователя по id
     //Index page events
     AUTH_CLICK_BUTTON = 'clickAuthButton',//клик кнопки LogIn
     AUTH_CLICK_LOGOUT_BUTTON = 'clickLogOutButton',//клик кнопки LogOut

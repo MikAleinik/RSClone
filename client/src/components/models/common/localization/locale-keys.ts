@@ -70,6 +70,8 @@ export const enum LocaleKeys {
     MAIN_ASIDE_CHAT = 'mainAsideChat',
     MAIN_ASIDE_NEWS = 'mainAsideNews',
 
+    MAIN_FILTER_PANEL_HEADER = 'mainFilterPanelHeader',
+
     MAIN_OVERVIEW_HEADER_RATING = 'mainOverviewRating',
     MAIN_OVERVIEW_HEADER_TRANSPORT = 'mainOverviewTransport',
     MAIN_OVERVIEW_HEADER_CARGO = 'mainOverviewCargo',
@@ -123,6 +125,7 @@ export const enum LocaleKeys {
     MAIN_EXCHANGE_TRANSPORT_LOCATION = 'mainExchangeTransportLocation',
 
     MAIN_EXCHANGE_CARGO_COMPANY = 'mainExchangeCargoCompany',
+    MAIN_EXCHANGE_CARGO_USER = 'mainExchangeCargoUser',
     MAIN_EXCHANGE_CARGO_NAME = 'mainExchangeCargoName',
     MAIN_EXCHANGE_CARGO_Weight = 'mainExchangeCargoWeight',
     MAIN_EXCHANGE_CARGO_VOLUME = 'mainExchangeCargoVolume',

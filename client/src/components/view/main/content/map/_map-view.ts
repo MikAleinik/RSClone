@@ -2,9 +2,9 @@ import L, { LatLng, LatLngTuple, Marker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
-import { getTransportLocation } from './map-transport';
-import { getLogisticsLocation } from './map-logistics';
-import { userCargo, userTruck } from '../../user-adapter';
+import { getTransportLocation } from './_map-transport';
+import { getLogisticsLocation } from './_map-logistics';
+import { userCargo, userTruck } from '../../_user-adapter';
 
 function getCurrentPosition(): Promise<L.LatLngExpression>{
   return new Promise ((resolve, reject) => {
