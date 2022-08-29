@@ -53,6 +53,7 @@ export default class ContentView extends View implements INotify, ILocale {
             const asideItemImg = document.createElement('img');
             asideItemImg.src = `./assets/icons/${el}.png`
             const asideItemSpan = document.createElement('span');
+            asideItemSpan.dataset.ln = el;
             asideItemSpan.textContent = userRoleActions[el];
             asideItem.dataset.link = el;
             asideItem.appendChild(asideItemImg);
@@ -103,16 +104,15 @@ export default class ContentView extends View implements INotify, ILocale {
                     case 'mainAsideTransport':
                         switchActive(li)
                         loadTruck(this._contentElement);
-                        // const trucks = new TruckContentView(this._observer)
                         break;
                 }
             }
         })
     }
     setLocale(locale: LocaleModel): void {
-        const asideList = this._asideElement.querySelectorAll('li') as NodeListOf<HTMLElement>;
+        const asideList = this._asideElement.querySelectorAll('[data-ln]') as NodeListOf<HTMLElement>;
         for (const i of asideList){
-            i.textContent = locale.getPhrase(i.dataset.link as LocaleKeys)
+            i.textContent = locale.getPhrase(i.dataset.ln as LocaleKeys)
         }
         
         const mainList = this._contentElement.querySelectorAll('[data-ln]') as NodeListOf<HTMLElement>;
