@@ -1,6 +1,6 @@
 main {
     grid-area: main;
-    padding: 20px 30px;
+    padding: 20px 10px;
     display: flex;
     flex-direction: column;
 }
@@ -11,18 +11,29 @@ h2 {
 }
 
 .promo {
-    width: 70%;
-    height: 80vh;
-    margin: 40px 20px;
+    background-image: url('../../../../assets/images/backgroung-trucks.webp');
+    background-clip: border-box;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    
+    width: auto;
     color: $font-color-light;
-    background: $background-color-ultra-light;
-    box-sizing: border-box;
-    padding: 0% 5%;
-    font-size: 25px;
-
+    font-size: 22px;
+    padding: 40px;
+    
+    h3 {
+        text-align: center;
+    }
     ul {
+        margin: 0 auto;
+        width: 70%;
+        min-height: 550px;
+        background: $background-color-ultra-light;
+        padding: 30px 40px;
         color: $font-color-dark;
-        font-size: 24px;
+        border-radius: 10px;
+        font-size: 20px;
 
         li {
             margin: 15px 5px;
@@ -42,4 +53,26 @@ h2 {
 
 .user__map {
     width: 70%;
+}
+
+@media screen and (max-width: 640px){
+    main {
+        padding: 10px 15px;
+    }
+    
+    h2 {
+        font-size: 16px;
+    }
+
+    .promo {
+        font-size: 16px;
+    
+        ul {
+            font-size: 14px;
+            min-height: 300px;
+            li {
+                margin: 10px 5px;
+            }
+        }
+    }
 }

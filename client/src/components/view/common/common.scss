@@ -28,11 +28,15 @@ a:visited {
 }
 
 .index {
-    background-image: url('../../../assets/images/backgroung-trucks.webp');
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    background-size: 100% auto;
+    grid-template-areas:
+        'header nav auth'
+        'main main main'
+        'footer footer footer';
 
+    main {
+      height: 100%;
+      padding: 20px 0px;
+    }
     header,
     nav,
     .auth {
@@ -45,13 +49,11 @@ a:visited {
 
     main {
         display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
         gap: 10px;
     }
 
     aside {
-        background: transparent;
+        display: none;
     }
 }
 aside {
@@ -88,3 +90,32 @@ aside {
       text-shadow: .5px .5px $background-color-middle;
     }
   }
+@media screen and (max-width: 640px){
+  body {
+    grid-template-columns: 40px 1fr 1fr;
+    grid-template-rows: 30px 30px auto 30px;
+    grid-template-areas:
+        'header header auth'
+        'nav nav nav'
+        'aside main main'
+        'footer footer footer';
+    color: $font-color-dark;
+    font-size: 12px;
+  }
+  aside {
+    li {
+      padding: 20px 10px;
+      span {
+        display: none;
+      }
+    }
+  }
+  .index {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        'header auth'
+        'nav nav'
+        'main main'
+        'footer footer';
+  }
+}
