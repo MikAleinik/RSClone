@@ -6,7 +6,7 @@
     user_id: number;
     user_company?: string;
     user_phone?: string;
-    user_name?: string;
+    user_firstname?: string;
     user_lastname?: string;
     point_start_lat: number;
     point_start_lon: number;

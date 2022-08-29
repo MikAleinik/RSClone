@@ -4,6 +4,10 @@
  type Car = {
     id: number;
     user_id: number;
+    user_company?: string;
+    user_phone?: string;
+    user_firstname?: string;
+    user_lastname?: string;
     model: string;
     point_current_lat: number;
     point_current_lon: number;

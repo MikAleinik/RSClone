@@ -25,17 +25,22 @@ export default class UserModel {
         point_lat: 0,
         point_lon: 0,
     };
-    private _users = new Array<User>();
+    private _users: Array<User>;
 
     constructor() {
-        this.getUserAll(AppEvents.USER_GET_ALL);
+        this._users = new Array<User>();
+        this.getUserAll(AppEvents.USER_GET_ALL)
+            .then((result) => {
+                if (typeof result !== 'undefined') {
+                    this._users = result;
+                }
+            });
     }
     getUserAll(nameEvents: AppEvents): Promise<Array<User>> {
         return new Promise((resolve, reject) => {
             this._dataMapper.read(nameEvents)
                 .then((result) => {
-                    this._users = result as Array<User>;
-                    resolve(this._users);
+                    resolve(result as Array<User>);
                 })
                 .catch((result) => {
                     reject(result);
@@ -44,13 +49,25 @@ export default class UserModel {
     }
     getUserById(nameEvents: AppEvents, param: Map<string, string>): Promise<User> {
         return new Promise((resolve, reject) => {
-            this._dataMapper.read(nameEvents, param)
-                .then((result) => {
-                    resolve(this.setMapToUser(result as Map<string, string>));
-                })
-                .catch((result) => {
-                    reject(result);
-                });
+            let findResult = false;
+            for (let i = 0; i < this._users.length; i += 1) {
+                if (this._users[i].id === Number(param.get('id'))) {
+                    findResult = true;
+                    resolve(this._users[i]);
+                    break;
+                }
+            }
+            if (!findResult) {
+                this._dataMapper.read(nameEvents, param)
+                    .then((result) => {
+                        const user = this.setMapToUser(result as Map<string, string>);
+                        this._users.push(user);
+                        resolve(user);
+                    })
+                    .catch((result) => {
+                        reject(result);
+                    });
+            }
         });
     }
     registerUser(nameEvents: AppEvents, param: Map<string, string>): Promise<Map<string, string>> {

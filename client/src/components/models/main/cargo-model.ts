@@ -21,7 +21,7 @@ export default class CargoModel {
                 });
         });
     }
-    deleteCargo(nameEvent: AppEvents, cargo: Cargo): Promise<boolean> {
+    deleteCargo(nameEvent: AppEvents, cargo: Cargo): Promise<Cargo> {
         return new Promise((resolve, reject) => {
             this._dataMapper.delete(nameEvent, this.setCargoToMap(cargo))
                 .then(() => {
@@ -31,11 +31,10 @@ export default class CargoModel {
                             break;
                         }
                     }
-                    console.log(true);
-                    resolve(true);
+                    resolve(cargo);
                 })
                 .catch((result) => {
-                    reject(false);
+                    reject(cargo);
                 });
         });
     }

@@ -32,9 +32,10 @@ export default class ExchangeTruckView extends AsideItemView {
     private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderVolume = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableHeaderStatus = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
+    // private _tableHeaderStatus = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderDescription = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderCompany = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
+    private _tableHeaderUser = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderPoint = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableBody = document.createElement(this.TAG_TABLE_BODY);
 
@@ -59,18 +60,18 @@ export default class ExchangeTruckView extends AsideItemView {
     setLocale(localeModel: localeModel): void {
         this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_TRANSPORT);
         this._formFilterLegend.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_HEADER);
-        this._tableHeaderModel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_NUMBER);
-        this._tableHeaderPoint.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_LOCATION);
-        this._tableHeaderCompany.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_COMPANY);
-        this._tableHeaderPrice.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_PRICE);
-        this._tableHeaderCurrency.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_CURRENCY);
-        this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_VOLUME);
-        this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_Weight);
-        this._tableHeaderStatus.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_STATUS);
+        this._tableHeaderModel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_NUMBER);
+        this._tableHeaderPoint.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_LOCATION);
+        this._tableHeaderCompany.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_COMPANY);
+        this._tableHeaderUser.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_USER);
+        this._tableHeaderPrice.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_PRICE);
+        this._tableHeaderCurrency.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_CURRENCY);
+        this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_VOLUME);
+        this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_Weight);
+        // this._tableHeaderStatus.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_STATUS);
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION);
     }
     setAllCar(cars: Array<Car>): void {
-        console.log(cars);
         this._cars = cars;
         this.clearTable();
         for (let i = 0; i < this._cars.length; i += 1) {
@@ -95,11 +96,36 @@ export default class ExchangeTruckView extends AsideItemView {
     }
     private createRow(car: Car): HTMLElement {
         const rowElement = document.createElement(this.TAG_TABLE_ROW);
-        // for (let i = 0; i < 5; i += 1) {
-        //     const rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
-        //     rowItem.textContent = '1212';
-        //     rowElement.appendChild(rowItem);
-        // }
+        let rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = car.model;
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = car.point_current_lat + ' ' + car.point_current_lon;
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (car.user_company !== undefined ? car.user_company : '');
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        const firstname = (car.user_firstname !== undefined ? car.user_firstname : '');
+        const lasttname = (car.user_lastname !== undefined ? car.user_lastname : '');
+        const phone = (car.user_phone !== undefined ? car.user_phone : '');
+        rowItem.textContent = firstname + ' ' + lasttname + ' ' + phone;
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = car.price.toString();
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = car.currency;
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = car.volume_max.toString();
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (car.weigth_max !== undefined ? car.weigth_max.toString() : '');
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = car.description;
+        rowElement.appendChild(rowItem);
 
         return rowElement;
     }
@@ -113,11 +139,12 @@ export default class ExchangeTruckView extends AsideItemView {
         tableHeaderRow.appendChild(this._tableHeaderModel);
         tableHeaderRow.appendChild(this._tableHeaderPoint);
         tableHeaderRow.appendChild(this._tableHeaderCompany);
+        tableHeaderRow.appendChild(this._tableHeaderUser);
         tableHeaderRow.appendChild(this._tableHeaderPrice);
         tableHeaderRow.appendChild(this._tableHeaderCurrency);
         tableHeaderRow.appendChild(this._tableHeaderVolume);
         tableHeaderRow.appendChild(this._tableHeaderWeight);
-        tableHeaderRow.appendChild(this._tableHeaderStatus);
+        // tableHeaderRow.appendChild(this._tableHeaderStatus);
         tableHeaderRow.appendChild(this._tableHeaderDescription);
         tableHeader.appendChild(tableHeaderRow);
         tableHeaderContainer.appendChild(tableHeader);

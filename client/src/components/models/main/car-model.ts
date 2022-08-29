@@ -106,6 +106,7 @@ export default class CarModel {
     }
     private setCarToMap(car: Car): Map<string, string> {
         const result = new Map();
+        console.log(car);
         result.set('id', car.id);
         result.set('user_id', car.user_id);
         result.set('model', car.model);

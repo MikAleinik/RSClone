@@ -52,7 +52,7 @@ export const enum AppEvents {
     MAIN_CAR_DELETE = 'mainCarDelete',//удалить машину
     MAIN_CAR_CHANGE = 'mainCarChange',//редактировать машину
     MAIN_CAR_GET_ALL = 'mainCarGetAll',//получить все доступные машину
-    // MAIN_CAR_GET_ALL_USER = 'mainCarGetAllUser',//получить все доступные машину пользователя
+    MAIN_CAR_GET_BY_USER = 'mainCarGetByUser',//получить все доступные машины пользователя
     MAIN_CAR_GET_BY_ID = 'mainCarGetById',//получить машину по ID машины
     // MAIN_CAR_UPDATE = 'mainCarUpdate',//обновить список машин
 

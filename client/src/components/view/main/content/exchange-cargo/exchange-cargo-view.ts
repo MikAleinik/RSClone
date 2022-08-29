@@ -35,7 +35,6 @@ export default class ExchangeCargoView extends AsideItemView {
     private _tableHeaderContact = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderPointStart = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderPointEnd = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    // private _tableHeaderDate = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableBody = document.createElement(this.TAG_TABLE_BODY);
 
     private _cargoes = new Array<Cargo>();
@@ -69,8 +68,6 @@ export default class ExchangeCargoView extends AsideItemView {
         this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_VOLUME);
         this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_Weight);
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION);
-        // this._tableHeaderDate.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_DATE);
-
     }
     setAllCargo(cargoes: Array<Cargo>): void {
         this._cargoes = cargoes;
@@ -103,14 +100,14 @@ export default class ExchangeCargoView extends AsideItemView {
         rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
         rowItem.textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
         rowElement.appendChild(rowItem);
-        // rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
-        // rowItem.textContent = cargo.date_from.getDate().toString() + '-' + (cargo.date_from.getMonth() + 1).toString() + '-' + cargo.date_from.getFullYear().toString();
-        // rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);//TODO запрос на название компании
-        rowItem.textContent = cargo.user_id.toString();
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (cargo.user_company !== undefined ? cargo.user_company : '');
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);//TODO запрос на название контакта
-        rowItem.textContent = cargo.user_id.toString();
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        const firstname = (cargo.user_firstname !== undefined ? cargo.user_firstname : '');
+        const lasttname = (cargo.user_lastname !== undefined ? cargo.user_lastname : '');
+        const phone = (cargo.user_phone !== undefined ? cargo.user_phone : '');
+        rowItem.textContent = firstname + ' ' + lasttname + ' ' + phone;
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
         rowItem.textContent = cargo.price.toString();
@@ -138,7 +135,6 @@ export default class ExchangeCargoView extends AsideItemView {
         const tableHeaderRow = document.createElement(this.TAG_TABLE_ROW);
         tableHeaderRow.appendChild(this._tableHeaderPointStart);
         tableHeaderRow.appendChild(this._tableHeaderPointEnd);
-        // tableHeaderRow.appendChild(this._tableHeaderDate);
         tableHeaderRow.appendChild(this._tableHeaderCompany);
         tableHeaderRow.appendChild(this._tableHeaderContact);
         tableHeaderRow.appendChild(this._tableHeaderPrice);
