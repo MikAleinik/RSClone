@@ -1,0 +1,86 @@
+.auth {
+    grid-area: auth;
+    background: $background-color-dark;
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    a {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+    }
+
+    img {
+        width: 30px;
+        margin: 0px 10px;
+    }
+}
+
+.auth__login {
+    background: #9cb9bd;
+    width: 120px;
+}
+
+.auth__registration {
+    background: #85685f;
+    width: 120px;
+}
+
+form[name=login] {
+    position: absolute;
+    right: 0px;
+    top: 30px;
+    background: $background-color-middle;
+    margin: 40px;
+    padding: 30px 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+
+    input {
+        border: 0px;
+        border-radius: 5px;
+        margin: 10px 0px;
+        padding: 5px;
+
+        &:invalid {
+            border: 1px solid $border-color-error;
+        }
+
+        &:disabled {
+            opacity: 0.3;
+        }
+    }
+}
+
+.auth__name {
+    visibility: hidden;
+    position: absolute;
+    top: 31%;
+    left: 0%;
+}
+
+.auth__name_visible {
+    visibility: visible;
+}
+
+.auth__button_logout {
+    position: absolute;
+    top: 0%;
+    left: 25%;
+}
+
+@media screen and (max-width: 640px){
+    .auth__login {
+        background: #9cb9bd;
+        width: 100px;
+    }
+    
+    .auth__registration {
+        background: #85685f;
+        width: 100px;
+    }
+}

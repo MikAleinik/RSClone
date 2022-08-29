@@ -1,0 +1,121 @@
+@import './color.scss';
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 220px auto 300px;
+    grid-template-rows: 50px minmax(calc(100vh - 80px), auto) 30px;
+    grid-template-areas:
+        'header nav auth'
+        'aside main main'
+        'footer footer footer';
+    color: $font-color-dark;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: $font-color-dark;
+}
+
+a:visited {
+    color: $font-color-dark;
+}
+
+.index {
+    grid-template-areas:
+        'header nav auth'
+        'main main main'
+        'footer footer footer';
+
+    main {
+      height: 100%;
+      padding: 20px 0px;
+    }
+    header,
+    nav,
+    .auth {
+        background: $background-color-light;
+    }
+
+    footer {
+        background: $background-color-middle;
+    }
+
+    main {
+        display: flex;
+        gap: 10px;
+    }
+
+    aside {
+        display: none;
+    }
+}
+aside {
+    grid-area: aside;
+    color: $font-color-light;
+    background: $background-color-middle;
+    a {
+      color: $font-color-light;
+      &:visited {
+        color: $font-color-light;
+      }
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 30px 20px;
+      cursor: pointer;
+      &:hover {
+        background: $background-color-accent;
+      }
+    }
+    img {
+      width: 20px;
+      filter: invert(1);
+    }
+    .active {
+      background: $background-color-accent;
+      font-weight: 600;
+      text-shadow: .5px .5px $background-color-middle;
+    }
+  }
+@media screen and (max-width: 640px){
+  body {
+    grid-template-columns: 40px 1fr 1fr;
+    grid-template-rows: 30px 30px auto 30px;
+    grid-template-areas:
+        'header header auth'
+        'nav nav nav'
+        'aside main main'
+        'footer footer footer';
+    color: $font-color-dark;
+    font-size: 12px;
+  }
+  aside {
+    li {
+      padding: 20px 10px;
+      span {
+        display: none;
+      }
+    }
+  }
+  .index {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        'header auth'
+        'nav nav'
+        'main main'
+        'footer footer';
+  }
+}

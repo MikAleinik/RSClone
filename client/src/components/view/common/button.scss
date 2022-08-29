@@ -1,0 +1,27 @@
+.big__button {
+  font-size    : 14px;
+  border       : 0px;
+  border-radius: 18px;
+  padding      : 5px 10px;
+  margin       : 10px;
+
+  &:hover {
+    background: $background-color-accent;
+  }
+
+  cursor: pointer;
+}
+
+.big__button_hidden {
+  visibility: hidden;
+}
+
+@media screen and (max-width: 640px){
+  .big__button{
+    font-size    : 12px;
+    border       : 0px;
+    border-radius: 14px;
+    padding      : 3px 7px;
+    margin       : 5px;
+  }
+}

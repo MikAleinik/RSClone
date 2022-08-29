@@ -1,0 +1,24 @@
+nav {
+    grid-area: nav;
+    background: $background-color-dark;
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    li {
+        display: inline-block;
+        padding: 0px 5px;
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 640px){
+    nav {
+        li {
+            display: inline-block;
+            padding: 0px 3px;
+            font-size: 12px;
+        }
+    }
+}
