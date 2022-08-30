@@ -51,6 +51,15 @@ export default class ExchangeTruckView extends AsideItemView {
 
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
+
+        /**
+         * TODO Временно для заполнения
+         */
+        this.setAllCar(new Array<Car>);
+        /**
+         * TODO Временно для заполнения
+         */
+
     }
     notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Car): void {
         switch (nameEvent) {
@@ -82,7 +91,7 @@ export default class ExchangeTruckView extends AsideItemView {
             if (value.id === car.id) {
                 key.remove();
             }
-        });     
+        });
     }
     carChangedHandler(car: Car) {
         this._cars.forEach((value, key) => {
@@ -117,7 +126,32 @@ export default class ExchangeTruckView extends AsideItemView {
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION);
     }
     setAllCar(cars: Array<Car>): void {
-        this.clearTable();
+        /**
+         * TODO Временно для заполнения
+         */
+        const car = {
+            id: 0,
+            user_id: 0,
+            point_current_lat: 10,
+            point_current_lon: 20,
+            model: '111',
+            price: 1000,
+            currency: 'EUR',
+            volume_max: 120,
+            weight_max: 12000,
+            date_start: new Date,
+            speed: 80,
+            drived: false,
+            description: 'пурум'
+        }
+        cars = new Array<Car>;
+        for (let i = 0; i < 30; i += 1) {
+            cars.push(car);
+        }
+        // this.clearTable();
+        /**
+         * TODO Временно для заполнения
+         */
         this._cars.clear();
         for (let i = 0; i < cars.length; i += 1) {
             const rowElement = this.createRow(cars[i])
