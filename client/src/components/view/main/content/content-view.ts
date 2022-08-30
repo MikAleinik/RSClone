@@ -20,8 +20,8 @@ export default class ContentView extends View implements INotify {
     private readonly PATH_IMAGE_OVERVIEW = './assets/icons/overview.png';
     private readonly PATH_IMAGE_CARGO = './assets/icons/cargo.png';
     private readonly PATH_IMAGE_TRUCK = './assets/icons/truck.png';
-    private readonly PATH_IMAGE_EXCHANGE_CARGO = './assets/icons/exchange.png';
-    private readonly PATH_IMAGE_EXCHANGE_TRUCK = './assets/icons/exchange.png';
+    private readonly PATH_IMAGE_EXCHANGE_CARGO = './assets/icons/exchange-cargo.png';
+    private readonly PATH_IMAGE_EXCHANGE_TRUCK = './assets/icons/exchange-truck.png';
     private readonly PATH_IMAGE_COMPANY = './assets/icons/company.png';
     private readonly PATH_IMAGE_ROUTES = './assets/icons/map.png';
 

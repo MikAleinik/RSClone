@@ -20,22 +20,3 @@
     margin: 10px 0px;
   }
 }
-.item_form {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  border: 1px solid $border-color-dark;
-  border-radius: 10px;
-  padding: 10px;
-  margin: 20px 0px;
-}
-.field__container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
-.field__button_hidden {
-  visibility: hidden;
-}
