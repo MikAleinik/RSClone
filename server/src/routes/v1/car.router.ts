@@ -115,7 +115,7 @@ const getCargoByUUIDOpts = {
 
 const changeCargoByUUIDOpts = {
     schema: {
-        tags: ['Cargo'],
+        tags: ['Cars'],
         description: 'Change cargo by Id',
         body: CreateCarSchema,
         response: {
@@ -130,7 +130,7 @@ const changeCargoByUUIDOpts = {
 
 const deleteCarByUUIDOpts = {
     schema: {
-        tags: ['Cargo'],
+        tags: ['Cars'],
         description: 'Delete cargo by Id',
         response: {
             200: {},
