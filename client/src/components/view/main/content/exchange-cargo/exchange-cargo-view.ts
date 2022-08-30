@@ -14,28 +14,29 @@ export default class ExchangeCargoView extends AsideItemView {
     private readonly TAG_FIELDSET_LABEL = 'label';
 
     private readonly TAG_TABLE_CONTAINER = 'div';
-    private readonly TAG_TABLE = 'table';
-    private readonly TAG_TABLE_HEADER = 'thead';
-    private readonly TAG_TABLE_BODY = 'tbody';
-    private readonly TAG_TABLE_ROW = 'tr';
-    private readonly TAG_TABLE_ROW_HEADER_ITEM = 'th';
-    private readonly TAG_TABLE_ROW_BODY_ITEM = 'td';
+    private readonly TAG_TABLE_ROW = 'div';
+    private readonly TAG_TABLE_ROW_DATA = 'span';
 
     private readonly CLASS_FIELDSET = 'item_form';
-    private readonly CLASS_TABLE_CONTAINER = 'scroll-table';
-    private readonly CLASS_TABLE_BODY = 'scroll-table__body';
+    private readonly CLASS_FIELDSET_ITEM = 'field__container';
+    private readonly CLASS_FIELDSET_BUTTON_CONTAINER = 'field__button_container';
+    private readonly CLASS_TABLE_WRAPPER = 'table__wrapper';
+    private readonly CLASS_TABLE_CONTAINER = 'table__container';
+    private readonly CLASS_TABLE_HEADER = 'table__header';
+    private readonly CLASS_TABLE_ROW = 'table__row';
+    private readonly CLASS_TABLE_DATA = 'table__data';
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
-    private _tableHeaderPrice = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableHeaderVolume = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableHeaderDescription = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableHeaderCompany = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableHeaderContact = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableHeaderPointStart = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableHeaderPointEnd = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    private _tableBody = document.createElement(this.TAG_TABLE_BODY);
+    private _tableHeaderPrice = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableHeaderVolume = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableHeaderDescription = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableHeaderCompany = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableHeaderContact = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableHeaderPointStart = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableHeaderPointEnd = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableContainer = document.createElement(this.TAG_TABLE_CONTAINER);
 
     private _cargoes = new Map<HTMLElement, Cargo>();
     // private _cargoes = new Array<Cargo>();
@@ -74,7 +75,7 @@ export default class ExchangeCargoView extends AsideItemView {
     cargoCreatedHandler(cargo: Cargo) {
         const rowElement = this.createRow(cargo);
         this._cargoes.set(rowElement, cargo);
-        this._tableBody.appendChild(rowElement);
+        this._tableContainer.appendChild(rowElement);
     }
     cargoDeletedHandler(cargo: Cargo) {
         this._cargoes.forEach((value, key) => {
@@ -121,7 +122,7 @@ export default class ExchangeCargoView extends AsideItemView {
         this._cargoes.clear();
         for (let i = 0; i < cargoes.length; i += 1) {
             const rowElement = this.createRow(cargoes[i])
-            this._tableBody.appendChild(rowElement);
+            this._tableContainer.appendChild(rowElement);
             this._cargoes.set(rowElement, cargoes[i]);
         }
     }
@@ -137,71 +138,84 @@ export default class ExchangeCargoView extends AsideItemView {
         this._mainElement.appendChild(this.createTable());
     }
     private clearTable(): void {
-        while (this._tableBody.firstElementChild) {
-            this._tableBody.firstElementChild.remove();
+        while (this._tableContainer.firstElementChild) {
+            this._tableContainer.firstElementChild.remove();
         }
     }
     private createRow(cargo: Cargo): HTMLElement {
         const rowElement = document.createElement(this.TAG_TABLE_ROW);
-        let rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowElement.className = this.CLASS_TABLE_ROW
+        let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
+        rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
+        rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = (cargo.user_company !== undefined ? cargo.user_company : '');
+        rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         const firstname = (cargo.user_firstname !== undefined ? cargo.user_firstname : '');
         const lasttname = (cargo.user_lastname !== undefined ? cargo.user_lastname : '');
         const phone = (cargo.user_phone !== undefined ? cargo.user_phone : '');
         rowItem.textContent = firstname + ' ' + lasttname + ' ' + phone;
+        rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.price.toString();
+        rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.currency;
+        rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.volume.toString();
+        rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.weigth.toString();
+        rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.description;
+        rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
         return rowElement;
     }
     private createTable(): HTMLElement {
         const tableWrapper = document.createElement(this.TAG_TABLE_CONTAINER);
-        tableWrapper.classList.add(this.CLASS_TABLE_CONTAINER);
+        tableWrapper.classList.add(this.CLASS_TABLE_WRAPPER);
 
-        const tableHeaderContainer = document.createElement(this.TAG_TABLE);
-        const tableHeader = document.createElement(this.TAG_TABLE_HEADER);
-        const tableHeaderRow = document.createElement(this.TAG_TABLE_ROW);
-        tableHeaderRow.appendChild(this._tableHeaderPointStart);
-        tableHeaderRow.appendChild(this._tableHeaderPointEnd);
-        tableHeaderRow.appendChild(this._tableHeaderCompany);
-        tableHeaderRow.appendChild(this._tableHeaderContact);
-        tableHeaderRow.appendChild(this._tableHeaderPrice);
-        tableHeaderRow.appendChild(this._tableHeaderCurrency);
-        tableHeaderRow.appendChild(this._tableHeaderVolume);
-        tableHeaderRow.appendChild(this._tableHeaderWeight);
-        tableHeaderRow.appendChild(this._tableHeaderDescription);
-        tableHeader.appendChild(tableHeaderRow);
-        tableHeaderContainer.appendChild(tableHeader);
+        const tableHeader = document.createElement(this.TAG_TABLE_ROW);
+        tableHeader.className = this.CLASS_TABLE_HEADER;
+       
+        tableHeader.appendChild(this._tableHeaderPointStart);
+        this._tableHeaderPointStart.className = this.CLASS_TABLE_DATA;
+        tableHeader.appendChild(this._tableHeaderPointEnd);
+        this._tableHeaderPointEnd.className = this.CLASS_TABLE_DATA;
+        tableHeader.appendChild(this._tableHeaderCompany);
+        this._tableHeaderCompany.className = this.CLASS_TABLE_DATA;
+        tableHeader.appendChild(this._tableHeaderContact);
+        this._tableHeaderContact.className = this.CLASS_TABLE_DATA;
+        tableHeader.appendChild(this._tableHeaderPrice);
+        this._tableHeaderPrice.className = this.CLASS_TABLE_DATA;
+        tableHeader.appendChild(this._tableHeaderCurrency);
+        this._tableHeaderCurrency.className = this.CLASS_TABLE_DATA;
+        tableHeader.appendChild(this._tableHeaderVolume);
+        this._tableHeaderVolume.className = this.CLASS_TABLE_DATA;
+        tableHeader.appendChild(this._tableHeaderWeight);
+        this._tableHeaderWeight.className = this.CLASS_TABLE_DATA;
+        tableHeader.appendChild(this._tableHeaderDescription);
+        this._tableHeaderDescription.className = this.CLASS_TABLE_DATA;
+        
+        tableWrapper.appendChild(tableHeader);
+        this._tableContainer.className = this.CLASS_TABLE_CONTAINER;
+        tableWrapper.appendChild(this._tableContainer);
 
-        const tableBodyContainer = document.createElement(this.TAG_TABLE_CONTAINER);
-        tableBodyContainer.classList.add(this.CLASS_TABLE_BODY);
-        const tableContainer = document.createElement(this.TAG_TABLE);
-        tableContainer.appendChild(this._tableBody);
-        tableBodyContainer.appendChild(tableContainer);
-
-        tableWrapper.appendChild(tableHeaderContainer);
-        tableWrapper.appendChild(tableBodyContainer);
         return tableWrapper;
     }
     private createFilterForm(): HTMLElement {
