@@ -93,9 +93,10 @@ export default class AuthController implements INotify {
                 verifySender.setAuthorizedUser(data);
             })
             .catch((data) => {
-                if (document.location.pathname === this.LINK_MAIN_PAGE) {
-                    document.location.href = this.LINK_INDEX_PAGE;
-                }
+                //TODO включить после переноса БД
+                // if (document.location.pathname === this.LINK_MAIN_PAGE) {
+                //     document.location.href = this.LINK_INDEX_PAGE;
+                // }
                 let verifySender = sender as AuthView;
                 verifySender.setAuthorizedUser(false);
             });

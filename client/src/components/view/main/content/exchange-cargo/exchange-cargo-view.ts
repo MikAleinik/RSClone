@@ -37,23 +37,70 @@ export default class ExchangeCargoView extends AsideItemView {
     private _tableHeaderPointEnd = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableBody = document.createElement(this.TAG_TABLE_BODY);
 
-    private _cargoes = new Array<Cargo>();
+    private _cargoes = new Map<HTMLElement, Cargo>();
+    // private _cargoes = new Array<Cargo>();
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
 
         this.createMainElement();
         this._observer.addSender(AppEvents.LOCALE_SET, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_DELETE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_CHANGE_SUCCESS, this);
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
     }
-    notify(nameEvent: AppEvents, sender: INotify | view): void {
+    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo): void {
         switch (nameEvent) {
             case AppEvents.LOCALE_SET: {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
                 break;
             }
+            case AppEvents.MAIN_CARGO_CREATE_SUCCESS: {
+                this.cargoCreatedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_DELETE_SUCCESS: {
+                this.cargoDeletedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_CHANGE_SUCCESS: {
+                this.cargoChangedHandler(params as Cargo);
+                break;
+            }
         }
+    }
+    cargoCreatedHandler(cargo: Cargo) {
+        const rowElement = this.createRow(cargo);
+        this._cargoes.set(rowElement, cargo);
+        this._tableBody.appendChild(rowElement);
+    }
+    cargoDeletedHandler(cargo: Cargo) {
+        this._cargoes.forEach((value, key) => {
+            if (value.id === cargo.id) {
+                key.remove();
+            }
+        });     
+    }
+    cargoChangedHandler(cargo: Cargo) {
+        this._cargoes.forEach((value, key) => {
+            if (value.id === cargo.id) {
+                value = cargo;
+                key.children[0].textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
+                key.children[1].textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
+                key.children[2].textContent = (cargo.user_company !== undefined ? cargo.user_company : '');
+                const firstname = (cargo.user_firstname !== undefined ? cargo.user_firstname : '');
+                const lasttname = (cargo.user_lastname !== undefined ? cargo.user_lastname : '');
+                const phone = (cargo.user_phone !== undefined ? cargo.user_phone : '');
+                key.children[3].textContent = firstname + ' ' + lasttname + ' ' + phone;
+                key.children[4].textContent = cargo.price.toString();
+                key.children[5].textContent = cargo.currency;
+                key.children[6].textContent = cargo.volume.toString();
+                key.children[7].textContent = cargo.weigth.toString();
+                key.children[8].textContent = cargo.description;
+            }
+        });
     }
     setLocale(localeModel: localeModel): void {
         this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_CARGO);
@@ -70,10 +117,12 @@ export default class ExchangeCargoView extends AsideItemView {
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION);
     }
     setAllCargo(cargoes: Array<Cargo>): void {
-        this._cargoes = cargoes;
         this.clearTable();
-        for (let i = 0; i < this._cargoes.length; i += 1) {
-            this._tableBody.appendChild(this.createRow(this._cargoes[i]));
+        this._cargoes.clear();
+        for (let i = 0; i < cargoes.length; i += 1) {
+            const rowElement = this.createRow(cargoes[i])
+            this._tableBody.appendChild(rowElement);
+            this._cargoes.set(rowElement, cargoes[i]);
         }
     }
     showErrorMessage(message: Map<string, string> | false) {

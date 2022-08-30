@@ -86,6 +86,7 @@ export default class CargoView extends AsideItemView {
     }
     setAllCargo(cargoes: Array<Cargo>): void {
         this.clearTable();
+        this._cargoes.clear();
         for (let i = 0; i < cargoes.length; i += 1) {
             const rowElement = this.createRow(cargoes[i]);
             rowElement.addEventListener('click', this.rowClickHandler.bind(this));
@@ -98,6 +99,7 @@ export default class CargoView extends AsideItemView {
             if (value.id === cargo.id) {
                 key.remove();
                 this.clearCargoHandler();
+                this._observer.notify(AppEvents.MAIN_CARGO_DELETE_SUCCESS, this, cargo);
             }
         });
     }
@@ -116,6 +118,7 @@ export default class CargoView extends AsideItemView {
                 key.children[5].textContent = cargo.weigth.toString();
                 key.children[6].textContent = cargo.description;
                 this.clearCargoHandler();
+                this._observer.notify(AppEvents.MAIN_CARGO_CHANGE_SUCCESS, this, cargo);
             }
         });
     }
@@ -127,6 +130,8 @@ export default class CargoView extends AsideItemView {
         rowElement.addEventListener('click', this.rowClickHandler.bind(this));
         this._cargoes.set(rowElement, cargo);
         this._tableBody.appendChild(rowElement);
+        this.clearCargoHandler();
+        this._observer.notify(AppEvents.MAIN_CARGO_CREATE_SUCCESS, this, cargo);
     }
     createCargoFail(cargo: Cargo) {
         this.clearCargoHandler();
@@ -345,7 +350,6 @@ export default class CargoView extends AsideItemView {
             this._formItemDescription.value = cargo.description;
             this._formItemPointStart.value = cargo.point_start_lat.toString();
             this._formItemPointEnd.value = cargo.point_end_lat.toString();
-            console.log(this._cargoes.get(parent));
         }
     }
 }

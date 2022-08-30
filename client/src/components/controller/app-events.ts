@@ -40,8 +40,11 @@ export const enum AppEvents {
     NEWS_GET_DATA = 'newsGetData',//получить данные новостной ленты
     //Main page events
     MAIN_CARGO_CREATE = 'mainCargoCreate',//создать груз
+    MAIN_CARGO_CREATE_SUCCESS = 'mainCargoCreateSuccess',//груз создан успешно
     MAIN_CARGO_DELETE = 'mainCargoDelete',//удалить груз
+    MAIN_CARGO_DELETE_SUCCESS = 'mainCargoDeleteSuccess',//груз удален успешно
     MAIN_CARGO_CHANGE = 'mainCargoChange',//редактировать груз
+    MAIN_CARGO_CHANGE_SUCCESS = 'mainCargoChangeSuccess',//груз отредактирован успешно
     MAIN_CARGO_GET_ALL = 'mainCargoGetAll',//получить все доступные грузы
     MAIN_CARGO_GET_BY_USER = 'mainCargoGetByUser',//получить все доступные грузы пользователя
     MAIN_CARGO_GET_BY_CAR = 'mainCargoGetByCar',//получить все доступные грузы в машине
