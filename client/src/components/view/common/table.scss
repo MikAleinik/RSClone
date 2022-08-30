@@ -33,7 +33,7 @@
 }
 .item_form {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
   border: 1px solid $border-color-dark;
   border-radius: 10px;
@@ -47,7 +47,7 @@
 }
 .field__button_container{
 	display: flex;
-	justify-content: space-around;
+	justify-content: center;
 	gap: 1.5rem;
 	width: 100%;
 	flex: 1 0 auto;
