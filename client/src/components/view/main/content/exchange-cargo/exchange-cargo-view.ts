@@ -50,14 +50,6 @@ export default class ExchangeCargoView extends AsideItemView {
         this._observer.addSender(AppEvents.MAIN_CARGO_CHANGE_SUCCESS, this);
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
-        /**
-         * TODO Временно для заполнения
-         */
-         this.setAllCargo(new Array<Cargo>);
-         /**
-          * TODO Временно для заполнения
-          */
- 
     }
     notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo): void {
         switch (nameEvent) {
@@ -125,31 +117,7 @@ export default class ExchangeCargoView extends AsideItemView {
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION);
     }
     setAllCargo(cargoes: Array<Cargo>): void {
-        /**
-         * TODO Временно для заполнения
-         */
-         const cargo = {
-            id: 0,
-            user_id: 0,
-            point_start_lat: 10,
-            point_start_lon: 20,
-            point_end_lat: 30,
-            point_end_lon: 40,
-            price: 9999,
-            currency: 'USD',
-            volume: 120,
-            weigth: 20000,
-            finished: false,
-            description: 'пурум'
-        }
-        cargoes = new Array<Cargo>;
-        for (let i = 0; i < 30; i += 1) {
-            cargoes.push(cargo);
-        }
-        // this.clearTable();
-        /**
-         * TODO Временно для заполнения
-         */
+        this.clearTable();
         this._cargoes.clear();
         for (let i = 0; i < cargoes.length; i += 1) {
             const rowElement = this.createRow(cargoes[i])
