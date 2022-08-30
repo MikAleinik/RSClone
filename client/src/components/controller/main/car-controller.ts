@@ -5,6 +5,7 @@ import UserModel from "../../models/index/data-model/user-model";
 import CarModel from "../../models/main/car-model";
 import View from "../../view/index/view";
 import ExchangeTruckView from "../../view/main/content/exchange-truck/exchange-truck-view";
+import TruckView from "../../view/main/content/truck/truck-view";
 import { AppEvents } from "../app-events";
 
 export default class CarController implements INotify {
@@ -34,7 +35,11 @@ export default class CarController implements INotify {
                 break;
             }
             case AppEvents.MAIN_CAR_GET_BY_ID: {
-                this.getByIdCarHandler(nameEvent, sender, car as Car);
+                this.getByUserCarHandler(nameEvent, sender);
+                break;
+            }
+            case AppEvents.MAIN_CAR_GET_BY_USER: {
+                this.getByUserCarHandler(nameEvent, sender);
                 break;
             }
             default: {
@@ -43,40 +48,41 @@ export default class CarController implements INotify {
         }
     }
     private createCarHandler(nameEvent: AppEvents, sender: View, car: Car): void {
-        this._carModel.createCar(nameEvent, car)
-            .then((result) => {
-                console.log(result);
-            })
-            .catch((result) => {
-                //TODO окно сообщения (?)
-                console.log(result);
+        this._userModel.getAuthUser()
+            .then((currentUser) => {
+                car.user_id = currentUser.id;
+                this._carModel.createCar(nameEvent, car)
+                    .then((result) => {
+                        let verifySender = sender as TruckView;
+                        verifySender.createCarSuccess(result);
+                    })
+                    .catch((result) => {
+                        let verifySender = sender as TruckView;
+                        verifySender.createCarFail(result);
+                    });
             });
-        // let verifySender = sender as AuthView;
-        // verifySender.setRegisterButtonState(result);
     }
     private deleteCarHandler(nameEvent: AppEvents, sender: View, car: Car): void {
         this._carModel.deleteCar(nameEvent, car)
             .then((result) => {
-                console.log(result);
+                let verifySender = sender as TruckView;
+                verifySender.deleteCarSuccess(result);
             })
             .catch((result) => {
-                //TODO окно сообщения (?)
-                console.log(result);
+                let verifySender = sender as TruckView;
+                verifySender.deleteCarFail(result);
             });
-        // let verifySender = sender as AuthView;
-        // verifySender.setRegisterButtonState(result);
     }
     private changeCarHandler(nameEvent: AppEvents, sender: View, car: Car): void {
         this._carModel.changeCar(nameEvent, car)
             .then((result) => {
-                console.log(result);
+                let verifySender = sender as TruckView;
+                verifySender.changeCarSuccess(result);
             })
             .catch((result) => {
-                //TODO окно сообщения (?)
-                console.log(result);
+                let verifySender = sender as TruckView;
+                verifySender.changeCarSuccess(result);
             });
-        // let verifySender = sender as AuthView;
-        // verifySender.setRegisterButtonState(result);
     }
     private getAllCarHandler(nameEvent: AppEvents, sender: View): void {
         this._carModel.getAllCar(nameEvent)
@@ -122,5 +128,21 @@ export default class CarController implements INotify {
         // let result = this._registerModel.isChangeStateButton();
         // let verifySender = sender as AuthView;
         // verifySender.setRegisterButtonState(result);
+    }
+    private getByUserCarHandler(nameEvent: AppEvents, sender: View): void {
+        this._userModel.getAuthUser()
+            .then((currentUser) => {
+                const param = new Map<string, string>();
+                param.set('id', currentUser.id.toString());
+                this._carModel.getCarByUser(nameEvent, param)
+                    .then((result) => {
+                        let verifySender = sender as ExchangeTruckView;
+                        verifySender.setAllCar(result);
+                    })
+                    .catch((result) => {
+                        let verifySender = sender as ExchangeTruckView;
+                        verifySender.setAllCar(result);
+                    });
+            });
     }
 }

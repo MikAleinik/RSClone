@@ -129,7 +129,6 @@ export default class CargoController implements INotify {
                 //TODO окно сообщения (?)
                 console.log(result);
             });
-        // let result = this._registerModel.isChangeStateButton();
         // let verifySender = sender as AuthView;
         // verifySender.setRegisterButtonState(result);
     }
@@ -140,12 +139,10 @@ export default class CargoController implements INotify {
                 param.set('id', currentUser.id.toString());
                 this._cargoModel.getCargoByUser(nameEvent, param)
                     .then((result) => {
-                        // console.log(result);
                         let verifySender = sender as ExchangeCargoView;
                         verifySender.setAllCargo(result);
                     })
                     .catch((result) => {
-                        // console.log(result);
                         let verifySender = sender as ExchangeCargoView;
                         verifySender.setAllCargo(result);
                     });
@@ -160,7 +157,6 @@ export default class CargoController implements INotify {
                 //TODO окно сообщения (?)
                 console.log(result);
             });
-        // let result = this._registerModel.isChangeStateButton();
         // let verifySender = sender as AuthView;
         // verifySender.setRegisterButtonState(result);
     }

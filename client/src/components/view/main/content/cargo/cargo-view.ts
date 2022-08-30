@@ -6,6 +6,7 @@ import view from "../../view";
 import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 import Cargo from '../../../../../types/cargo';
+import '../../../common/table.scss';
 
 export default class CargoView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
@@ -314,7 +315,22 @@ export default class CargoView extends AsideItemView {
         this._observer.notify(AppEvents.MAIN_CARGO_CREATE, this, cargo);
     }
     private saveCargoHandler() {
-        this._observer.notify(AppEvents.MAIN_CARGO_CHANGE, this, <Cargo>this._selectedCargo);
+        const selectedCargo = <Cargo>this._selectedCargo;
+        const cargo = {
+            id: selectedCargo.id,
+            user_id: selectedCargo.user_id,
+            point_start_lat: Number(this._formItemPointStart.value),
+            point_start_lon: Number(this._formItemPointStart.value),
+            point_end_lat: Number(this._formItemPointEnd.value),
+            point_end_lon: Number(this._formItemPointEnd.value),
+            price: Number(this._formItemPrice.value),
+            currency: this._formItemCurrency.value,
+            volume: Number(this._formItemVolume.value),
+            weigth: Number(this._formItemWeight.value),
+            finished: false,
+            description: this._formItemDescription.value
+        }
+        this._observer.notify(AppEvents.MAIN_CARGO_CHANGE, this, cargo);
     }
     private deleteCargoHandler() {
         this._observer.notify(AppEvents.MAIN_CARGO_DELETE, this, <Cargo>this._selectedCargo);

@@ -52,8 +52,11 @@ export const enum AppEvents {
     // MAIN_CARGO_UPDATE = 'mainCargoUpdate',//обновить список грузов
 
     MAIN_CAR_CREATE = 'mainCarCreate',//создать машину
+    MAIN_CAR_CREATE_SUCCESS = 'mainCargoCreateSuccess',//машина создан успешно
     MAIN_CAR_DELETE = 'mainCarDelete',//удалить машину
+    MAIN_CAR_DELETE_SUCCESS = 'mainCargoDeleteSuccess',//машина удален успешно
     MAIN_CAR_CHANGE = 'mainCarChange',//редактировать машину
+    MAIN_CAR_CHANGE_SUCCESS = 'mainCargoChangeSuccess',//машина отредактирован успешно
     MAIN_CAR_GET_ALL = 'mainCarGetAll',//получить все доступные машину
     MAIN_CAR_GET_BY_USER = 'mainCarGetByUser',//получить все доступные машины пользователя
     MAIN_CAR_GET_BY_ID = 'mainCarGetById',//получить машину по ID машины

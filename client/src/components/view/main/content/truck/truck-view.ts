@@ -5,8 +5,68 @@ import INotify from "../../../../interfaces/i-notify";
 import view from "../../view";
 import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
+import '../../../common/table.scss';
+import Car from '../../../../../types/car';
 
 export default class TruckView extends AsideItemView {
+    private readonly TAG_FIELDSET = 'fieldset';
+    private readonly TAG_FIELDSET_ITEM = 'div';
+    private readonly TAG_LEGEND = 'legend';
+    private readonly TAG_FIELDSET_INPUT = 'input';
+    private readonly TAG_FIELDSET_LABEL = 'label';
+    private readonly TAG_FIELDSET_SELECT = 'select';
+    private readonly TAG_FIELDSET_OPTION = 'option';
+    private readonly TAG_FIELDSET_BUTTON = 'button';
+
+    private readonly TAG_TABLE_CONTAINER = 'div';
+    private readonly TAG_TABLE = 'table';
+    private readonly TAG_TABLE_HEADER = 'thead';
+    private readonly TAG_TABLE_BODY = 'tbody';
+    private readonly TAG_TABLE_ROW = 'tr';
+    private readonly TAG_TABLE_ROW_HEADER_ITEM = 'th';
+    private readonly TAG_TABLE_ROW_BODY_ITEM = 'td';
+
+    private readonly CLASS_FIELDSET = 'item_form';
+    private readonly CLASS_FIELDSET_ITEM = 'field__container';
+    private readonly CLASS_FIELDSET_BUTTON_HIDDEN = 'field__button_hidden';
+    private readonly CLASS_TABLE_CONTAINER = 'scroll-table';
+    private readonly CLASS_TABLE_BODY = 'scroll-table__body';
+
+    private readonly CURRENCY = new Array('USD', 'EUR', 'BYN', 'RUB');
+
+    private _formFilterLegend = document.createElement(this.TAG_LEGEND);
+    private _tableHeaderModel = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
+    private _tableHeaderPrice = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
+    private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
+    private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
+    private _tableHeaderVolume = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
+    private _tableHeaderDescription = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
+    private _tableHeaderPoint = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
+    private _tableBody = document.createElement(this.TAG_TABLE_BODY);
+
+    private _formItemModel = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemPrice = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemCurrency = document.createElement(this.TAG_FIELDSET_SELECT);
+    private _formItemWeight = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemVolume = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemDescription = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemPoint = document.createElement(this.TAG_FIELDSET_INPUT);
+
+    private _formItemModelLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemPriceLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemCurrencyLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemWeightLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemVolumeLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemDescriptionLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemPointLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+
+    private _formItemButtonCreate = document.createElement(this.TAG_FIELDSET_BUTTON);
+    private _formItemButtonSave = document.createElement(this.TAG_FIELDSET_BUTTON);
+    private _formItemButtonDelete = document.createElement(this.TAG_FIELDSET_BUTTON);
+    private _formItemButtonClear = document.createElement(this.TAG_FIELDSET_BUTTON);
+
+    private _cars = new Map<HTMLElement, Car>();
+    private _selectedCar: Car | false;
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
@@ -14,6 +74,8 @@ export default class TruckView extends AsideItemView {
         this.createMainElement();
         this._observer.addSender(AppEvents.LOCALE_SET, this);
         this._observer.notify(AppEvents.LOCALE_GET, this);
+        this._observer.notify(AppEvents.MAIN_CAR_GET_BY_USER, this);
+        this._selectedCar = false;
     }
     notify(nameEvent: AppEvents, sender: INotify | view): void {
         switch (nameEvent) {
@@ -23,10 +85,289 @@ export default class TruckView extends AsideItemView {
             }
         }
     }
+    setAllCar(cars: Array<Car>): void {
+        this.clearTable();
+        this._cars.clear();
+        for (let i = 0; i < cars.length; i += 1) {
+            const rowElement = this.createRow(cars[i]);
+            rowElement.addEventListener('click', this.rowClickHandler.bind(this));
+            this._cars.set(rowElement, cars[i]);
+            this._tableBody.appendChild(rowElement);
+        }
+    }
+    deleteCarSuccess(car: Car) {
+        this._cars.forEach((value, key) => {
+            if (value.id === car.id) {
+                key.remove();
+                this.clearCarHandler();
+                this._observer.notify(AppEvents.MAIN_CARGO_DELETE_SUCCESS, this, car);
+            }
+        });
+    }
+    deleteCarFail(car: Car) {
+        this.clearCarHandler();
+    }
+    changeCarSuccess(car: Car) {
+        this._cars.forEach((value, key) => {
+            if (value.id === car.id) {
+                value = car;
+                key.children[0].textContent = car.model;
+                key.children[1].textContent = car.point_current_lat + ' ' + car.point_current_lon;
+                key.children[4].textContent = car.price.toString();
+                key.children[5].textContent = car.currency;
+                key.children[6].textContent = car.volume_max.toString();
+                key.children[7].textContent = car.weight_max.toString();
+                key.children[8].textContent = car.description;
+                this.clearCarHandler();
+                this._observer.notify(AppEvents.MAIN_CARGO_CHANGE_SUCCESS, this, car);
+            }
+        });
+    }
+    changeCarFail(car: Car) {
+        this.clearCarHandler();
+    }
+    createCarSuccess(car: Car) {
+        const rowElement = this.createRow(car);
+        rowElement.addEventListener('click', this.rowClickHandler.bind(this));
+        this._cars.set(rowElement, car);
+        this._tableBody.appendChild(rowElement);
+        this.clearCarHandler();
+        this._observer.notify(AppEvents.MAIN_CARGO_CREATE_SUCCESS, this, car);
+    }
+    createCarFail(car: Car) {
+        this.clearCarHandler();
+    }
+    showErrorMessage(message: Map<string, string> | false) {
+        if (!message) {
+            console.log('TODO Ошибка получения транспорта пользователя');
+        } else {
+            console.log(message.get('message'));
+        }
+    }
     setLocale(localeModel: localeModel): void {
-        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_TRANSPORT);;        
+        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_TRANSPORT);
+        
+        this._formFilterLegend.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_PANEL_HEADER);
+
+        this._formItemModelLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_NUMBER);
+        this._formItemPriceLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_PRICE);
+        this._formItemCurrencyLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_CURRENCY);
+        this._formItemWeightLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_Weight);
+        this._formItemVolumeLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_VOLUME);
+        this._formItemDescriptionLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION);
+        this._formItemPointLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_LOCATION);
+
+        this._tableHeaderModel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_NUMBER);
+        this._tableHeaderPrice.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_PRICE);
+        this._tableHeaderCurrency.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_CURRENCY);
+        this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_Weight);
+        this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_VOLUME);
+        this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION);
+        this._tableHeaderPoint.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_LOCATION);
+
+        this._formItemButtonCreate.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_ADD_NEW);
+        this._formItemButtonSave.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_SAVE);
+        this._formItemButtonDelete.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DELETE);
+        this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_CLEAR);
     }
     protected createMainElement(): void {
-        this._mainElement.textContent = 'TruckView';
+        this._mainElement.appendChild(this.createForm());
+        this._mainElement.appendChild(this.createTable());
+    }
+    private clearTable(): void {
+        while (this._tableBody.firstElementChild) {
+            this._tableBody.firstElementChild.remove();
+        }
+    }
+    private createRow(car: Car): HTMLElement {
+        const rowElement = document.createElement(this.TAG_TABLE_ROW);
+        let rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (car.model !== undefined ? car.model : '');
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (car.point_current_lat !== undefined && car.point_current_lon !== undefined ? car.point_current_lat + ', ' + car.point_current_lon : '');
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (car.price !== undefined ? car.price.toString() : '');
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (car.currency !== undefined ? car.currency : '');
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (car.volume_max !== undefined ? car.volume_max.toString() : '');
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (car.weight_max !== undefined ? car.weight_max.toString() : '');
+        rowElement.appendChild(rowItem);
+        rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
+        rowItem.textContent = (car.description !== undefined ? car.description : '');
+        rowElement.appendChild(rowItem);
+        return rowElement;
+    }
+    private createTable(): HTMLElement {
+        const tableWrapper = document.createElement(this.TAG_TABLE_CONTAINER);
+        tableWrapper.classList.add(this.CLASS_TABLE_CONTAINER);
+
+        const tableHeaderContainer = document.createElement(this.TAG_TABLE);
+        const tableHeader = document.createElement(this.TAG_TABLE_HEADER);
+        const tableHeaderRow = document.createElement(this.TAG_TABLE_ROW);
+        tableHeaderRow.appendChild(this._tableHeaderModel);
+        tableHeaderRow.appendChild(this._tableHeaderPoint);
+        tableHeaderRow.appendChild(this._tableHeaderPrice);
+        tableHeaderRow.appendChild(this._tableHeaderCurrency);
+        tableHeaderRow.appendChild(this._tableHeaderVolume);
+        tableHeaderRow.appendChild(this._tableHeaderWeight);
+        tableHeaderRow.appendChild(this._tableHeaderDescription);
+        tableHeader.appendChild(tableHeaderRow);
+        tableHeaderContainer.appendChild(tableHeader);
+
+        const tableBodyContainer = document.createElement(this.TAG_TABLE_CONTAINER);
+        tableBodyContainer.classList.add(this.CLASS_TABLE_BODY);
+        const tableContainer = document.createElement(this.TAG_TABLE);
+        tableContainer.appendChild(this._tableBody);
+        tableBodyContainer.appendChild(tableContainer);
+
+        tableWrapper.appendChild(tableHeaderContainer);
+        tableWrapper.appendChild(tableBodyContainer);
+        return tableWrapper;
+    }
+    private createForm(): HTMLElement {
+        const formElement = document.createElement(this.TAG_FIELDSET);
+        formElement.classList.add(this.CLASS_FIELDSET);
+        formElement.appendChild(this._formFilterLegend);
+
+        let containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.appendChild(this._formItemModelLabel);
+        containerItem.appendChild(this._formItemModel);
+        formElement.appendChild(containerItem);
+
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.appendChild(this._formItemPointLabel);
+        containerItem.appendChild(this._formItemPoint);
+        formElement.appendChild(containerItem);
+
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.appendChild(this._formItemPriceLabel);
+        containerItem.appendChild(this._formItemPrice);
+        formElement.appendChild(containerItem);
+
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.appendChild(this._formItemCurrencyLabel);
+        containerItem.appendChild(this._formItemCurrency);
+        for (let i = 0; i < this.CURRENCY.length; i += 1) {
+            const option = document.createElement(this.TAG_FIELDSET_OPTION);
+            option.textContent = this.CURRENCY[i];
+            this._formItemCurrency.appendChild(option);
+        }
+        formElement.appendChild(containerItem);
+
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.appendChild(this._formItemVolumeLabel);
+        containerItem.appendChild(this._formItemVolume);
+        formElement.appendChild(containerItem);
+
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.appendChild(this._formItemWeightLabel);
+        containerItem.appendChild(this._formItemWeight);
+        formElement.appendChild(containerItem);
+
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.appendChild(this._formItemDescriptionLabel);
+        containerItem.appendChild(this._formItemDescription);
+        formElement.appendChild(containerItem);
+
+        formElement.appendChild(this._formItemButtonCreate);
+        formElement.appendChild(this._formItemButtonDelete);
+        formElement.appendChild(this._formItemButtonClear);
+        formElement.appendChild(this._formItemButtonSave);
+        this._formItemButtonSave.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+        this._formItemButtonDelete.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+        this._formItemButtonClear.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+        this._formItemButtonCreate.addEventListener('click', this.createNewCarHandler.bind(this));
+        this._formItemButtonSave.addEventListener('click', this.saveCarHandler.bind(this));
+        this._formItemButtonDelete.addEventListener('click', this.deleteCarHandler.bind(this));
+        this._formItemButtonClear.addEventListener('click', this.clearCarHandler.bind(this));
+
+        return formElement;
+    }
+    private createNewCarHandler() {
+        const car = {
+            id: 0,
+            user_id: 0,
+            point_current_lat: Number(this._formItemPoint.value),
+            point_current_lon: Number(this._formItemPoint.value),
+            model: this._formItemModel.value,
+            price: Number(this._formItemPrice.value),
+            currency: this._formItemCurrency.value,
+            volume_max: Number(this._formItemVolume.value),
+            weight_max: Number(this._formItemWeight.value),
+            date_start: new Date,
+            speed: 80,
+            drived: false,
+            description: this._formItemDescription.value
+        }
+        this._observer.notify(AppEvents.MAIN_CAR_CREATE, this, car);
+    }
+    private saveCarHandler() {
+        const selectedCar = <Car>this._selectedCar;
+        const car = {
+            id: selectedCar.id,
+            user_id: selectedCar.user_id,
+            point_current_lat: Number(this._formItemPoint.value),
+            point_current_lon: Number(this._formItemPoint.value),
+            model: this._formItemModel.value,
+            price: Number(this._formItemPrice.value),
+            currency: this._formItemCurrency.value,
+            volume_max: Number(this._formItemVolume.value),
+            weight_max: Number(this._formItemWeight.value),
+            date_start: new Date,
+            speed: 80,
+            drived: false,
+            description: this._formItemDescription.value
+        }
+        this._observer.notify(AppEvents.MAIN_CAR_CHANGE, this, car);
+    }
+    private deleteCarHandler() {
+        this._observer.notify(AppEvents.MAIN_CAR_DELETE, this, <Car>this._selectedCar);
+    }
+    private clearCarHandler() {
+        this._formItemButtonCreate.classList.remove(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+        this._formItemButtonSave.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+        this._formItemButtonClear.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+        this._formItemButtonDelete.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+        this._selectedCar = false;
+        this._formItemModel.value = '';
+        this._formItemPrice.value = '';
+        this._formItemCurrency.value = '';
+        this._formItemWeight.value = '';
+        this._formItemVolume.value = '';
+        this._formItemDescription.value = '';
+        this._formItemPoint.value = '';
+    }
+    private rowClickHandler(event: Event) {
+        const element: HTMLElement = <HTMLElement>event.target;
+        const parent = element.closest(this.TAG_TABLE_ROW);
+        if (parent !== null) {
+            this._formItemButtonCreate.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+            this._formItemButtonSave.classList.remove(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+            this._formItemButtonClear.classList.remove(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+            this._formItemButtonDelete.classList.remove(this.CLASS_FIELDSET_BUTTON_HIDDEN);
+            const car = <Car>this._cars.get(parent);
+            this._selectedCar = car;
+            this._formItemPrice.value = car.price.toString();
+            this._formItemCurrency.value = car.currency;
+            this._formItemWeight.value = car.weight_max.toString();
+            this._formItemVolume.value = car.volume_max.toString();
+            this._formItemDescription.value = car.description;
+            this._formItemPoint.value = car.point_current_lat.toString();
+            this._formItemModel.value = car.model.toString();
+        }
     }
 }

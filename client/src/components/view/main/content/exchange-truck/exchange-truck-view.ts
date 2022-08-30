@@ -32,30 +32,76 @@ export default class ExchangeTruckView extends AsideItemView {
     private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderVolume = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
-    // private _tableHeaderStatus = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderDescription = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderCompany = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderUser = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableHeaderPoint = document.createElement(this.TAG_TABLE_ROW_HEADER_ITEM);
     private _tableBody = document.createElement(this.TAG_TABLE_BODY);
 
-    private _cars = new Array<Car>();
+    private _cars = new Map<HTMLElement, Car>();
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
 
         this.createMainElement();
         this._observer.addSender(AppEvents.LOCALE_SET, this);
+        this._observer.addSender(AppEvents.MAIN_CAR_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CAR_DELETE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CAR_CHANGE_SUCCESS, this);
+
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
     }
-    notify(nameEvent: AppEvents, sender: INotify | view): void {
+    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Car): void {
         switch (nameEvent) {
             case AppEvents.LOCALE_SET: {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
                 break;
             }
+            case AppEvents.MAIN_CARGO_CREATE_SUCCESS: {
+                this.carCreatedHandler(params as Car);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_DELETE_SUCCESS: {
+                this.carDeletedHandler(params as Car);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_CHANGE_SUCCESS: {
+                this.carChangedHandler(params as Car);
+                break;
+            }
         }
+    }
+    carCreatedHandler(car: Car) {
+        const rowElement = this.createRow(car);
+        this._cars.set(rowElement, car);
+        this._tableBody.appendChild(rowElement);
+    }
+    carDeletedHandler(car: Car) {
+        this._cars.forEach((value, key) => {
+            if (value.id === car.id) {
+                key.remove();
+            }
+        });     
+    }
+    carChangedHandler(car: Car) {
+        this._cars.forEach((value, key) => {
+            if (value.id === car.id) {
+                value = car;
+                key.children[0].textContent = car.model;
+                key.children[1].textContent = car.point_current_lat + ' ' + car.point_current_lon;
+                key.children[2].textContent = (car.user_company !== undefined ? car.user_company : '');
+                const firstname = (car.user_firstname !== undefined ? car.user_firstname : '');
+                const lasttname = (car.user_lastname !== undefined ? car.user_lastname : '');
+                const phone = (car.user_phone !== undefined ? car.user_phone : '');
+                key.children[3].textContent = firstname + ' ' + lasttname + ' ' + phone;
+                key.children[4].textContent = car.price.toString();
+                key.children[5].textContent = car.currency;
+                key.children[6].textContent = car.volume_max.toString();
+                key.children[7].textContent = car.weight_max.toString();
+                key.children[8].textContent = car.description;
+            }
+        });
     }
     setLocale(localeModel: localeModel): void {
         this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_TRANSPORT);
@@ -68,14 +114,15 @@ export default class ExchangeTruckView extends AsideItemView {
         this._tableHeaderCurrency.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_CURRENCY);
         this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_VOLUME);
         this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_Weight);
-        // this._tableHeaderStatus.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_STATUS);
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION);
     }
     setAllCar(cars: Array<Car>): void {
-        this._cars = cars;
         this.clearTable();
-        for (let i = 0; i < this._cars.length; i += 1) {
-            this._tableBody.appendChild(this.createRow(this._cars[i]));
+        this._cars.clear();
+        for (let i = 0; i < cars.length; i += 1) {
+            const rowElement = this.createRow(cars[i])
+            this._tableBody.appendChild(rowElement);
+            this._cars.set(rowElement, cars[i]);
         }
     }
     showErrorMessage(message: Map<string, string> | false) {
@@ -121,7 +168,7 @@ export default class ExchangeTruckView extends AsideItemView {
         rowItem.textContent = car.volume_max.toString();
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
-        rowItem.textContent = (car.weigth_max !== undefined ? car.weigth_max.toString() : '');
+        rowItem.textContent = (car.weight_max !== undefined ? car.weight_max.toString() : '');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_BODY_ITEM);
         rowItem.textContent = car.description;
@@ -144,7 +191,6 @@ export default class ExchangeTruckView extends AsideItemView {
         tableHeaderRow.appendChild(this._tableHeaderCurrency);
         tableHeaderRow.appendChild(this._tableHeaderVolume);
         tableHeaderRow.appendChild(this._tableHeaderWeight);
-        // tableHeaderRow.appendChild(this._tableHeaderStatus);
         tableHeaderRow.appendChild(this._tableHeaderDescription);
         tableHeader.appendChild(tableHeaderRow);
         tableHeaderContainer.appendChild(tableHeader);

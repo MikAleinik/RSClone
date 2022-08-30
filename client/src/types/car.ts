@@ -17,7 +17,7 @@
     price: number;
     currency: string;
     volume_max: number;
-    weigth_max: number;
+    weight_max: number;
     speed: number;
     drived: boolean;
     description: string;

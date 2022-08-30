@@ -83,6 +83,7 @@ export const enum LocaleKeys {
     MAIN_OVERVIEW_COMPANY_PHONE = 'mainOverviewCompanyPhone',
     MAIN_OVERVIEW_EMAIL = 'mainOverviewEmail',
 
+    MAIN_TRANSPORT_PANEL_HEADER = 'mainTransportPanelHeader',
     MAIN_TRANSPORT_NEW = 'mainTransportAddNew',
     MAIN_TRANSPORT_CHANGE = 'mainTransportChange',
     MAIN_TRANSPORT_NUMBER = 'mainTransportNumber',
@@ -97,6 +98,10 @@ export const enum LocaleKeys {
     MAIN_TRANSPORT_STATUS_STOPPED = 'mainTransportStatusStopped',
     MAIN_TRANSPORT_STATUS_DRIVED = 'mainTransportStatusDrived',
     MAIN_TRANSPORT_FILLING = 'mainTransportFilling',
+    MAIN_TRANSPORT_ADD_NEW = 'mainTransportAddNew',
+    MAIN_TRANSPORT_DELETE = 'mainTransportDelete',
+    MAIN_TRANSPORT_SAVE = 'mainTransportSave',
+    MAIN_TRANSPORT_CLEAR = 'mainTransportClear',
 
     MAIN_CARGO_PANEL_HEADER = 'mainCargoPanelHeader',
     MAIN_CARGO_NAME = 'mainCargoName',

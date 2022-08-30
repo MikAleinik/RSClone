@@ -131,8 +131,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_COMPANY_PHONE, new Array('Phone', 'Телефон'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_EMAIL, new Array('Email', 'Эл.почта'));
 
-        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_NEW, new Array('Add new car', 'Добавить машину'));
-        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_CHANGE, new Array('Change car', 'Изменить машину'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_PANEL_HEADER, new Array('Car panel', 'Панель транспорта'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_COMPANY, new Array('Car owner', 'Владелец машины'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_NUMBER, new Array('Plate number', 'Номерной знак'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_VOLUME, new Array('Volume capacity', 'Объем кузова'));
@@ -145,6 +144,10 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_STATUS_DRIVED, new Array('On the way', 'В пути'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_STATUS_STOPPED, new Array('Waiting', 'Ожидает загрузки'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_FILLING, new Array('Filling', 'Заполнение'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_ADD_NEW, new Array('Create', 'Создать'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_DELETE, new Array('Delete', 'Удалить'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_SAVE, new Array('Save', 'Сохранить'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_CLEAR, new Array('Clear', 'Очистить'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_PANEL_HEADER, new Array('Cargo panel', 'Панель груза'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_NAME, new Array('Name', 'Название'));
