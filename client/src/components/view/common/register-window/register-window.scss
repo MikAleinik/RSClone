@@ -6,32 +6,30 @@
     left    : 0;
     right   : 0;
 
-    height: 100vh;
-    // width : 100vw;
+    height: 100%;
 
     background: $modal_background-color;
 }
 
 .window-register {
-    position: absolute;
-    left    : 35%;
-    top     : 40%;
+    margin: 100px auto;
 
     display        : flex;
     flex-direction : column;
     justify-content: center;
     align-items    : center;
 
-    height    : 30%;
-    min-height: 260px;
     width     : 30%;
+    min-width: 300px;
 
     background-color: $window_background-color;
+    border-radius: 10px;
+
+    padding: 20px 10px;
 }
 
 .window-register__header {
-    font-size: 1rem;
-    margin   : 1rem;
+    font-size: $font-size-medium;
 }
 
 .window-register__row-container {
@@ -42,12 +40,15 @@
 
     width: 100%;
 
-    box-sizing: border-box;
-    padding: 0% 10%;
+    label{
+        width: 20%
+    }
+    input{
+        width: 60%;
+    }
 }
 
 .window-register__info {
-    width: 40%;
     text-align: right;
 }
 
@@ -55,7 +56,7 @@
     height: 12px;
     width: 40%;
 
-    font-size    : 16px;
+    font-size    : $font-size-medium;
     border       : 1px solid;
     border-radius: 18px;
     padding      : 5px 15px;
@@ -72,7 +73,7 @@
     height: 12px;
     width: 40%;
 
-    font-size    : 16px;
+    font-size    : $font-size-medium;
     border       : 1px solid;
     border-radius: 18px;
     padding      : 5px 15px;

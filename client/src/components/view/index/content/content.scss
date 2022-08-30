@@ -1,13 +1,31 @@
-main {
-    grid-area: main;
-    padding: 20px 10px;
-    display: flex;
-    flex-direction: column;
-}
+.index {
+    grid-template-areas:
+        'header nav auth'
+        'main main main'
+        'footer footer footer';
 
-h2 {
-    font-size: 20px;
-    color: $font-color-light;
+    main {
+      height: 100%;
+      padding: 20px 0px;
+    }
+    header,
+    nav,
+    .auth {
+        background: $background-color-light;
+    }
+
+    footer {
+        background: $background-color-middle;
+    }
+
+    main {
+        display: flex;
+        gap: 10px;
+    }
+
+    aside {
+        display: none;
+    }
 }
 
 .promo {
@@ -19,7 +37,7 @@ h2 {
     
     width: auto;
     color: $font-color-light;
-    font-size: 22px;
+    font-size: $font-size-big;
     padding: 40px;
     
     h3 {
@@ -33,7 +51,7 @@ h2 {
         padding: 30px 40px;
         color: $font-color-dark;
         border-radius: 10px;
-        font-size: 20px;
+        font-size: $font-size-big;
 
         li {
             margin: 15px 5px;
@@ -59,16 +77,9 @@ h2 {
     main {
         padding: 10px 15px;
     }
-    
-    h2 {
-        font-size: 16px;
-    }
 
-    .promo {
-        font-size: 16px;
-    
+    .promo {    
         ul {
-            font-size: 14px;
             min-height: 300px;
             li {
                 margin: 10px 5px;

@@ -16,7 +16,7 @@
 	border: none;
 	padding: 10px 15px;
 	background: #d8d8d8;
-	font-size: 14px;
+	font-size: $font-size-medium;
 	border-left: 1px solid #ddd;
 	border-right: 1px solid #ddd;
 }
@@ -25,7 +25,7 @@
 	border-left: 1px solid #ddd;
 	border-right: 1px solid #ddd;
 	padding: 10px 15px;
-	font-size: 14px;
+	font-size: $font-size-medium;
 	vertical-align: top;
 }
 .scroll-table tbody tr:nth-child(even){

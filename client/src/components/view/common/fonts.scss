@@ -1,0 +1,13 @@
+html {
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+$font-size-big: 2.2rem;
+$font-size-medium: 1.6rem;
+$font-size-small: 1.2rem;
+
+@media screen and (max-width: 640px){
+  html{
+    font-size: 8px;
+  }
+}

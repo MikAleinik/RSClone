@@ -1,4 +1,6 @@
 @import './color.scss';
+@import './fonts.scss';
+@import './button.scss';
 
 html {
     scroll-behavior: smooth;
@@ -14,8 +16,19 @@ body {
         'aside main main'
         'footer footer footer';
     color: $font-color-dark;
-    font-size: 16px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-size: $font-size-medium;
+}
+
+main {
+  grid-area: main;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  font-size: $font-size-big;
+  color: $font-color-light;
 }
 
 a {
@@ -27,35 +40,6 @@ a:visited {
     color: $font-color-dark;
 }
 
-.index {
-    grid-template-areas:
-        'header nav auth'
-        'main main main'
-        'footer footer footer';
-
-    main {
-      height: 100%;
-      padding: 20px 0px;
-    }
-    header,
-    nav,
-    .auth {
-        background: $background-color-light;
-    }
-
-    footer {
-        background: $background-color-middle;
-    }
-
-    main {
-        display: flex;
-        gap: 10px;
-    }
-
-    aside {
-        display: none;
-    }
-}
 aside {
     grid-area: aside;
     color: $font-color-light;
@@ -99,8 +83,6 @@ aside {
         'nav nav nav'
         'aside main main'
         'footer footer footer';
-    color: $font-color-dark;
-    font-size: 12px;
   }
   aside {
     li {

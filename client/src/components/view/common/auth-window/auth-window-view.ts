@@ -3,7 +3,6 @@ import Observer from "../../../controller/observer";
 import INotify from "../../../interfaces/i-notify";
 import View from "../../index/view";
 import './auth-window.scss';
-import '../../common/button.scss';
 import ILocale from "../../../interfaces/i-locale";
 import LocaleModel from "../../../models/common/localization/locale-model";
 import { LocaleKeys } from "../../../models/common/localization/locale-keys";
