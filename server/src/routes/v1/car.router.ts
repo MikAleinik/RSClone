@@ -38,7 +38,7 @@ export const CreateCarSchema = {
         price: { type: 'number' },
         currency: { type: 'string' },
         volume_max: { type: 'number' },
-        weigth_max: { type: 'number' },
+        weight_max: { type: 'number' },
     },
     required: ['point_current_lat', 'point_current_lon'],
     additionalProperties: false,
