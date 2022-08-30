@@ -27,7 +27,9 @@ export class CarMapper {
         this._columnSet = createColumnSet(
             this.TABLE_NAME,
             ['model', 'currency'],
-            ['point_current_lat', 'point_current_lon', 'route_lat', 'route_lon', 'price', 'volume_max', 'weight_max']
+            ['point_current_lat', 'point_current_lon', 'price', 'volume_max', 'weight_max'],
+            null,
+            ['route_lat', 'route_lon']
         );
     }
 

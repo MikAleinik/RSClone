@@ -28,11 +28,11 @@ export const CreateCarSchema = {
         point_current_lat: { type: 'number' },
         point_current_lon: { type: 'number' },
         route_lat: {
-            type: 'array',
+            type: ['array', 'null'],
             items: { type: 'number' },
         },
         route_lon: {
-            type: 'array',
+            type: ['array', 'null'],
             items: { type: 'number' },
         },
         price: { type: 'number' },
