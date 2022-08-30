@@ -25,6 +25,7 @@ export const CreateCarSchema = {
     type: 'object',
     properties: {
         model: { type: 'string' },
+        description: { type: 'string' },
         point_current_lat: { type: 'number' },
         point_current_lon: { type: 'number' },
         route_lat: {
@@ -50,6 +51,7 @@ export const CarSchema = {
         id: { type: 'number' },
         user_id: { type: 'number' },
         model: { type: 'string' },
+        description: { type: 'string' },
         point_current_lat: { type: 'number' },
         point_current_lon: { type: 'number' },
         route_lat: {
