@@ -64,7 +64,7 @@ export const CarSchema = {
         price: { type: 'number' },
         currency: { type: 'string' },
         volume_max: { type: 'number' },
-        weigth_max: { type: 'number' },
+        weight_max: { type: 'number' },
     },
 } as const;
 
