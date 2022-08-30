@@ -26,8 +26,9 @@ export class CargoMapper {
 
         this._columnSet = createColumnSet(
             this.TABLE_NAME,
-            ['currency', 'finished', 'description'],
-            ['point_start_lat', 'point_start_lon', 'point_end_lat', 'point_end_lon', 'volume', 'weigth', 'price']
+            ['currency', 'description'],
+            ['point_start_lat', 'point_start_lon', 'point_end_lat', 'point_end_lon', 'volume', 'weigth', 'price'],
+            ['finished']
         );
     }
 
