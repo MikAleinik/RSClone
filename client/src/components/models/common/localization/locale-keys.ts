@@ -77,6 +77,7 @@ export const enum LocaleKeys {
     MAIN_FILTER_PANEL_PRICE = 'mainFilterPanelHeaderPrice',
     MAIN_FILTER_PANEL_WEIGHT = 'mainFilterPanelHeaderWeight',
     MAIN_FILTER_PANEL_VOLUME = 'mainFilterPanelHeaderVolume',
+    MAIN_FILTER_PANEL_LOAD = 'mainFilterPanelHeaderLoad',
 
     MAIN_OVERVIEW_HEADER_RATING = 'mainOverviewRating',
     MAIN_OVERVIEW_HEADER_TRANSPORT = 'mainOverviewTransport',

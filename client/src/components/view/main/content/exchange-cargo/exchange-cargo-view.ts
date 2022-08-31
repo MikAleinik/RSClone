@@ -121,7 +121,6 @@ export default class ExchangeCargoView extends AsideItemView {
     }
     setLocale(localeModel: localeModel): void {
         this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_CARGO);
-
         this._formFilterLegend.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_HEADER);
         this._formItemSearchLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
         this._formItemPriceLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_PRICE);
@@ -267,22 +266,6 @@ export default class ExchangeCargoView extends AsideItemView {
         this._formItemPriceRange.value = this._formItemPrice.value;
         containerItem.appendChild(this._formItemPriceRange);
         formElement.appendChild(containerItem);
-        
-        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
-        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
-        containerItem.classList.add(this.CLASS_FIELDSET_RANGE);
-        containerItem.appendChild(this._formItemWeightLabel)
-        containerItem.appendChild(this._formItemWeight);
-        this._formItemWeight.setAttribute('type', 'number')
-        this._formItemWeight.id = 'weight'
-        this._formItemWeight.value = '11000'
-        formElement.appendChild(containerItem);
-        this._formItemWeightRange.setAttribute('type', 'range')
-        this._formItemWeightRange.min = '0';
-        this._formItemWeightRange.max = this._formItemWeight.value;
-        this._formItemWeightRange.value = this._formItemWeight.value;
-        containerItem.appendChild(this._formItemWeightRange);
-        formElement.appendChild(containerItem);
 
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
@@ -298,6 +281,22 @@ export default class ExchangeCargoView extends AsideItemView {
         this._formItemVolumeRange.max = this._formItemVolume.value;
         this._formItemVolumeRange.value = this._formItemVolume.value;
         containerItem.appendChild(this._formItemVolumeRange);
+        formElement.appendChild(containerItem);
+        
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_RANGE);
+        containerItem.appendChild(this._formItemWeightLabel)
+        containerItem.appendChild(this._formItemWeight);
+        this._formItemWeight.setAttribute('type', 'number')
+        this._formItemWeight.id = 'weight'
+        this._formItemWeight.value = '11000'
+        formElement.appendChild(containerItem);
+        this._formItemWeightRange.setAttribute('type', 'range')
+        this._formItemWeightRange.min = '0';
+        this._formItemWeightRange.max = this._formItemWeight.value;
+        this._formItemWeightRange.value = this._formItemWeight.value;
+        containerItem.appendChild(this._formItemWeightRange);
         formElement.appendChild(containerItem);
         
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
