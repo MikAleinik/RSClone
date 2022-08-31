@@ -91,6 +91,7 @@ export const enum LocaleKeys {
     MAIN_OVERVIEW_COMPANY_PHONE = 'mainOverviewCompanyPhone',
     MAIN_OVERVIEW_EMAIL = 'mainOverviewEmail',
     MAIN_OVERVIEW_PASSWORD = 'mainOverviewPassword',
+    MAIN_OVERVIEW_ACCEPT = 'mainOverviewAccept',
 
     MAIN_TRANSPORT_PANEL_HEADER = 'mainTransportPanelHeader',
     MAIN_TRANSPORT_NEW = 'mainTransportAddNew',

@@ -18,6 +18,7 @@ import GetUserHandler from "./handler/read/get-user";
 import ReadNewsHandler from "./handler/read/read-news";
 import ChangeCarHandler from "./handler/update/change-car";
 import ChangeCargoHandler from "./handler/update/change-cargo";
+import ChangeUserHandler from "./handler/update/change-user";
 import LogInUserHandler from "./handler/update/login";
 import LogOutUserHandler from "./handler/update/logout";
 import { HttpCodes } from "./http-codes";
@@ -385,6 +386,29 @@ export default class DataMapper {
     update<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
+                case AppEvents.MAIN_USER_SAVE_INFO: {
+                    const handler = new ChangeUserHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    resolve(params);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_NOT_FOUND: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка редактирования пользователя');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
                 case AppEvents.MAIN_CAR_CHANGE: {
                     const handler = new ChangeCarHandler(params);
                     handler.send()

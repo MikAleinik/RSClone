@@ -62,4 +62,5 @@ export const enum AppEvents {
     MAIN_CAR_GET_BY_ID = 'mainCarGetById',//получить машину по ID машины
     // MAIN_CAR_UPDATE = 'mainCarUpdate',//обновить список машин
 
+    MAIN_USER_SAVE_INFO = 'mainUserSaveInfo',//сохранение персональных данных пользователя
 }

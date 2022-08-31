@@ -139,6 +139,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_COMPANY_PHONE, new Array('Phone', 'Телефон'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_EMAIL, new Array('Email', 'Эл.почта'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_PASSWORD, new Array('Password', 'Пароль'));
+        this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_ACCEPT, new Array('Save', 'Сохранить'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_PANEL_HEADER, new Array('Car panel', 'Панель транспорта'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_COMPANY, new Array('Car owner', 'Владелец машины'));

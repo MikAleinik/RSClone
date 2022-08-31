@@ -36,6 +36,18 @@ export default class UserModel {
                 }
             });
     }
+    save(nameEvents: AppEvents, user: User): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.update(nameEvents, this.setUserToMap(user))
+                .then((result) => {
+                    this.setUser(this.setUserToMap(user));
+                    resolve(true);
+                })
+                .catch(() => {
+                    reject(false);
+                });
+        });
+    }
     getUserAll(nameEvents: AppEvents): Promise<Array<User>> {
         return new Promise((resolve, reject) => {
             this._dataMapper.read(nameEvents)
@@ -168,6 +180,24 @@ export default class UserModel {
             point_lon: Number(result.get('point_lon')!),
             role_id: result.get('role_id')!,
         }
+    }
+    private setUserToMap(user: User): Map<string, string> {
+        const result = new Map<string, string>();
+        result.set('id', user.id.toString());
+        result.set('login', user.login);
+        result.set('email', user.email);
+        result.set('password', user.password);
+        result.set('first_name', user.first_name);
+        result.set('last_name', user.last_name);
+        result.set('phone', user.phone);
+        result.set('company', user.company);
+        result.set('address', user.address);
+        result.set('rating', user.rating.toString());
+        result.set('rating_count', user.rating_count.toString());
+        result.set('point_lat', user.point_lat.toString());
+        result.set('point_lon', user.point_lon.toString());
+        result.set('role_id', user.role_id);
+        return result;
     }
     private clearUser(): void {
         this._currentUser.id = 0;

@@ -7,7 +7,7 @@ import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 import MapLeaflet from '../map/map-leaflet';
 import './overview.scss';
-import user from '../../../../../types/user';
+import User from '../../../../../types/user';
 
 export default class OverviewView extends AsideItemView {
     private readonly TAG_USER_DATA = 'div';
@@ -16,7 +16,7 @@ export default class OverviewView extends AsideItemView {
     private readonly TAG_FIELD_LABEL = 'label';
     private readonly TAG_FIELD_INPUT = 'input';
     private readonly TAG_FIELD_IMG = 'img';
-    // private readonly TAG_FIELD_INPUT = 'input';
+    private readonly TAG_BUTTON = 'button';
     // private readonly TAG_FIELD_INPUT = 'input';
 
 
@@ -26,6 +26,7 @@ export default class OverviewView extends AsideItemView {
     private readonly CLASS_USER_FIELD = 'user__row_name';
     private readonly CLASS_USER_FIELD_STAR = 'user__star';
     private readonly CLASS_USER_STAR = 'user__star-item';
+    private readonly CLASS_BUTTON = 'big__button';
 
     private readonly PATH_IMAGE_STAR = './assets/icons/star-empty.png'
 
@@ -48,8 +49,10 @@ export default class OverviewView extends AsideItemView {
     private _passwordInput = document.createElement(this.TAG_FIELD_INPUT);
     private _companyNameInput = document.createElement(this.TAG_FIELD_INPUT);
     private _companyAddressInput = document.createElement(this.TAG_FIELD_INPUT);
+    private _buttonAccept = document.createElement(this.TAG_BUTTON);
 
     private _map!: MapLeaflet;
+    private _user!: User;
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
@@ -79,14 +82,16 @@ export default class OverviewView extends AsideItemView {
         this._companyNameLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_NAME);
         this._companyAddressLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_ADDRESS);
         this._companyRatingLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING);
+        this._buttonAccept.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_ACCEPT);
     }
     setMap(map: MapLeaflet) {
         this._map = map;
         this._mainElement.appendChild(this._map.getMap());
+        this._map.setRouteMode(false);
     }
-    setAuthorizedUser(authUser: user | false){
-        console.log(authUser);
+    setAuthorizedUser(authUser: User | false){
         if(authUser !== false) {
+            this._user = authUser;
             this._firstNameInput.value = authUser.first_name;
             this._lastNameInput.value = authUser.last_name;
             this._phoneInput.value = authUser.phone;
@@ -94,9 +99,10 @@ export default class OverviewView extends AsideItemView {
             this._passwordInput.value = '';
             this._companyNameInput.value = authUser.company;
             this._companyAddressInput.value = authUser.address;
-            // background: linear-gradient(to right, red 50%, white 50%);
-            let tempRating = 3.43;
-            this._starContainer.style.background = `linear-gradient(to right, #4c577abd ${tempRating * 2 * 10}%, white ${100 - tempRating * 2 * 10}%)`;
+            const rating = authUser.rating / authUser.rating_count;
+            this._starContainer.style.background = `linear-gradient(to right, #4c577abd ${rating * 2 * 10}%, white ${100 - rating * 2 * 10}%)`;
+        } else {
+            //TODO error message
         }
     }
     protected itemClickedHandler(): void {
@@ -173,9 +179,30 @@ export default class OverviewView extends AsideItemView {
             starElement.src = this.PATH_IMAGE_STAR;
             this._starContainer.appendChild(starElement);
         }
-
         nameRow.appendChild(this._starContainer);
         userElement.appendChild(nameRow);
 
+        this._buttonAccept.classList.add(this.CLASS_BUTTON);
+        this._buttonAccept.addEventListener('click', this.buttonAcceptClickHandler.bind(this));
+        userElement.appendChild(this._buttonAccept);
+    }
+    private buttonAcceptClickHandler() {
+        const user: User = {
+            id: this._user.id,
+            login: this._user.login,
+            email: this._emailInput.value,
+            password: (this._passwordInput.value !== '' ? this._passwordInput.value : ''),
+            role_id: this._user.role_id,
+            first_name: this._firstNameInput.value,
+            last_name: this._lastNameInput.value,
+            phone: this._phoneInput.value,
+            company: this._companyNameInput.value,
+            address: this._companyAddressInput.value,
+            rating: this._user.rating,
+            rating_count: this._user.rating_count,
+            point_lat: 0,
+            point_lon: 0,
+        }
+        this._observer.notify(AppEvents.MAIN_USER_SAVE_INFO, this, user as User);
     }
 }
