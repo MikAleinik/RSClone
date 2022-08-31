@@ -119,6 +119,10 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_ASIDE_NEWS, new Array('News', 'Новости'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_FILTER_PANEL_HEADER, new Array('Filter items', 'Панель фильтрации'));
+        this._localeDictionary.set(LocaleKeys.MAIN_FILTER_PANEL_SEARCH, new Array('Search', 'Поиск'));
+        this._localeDictionary.set(LocaleKeys.MAIN_FILTER_PANEL_PRICE, new Array('Max price', 'Макс. стоимость'));
+        this._localeDictionary.set(LocaleKeys.MAIN_FILTER_PANEL_WEIGHT, new Array('Max wieght', 'Макс. вес'));
+        this._localeDictionary.set(LocaleKeys.MAIN_FILTER_PANEL_VOLUME, new Array('Max volume', 'Макс. объем'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING, new Array('Rating', 'Рейтинг'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO, new Array('Your cargoes', 'Ваши грузы'));

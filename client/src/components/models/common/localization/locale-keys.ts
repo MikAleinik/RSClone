@@ -71,6 +71,10 @@ export const enum LocaleKeys {
     MAIN_ASIDE_NEWS = 'mainAsideNews',
 
     MAIN_FILTER_PANEL_HEADER = 'mainFilterPanelHeader',
+    MAIN_FILTER_PANEL_SEARCH = 'mainFilterPanelHeaderSearch',
+    MAIN_FILTER_PANEL_PRICE = 'mainFilterPanelHeaderPrice',
+    MAIN_FILTER_PANEL_WEIGHT = 'mainFilterPanelHeaderWeight',
+    MAIN_FILTER_PANEL_VOLUME = 'mainFilterPanelHeaderVolume',
 
     MAIN_OVERVIEW_HEADER_RATING = 'mainOverviewRating',
     MAIN_OVERVIEW_HEADER_TRANSPORT = 'mainOverviewTransport',
