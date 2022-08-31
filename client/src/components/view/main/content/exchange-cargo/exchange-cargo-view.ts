@@ -10,6 +10,7 @@ import Cargo from '../../../../../types/cargo';
 export default class ExchangeCargoView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
     private readonly TAG_LEGEND = 'legend';
+    private readonly TAG_FIELDSET_ITEM = 'div';
     private readonly TAG_FIELDSET_INPUT = 'input';
     private readonly TAG_FIELDSET_LABEL = 'label';
 
@@ -19,7 +20,9 @@ export default class ExchangeCargoView extends AsideItemView {
 
     private readonly CLASS_FIELDSET = 'item_form';
     private readonly CLASS_FIELDSET_ITEM = 'field__container';
+    private readonly CLASS_FIELDSET_RANGE = 'field__range';
     private readonly CLASS_FIELDSET_BUTTON_CONTAINER = 'field__button_container';
+    private readonly TAG_FIELDSET_BUTTON = 'button';
     private readonly CLASS_TABLE_WRAPPER = 'table__wrapper';
     private readonly CLASS_TABLE_CONTAINER = 'table__container';
     private readonly CLASS_TABLE_HEADER = 'table__header';
@@ -27,6 +30,19 @@ export default class ExchangeCargoView extends AsideItemView {
     private readonly CLASS_TABLE_DATA = 'table__data';
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
+    private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemSearchLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemPrice = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemPriceRange = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemPriceLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemWeight = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemWeightRange = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemWeightLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemVolume = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemVolumeRange = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemVolumeLabel = document.createElement(this.TAG_FIELDSET_LABEL);
+    private _formItemButtonClear = document.createElement(this.TAG_FIELDSET_BUTTON);
+
     private _tableHeaderPrice = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_DATA);
@@ -107,6 +123,10 @@ export default class ExchangeCargoView extends AsideItemView {
         this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_CARGO);
 
         this._formFilterLegend.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_HEADER);
+        this._formItemSearchLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
+        this._formItemPriceLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_PRICE);
+        this._formItemWeightLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_WEIGHT);
+        this._formItemVolumeLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_VOLUME);
         this._tableHeaderPointStart.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_LOCATION_FROM);
         this._tableHeaderPointEnd.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_LOCATION_TO);
         this._tableHeaderCompany.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_COMPANY);
@@ -116,6 +136,7 @@ export default class ExchangeCargoView extends AsideItemView {
         this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_VOLUME);
         this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_Weight);
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION);
+        this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
     }
     setAllCargo(cargoes: Array<Cargo>): void {
         this.clearTable();
@@ -221,8 +242,114 @@ export default class ExchangeCargoView extends AsideItemView {
     private createFilterForm(): HTMLElement {
         const formElement = document.createElement(this.TAG_FIELDSET);
         formElement.classList.add(this.CLASS_FIELDSET);
-
         formElement.appendChild(this._formFilterLegend);
+
+        let containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        this._formItemSearch.setAttribute('type', 'search')
+        this._formItemSearch.id = 'search';
+        containerItem.appendChild(this._formItemSearchLabel);
+        containerItem.appendChild(this._formItemSearch);
+        formElement.appendChild(containerItem);
+        
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_RANGE);
+        containerItem.appendChild(this._formItemPriceLabel)
+        containerItem.appendChild(this._formItemPrice);
+        this._formItemPrice.setAttribute('type', 'number')
+        this._formItemPrice.id = 'price'
+        this._formItemPrice.value = '20000'
+        formElement.appendChild(containerItem);
+        this._formItemPriceRange.setAttribute('type', 'range');
+        this._formItemPriceRange.min = '0';
+        this._formItemPriceRange.max = this._formItemPrice.value;
+        this._formItemPriceRange.value = this._formItemPrice.value;
+        containerItem.appendChild(this._formItemPriceRange);
+        formElement.appendChild(containerItem);
+        
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_RANGE);
+        containerItem.appendChild(this._formItemWeightLabel)
+        containerItem.appendChild(this._formItemWeight);
+        this._formItemWeight.setAttribute('type', 'number')
+        this._formItemWeight.id = 'weight'
+        this._formItemWeight.value = '11000'
+        formElement.appendChild(containerItem);
+        this._formItemWeightRange.setAttribute('type', 'range')
+        this._formItemWeightRange.min = '0';
+        this._formItemWeightRange.max = this._formItemWeight.value;
+        this._formItemWeightRange.value = this._formItemWeight.value;
+        containerItem.appendChild(this._formItemWeightRange);
+        formElement.appendChild(containerItem);
+
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_RANGE);
+        containerItem.appendChild(this._formItemVolumeLabel)
+        containerItem.appendChild(this._formItemVolume);
+        this._formItemVolume.setAttribute('type', 'number');
+        this._formItemVolume.id = 'volume';
+        this._formItemVolume.value = '3000';
+        formElement.appendChild(containerItem);
+        this._formItemVolumeRange.setAttribute('type', 'range')
+        this._formItemVolumeRange.min = '0';
+        this._formItemVolumeRange.max = this._formItemVolume.value;
+        this._formItemVolumeRange.value = this._formItemVolume.value;
+        containerItem.appendChild(this._formItemVolumeRange);
+        formElement.appendChild(containerItem);
+        
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_BUTTON_CONTAINER);
+        containerItem.appendChild(this._formItemButtonClear);
+        formElement.appendChild(containerItem);
+
+        this._formItemButtonClear.addEventListener('click', (e) => {
+            this._formItemSearch.value = '';
+            this._formItemPrice.value = '20000';
+            this._formItemWeight.value = '11000';
+            this._formItemVolume.value = '3000';
+            const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
+            for (const r of allRows){
+                r.style.display = 'flex'
+            }
+        })
+        
+        formElement.addEventListener('input', (e) => {
+            const inputField = e.target  as HTMLInputElement;
+            const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
+
+            if (inputField.type === 'range'){
+                const field = inputField.previousSibling as HTMLInputElement;
+                field.value = inputField.value;
+            }
+
+            console.log(e.target)
+
+            const search = inputField.id === 'search' ? inputField.value : '';
+            const price = inputField.id === 'price' ? inputField.value : this._formItemPrice.value;
+            const weight = inputField.id === 'weight' ? inputField.value : this._formItemWeight.value;
+            const volume = inputField.id === 'volume' ? inputField.value : this._formItemVolume.value;
+            
+            for (const r of allRows){
+                const textData = [
+                    r.childNodes[2].textContent,
+                    r.childNodes[3].textContent,
+                    r.childNodes[8].textContent
+                ].toString().includes(search);
+                const priceData = Number(r.childNodes[4].textContent) <= Number(price);
+                const volumeData = Number(r.childNodes[6].textContent) <= Number(volume);
+                const weightData = Number(r.childNodes[7].textContent) <= Number(weight);
+                if (textData && priceData && volumeData && weightData){
+                    r.style.display = 'flex'
+                } else {
+                    r.style.display = 'none'
+                }
+            }
+        })
+
+        // this._formItemButtonClear.addEventListener('click', this.clearCargoHandler.bind(this));
 
         return formElement;
     }

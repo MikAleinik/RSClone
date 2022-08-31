@@ -25,7 +25,7 @@ export default class TruckView extends AsideItemView {
     private readonly CLASS_FIELDSET = 'item_form';
     private readonly CLASS_FIELDSET_ITEM = 'field__container';
     private readonly CLASS_FIELDSET_BUTTON_CONTAINER = 'field__button_container';
-    private readonly CLASS_FIELDSET_BUTTON_HIDDEN = 'field__button_hidden';
+    private readonly CLASS_FIELDSET_BUTTON_HIDDEN = 'invisible';
     private readonly CLASS_TABLE_WRAPPER = 'table__wrapper';
     private readonly CLASS_TABLE_CONTAINER = 'table__container';
     private readonly CLASS_TABLE_HEADER = 'table__header';
