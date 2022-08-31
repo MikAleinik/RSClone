@@ -26,7 +26,7 @@ export default class Observer {
             this._senders.set(nameEvent, new Array(sender));
         }
     }
-    notify(nameEvent: AppEvents, sender: View | INotify, params?: Map<string, string> | Cargo | Car | User) {
+    notify(nameEvent: AppEvents, sender: View | INotify, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car> | User) {
         let currentListController = this._listeners.get(nameEvent);
         if (currentListController !== undefined) {
             currentListController.forEach((controller) => {
@@ -38,7 +38,7 @@ export default class Observer {
         }
         this.checkSenderNotify(nameEvent, <INotify>sender, params);
     }
-    private checkSenderNotify(nameEvent: AppEvents, eventSender: INotify, params?: Map<string, string> | Cargo | Car | User) {
+    private checkSenderNotify(nameEvent: AppEvents, eventSender: INotify, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car> | User) {
         let currentListSender = this._senders.get(nameEvent);
         if (currentListSender !== undefined) {
             currentListSender.forEach((sender) => {

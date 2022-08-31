@@ -47,6 +47,7 @@ export const enum AppEvents {
     MAIN_CARGO_CHANGE_SUCCESS = 'mainCargoChangeSuccess',//груз отредактирован успешно
     MAIN_CARGO_GET_ALL = 'mainCargoGetAll',//получить все доступные грузы
     MAIN_CARGO_GET_BY_USER = 'mainCargoGetByUser',//получить все доступные грузы пользователя
+    MAIN_CARGO_BY_USER_RECEIVED = 'mainCargoByUserReceived',//получены все доступные грузы пользователя
     MAIN_CARGO_GET_BY_CAR = 'mainCargoGetByCar',//получить все доступные грузы в машине
     MAIN_CARGO_GET_BY_ID = 'mainCargoGetById',//получить груз по ID груза
     // MAIN_CARGO_UPDATE = 'mainCargoUpdate',//обновить список грузов
@@ -59,6 +60,7 @@ export const enum AppEvents {
     MAIN_CAR_CHANGE_SUCCESS = 'mainCargoChangeSuccess',//машина отредактирован успешно
     MAIN_CAR_GET_ALL = 'mainCarGetAll',//получить все доступные машину
     MAIN_CAR_GET_BY_USER = 'mainCarGetByUser',//получить все доступные машины пользователя
+    MAIN_CAR_BY_USER_RECEIVED = 'mainCarByUserReceived',//получены все доступные машины пользователя
     MAIN_CAR_GET_BY_ID = 'mainCarGetById',//получить машину по ID машины
     // MAIN_CAR_UPDATE = 'mainCarUpdate',//обновить список машин
 

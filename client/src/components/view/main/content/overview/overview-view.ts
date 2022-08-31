@@ -8,6 +8,8 @@ import AsideItemView from '../aside-item-view';
 import MapLeaflet from '../map/map-leaflet';
 import './overview.scss';
 import User from '../../../../../types/user';
+import Cargo from '../../../../../types/cargo';
+import Car from '../../../../../types/car';
 
 export default class OverviewView extends AsideItemView {
     private readonly TAG_USER_DATA = 'div';
@@ -17,6 +19,9 @@ export default class OverviewView extends AsideItemView {
     private readonly TAG_FIELD_INPUT = 'input';
     private readonly TAG_FIELD_IMG = 'img';
     private readonly TAG_BUTTON = 'button';
+    private readonly TAG_TABLE_CONTAINER = 'div';
+    private readonly TAG_TABLE_ROW = 'div';
+    private readonly TAG_TABLE_ROW_DATA = 'span';
     // private readonly TAG_FIELD_INPUT = 'input';
 
 
@@ -27,6 +32,9 @@ export default class OverviewView extends AsideItemView {
     private readonly CLASS_USER_FIELD_STAR = 'user__star';
     private readonly CLASS_USER_STAR = 'user__star-item';
     private readonly CLASS_BUTTON = 'big__button';
+    private readonly CLASS_TABLE = 'user__table';
+    private readonly CLASS_TABLE_ROW = 'table__row';
+    private readonly CLASS_TABLE_DATA = 'table__data';
 
     private readonly PATH_IMAGE_STAR = './assets/icons/star-empty.png'
 
@@ -41,6 +49,8 @@ export default class OverviewView extends AsideItemView {
     private _companyAddressLabel = document.createElement(this.TAG_FIELD_LABEL);
     private _companyRatingLabel = document.createElement(this.TAG_FIELD_LABEL);
     private _starContainer = document.createElement(this.TAG_FIELD_ROW);
+    private _headerStatisticCar = document.createElement(this.TAG_USER_HEADER);
+    private _headerStatisticCargo = document.createElement(this.TAG_USER_HEADER);
 
     private _firstNameInput = document.createElement(this.TAG_FIELD_INPUT);
     private _lastNameInput = document.createElement(this.TAG_FIELD_INPUT);
@@ -50,22 +60,69 @@ export default class OverviewView extends AsideItemView {
     private _companyNameInput = document.createElement(this.TAG_FIELD_INPUT);
     private _companyAddressInput = document.createElement(this.TAG_FIELD_INPUT);
     private _buttonAccept = document.createElement(this.TAG_BUTTON);
+    private _tableContainerCar = document.createElement(this.TAG_TABLE_CONTAINER);
+    private _tableContainerCargo = document.createElement(this.TAG_TABLE_CONTAINER);
 
     private _map!: MapLeaflet;
     private _user!: User;
+    private _cargoes = new Map<HTMLElement, Cargo>();
+    private _cars = new Map<HTMLElement, Car>();
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
 
         this.createMainElement();
         this._observer.addSender(AppEvents.LOCALE_SET, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_BY_USER_RECEIVED, this);
+        this._observer.addSender(AppEvents.MAIN_CAR_BY_USER_RECEIVED, this);
+
+        this._observer.addSender(AppEvents.MAIN_CARGO_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_DELETE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_CHANGE_SUCCESS, this);
+
+        this._observer.addSender(AppEvents.MAIN_CAR_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CAR_DELETE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CAR_CHANGE_SUCCESS, this);
+
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
     }
-    notify(nameEvent: AppEvents, sender: INotify | view): void {
+    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car>): void {
         switch (nameEvent) {
             case AppEvents.LOCALE_SET: {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_BY_USER_RECEIVED: {
+                this.setAllCargo(params as Array<Cargo>);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_CREATE_SUCCESS: {
+                this.cargoCreatedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_DELETE_SUCCESS: {
+                this.cargoDeletedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_CHANGE_SUCCESS: {
+                this.cargoChangedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CAR_BY_USER_RECEIVED: {
+                this.setAllCar(params as Array<Car>);
+                break;
+            }
+            case AppEvents.MAIN_CAR_CREATE_SUCCESS: {
+                this.carCreatedHandler(params as Car);
+                break;
+            }
+            case AppEvents.MAIN_CAR_DELETE_SUCCESS: {
+                this.carDeletedHandler(params as Car);
+                break;
+            }
+            case AppEvents.MAIN_CAR_CHANGE_SUCCESS: {
+                this.carChangedHandler(params as Car);
                 break;
             }
         }
@@ -83,6 +140,9 @@ export default class OverviewView extends AsideItemView {
         this._companyAddressLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_ADDRESS);
         this._companyRatingLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING);
         this._buttonAccept.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_ACCEPT);
+        this._headerStatisticCar.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_TRANSPORT);
+        this._headerStatisticCargo.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO);
+
     }
     setMap(map: MapLeaflet) {
         this._map = map;
@@ -104,6 +164,118 @@ export default class OverviewView extends AsideItemView {
         } else {
             //TODO error message
         }
+    }
+    setAllCargo(cargoes: Array<Cargo>): void {
+        this.clearTableCargo();
+        this._cargoes.clear();
+        for (let i = 0; i < cargoes.length; i += 1) {
+            const rowElement = this.createRowCargo(cargoes[i])
+            this._tableContainerCargo.appendChild(rowElement);
+            this._cargoes.set(rowElement, cargoes[i]);
+        }
+    }
+    cargoCreatedHandler(cargo: Cargo) {
+        if (cargo !== undefined) {
+            const rowElement = this.createRowCargo(cargo);
+            this._cargoes.set(rowElement, cargo);
+            this._tableContainerCargo.appendChild(rowElement);
+        }
+    }
+    cargoDeletedHandler(cargo: Cargo) {
+        this._cargoes.forEach((value, key) => {
+            if (value.id === cargo.id) {
+                key.remove();
+            }
+        });     
+    }
+    cargoChangedHandler(cargo: Cargo) {
+        this._cargoes.forEach((value, key) => {
+            if (value.id === cargo.id) {
+                value = cargo;
+                key.children[0].textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
+                key.children[1].textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
+                key.children[2].textContent = (cargo.user_company !== undefined ? cargo.user_company : '');
+                const firstname = (cargo.user_firstname !== undefined ? cargo.user_firstname : '');
+                const lasttname = (cargo.user_lastname !== undefined ? cargo.user_lastname : '');
+                const phone = (cargo.user_phone !== undefined ? cargo.user_phone : '');
+                key.children[3].textContent = firstname + ' ' + lasttname + ' ' + phone;
+                key.children[4].textContent = cargo.price.toString();
+                key.children[5].textContent = cargo.currency;
+                key.children[6].textContent = cargo.volume.toString();
+                key.children[7].textContent = cargo.weigth.toString();
+                key.children[8].textContent = cargo.description;
+            }
+        });
+    }
+    setAllCar(cars: Array<Car>): void {
+        this.clearTableCar();
+        this._cars.clear();
+        for (let i = 0; i < cars.length; i += 1) {
+            const rowElement = this.createRowCar(cars[i])
+            this._tableContainerCar.appendChild(rowElement);
+            this._cars.set(rowElement, cars[i]);
+        }
+    }
+    carCreatedHandler(car: Car) {
+        if(car !== undefined) {
+            const rowElement = this.createRowCar(car);
+            this._cars.set(rowElement, car);
+            this._tableContainerCar.appendChild(rowElement);
+        }
+    }
+    carDeletedHandler(car: Car) {
+        this._cars.forEach((value, key) => {
+            if (value.id === car.id) {
+                key.remove();
+            }
+        });
+    }
+    carChangedHandler(car: Car) {
+        this._cars.forEach((value, key) => {
+            if (value.id === car.id) {
+                value = car;
+                key.children[0].textContent = car.model;
+                key.children[1].textContent = car.point_current_lat + ' ' + car.point_current_lon;
+                key.children[2].textContent = (car.user_company !== undefined ? car.user_company : '');
+                const firstname = (car.user_firstname !== undefined ? car.user_firstname : '');
+                const lasttname = (car.user_lastname !== undefined ? car.user_lastname : '');
+                const phone = (car.user_phone !== undefined ? car.user_phone : '');
+                key.children[3].textContent = firstname + ' ' + lasttname + ' ' + phone;
+                key.children[4].textContent = car.price.toString();
+                key.children[5].textContent = car.currency;
+                key.children[6].textContent = car.volume_max.toString();
+                key.children[7].textContent = car.weight_max.toString();
+                key.children[8].textContent = car.description;
+            }
+        });
+    }
+    private clearTableCargo(): void {
+        while (this._tableContainerCargo.firstElementChild) {
+            this._tableContainerCargo.firstElementChild.remove();
+        }
+    }
+    private clearTableCar(): void {
+        while (this._tableContainerCar.firstElementChild) {
+            this._tableContainerCar.firstElementChild.remove();
+        }
+    }
+    private createRowCar(car: Car): HTMLElement {
+        const rowElement = document.createElement(this.TAG_TABLE_ROW);
+        rowElement.className = this.CLASS_TABLE_ROW
+        let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
+        rowItem.textContent = car.model;
+        rowItem.className = this.CLASS_TABLE_DATA;
+        rowElement.appendChild(rowItem);
+        return rowElement;
+    }
+    private createRowCargo(cargo: Cargo): HTMLElement {
+        const rowElement = document.createElement(this.TAG_TABLE_ROW);
+        rowElement.className = this.CLASS_TABLE_ROW
+        let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
+        rowItem.textContent = cargo.description;
+        rowItem.className = this.CLASS_TABLE_DATA;
+        rowElement.appendChild(rowItem);
+        return rowElement;
     }
     protected itemClickedHandler(): void {
         this._mainContainer.firstElementChild?.remove();
@@ -185,6 +357,17 @@ export default class OverviewView extends AsideItemView {
         this._buttonAccept.classList.add(this.CLASS_BUTTON);
         this._buttonAccept.addEventListener('click', this.buttonAcceptClickHandler.bind(this));
         userElement.appendChild(this._buttonAccept);
+
+        this._headerStatisticCar.classList.add(this.CLASS_USER_HEADER);
+        userElement.appendChild(this._headerStatisticCar);
+        this._tableContainerCar.classList.add(this.CLASS_TABLE);
+        userElement.appendChild(this._tableContainerCar);
+
+        this._headerStatisticCargo.classList.add(this.CLASS_USER_HEADER);
+        userElement.appendChild(this._headerStatisticCargo);
+        this._tableContainerCargo.classList.add(this.CLASS_TABLE);
+        userElement.appendChild(this._tableContainerCargo);
+
     }
     private buttonAcceptClickHandler() {
         const user: User = {

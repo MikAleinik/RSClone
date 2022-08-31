@@ -138,6 +138,7 @@ export default class ExchangeCargoView extends AsideItemView {
         this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
     }
     setAllCargo(cargoes: Array<Cargo>): void {
+        this._observer.notify(AppEvents.MAIN_CARGO_BY_USER_RECEIVED, this, cargoes);
         this.clearTable();
         this._cargoes.clear();
         for (let i = 0; i < cargoes.length; i += 1) {

@@ -76,15 +76,15 @@ export default class ExchangeTruckView extends AsideItemView {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
                 break;
             }
-            case AppEvents.MAIN_CARGO_CREATE_SUCCESS: {
+            case AppEvents.MAIN_CAR_CREATE_SUCCESS: {
                 this.carCreatedHandler(params as Car);
                 break;
             }
-            case AppEvents.MAIN_CARGO_DELETE_SUCCESS: {
+            case AppEvents.MAIN_CAR_DELETE_SUCCESS: {
                 this.carDeletedHandler(params as Car);
                 break;
             }
-            case AppEvents.MAIN_CARGO_CHANGE_SUCCESS: {
+            case AppEvents.MAIN_CAR_CHANGE_SUCCESS: {
                 this.carChangedHandler(params as Car);
                 break;
             }
@@ -140,6 +140,7 @@ export default class ExchangeTruckView extends AsideItemView {
         this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
     }
     setAllCar(cars: Array<Car>): void {
+        this._observer.notify(AppEvents.MAIN_CAR_BY_USER_RECEIVED, this, cars);
         this.clearTable();
         this._cars.clear();
         for (let i = 0; i < cars.length; i += 1) {
