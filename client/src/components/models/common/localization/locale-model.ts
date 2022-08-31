@@ -201,6 +201,7 @@ export default class LocaleModel {
 
         this._localeDictionary.set(LocaleKeys.MAIN_MAP_POINT_FROM, new Array('Route from', 'Начало маршрута'));
         this._localeDictionary.set(LocaleKeys.MAIN_MAP_POINT_TO, new Array('Route to', 'Конец маршрута'));
+        this._localeDictionary.set(LocaleKeys.MAIN_MAP_POINT_CLEAR, new Array('Clear route', 'Очистить маршрут'));
         this._localeDictionary.set(LocaleKeys.MAIN_MAP_SEARCH_FAILED, new Array('Sorry, that address could not be found', 'Извините, по запросу ни чего не найдено'));
         this._localeDictionary.set(LocaleKeys.MAIN_MAP_SEARCH_FIELD, new Array('Enter address...', 'Введите адрес...'));
     }

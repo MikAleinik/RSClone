@@ -60,7 +60,7 @@ export default class MapLeaflet implements INotify, ILocale {
     }
     setLocale(localeModel: localeModel): void {
         this._localeModel = localeModel;
-        this._popup.closeTooltip();
+        this._popup.removeFrom(this._map);
 
         this._search.searchElement.input.placeholder = this._localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_FIELD);
     }
@@ -69,7 +69,7 @@ export default class MapLeaflet implements INotify, ILocale {
     }
     clearMap() {
         this._marker = new Map<Leaflet.Marker, Car | Cargo | string>();
-        this._popup.closePopup();
+        this._popup.removeFrom(this._map);
     }
     setRouteMode(mode: boolean) {
         this._routeMode = mode;
@@ -109,8 +109,12 @@ export default class MapLeaflet implements INotify, ILocale {
                     const buttonTo = document.createElement(this.TAG_MAP_POPUP_BUTTON);
                     buttonTo.classList.add(this.CLASS_MAP_POPUP_BUTTON);
                     buttonTo.textContent = this._localeModel.getPhrase(LocaleKeys.MAIN_MAP_POINT_TO);
+                    const buttonClear = document.createElement(this.TAG_MAP_POPUP_BUTTON);
+                    buttonClear.classList.add(this.CLASS_MAP_POPUP_BUTTON);
+                    buttonClear.textContent = this._localeModel.getPhrase(LocaleKeys.MAIN_MAP_POINT_CLEAR);
                     buttonContainer.appendChild(buttonFrom);
                     buttonContainer.appendChild(buttonTo);
+                    buttonContainer.appendChild(buttonClear);
 
                     content.appendChild(buttonContainer);
 
@@ -128,6 +132,20 @@ export default class MapLeaflet implements INotify, ILocale {
                         this._markerRouteTo = this.addMarkerToMap(event.latlng.lat, event.latlng.lng, LocaleKeys.MAIN_MAP_POINT_TO);
                         if (this._markerRouteFrom !== null) {
                             this.createRoute([this._markerRouteFrom, this._markerRouteTo]);
+                        }
+                    });
+                    buttonClear.addEventListener('click', () => {
+                        this._popup.removeFrom(this._map);
+                        if (this._route !== null) {
+                            this._route.remove();
+                        }
+                        if (this._markerRouteFrom !== null) {
+                            this._markerRouteFrom.remove();
+                            this._markerRouteFrom = null;
+                        }
+                        if (this._markerRouteTo !== null) {
+                            this._markerRouteTo.remove();
+                            this._markerRouteTo = null;
                         }
                     });
                 }
