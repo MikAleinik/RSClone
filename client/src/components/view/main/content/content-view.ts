@@ -68,10 +68,12 @@ export default class ContentView extends View implements INotify {
 
         this._asideElement.appendChild(listItemElement);
 
-        routesItem.selectElement();
+        const mapOverview = new MapLeaflet(this._observer);
+        overviewItem.setMap(mapOverview);
 
-        const map = new MapLeaflet(this._observer);
-        routesItem.setMap(map);
-        map.createMap();
+        const mapRoute = new MapLeaflet(this._observer);
+        routesItem.setMap(mapRoute);
+
+        overviewItem.selectElement();
     }
 }

@@ -1,4 +1,4 @@
-import Leaflet, { LatLng, LatLngTuple, LeafletEventHandlerFn, Marker } from 'leaflet';
+import Leaflet from 'leaflet';
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css'
@@ -75,22 +75,24 @@ export default class MapLeaflet implements INotify, ILocale {
         this._routeMode = mode;
     }
     createMap() {
-        this._mapContainer.classList.add(this.CLASS_MAP_WRAPPER);
-        Leaflet.Icon.Default.mergeOptions({
-            iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-            iconUrl: require('leaflet/dist/images/marker-icon.png'),
-            shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-        });
+        if (this._map === undefined) {
+            this._mapContainer.classList.add(this.CLASS_MAP_WRAPPER);
+            Leaflet.Icon.Default.mergeOptions({
+                iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+                iconUrl: require('leaflet/dist/images/marker-icon.png'),
+                shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+            });
 
-        this._map = Leaflet.map(<HTMLElement>this._mapContainer);
-        const tiles = Leaflet.tileLayer(this.URL_OSM_DE);
-        this._map.setView(<Leaflet.LatLngTuple>[this.DEFAULT_LAT, this.DEFAULT_LON], this.DEFAULT_ZOOM)
-        tiles.addTo(this._map);
+            this._map = Leaflet.map(<HTMLElement>this._mapContainer);
+            const tiles = Leaflet.tileLayer(this.URL_OSM_DE);
+            this._map.setView(<Leaflet.LatLngTuple>[this.DEFAULT_LAT, this.DEFAULT_LON], this.DEFAULT_ZOOM)
+            tiles.addTo(this._map);
 
-        this._map.addEventListener('click', this.mapClickHandler.bind(this));
+            this._map.addEventListener('click', this.mapClickHandler.bind(this));
 
-        if (this._routeMode) {
-            this.createMapSearch();
+            if (this._routeMode) {
+                this.createMapSearch();
+            }
         }
     }
     private mapClickHandler(event: Leaflet.LeafletMouseEvent) {
@@ -169,7 +171,7 @@ export default class MapLeaflet implements INotify, ILocale {
             this._route.remove();
         }
         const points = new Array<Leaflet.LatLng>();
-        for(let i = 0; i < items.length; i += 1) {
+        for (let i = 0; i < items.length; i += 1) {
             points.push(items[i].getLatLng());
         }
         this._route = Leaflet.Routing.control({

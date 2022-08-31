@@ -35,6 +35,11 @@ export default class RoutesView extends AsideItemView {
         this._map = map;
         this._mainElement.appendChild(this._map.getMap());
     }
+    protected itemClickedHandler(): void {
+        this._mainContainer.firstElementChild?.remove();
+        this._mainContainer.appendChild(this._mainElement);
+        this._map.createMap();
+    }
     protected createMainElement(): void {
         this._mainElement.classList.add(this.CLASS_MAP_CONTAINER);
     }
