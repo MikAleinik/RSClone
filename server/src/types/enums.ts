@@ -2,6 +2,8 @@ export enum RouterPath {
     CARS = 'cars',
     USERS = 'users',
     CARGO = 'cargo',
+    CARGO_TO_CAR = 'cargotocar',
+    CARGO_TO_CAR_REGISTER = 'cargotocar/create',
     CARS_REGISTER = 'cars/create',
     CARGO_REGISTER = 'cargo/create',
     USERS_REGISTER = 'users/register',

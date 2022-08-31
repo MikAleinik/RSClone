@@ -48,6 +48,8 @@ export const UserSchema = {
         address: { type: 'string' },
         point_lat: { type: 'number' },
         point_lon: { type: 'number' },
+        rating: { type: 'number' },
+        rating_count: { type: 'number' },
     },
 } as const;
 
