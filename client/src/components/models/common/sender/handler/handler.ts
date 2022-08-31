@@ -1,8 +1,8 @@
 import answer from "../../../../../types/answer";
 
 export default abstract class Handler {
-    protected readonly SERVER_URL = 'https://rs-clone-server.lm.r.appspot.com/v1';
-    // protected readonly SERVER_URL = 'http://localhost:3000/v1';
+    // protected readonly SERVER_URL = 'https://rs-clone-server.lm.r.appspot.com/v1';
+    protected readonly SERVER_URL = 'http://localhost:3000/v1';
     protected readonly AUTH_END_POINT = '/auth';
     protected readonly UNAUTH_END_POINT = '/unauth';
     protected readonly USER_END_POINT = '/users';

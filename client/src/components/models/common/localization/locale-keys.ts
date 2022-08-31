@@ -1,4 +1,6 @@
 export const enum LocaleKeys {
+    LOCALE = 'locale',
+
     BUTTON_LOCALE = 'buttonLocale',
     BUTTON_LOGIN = 'buttonLogin',
     BUTTON_LOGOUT = 'buttonLogOut',
@@ -154,4 +156,10 @@ export const enum LocaleKeys {
     MAIN_COMPANY_PHONE = 'mainCompanyPhone',
     MAIN_COMPANY_OWNER = 'mainCompanyOwner',
     MAIN_COMPANY_RATING = 'mainCompanyRating',
+
+    MAIN_MAP_POINT_FROM = 'mainMapPointFrom',
+    MAIN_MAP_POINT_TO = 'mainMapPointTo',
+    MAIN_MAP_POINT_CLEAR = 'mainMapPointClear',
+    MAIN_MAP_SEARCH_FAILED = 'mainMapSearchFailed',
+    MAIN_MAP_SEARCH_FIELD = 'mainMapSearchField',
 }

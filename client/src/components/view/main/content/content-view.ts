@@ -11,6 +11,7 @@ import TruckView from './truck/truck-view';
 import RoutesView from './routes/routes-view';
 import ExchangeTruckView from './exchange-truck/exchange-truck-view';
 import ExchangeCargoView from './exchange-cargo/exchange-cargo-view';
+import MapLeaflet from './map/map-leaflet';
 
 export default class ContentView extends View implements INotify {
     private readonly TAG_MAIN_CONTAINER = 'main';
@@ -66,6 +67,12 @@ export default class ContentView extends View implements INotify {
         listItemElement.appendChild(routesItem.getCurrentElement());
 
         this._asideElement.appendChild(listItemElement);
+
+        const mapOverview = new MapLeaflet(this._observer);
+        overviewItem.setMap(mapOverview);
+
+        const mapRoute = new MapLeaflet(this._observer);
+        routesItem.setMap(mapRoute);
 
         overviewItem.selectElement();
     }
