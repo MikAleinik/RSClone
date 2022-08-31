@@ -122,16 +122,18 @@ export default class LocaleModel {
 
         this._localeDictionary.set(LocaleKeys.MAIN_FILTER_PANEL_HEADER, new Array('Filter items', 'Панель фильтрации'));
 
+        this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_PERSONAL, new Array('Personal info', 'Личные данные'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING, new Array('Rating', 'Рейтинг'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO, new Array('Your cargoes', 'Ваши грузы'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_TRANSPORT, new Array('Your transports', 'Ваш транспорт'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_HEADER_COMPANY, new Array('Your company', 'Ваша компания'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_USER_NAME, new Array('Name', 'Имя'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_USER_FAMILY, new Array('Surname', 'Фамилия'));
-        this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_COMPANY_NAME, new Array('Company name', 'Название компании'));
+        this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_COMPANY_NAME, new Array('Name', 'Название'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_COMPANY_ADDRESS, new Array('Address', 'Адрес'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_COMPANY_PHONE, new Array('Phone', 'Телефон'));
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_EMAIL, new Array('Email', 'Эл.почта'));
+        this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_PASSWORD, new Array('Password', 'Пароль'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_PANEL_HEADER, new Array('Car panel', 'Панель транспорта'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_COMPANY, new Array('Car owner', 'Владелец машины'));

@@ -74,6 +74,7 @@ export const enum LocaleKeys {
 
     MAIN_FILTER_PANEL_HEADER = 'mainFilterPanelHeader',
 
+    MAIN_OVERVIEW_HEADER_PERSONAL = 'mainOverviewPersonal',
     MAIN_OVERVIEW_HEADER_RATING = 'mainOverviewRating',
     MAIN_OVERVIEW_HEADER_TRANSPORT = 'mainOverviewTransport',
     MAIN_OVERVIEW_HEADER_CARGO = 'mainOverviewCargo',
@@ -84,6 +85,7 @@ export const enum LocaleKeys {
     MAIN_OVERVIEW_COMPANY_ADDRESS = 'mainOverviewCompanyAddress',
     MAIN_OVERVIEW_COMPANY_PHONE = 'mainOverviewCompanyPhone',
     MAIN_OVERVIEW_EMAIL = 'mainOverviewEmail',
+    MAIN_OVERVIEW_PASSWORD = 'mainOverviewPassword',
 
     MAIN_TRANSPORT_PANEL_HEADER = 'mainTransportPanelHeader',
     MAIN_TRANSPORT_NEW = 'mainTransportAddNew',
