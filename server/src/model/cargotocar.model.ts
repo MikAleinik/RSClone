@@ -40,7 +40,7 @@ export class CargoToCarModel {
         return await CargoToCarModel.mapper.createCargoToCar({ ...body });
     }
 
-    async updateCargoToCars(body: ChangeCargoToCarsSchemaType, id: number) {
+    async changeCargoToCars(body: ChangeCargoToCarsSchemaType, id: number) {
         const { jwtDecoded } = body;
         const cargoToCar = await CargoToCarModel.getInstance().getById(id);
         if (!cargoToCar) {
@@ -53,7 +53,7 @@ export class CargoToCarModel {
         const carData = car.getData();
         if (carData.user_id !== jwtDecoded.id) {
             throw new Error(
-                `updateCargoToCars can perform only carId = ${carData.id} ownder (${carData.user_id}) but not ${jwtDecoded.id}`
+                `changeCargoToCars can perform only carId = ${carData.id} ownder (${carData.user_id}) but not ${jwtDecoded.id}`
             );
         }
         return await CargoToCarModel.mapper.changeCargoToCar(id, body);

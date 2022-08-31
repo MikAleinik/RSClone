@@ -119,14 +119,14 @@ const changeCargoByUUIDOpts = {
 const deleteCargoByUUIDOpts = {
     schema: {
         tags: ['Cargo to Cars'],
-        description: 'Delete cargo by Id',
+        description: 'Delete cargo to car by Id',
         response: {
             200: {},
             400: ErrorReplySchema,
         },
     },
     preHandler: [AuthController.getInstance().verifyJWTFunc()],
-    handler: CargoToCarsController.getInstance().deleteCargoByUUIDFunc(),
+    handler: CargoToCarsController.getInstance().deleteCargoToCarByUUIDFunc(),
 };
 
 const createCargoToCarOpts = {

@@ -113,7 +113,7 @@ export class CargoToCarsController {
         return async (req, res) => {
             try {
                 const { id } = req.params;
-                const cargo = await CargoToCarModel.getInstance().updateCargoToCars(req.body, id);
+                const cargo = await CargoToCarModel.getInstance().changeCargoToCars(req.body, id);
                 res.code(OkCodes.OK);
                 res.send(cargo?.toJsonResponse());
             } catch (err) {
@@ -132,7 +132,7 @@ export class CargoToCarsController {
         return oldCargo;
     }
 
-    deleteCargoByUUIDFunc(): RouteHandler<{ Params: { id: number } }> {
+    deleteCargoToCarByUUIDFunc(): RouteHandler<{ Params: { id: number } }> {
         return async (req, res) => {
             try {
                 const { id } = req.params;
