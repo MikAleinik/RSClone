@@ -3,7 +3,6 @@ import { AuthController } from '../../controller/auth.controller';
 import { RouterPath } from '../../types/enums';
 import { ErrorReplySchema } from '../../schema/general.schema';
 import { FromSchema } from 'json-schema-to-ts';
-import { CargoController } from '../../controller/cargo.controller';
 import { IBodyWithJWT } from '../../types/interfaces';
 import { CargoToCarModel } from '../../model/cargotocar.model';
 import { CargoToCarsMapper } from '../../model/mappers/cargotocar.mapper';
@@ -13,6 +12,7 @@ import { CargoToCarsController } from '../../controller/cargotocar.controller';
 
 export type CreateCargoToCarsSchemaType = FromSchema<typeof CreateCargoToCarsSchema> & IBodyWithJWT;
 export type CargoToCarsSchemaType = FromSchema<typeof CargoToCarsSchema>;
+export type ChangeCargoToCarsSchemaType = FromSchema<typeof ChangeCargoToCarsSchema> & IBodyWithJWT;
 export type ReplyAllCargosToCarsType = FromSchema<typeof ReplyAllCargosToCars>;
 
 // Schemas
@@ -24,6 +24,15 @@ export const CreateCargoToCarsSchema = {
         id_cars: { type: 'number' },
     },
     required: ['id_cargo', 'id_cars'],
+    additionalProperties: false,
+} as const;
+
+export const ChangeCargoToCarsSchema = {
+    type: 'object',
+    properties: {
+        agree: { type: 'string' },
+    },
+    required: ['agree'],
     additionalProperties: false,
 } as const;
 
@@ -96,7 +105,7 @@ const changeCargoByUUIDOpts = {
     schema: {
         tags: ['Cargo to Cars'],
         description: 'Change cargo by Id',
-        body: CreateCargoToCarsSchema,
+        body: ChangeCargoToCarsSchema,
         response: {
             200: CargoToCarsSchema,
             400: ErrorReplySchema,
@@ -104,7 +113,7 @@ const changeCargoByUUIDOpts = {
         },
     },
     preHandler: [AuthController.getInstance().verifyJWTFunc()],
-    handler: CargoController.getInstance().changeCargoByUUIDFunc(),
+    handler: CargoToCarsController.getInstance().changeCargoToCarByUUIDFunc(),
 };
 
 const deleteCargoByUUIDOpts = {
@@ -117,7 +126,7 @@ const deleteCargoByUUIDOpts = {
         },
     },
     preHandler: [AuthController.getInstance().verifyJWTFunc()],
-    handler: CargoController.getInstance().deleteCargoByUUIDFunc(),
+    handler: CargoToCarsController.getInstance().deleteCargoByUUIDFunc(),
 };
 
 const createCargoToCarOpts = {

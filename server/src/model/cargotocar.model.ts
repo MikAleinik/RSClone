@@ -1,9 +1,9 @@
 import { ContentTypeJson } from '../types/types';
 import { ErrorNoMapper } from '../errors/ErrorNoMapper';
-import { CreateCargoSchemaType } from '../routes/v1/cargo.router';
 import { CargoToCarsMapper } from './mappers/cargotocar.mapper';
 import { CargosModel } from './cargo.model';
-import { CreateCargoToCarsSchemaType } from '../routes/v1/cargotocar.router';
+import { ChangeCargoToCarsSchemaType, CreateCargoToCarsSchemaType } from '../routes/v1/cargotocar.router';
+import { CarsModel } from './car.model';
 
 export class CargoToCarModel {
     private static instance: CargoToCarModel;
@@ -40,10 +40,23 @@ export class CargoToCarModel {
         return await CargoToCarModel.mapper.createCargoToCar({ ...body });
     }
 
-    async updateCargo(body: CreateCargoSchemaType, id: number) {
+    async updateCargoToCars(body: ChangeCargoToCarsSchemaType, id: number) {
         const { jwtDecoded } = body;
-        await CargoToCarModel.getInstance().checkCargoByIdAndUser(id, jwtDecoded.id);
-        return await CargoToCarModel.mapper.changeCargo(id, body);
+        const cargoToCar = await CargoToCarModel.getInstance().getById(id);
+        if (!cargoToCar) {
+            throw new Error(`${id}`);
+        }
+        const car = await CarsModel.getInstance().getById(cargoToCar.getData().id_cars);
+        if (!car) {
+            throw new Error('No car');
+        }
+        const carData = car.getData();
+        if (carData.user_id !== jwtDecoded.id) {
+            throw new Error(
+                `updateCargoToCars can perform only carId = ${carData.id} ownder (${carData.user_id}) but not ${jwtDecoded.id}`
+            );
+        }
+        return await CargoToCarModel.mapper.changeCargoToCar(id, body);
     }
 
     checkMapper() {
@@ -57,8 +70,12 @@ export class CargoToCarModel {
     }
 
     async deleteCargoByUUID(id: number, userId: number) {
-        await CargoToCarModel.getInstance().checkCargoByIdAndUser(id, userId);
-        await CargoToCarModel.mapper.deleteCargo(id);
+        const cargoToCar = await CargoToCarModel.getInstance().getById(id);
+        if (!cargoToCar) {
+            throw new Error(`${id}`);
+        }
+        await CargoToCarModel.getInstance().checkCargoByIdAndUser(cargoToCar.getData().id_cargo, userId);
+        await CargoToCarModel.mapper.deleteCargoToCars(id);
     }
 
     static getInstance() {

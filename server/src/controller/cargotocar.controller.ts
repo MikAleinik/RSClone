@@ -2,11 +2,15 @@ import { ContentTypeJson } from '../types/types';
 import { ErrorCodes, OkCodes } from '../types/enums';
 import { RouteHandler } from 'fastify';
 import { ErrorReplyType } from '../schema/general.schema';
-import { CargoSchemaType, CreateCargoSchemaType, ReplyAllCargosType } from '../routes/v1/cargo.router';
+import { CargoSchemaType, ReplyAllCargosType } from '../routes/v1/cargo.router';
 import { CargosModel } from '../model/cargo.model';
 import { IBodyWithJWT } from '../types/interfaces';
 import { CargoToCarModel } from '../model/cargotocar.model';
-import { CargoToCarsSchemaType, CreateCargoToCarsSchemaType } from '../routes/v1/cargotocar.router';
+import {
+    CargoToCarsSchemaType,
+    ChangeCargoToCarsSchemaType,
+    CreateCargoToCarsSchemaType,
+} from '../routes/v1/cargotocar.router';
 
 export class CargoToCarsController {
     private static instance: CargoToCarsController;
@@ -101,15 +105,15 @@ export class CargoToCarsController {
         };
     }
 
-    changeCargoByUUIDFunc(): RouteHandler<{
+    changeCargoToCarByUUIDFunc(): RouteHandler<{
         Params: { id: number };
-        Body: CreateCargoSchemaType;
+        Body: ChangeCargoToCarsSchemaType;
         Reply: CargoSchemaType;
     }> {
         return async (req, res) => {
             try {
                 const { id } = req.params;
-                const cargo = await CargosModel.getInstance().updateCargo(req.body, id);
+                const cargo = await CargoToCarModel.getInstance().updateCargoToCars(req.body, id);
                 res.code(OkCodes.OK);
                 res.send(cargo?.toJsonResponse());
             } catch (err) {
@@ -133,7 +137,7 @@ export class CargoToCarsController {
             try {
                 const { id } = req.params;
                 const { jwtDecoded } = req.body as IBodyWithJWT;
-                await CargosModel.getInstance().deleteCargoByUUID(id, jwtDecoded.id);
+                await CargoToCarModel.getInstance().deleteCargoByUUID(id, jwtDecoded.id);
                 res.code(OkCodes.OK);
                 res.header(ContentTypeJson[0], ContentTypeJson[1]);
                 res.send({});

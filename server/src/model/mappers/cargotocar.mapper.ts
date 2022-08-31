@@ -1,6 +1,6 @@
 import pgPromise from 'pg-promise';
 import pg from 'pg-promise/typescript/pg-subset';
-import { CreateCargoSchemaType } from '../../routes/v1/cargo.router';
+import { ChangeCargoToCarsSchemaType } from '../../routes/v1/cargotocar.router';
 import { RecordStringUnknown } from '../../types/types';
 import { createColumnSet } from '../util/pg.helper';
 import { Cargo } from '../vo/cargo';
@@ -40,20 +40,18 @@ export class CargoToCarsMapper {
         return dbData;
     }
 
-    async changeCargo(cargoId: number, body: CreateCargoSchemaType) {
-        const update = `${this._pgp.helpers.update(body, this._columnSet)}, "date_change" = ${this._pgp.as.date(
-            new Date()
-        )} WHERE id = ${cargoId}`;
+    async changeCargoToCar(cargoToCarId: number, body: ChangeCargoToCarsSchemaType) {
+        const update = `${this._pgp.helpers.update(body, this._columnSet)} WHERE id = ${cargoToCarId}`;
         try {
             await this._db.none(update);
-            return this.getById(cargoId);
+            return this.getById(cargoToCarId);
         } catch (err) {
             throw new Error((err as Error).message);
         }
     }
 
-    async deleteCargo(cargoId: number) {
-        await this._db.none(`DELETE FROM ${this.TABLE_NAME} WHERE id = ${cargoId};`);
+    async deleteCargoToCars(id: number) {
+        await this._db.none(`DELETE FROM ${this.TABLE_NAME} WHERE id = ${id};`);
     }
 
     async getById(idNum: number) {
