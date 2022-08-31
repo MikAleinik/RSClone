@@ -1,7 +1,9 @@
 import pgPromise from 'pg-promise';
 import pg from 'pg-promise/typescript/pg-subset';
+import { RegisterUserSchemaType } from '../../routes/v1/user.router';
 import { RecordStringUnknown } from '../../types/types';
 import { hashPassword } from '../util/password.manager';
+import { createColumnSet } from '../util/pg.helper';
 import { DBDataVO } from '../vo/db.data';
 import { User } from '../vo/user';
 
@@ -12,10 +14,19 @@ export class UsersMapper {
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     private _db: pgPromise.IDatabase<{}, pg.IClient>;
+    private _columnSet: pgPromise.ColumnSet<unknown>;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    private _pgp: pgPromise.IMain<{}, pg.IClient>;
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     constructor(db: pgPromise.IDatabase<{}, pg.IClient>) {
         this._db = db;
+        this._pgp = pgPromise();
+        this._columnSet = createColumnSet(
+            this.TABLE_NAME,
+            ['login', 'email', 'password', 'phone', 'first_name', 'last_name', 'company', 'address'],
+            ['role_id', 'rating', 'rating_count', 'point_lat', 'point_lon']
+        );
     }
 
     async createUser<T extends RecordStringUnknown>(userData: T) {
@@ -54,7 +65,7 @@ export class UsersMapper {
         return new DBDataVO(User, user);
     }
 
-    async getUserById(id: number) {
+    async getById(id: number) {
         const user = await this._db.oneOrNone(`SELECT ${this.ALL_FIELDS_GET} FROM users WHERE id = $1`, [id]);
         if (!user) {
             return null;
@@ -68,5 +79,23 @@ export class UsersMapper {
             return null;
         }
         return (items as RecordStringUnknown[]).map((item) => new DBDataVO(User, item));
+    }
+
+    async changeUser(userId: number, body: RegisterUserSchemaType) {
+        const dataCopy = { ...body };
+        const user = await this.getById(userId);
+        if (!user) {
+            throw new Error(`User ${userId} not found!`);
+        }
+        dataCopy.password = dataCopy.password && dataCopy.password !== '' ? dataCopy.password : user.getData().password;
+        const update = `${this._pgp.helpers.update(body, this._columnSet)}, "date_change" = ${this._pgp.as.date(
+            new Date()
+        )} WHERE id = ${userId}`;
+        try {
+            await this._db.none(update);
+            return this.getById(userId);
+        } catch (err) {
+            throw new Error((err as Error).message);
+        }
     }
 }

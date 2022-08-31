@@ -115,7 +115,7 @@ export class CargoController {
     changeCargoByUUIDFunc(): RouteHandler<{
         Params: { id: number };
         Body: CreateCargoSchemaType;
-        Reply: CargoSchemaType;
+        Reply: CargoSchemaType | ErrorReplyType;
     }> {
         return async (req, res) => {
             try {
