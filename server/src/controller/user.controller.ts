@@ -2,7 +2,6 @@ import { ContentTypeJson } from '../types/types';
 import { ErrorCodes, OkCodes } from '../types/enums';
 import { UsersModel } from '../model/user.model';
 import { AuthController } from './auth.controller';
-import { User } from '../model/vo/user';
 import { RouteHandler } from 'fastify';
 import { RegisterUserSchemaType, ReplyAllUsersType, UserSchemaType } from '../routes/v1/user.router';
 import { ErrorReplyType } from '../schema/general.schema';
@@ -98,13 +97,22 @@ export class UsersController {
         };
     }
 
-    changeUserByUUIDFunc(): RouteHandler<{ Body: UserSchemaType; Reply: UserSchemaType | ErrorReplyType }> {
+    changeUserByUUIDFunc(): RouteHandler<{
+        Params: { id: number };
+        Body: RegisterUserSchemaType;
+        Reply: UserSchemaType | ErrorReplyType;
+    }> {
         return async (req, res) => {
-            //TODO add implementation
-            const user = new User(); //await usersRepo.addUser({ name, login, password });
-            res.code(OkCodes.CREATED);
-            res.header(ContentTypeJson[0], ContentTypeJson[1]);
-            res.send({ ...user });
+            try {
+                const { id } = req.params;
+                const cargo = await UsersModel.getInstance().updateCargo(req.body, id);
+                res.code(OkCodes.OK);
+                res.send(cargo?.toJsonResponse());
+            } catch (err) {
+                res.code(ErrorCodes.BAD_REQUEST);
+                res.header(ContentTypeJson[0], ContentTypeJson[1]);
+                res.send({ message: (err as Error).message });
+            }
         };
     }
 

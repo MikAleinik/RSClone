@@ -6,10 +6,11 @@ import { ErrorReplySchema } from '../../schema/general.schema';
 import { FromSchema } from 'json-schema-to-ts';
 import { UsersModel } from '../../model/user.model';
 import { UsersMapper } from '../../model/mappers/user.mapper';
+import { IBodyWithJWT } from '../../types/interfaces';
 
 // export Schema types
 
-export type RegisterUserSchemaType = FromSchema<typeof RegisterUserSchema>;
+export type RegisterUserSchemaType = FromSchema<typeof RegisterUserSchema> & IBodyWithJWT;
 export type UserSchemaType = FromSchema<typeof UserSchema>;
 export type ReplyAllUsersType = FromSchema<typeof ReplyAllUsers>;
 
@@ -48,6 +49,8 @@ export const UserSchema = {
         address: { type: 'string' },
         point_lat: { type: 'number' },
         point_lon: { type: 'number' },
+        rating: { type: 'number' },
+        rating_count: { type: 'number' },
     },
 } as const;
 

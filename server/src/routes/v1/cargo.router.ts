@@ -26,7 +26,6 @@ export interface IQueryCargoByUser {
 export const CreateCargoSchema = {
     type: 'object',
     properties: {
-        user_id: { type: 'number' },
         point_start_lat: { type: 'number' },
         point_start_lon: { type: 'number' },
         point_end_lat: { type: 'number' },

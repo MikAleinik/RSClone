@@ -9,9 +9,9 @@ import { DBDataVO } from '../vo/db.data';
 export class CarMapper {
     private TABLE_NAME = 'cars';
     private ALL_FIELDS_GET =
-        'id, date_change, user_id, model, point_current_lat, point_current_lon, route_lat, route_lon, date_start, price, currency, volume_max, weight_max';
+        'id, date_change, user_id, model, description, point_current_lat, point_current_lon, route_lat, route_lon, date_start, price, currency, volume_max, weight_max';
     private ALL_FIELDS_GET_BUT_NO_ID =
-        'date_change, user_id, model, point_current_lat, point_current_lon, route_lat, route_lon, date_start, price, currency, volume_max, weight_max';
+        'date_change, user_id, model, description, point_current_lat, point_current_lon, route_lat, route_lon, date_start, price, currency, volume_max, weight_max';
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     private _db: pgPromise.IDatabase<{}, pg.IClient>;
@@ -26,8 +26,10 @@ export class CarMapper {
 
         this._columnSet = createColumnSet(
             this.TABLE_NAME,
-            ['model', 'currency'],
-            ['point_current_lat', 'point_current_lon', 'route_lat', 'route_lon', 'price', 'volume_max', 'weight_max']
+            ['model', 'currency', 'description'],
+            ['point_current_lat', 'point_current_lon', 'price', 'volume_max', 'weight_max'],
+            null,
+            ['route_lat', 'route_lon']
         );
     }
 
@@ -38,11 +40,12 @@ export class CarMapper {
         const {
             id,
         } = await this._db.one(
-            `INSERT INTO ${this.TABLE_NAME} (${this.ALL_FIELDS_GET_BUT_NO_ID}) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`,
+            `INSERT INTO ${this.TABLE_NAME} (${this.ALL_FIELDS_GET_BUT_NO_ID}) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id`,
             [
                 dataCar.date_change,
                 dataCar.user_id,
                 dataCar.model,
+                dataCar.description,
                 dataCar.point_current_lat,
                 dataCar.point_current_lon,
                 dataCar.route_lat,

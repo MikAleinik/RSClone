@@ -25,20 +25,21 @@ export const CreateCarSchema = {
     type: 'object',
     properties: {
         model: { type: 'string' },
+        description: { type: 'string' },
         point_current_lat: { type: 'number' },
         point_current_lon: { type: 'number' },
         route_lat: {
-            type: 'array',
+            type: ['array', 'null'],
             items: { type: 'number' },
         },
         route_lon: {
-            type: 'array',
+            type: ['array', 'null'],
             items: { type: 'number' },
         },
         price: { type: 'number' },
         currency: { type: 'string' },
         volume_max: { type: 'number' },
-        weigth_max: { type: 'number' },
+        weight_max: { type: 'number' },
     },
     required: ['point_current_lat', 'point_current_lon'],
     additionalProperties: false,
@@ -50,6 +51,7 @@ export const CarSchema = {
         id: { type: 'number' },
         user_id: { type: 'number' },
         model: { type: 'string' },
+        description: { type: 'string' },
         point_current_lat: { type: 'number' },
         point_current_lon: { type: 'number' },
         route_lat: {
@@ -64,7 +66,7 @@ export const CarSchema = {
         price: { type: 'number' },
         currency: { type: 'string' },
         volume_max: { type: 'number' },
-        weigth_max: { type: 'number' },
+        weight_max: { type: 'number' },
     },
 } as const;
 
@@ -115,7 +117,7 @@ const getCargoByUUIDOpts = {
 
 const changeCargoByUUIDOpts = {
     schema: {
-        tags: ['Cargo'],
+        tags: ['Cars'],
         description: 'Change cargo by Id',
         body: CreateCarSchema,
         response: {
@@ -130,7 +132,7 @@ const changeCargoByUUIDOpts = {
 
 const deleteCarByUUIDOpts = {
     schema: {
-        tags: ['Cargo'],
+        tags: ['Cars'],
         description: 'Delete cargo by Id',
         response: {
             200: {},
