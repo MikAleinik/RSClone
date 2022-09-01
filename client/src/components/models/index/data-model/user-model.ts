@@ -157,11 +157,12 @@ export default class UserModel {
         this._currentUser.rating_count = Number(result.get('rating_count')!);
         this._currentUser.point_lat = Number(result.get('point_lat')!);
         this._currentUser.point_lon = Number(result.get('point_lon')!);
-        if (result.get('role_id')! === this.NAME_ROLE_CUSTOMER_EN || this.NAME_ROLE_CUSTOMER_RU) {
-            this._currentUser.role_id = this.ID_ROLE_CUSTOMER;
-        } else {
-            this._currentUser.role_id = this.ID_ROLE_CARRIER;
-        }
+        this._currentUser.role_id = result.get('role_id')!;
+    //     if (result.get('role_id')! === this.NAME_ROLE_CUSTOMER_EN || this.NAME_ROLE_CUSTOMER_RU) {
+    //         this._currentUser.role_id = this.ID_ROLE_CUSTOMER;
+    //     } else {
+    //         this._currentUser.role_id = this.ID_ROLE_CARRIER;
+    //     }
     }
     private setMapToUser(result: Map<string, string>): User {
         return {

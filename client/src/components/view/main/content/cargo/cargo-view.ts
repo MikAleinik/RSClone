@@ -7,6 +7,7 @@ import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 import Cargo from '../../../../../types/cargo';
 import '../../../common/table.scss';
+import User from '../../../../../types/user';
 
 export default class CargoView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
@@ -33,6 +34,8 @@ export default class CargoView extends AsideItemView {
     private readonly CLASS_TABLE_DATA = 'table__data';
 
     private readonly CURRENCY = new Array('USD', 'EUR', 'BYN', 'RUB');
+    private readonly ID_ROLE_CUSTOMER = '1';
+    private readonly ID_ROLE_CARRIER = '2';
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
     private _tableHeaderPrice = document.createElement(this.TAG_TABLE_ROW_DATA);
@@ -73,6 +76,7 @@ export default class CargoView extends AsideItemView {
 
         this.createMainElement();
         this._observer.addSender(AppEvents.LOCALE_SET, this);
+        this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.MAIN_CARGO_GET_BY_USER, this);
         this._selectedCargo = false;
@@ -83,6 +87,13 @@ export default class CargoView extends AsideItemView {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
                 break;
             }
+        }
+    }
+    setAuthorizedUser(authUser: User | false) {
+        if (authUser !== false && authUser.role_id !== this.ID_ROLE_CUSTOMER) {
+            this._itemElement.style.display = 'none';
+        } else {
+            //TODO
         }
     }
     setAllCargo(cargoes: Array<Cargo>): void {

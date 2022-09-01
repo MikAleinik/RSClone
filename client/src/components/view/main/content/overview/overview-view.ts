@@ -24,7 +24,6 @@ export default class OverviewView extends AsideItemView {
     private readonly TAG_TABLE_ROW_DATA = 'span';
     // private readonly TAG_FIELD_INPUT = 'input';
 
-
     private readonly CLASS_USER_CONTAINER = 'user__container';
     private readonly CLASS_USER_DATA = 'user__data';
     private readonly CLASS_USER_HEADER = 'user__header';
@@ -32,11 +31,17 @@ export default class OverviewView extends AsideItemView {
     private readonly CLASS_USER_FIELD_STAR = 'user__star';
     private readonly CLASS_USER_STAR = 'user__star-item';
     private readonly CLASS_BUTTON = 'big__button';
+    private readonly CLASS_BUTTON_WIDE = 'wide__button';
     private readonly CLASS_TABLE = 'user__table';
     private readonly CLASS_TABLE_ROW = 'table__row';
     private readonly CLASS_TABLE_DATA = 'table__data';
+    private readonly CLASS_HIDDEN = 'user__hidden';
+    private readonly CLASS_UNVISIBLE = 'user__unvisible';
 
     private readonly PATH_IMAGE_STAR = './assets/icons/star-empty.png'
+
+    private readonly ID_ROLE_CUSTOMER = '1';
+    private readonly ID_ROLE_CARRIER = '2';
 
     private _headerUser = document.createElement(this.TAG_USER_HEADER);
     private _firstNameLabel = document.createElement(this.TAG_FIELD_LABEL);
@@ -67,6 +72,8 @@ export default class OverviewView extends AsideItemView {
     private _user!: User;
     private _cargoes = new Map<HTMLElement, Cargo>();
     private _cars = new Map<HTMLElement, Car>();
+
+    private _errorMessage = '';
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
@@ -142,15 +149,15 @@ export default class OverviewView extends AsideItemView {
         this._buttonAccept.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_ACCEPT);
         this._headerStatisticCar.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_TRANSPORT);
         this._headerStatisticCargo.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO);
-
+        this._errorMessage = localeModel.getPhrase(LocaleKeys.COMMON_ERROR_SAVE);;
     }
     setMap(map: MapLeaflet) {
         this._map = map;
         this._mainElement.appendChild(this._map.getMap());
         this._map.setRouteMode(false);
     }
-    setAuthorizedUser(authUser: User | false){
-        if(authUser !== false) {
+    setAuthorizedUser(authUser: User | false) {
+        if (authUser !== false) {
             this._user = authUser;
             this._firstNameInput.value = authUser.first_name;
             this._lastNameInput.value = authUser.last_name;
@@ -161,17 +168,32 @@ export default class OverviewView extends AsideItemView {
             this._companyAddressInput.value = authUser.address;
             const rating = authUser.rating / authUser.rating_count;
             this._starContainer.style.background = `linear-gradient(to right, #4c577abd ${rating * 2 * 10}%, white ${100 - rating * 2 * 10}%)`;
+
+            if (this._user.role_id === this.ID_ROLE_CUSTOMER) {
+                this._headerStatisticCar.classList.add(this.CLASS_UNVISIBLE);
+                this._tableContainerCar.classList.add(this.CLASS_UNVISIBLE);
+                this._headerStatisticCargo.classList.remove(this.CLASS_HIDDEN);
+                this._tableContainerCargo.classList.remove(this.CLASS_HIDDEN);
+            } else {
+                this._headerStatisticCargo.classList.add(this.CLASS_UNVISIBLE);
+                this._tableContainerCargo.classList.add(this.CLASS_UNVISIBLE);
+                this._headerStatisticCar.classList.remove(this.CLASS_HIDDEN);
+                this._tableContainerCar.classList.remove(this.CLASS_HIDDEN);
+            }
+    
         } else {
-            //TODO error message
+            alert(this._errorMessage);
         }
     }
     setAllCargo(cargoes: Array<Cargo>): void {
         this.clearTableCargo();
-        this._cargoes.clear();
         for (let i = 0; i < cargoes.length; i += 1) {
-            const rowElement = this.createRowCargo(cargoes[i])
-            this._tableContainerCargo.appendChild(rowElement);
-            this._cargoes.set(rowElement, cargoes[i]);
+            if (this._user.id === cargoes[i].user_id) {
+                const rowElement = this.createRowCargo(cargoes[i])
+                this._tableContainerCargo.appendChild(rowElement);
+                this._cargoes.set(rowElement, cargoes[i]);
+                this.addItemToMap(cargoes[i]);
+            }
         }
     }
     cargoCreatedHandler(cargo: Cargo) {
@@ -179,14 +201,16 @@ export default class OverviewView extends AsideItemView {
             const rowElement = this.createRowCargo(cargo);
             this._cargoes.set(rowElement, cargo);
             this._tableContainerCargo.appendChild(rowElement);
+            this.addItemToMap(cargo);
         }
     }
     cargoDeletedHandler(cargo: Cargo) {
         this._cargoes.forEach((value, key) => {
             if (value.id === cargo.id) {
                 key.remove();
+                this.removeItemFromMap(cargo);
             }
-        });     
+        });
     }
     cargoChangedHandler(cargo: Cargo) {
         this._cargoes.forEach((value, key) => {
@@ -204,29 +228,34 @@ export default class OverviewView extends AsideItemView {
                 key.children[6].textContent = cargo.volume.toString();
                 key.children[7].textContent = cargo.weigth.toString();
                 key.children[8].textContent = cargo.description;
+                this.changeItemOnMap(cargo);
             }
         });
     }
     setAllCar(cars: Array<Car>): void {
         this.clearTableCar();
-        this._cars.clear();
         for (let i = 0; i < cars.length; i += 1) {
-            const rowElement = this.createRowCar(cars[i])
-            this._tableContainerCar.appendChild(rowElement);
-            this._cars.set(rowElement, cars[i]);
+            if (this._user.id === cars[i].user_id) {
+                const rowElement = this.createRowCar(cars[i])
+                this._tableContainerCar.appendChild(rowElement);
+                this._cars.set(rowElement, cars[i]);
+                this.addItemToMap(cars[i]);
+            }
         }
     }
     carCreatedHandler(car: Car) {
-        if(car !== undefined) {
+        if (car !== undefined) {
             const rowElement = this.createRowCar(car);
             this._cars.set(rowElement, car);
             this._tableContainerCar.appendChild(rowElement);
+            this.addItemToMap(car);
         }
     }
     carDeletedHandler(car: Car) {
         this._cars.forEach((value, key) => {
             if (value.id === car.id) {
                 key.remove();
+                this.removeItemFromMap(car);
             }
         });
     }
@@ -246,18 +275,36 @@ export default class OverviewView extends AsideItemView {
                 key.children[6].textContent = car.volume_max.toString();
                 key.children[7].textContent = car.weight_max.toString();
                 key.children[8].textContent = car.description;
+                this.changeItemOnMap(car);
             }
         });
     }
     private clearTableCargo(): void {
+        this._cargoes.forEach((cargo) => {
+            this.removeItemFromMap(cargo);
+        });
+        this._cargoes.clear();
         while (this._tableContainerCargo.firstElementChild) {
             this._tableContainerCargo.firstElementChild.remove();
         }
     }
     private clearTableCar(): void {
+        this._cars.forEach((car) => {
+            this.removeItemFromMap(car);
+        });
+        this._cars.clear();
         while (this._tableContainerCar.firstElementChild) {
             this._tableContainerCar.firstElementChild.remove();
         }
+    }
+    private addItemToMap(item: Cargo | Car): void {
+        this._map.addItemToMap(item);
+    }
+    private removeItemFromMap(item: Cargo | Car): void {
+
+    }
+    private changeItemOnMap(item: Cargo | Car): void {
+
     }
     private createRowCar(car: Car): HTMLElement {
         const rowElement = document.createElement(this.TAG_TABLE_ROW);
@@ -266,6 +313,13 @@ export default class OverviewView extends AsideItemView {
         rowItem.textContent = car.model;
         rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
+        rowElement.addEventListener('click', (event) => {
+            const clickedElement = <HTMLDivElement>event.target;
+            const rowElement = clickedElement.closest(this.TAG_TABLE_ROW);
+            if (rowElement !== null) {
+                console.log(this._cars.get(rowElement));
+            }
+        });
         return rowElement;
     }
     private createRowCargo(cargo: Cargo): HTMLElement {
@@ -294,26 +348,38 @@ export default class OverviewView extends AsideItemView {
 
         let nameRow = document.createElement(this.TAG_FIELD_ROW);
         nameRow.classList.add(this.CLASS_USER_FIELD);
-        nameRow.appendChild(this._firstNameLabel);        
+        nameRow.appendChild(this._firstNameLabel);
         nameRow.appendChild(this._firstNameInput);
+        this._firstNameInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
         userElement.appendChild(nameRow);
 
         nameRow = document.createElement(this.TAG_FIELD_ROW);
         nameRow.classList.add(this.CLASS_USER_FIELD);
-        nameRow.appendChild(this._lastNameLabel);        
+        nameRow.appendChild(this._lastNameLabel);
         nameRow.appendChild(this._lastNameInput);
+        this._lastNameInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
         userElement.appendChild(nameRow);
 
         nameRow = document.createElement(this.TAG_FIELD_ROW);
         nameRow.classList.add(this.CLASS_USER_FIELD);
-        nameRow.appendChild(this._phoneLabel);        
+        nameRow.appendChild(this._phoneLabel);
         nameRow.appendChild(this._phoneInput);
+        this._phoneInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
         userElement.appendChild(nameRow);
 
         nameRow = document.createElement(this.TAG_FIELD_ROW);
         nameRow.classList.add(this.CLASS_USER_FIELD);
-        nameRow.appendChild(this._emailLabel);        
+        nameRow.appendChild(this._emailLabel);
         nameRow.appendChild(this._emailInput);
+        this._emailInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
         userElement.appendChild(nameRow);
 
         nameRow = document.createElement(this.TAG_FIELD_ROW);
@@ -323,6 +389,9 @@ export default class OverviewView extends AsideItemView {
         this._passwordInput.setAttribute('type', 'password');
         this._passwordInput.setAttribute('autocomplete', 'off');
         this._passwordInput.style.userSelect = 'none';
+        this._passwordInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
         userElement.appendChild(nameRow);
 
         this._headerCompany.classList.add(this.CLASS_USER_HEADER);
@@ -330,22 +399,28 @@ export default class OverviewView extends AsideItemView {
 
         nameRow = document.createElement(this.TAG_FIELD_ROW);
         nameRow.classList.add(this.CLASS_USER_FIELD);
-        nameRow.appendChild(this._companyNameLabel);        
+        nameRow.appendChild(this._companyNameLabel);
         nameRow.appendChild(this._companyNameInput);
+        this._companyNameInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
         userElement.appendChild(nameRow);
 
         nameRow = document.createElement(this.TAG_FIELD_ROW);
         nameRow.classList.add(this.CLASS_USER_FIELD);
-        nameRow.appendChild(this._companyAddressLabel);        
+        nameRow.appendChild(this._companyAddressLabel);
         nameRow.appendChild(this._companyAddressInput);
+        this._companyAddressInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
         userElement.appendChild(nameRow);
 
         nameRow = document.createElement(this.TAG_FIELD_ROW);
         nameRow.classList.add(this.CLASS_USER_FIELD);
-        nameRow.appendChild(this._companyRatingLabel);        
+        nameRow.appendChild(this._companyRatingLabel);
         this._starContainer = document.createElement(this.TAG_FIELD_ROW);
         this._starContainer.classList.add(this.CLASS_USER_FIELD_STAR);
-        for(let i = 0; i < 5; i += 1){
+        for (let i = 0; i < 5; i += 1) {
             const starElement = document.createElement(this.TAG_FIELD_IMG);
             starElement.classList.add(this.CLASS_USER_STAR);
             starElement.src = this.PATH_IMAGE_STAR;
@@ -355,21 +430,27 @@ export default class OverviewView extends AsideItemView {
         userElement.appendChild(nameRow);
 
         this._buttonAccept.classList.add(this.CLASS_BUTTON);
+        this._buttonAccept.classList.add(this.CLASS_BUTTON_WIDE);
         this._buttonAccept.addEventListener('click', this.buttonAcceptClickHandler.bind(this));
+        this._buttonAccept.setAttribute('disabled', 'true');
         userElement.appendChild(this._buttonAccept);
 
-        this._headerStatisticCar.classList.add(this.CLASS_USER_HEADER);
-        userElement.appendChild(this._headerStatisticCar);
-        this._tableContainerCar.classList.add(this.CLASS_TABLE);
-        userElement.appendChild(this._tableContainerCar);
-
         this._headerStatisticCargo.classList.add(this.CLASS_USER_HEADER);
+        this._headerStatisticCargo.classList.add(this.CLASS_HIDDEN);
         userElement.appendChild(this._headerStatisticCargo);
         this._tableContainerCargo.classList.add(this.CLASS_TABLE);
+        this._tableContainerCargo.classList.add(this.CLASS_HIDDEN);
         userElement.appendChild(this._tableContainerCargo);
 
+        this._headerStatisticCar.classList.add(this.CLASS_USER_HEADER);
+        this._headerStatisticCar.classList.add(this.CLASS_HIDDEN);
+        userElement.appendChild(this._headerStatisticCar);
+        this._tableContainerCar.classList.add(this.CLASS_TABLE);
+        this._tableContainerCar.classList.add(this.CLASS_HIDDEN);
+        userElement.appendChild(this._tableContainerCar);
     }
     private buttonAcceptClickHandler() {
+        this._buttonAccept.setAttribute('disabled', 'true');
         const user: User = {
             id: this._user.id,
             login: this._user.login,

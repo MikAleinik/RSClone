@@ -33,6 +33,12 @@ export default class MapLeaflet implements INotify, ILocale {
     private readonly DEFAULT_LON = 27.608643;
     private readonly DEFAULT_ZOOM = 7;
 
+    private readonly ICON_NAMES: Array<string> = ['marker-color.png', 'truck-color.png', 'storage-color.png'];
+    private readonly ICON_DEFAULT: string = './assets/icons/marker-color.png';
+    private readonly ICON_CAR: string = './assets/icons/truck-color.png';
+    private readonly ICON_CARGO: string = './assets/icons/storage-color.png';
+    private readonly ICON_SIZE: Leaflet.PointExpression = [22, 22];
+
     private _observer: Observer;
     private _localeModel!: localeModel;
     private _map!: Leaflet.Map;
@@ -94,6 +100,17 @@ export default class MapLeaflet implements INotify, ILocale {
                 this.createMapSearch();
             }
         }
+    }
+    addItemToMap(item: Cargo | Car) {
+        const car = item as Car;
+        if (car.point_current_lat !== undefined) {
+            this.addMarkerToMap(car.point_current_lat, car.point_current_lon, item);            
+        }
+        const cargo = item as Cargo;
+        if (cargo.point_start_lat !== undefined) {
+            this.addMarkerToMap(cargo.point_start_lat, cargo.point_start_lon, item);                       
+        }
+
     }
     private mapClickHandler(event: Leaflet.LeafletMouseEvent) {
         this.getPointInfo(event.latlng.lat, event.latlng.lng)
@@ -158,10 +175,27 @@ export default class MapLeaflet implements INotify, ILocale {
             });
     }
     private addMarkerToMap(lat: number, lon: number, item: Car | Cargo | string): Leaflet.Marker {
-        const marker = Leaflet.marker(<Leaflet.LatLngTuple>[lat, lon]);
+        let iconPath = '';
+        if (typeof item === 'string') {
+            iconPath = this.ICON_DEFAULT;
+        }
+        const car = item as Car;
+        if (car.point_current_lat !== undefined) {
+            iconPath = this.ICON_CAR;
+        }
+        const cargo = item as Cargo;
+        if (cargo.point_start_lat !== undefined) {
+            iconPath = this.ICON_CARGO;
+        }
+        const icon = Leaflet.icon({
+            iconUrl: iconPath,
+            iconSize: this.ICON_SIZE,
+        });
+        const marker = Leaflet.marker(<Leaflet.LatLngTuple>[lat, lon], { icon: icon });
         this._marker.set(marker, item);
         marker.addTo(this._map);
         marker.addEventListener('click', () => {
+            //TODO обработчик вывода информации в окошко / пути и т.п.
             console.log(this._marker.get(marker));
         });
         return marker;
@@ -177,9 +211,19 @@ export default class MapLeaflet implements INotify, ILocale {
         this._route = Leaflet.Routing.control({
             waypoints: points,
             router: Leaflet.Routing.mapbox(this.MAP_BOX_KEY, { timeout: 3000 }),
-            routeWhileDragging: true,
+            routeWhileDragging: (this._routeMode === true ? true : false),
         });
         this._route.addTo(this._map);
+
+        //TODO Костыль для скрытия базового маркера пути
+        const markers = document.getElementsByClassName('leaflet-marker-icon');
+        for (let i = 0; i < markers.length; i += 1) {
+            const element = <HTMLImageElement>markers[i];
+            const path: Array<string> = element.src.split('/');
+            if (this.ICON_NAMES.includes(path[path.length - 1]) === false) {
+                element.style.display = 'none';
+            }
+        }
     }
     private getPointInfo(latitude: number, longitude: number): Promise<string> {
         return new Promise((resolve, reject) => {
