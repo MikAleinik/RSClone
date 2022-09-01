@@ -10,6 +10,7 @@ export const enum LocaleKeys {
     AUTH_HEADER = 'authHeader',
     AUTH_EMAIL = 'authEmail',
     AUTH_PASSWORD = 'authPassword',
+    AUTH_ERROR = 'authError',
 
     REGISTER_HEADER = 'registerHeader',
     REGISTER_LOGIN = 'registerLogin',

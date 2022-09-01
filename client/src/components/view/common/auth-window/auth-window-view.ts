@@ -34,6 +34,8 @@ export default class AuthWindowView extends View implements INotify, ILocale {
     private _loginButton = document.createElement(this.TAG_BUTTON);
     private _cancelButton = document.createElement(this.TAG_BUTTON);
 
+    private _errorMessage = '';
+
     constructor(observer: Observer) {
         super(observer);
         this.createWindowElement();
@@ -65,6 +67,7 @@ export default class AuthWindowView extends View implements INotify, ILocale {
         this._textPassword.textContent = locale.getPhrase(LocaleKeys.AUTH_PASSWORD);
         this._loginButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_LOGIN);
         this._cancelButton.textContent = locale.getPhrase(LocaleKeys.BUTTON_CANCEL);
+        this._errorMessage = locale.getPhrase(LocaleKeys.AUTH_ERROR);
     }
     setWindowVisibilityState(state: boolean): void {
         if (state) {
@@ -74,12 +77,11 @@ export default class AuthWindowView extends View implements INotify, ILocale {
         }
     }
     successLogInHandler() {
-        this.setWindowVisibilityState(false);//TODO убрать прямое изменение состояния
+        this.setWindowVisibilityState(false);
         this._observer.notify(AppEvents.AUTH_LOGIN_USER_SUCCESS, this);
     }
     failLogInHandler(result: Map<string, string>) {
-        //TODO запилить отдельный компонент инфо окна для всех страниц
-        alert(result.get('message'));
+        alert(this._errorMessage);
     }
     private logInUser() {
         event?.preventDefault();
