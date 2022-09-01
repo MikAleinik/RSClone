@@ -87,7 +87,8 @@ export class UsersMapper {
         if (!user) {
             throw new Error(`User ${userId} not found!`);
         }
-        dataCopy.password = dataCopy.password && dataCopy.password !== '' ? dataCopy.password : user.getData().password;
+        dataCopy.password =
+            dataCopy.password && dataCopy.password !== '' ? hashPassword(dataCopy.password) : user.getData().password;
         const update = `${this._pgp.helpers.update(body, this._columnSet)}, "date_change" = ${this._pgp.as.date(
             new Date()
         )} WHERE id = ${userId}`;
