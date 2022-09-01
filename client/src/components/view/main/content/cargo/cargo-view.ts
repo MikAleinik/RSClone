@@ -6,7 +6,6 @@ import view from "../../view";
 import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 import Cargo from '../../../../../types/cargo';
-import '../../../common/table.scss';
 import User from '../../../../../types/user';
 
 export default class CargoView extends AsideItemView {

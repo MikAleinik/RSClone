@@ -5,7 +5,6 @@ import INotify from "../../../../interfaces/i-notify";
 import view from "../../view";
 import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
-import '../../../common/table.scss';
 import Car from '../../../../../types/car';
 import User from '../../../../../types/user';
 

@@ -59,20 +59,6 @@
     }
 }
 
-.user__overview {
-    display: flex;
-    justify-content: space-between;
-    height: 100%;
-}
-
-.user__data {
-    width: 30%;
-}
-
-.user__map {
-    width: 70%;
-}
-
 @media screen and (max-width: 640px){
     main {
         padding: 10px 15px;

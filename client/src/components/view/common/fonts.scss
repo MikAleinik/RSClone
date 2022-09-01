@@ -6,6 +6,20 @@ $font-size-big: 2.2rem;
 $font-size-medium: 1.6rem;
 $font-size-small: 1.2rem;
 
+h2 {
+  font-size: $font-size-big;
+  color: $font-color-light;
+}
+
+a {
+  text-decoration: none;
+  color: $font-color-dark;
+}
+
+a:visited {
+  color: $font-color-dark;
+}
+
 @media screen and (max-width: 640px){
   html{
     font-size: 8px;

@@ -1,25 +1,33 @@
+@mixin input_border {
+	border: .1rem solid $background-color-dark;
+	border-radius: 1.5rem;
+	padding: .5rem 1rem;
+}
 .item_form {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  border: 1px solid $border-color-dark;
-  border-radius: 10px;
-  padding: 10px;
-  margin: 20px 0px;
+  border: .1rem solid $border-color-dark;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 2rem 0;
 	gap: 1rem;
+	input,
+	select {
+		@include input_border;
+	}
+	button {
+		@include input_border;
+		background: $background-color-middle;
+		&:hover {
+			background: $background-color-accent;
+		}
+	};
 }
 .field__container {
   display: flex;
   flex-direction: column;
 }
-/* .field__range {
-	label {
-		width: 10rem;
-	}
-	input[type="range"]{
-		width: 10rem;
-	}
-} */
 .field__button_container{
 	display: flex;
 	justify-content: center;
@@ -39,19 +47,26 @@
 	background: $background-color-middle;
 	position: sticky;
 	top: 60px;
-	padding: 10px 10px;
+	padding: 1rem;
+	border-radius: 1rem;
+	box-shadow: .1rem .1rem .2rem $background-color-dark;
 }
 .table__row {
 	display: flex;
 	padding: 5px 10px;
 	&:nth-child(even){
 		background: $background-color-accent;
+		border-radius: .5rem;
 	}
 }
 .table__data {
 	width: 14%;
 }
 @media screen and (max-width: 640px){
+	.item_form {
+		padding: 1rem;
+		gap: .5rem;
+	}
 	.table__header{
 		top: 40px;
 	}

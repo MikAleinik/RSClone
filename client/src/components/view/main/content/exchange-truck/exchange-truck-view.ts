@@ -6,7 +6,6 @@ import view from "../../view";
 import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 import Car from '../../../../../types/car';
-import '../../../common/table.scss';
 
 export default class ExchangeTruckView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
