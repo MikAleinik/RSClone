@@ -167,4 +167,6 @@ export const enum LocaleKeys {
     MAIN_MAP_POINT_CLEAR = 'mainMapPointClear',
     MAIN_MAP_SEARCH_FAILED = 'mainMapSearchFailed',
     MAIN_MAP_SEARCH_FIELD = 'mainMapSearchField',
+
+    COMMON_ERROR_SAVE = 'commonErrorSave'
 }

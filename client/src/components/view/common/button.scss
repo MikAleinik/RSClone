@@ -5,15 +5,18 @@
   padding      : 5px 10px;
   margin       : 10px;
 
-  &:hover {
+  &:not(:disabled):hover {
     background: $background-color-accent;
+    cursor: pointer;
   }
-
-  cursor: pointer;
 }
 
 .big__button_hidden {
   visibility: hidden;
+}
+
+.wide__button {
+    min-width: 120px;
 }
 
 @media screen and (max-width: 640px){

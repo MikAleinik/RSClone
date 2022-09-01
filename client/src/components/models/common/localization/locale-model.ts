@@ -32,7 +32,9 @@ export default class LocaleModel {
     }
     private createDictionary() {
         this._localeDictionary.set(LocaleKeys.LOCALE, new Array('en', 'ru'));
-        
+
+        this._localeDictionary.set(LocaleKeys.COMMON_ERROR_SAVE, new Array('An error occurred while saving data. Please try again later.', 'Произошла ошибка сохранения данных. Попробуйте еще раз позже.'));
+
         this._localeDictionary.set(LocaleKeys.BUTTON_LOCALE, new Array('En', 'Ru'));
         this._localeDictionary.set(LocaleKeys.BUTTON_LOGIN, new Array('LogIn', 'Вход'));
         this._localeDictionary.set(LocaleKeys.BUTTON_LOGOUT, new Array('LogOut', 'Выход'));
