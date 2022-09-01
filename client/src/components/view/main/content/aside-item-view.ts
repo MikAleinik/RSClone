@@ -41,6 +41,15 @@ export default abstract class AsideItemView extends View implements INotify, ILo
         this._itemElement.appendChild(this._asideItemSpan);
 
         this._itemElement.addEventListener('click', this.itemClickedHandler.bind(this));
+        
+        this._itemElement.addEventListener('click', (e) => {
+            const el = e.target as HTMLInputElement;
+            const list = document.querySelectorAll('aside li') as NodeListOf<HTMLElement>;
+            for (const l of list){
+                l.classList.remove('active')
+            }
+            el.closest('li')?.classList.add('active');
+        });
     }
     protected abstract createMainElement(): void;
 }

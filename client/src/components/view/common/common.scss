@@ -56,51 +56,9 @@ a:visited {
     color: $font-color-dark;
 }
 
-aside {
-    grid-area: aside;
-    color: $font-color-light;
-    background: $background-color-middle;
-
-    a {
-        color: $font-color-light;
-
-        &:visited {
-            color: $font-color-light;
-        }
-    }
-
-    ul {
-        margin: 0;
-        padding: 0;
-    }
-
-    li {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 30px 20px;
-        cursor: pointer;
-
-        &:hover {
-            background: $background-color-accent;
-        }
-    }
-
-    img {
-        width: 20px;
-        filter: invert(1);
-    }
-
-    .active {
-        background: $background-color-accent;
-        font-weight: 600;
-        text-shadow: .5px .5px $background-color-middle;
-    }
-}
-
 @media screen and (max-width: 640px) {
     body {
-        grid-template-columns: 40px 1fr 1fr;
+        grid-template-columns: 6rem 1fr 1fr;
         grid-template-rows: 30px 30px auto 30px;
         grid-template-areas:
             'header header auth'
