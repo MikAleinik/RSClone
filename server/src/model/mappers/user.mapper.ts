@@ -89,7 +89,7 @@ export class UsersMapper {
         }
         dataCopy.password =
             dataCopy.password && dataCopy.password !== '' ? hashPassword(dataCopy.password) : user.getData().password;
-        const update = `${this._pgp.helpers.update(body, this._columnSet)}, "date_change" = ${this._pgp.as.date(
+        const update = `${this._pgp.helpers.update(dataCopy, this._columnSet)}, "date_change" = ${this._pgp.as.date(
             new Date()
         )} WHERE id = ${userId}`;
         try {
