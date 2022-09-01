@@ -4,9 +4,11 @@
   border-radius: 1.5rem;
   padding: .5rem 1rem;
   margin: 1rem;
-
+  
   &:not(:disabled):hover {
     background: $background-color-accent;
+    box-shadow: .1rem .1rem .3rem $background-color-ultra-light;
+    transform: translateY(-0.1rem);
     cursor: pointer;
   }
 }
@@ -16,7 +18,11 @@
 }
 
 .wide__button {
-    width: 12rem;
-    position: relative;
-    left: calc(50% - 6rem);
+  width: 12rem;
+  position: relative;
+  left: calc(50% - 6rem);
+  &:hover {
+    box-shadow: .1rem .1rem .3rem $background-color-dark;
+    transform: translateY(-0.1rem);
+  }
 }

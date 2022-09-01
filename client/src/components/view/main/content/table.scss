@@ -16,11 +16,17 @@
 	select {
 		@include input_border;
 	}
+	/* input[type=number]{
+		width: 6rem;
+	} */
 	button {
 		@include input_border;
+		border: 0;
 		background: $background-color-middle;
 		&:hover {
 			background: $background-color-accent;
+			box-shadow: .1rem .1rem .3rem $background-color-middle;
+    	transform: translateY(-0.1rem);
 		}
 	};
 }

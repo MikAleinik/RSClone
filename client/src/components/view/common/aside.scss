@@ -29,6 +29,7 @@ aside {
       &:hover {
           background: $background-color-accent;
           border-radius: 2rem;
+          transform: translateY(-0.1rem);
       }
   }
 
