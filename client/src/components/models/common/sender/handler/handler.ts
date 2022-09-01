@@ -25,7 +25,7 @@ export default abstract class Handler {
         this._options= {
             method: 'GET',
             credentials: 'include',
-            // mode: 'cors',
+            mode: 'cors',
             headers: this._headers,
         }
     }
