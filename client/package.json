@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development --out-dir=distdev",
+    "build:prod": "webpack --mode=production --node-env=production --env outdir=distprod",
     "watch": "webpack --watch",
     "serve": "webpack serve"
   },
