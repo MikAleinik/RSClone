@@ -261,7 +261,11 @@ export default class MapLeaflet implements INotify, ILocale {
         catch (error) {
             alert(this._errorRoute);
         }
-
+        this._mapContainer.addEventListener('mousedown', this.hideDefaultMarker.bind(this));
+        this._mapContainer.addEventListener('mouseup', this.hideDefaultMarker.bind(this));
+        this.hideDefaultMarker();
+    }
+    private hideDefaultMarker() {
         //TODO Костыль для скрытия базового маркера пути
         const markers = document.getElementsByClassName('leaflet-marker-icon');
         for (let i = 0; i < markers.length; i += 1) {
@@ -269,6 +273,9 @@ export default class MapLeaflet implements INotify, ILocale {
             const path: Array<string> = element.src.split('/');
             if (this.ICON_NAMES.includes(path[path.length - 1]) === false) {
                 element.style.display = 'none';
+                // element.src = this.ICON_DEFAULT;
+                // element.style.height = `22px`;
+                // element.style.width = `22px`;
             }
         }
     }
