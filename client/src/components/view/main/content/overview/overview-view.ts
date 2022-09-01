@@ -317,7 +317,7 @@ export default class OverviewView extends AsideItemView {
             const clickedElement = <HTMLDivElement>event.target;
             const rowElement = clickedElement.closest(this.TAG_TABLE_ROW);
             if (rowElement !== null) {
-                console.log(this._cars.get(rowElement));
+                this._map.openItemOnMap(this._cars.get(rowElement) as Car);
             }
         });
         return rowElement;
@@ -329,6 +329,13 @@ export default class OverviewView extends AsideItemView {
         rowItem.textContent = cargo.description;
         rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
+        rowElement.addEventListener('click', (event) => {
+            const clickedElement = <HTMLDivElement>event.target;
+            const rowElement = clickedElement.closest(this.TAG_TABLE_ROW);
+            if (rowElement !== null) {
+                this._map.openItemOnMap(this._cargoes.get(rowElement) as Cargo);
+            }
+        });
         return rowElement;
     }
     protected itemClickedHandler(): void {

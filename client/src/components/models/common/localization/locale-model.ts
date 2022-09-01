@@ -34,6 +34,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.LOCALE, new Array('en', 'ru'));
 
         this._localeDictionary.set(LocaleKeys.COMMON_ERROR_SAVE, new Array('An error occurred while saving data. Please try again later.', 'Произошла ошибка сохранения данных. Попробуйте еще раз позже.'));
+        this._localeDictionary.set(LocaleKeys.COMMON_ERROR_ROUTE, new Array('There was an error getting route data. Please try again later.', 'Произошла ошибка получения данных маршрута. Попробуйте еще раз позже.'));
 
         this._localeDictionary.set(LocaleKeys.BUTTON_LOCALE, new Array('En', 'Ru'));
         this._localeDictionary.set(LocaleKeys.BUTTON_LOGIN, new Array('LogIn', 'Вход'));

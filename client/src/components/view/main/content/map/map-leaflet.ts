@@ -32,12 +32,15 @@ export default class MapLeaflet implements INotify, ILocale {
     private readonly DEFAULT_LAT = 53.90332;
     private readonly DEFAULT_LON = 27.608643;
     private readonly DEFAULT_ZOOM = 7;
+    private readonly CLICK_ITEM_ZOOM = 12;
 
     private readonly ICON_NAMES: Array<string> = ['marker-color.png', 'truck-color.png', 'storage-color.png'];
     private readonly ICON_DEFAULT: string = './assets/icons/marker-color.png';
     private readonly ICON_CAR: string = './assets/icons/truck-color.png';
     private readonly ICON_CARGO: string = './assets/icons/storage-color.png';
     private readonly ICON_SIZE: Leaflet.PointExpression = [22, 22];
+
+    private readonly MAP_POPUP_SEPARATOR = '</br>';
 
     private _observer: Observer;
     private _localeModel!: localeModel;
@@ -50,6 +53,8 @@ export default class MapLeaflet implements INotify, ILocale {
     private _search = GeoSearch.GeoSearchControl({ provider: new GeoSearch.OpenStreetMapProvider() });
     private _route: Leaflet.Routing.Control | null = null;
     private _routeMode = true;
+
+    private _errorRoute = '';
 
     constructor(observer: Observer) {
         this._observer = observer;
@@ -69,6 +74,7 @@ export default class MapLeaflet implements INotify, ILocale {
         this._popup.removeFrom(this._map);
 
         this._search.searchElement.input.placeholder = this._localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_FIELD);
+        this._errorRoute = this._localeModel.getPhrase(LocaleKeys.COMMON_ERROR_ROUTE);
     }
     getMap(): HTMLDivElement {
         return this._mapContainer;
@@ -91,7 +97,7 @@ export default class MapLeaflet implements INotify, ILocale {
 
             this._map = Leaflet.map(<HTMLElement>this._mapContainer);
             const tiles = Leaflet.tileLayer(this.URL_OSM_DE);
-            this._map.setView(<Leaflet.LatLngTuple>[this.DEFAULT_LAT, this.DEFAULT_LON], this.DEFAULT_ZOOM)
+            this._map.setView(<Leaflet.LatLngTuple>[this.DEFAULT_LAT, this.DEFAULT_LON], this.DEFAULT_ZOOM);
             tiles.addTo(this._map);
 
             this._map.addEventListener('click', this.mapClickHandler.bind(this));
@@ -104,13 +110,19 @@ export default class MapLeaflet implements INotify, ILocale {
     addItemToMap(item: Cargo | Car) {
         const car = item as Car;
         if (car.point_current_lat !== undefined) {
-            this.addMarkerToMap(car.point_current_lat, car.point_current_lon, item);            
+            this.addMarkerToMap(car.point_current_lat, car.point_current_lon, item);
         }
         const cargo = item as Cargo;
         if (cargo.point_start_lat !== undefined) {
-            this.addMarkerToMap(cargo.point_start_lat, cargo.point_start_lon, item);                       
+            this.addMarkerToMap(cargo.point_start_lat, cargo.point_start_lon, item);
         }
-
+    }
+    openItemOnMap(clickedItem: Cargo | Car) {
+        this._marker.forEach((item, marker) => {
+            if (clickedItem === item) {
+                this.itemClickHandler(marker);
+            }
+        })
     }
     private mapClickHandler(event: Leaflet.LeafletMouseEvent) {
         this.getPointInfo(event.latlng.lat, event.latlng.lng)
@@ -195,10 +207,40 @@ export default class MapLeaflet implements INotify, ILocale {
         this._marker.set(marker, item);
         marker.addTo(this._map);
         marker.addEventListener('click', () => {
-            //TODO обработчик вывода информации в окошко / пути и т.п.
-            console.log(this._marker.get(marker));
+            this.itemClickHandler(marker);
         });
         return marker;
+    }
+    private itemClickHandler(marker: Leaflet.Marker): void {
+        //TODO обработчик вывода информации в окошко / пути и т.п.
+        // console.log(this._marker.get(marker));
+        const item = this._marker.get(marker);
+        let message = '';
+        const car = item as Car;
+        if (car.point_current_lat !== undefined) {
+            this._map.setView(<Leaflet.LatLngTuple>[car.point_current_lat, car.point_current_lon], this.CLICK_ITEM_ZOOM);
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_NUMBER) + ': ' + car.model + '</br>';
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_VOLUME) + ': ' + car.volume_max + '</br>';
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_Weight) + ': ' + car.weight_max + '</br>';
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_PRICE) + ': ' + car.price + car.currency + '</br>';
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION) + ': ' + car.description + '</br>';
+            this._popup.setLatLng(<Leaflet.LatLngTuple>[car.point_current_lat, car.point_current_lon])
+                .setContent(message)
+                .openOn(this._map);
+        }
+        const cargo = item as Cargo;
+        if (cargo.point_start_lat !== undefined) {
+            this._map.setView(<Leaflet.LatLngTuple>[cargo.point_start_lat, cargo.point_start_lon], this.CLICK_ITEM_ZOOM);
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_FROM) + ': ' + cargo.point_start_lat + '</br>';
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_TO) + ': ' + cargo.point_start_lon + '</br>';
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_CARGO_Weight) + ': ' + cargo.weigth + '</br>';
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_CARGO_VOLUME) + ': ' + cargo.volume + '</br>';
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PRICE) + ': ' + cargo.price + cargo.currency + '</br>';
+            message += this._localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DESCRIPTION) + ': ' + cargo.description + '</br>';
+            this._popup.setLatLng(<Leaflet.LatLngTuple>[cargo.point_start_lat, cargo.point_start_lon])
+                .setContent(message)
+                .openOn(this._map);
+        }
     }
     private createRoute(items: Array<Leaflet.Marker>) {
         if (this._route !== null) {
@@ -208,12 +250,17 @@ export default class MapLeaflet implements INotify, ILocale {
         for (let i = 0; i < items.length; i += 1) {
             points.push(items[i].getLatLng());
         }
-        this._route = Leaflet.Routing.control({
-            waypoints: points,
-            router: Leaflet.Routing.mapbox(this.MAP_BOX_KEY, { timeout: 3000 }),
-            routeWhileDragging: (this._routeMode === true ? true : false),
-        });
-        this._route.addTo(this._map);
+        try {
+            this._route = Leaflet.Routing.control({
+                waypoints: points,
+                router: Leaflet.Routing.mapbox(this.MAP_BOX_KEY, { timeout: 3000 }),
+                routeWhileDragging: (this._routeMode === true ? true : false),
+            });
+            this._route.addTo(this._map);
+        }
+        catch (error) {
+            alert(this._errorRoute);
+        }
 
         //TODO Костыль для скрытия базового маркера пути
         const markers = document.getElementsByClassName('leaflet-marker-icon');
