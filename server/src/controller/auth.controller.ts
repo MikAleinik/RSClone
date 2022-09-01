@@ -122,7 +122,7 @@ export class AuthController {
     unAuthorizeUserFunc(): RouteHandler {
         return async (req, res) => {
             try {
-                res.setCookie(AuthController.COOKIE_NAME, AuthController.COOKIE_UNAUTH, AuthController.COOKIE_OPTIONS);
+                res.clearCookie(AuthController.COOKIE_NAME, AuthController.COOKIE_OPTIONS);
                 res.code(OkCodes.OK);
                 res.send({});
             } catch (err) {
