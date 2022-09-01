@@ -29,7 +29,7 @@ export class AuthController {
     //     sameSite: <boolean>(<unknown>'none'),
     // };
     private static COOKIE_NAME = 'authCookie';
-    private static COOKIE_UNAUTH = '-1';
+    // private static COOKIE_UNAUTH = '-1';
     private static instance: AuthController;
 
     private constructor() {
