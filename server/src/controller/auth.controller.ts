@@ -15,18 +15,18 @@ export class AuthController {
         algorithm: 'HS256',
         expiresIn: '1d',
     } as SignOptions;
-    // private static COOKIE_OPTIONS = {
-    //     path: '/',
-    //     httpOnly: true,
-    //     // secure: true,
-    //     sameSite: <boolean>(<unknown>'none'),
-    // };
     private static COOKIE_OPTIONS = {
         path: '/',
         httpOnly: true,
-        secure: true,
+        // secure: true,
         sameSite: <boolean>(<unknown>'none'),
     };
+    // private static COOKIE_OPTIONS = {
+    //     path: '/',
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: <boolean>(<unknown>'none'),
+    // };
     private static COOKIE_NAME = 'authCookie';
     private static COOKIE_UNAUTH = '-1';
     private static instance: AuthController;
