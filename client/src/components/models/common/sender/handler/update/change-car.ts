@@ -8,7 +8,7 @@ export default class ChangeCarHandler extends Handler {
 
     send<T>(): Promise<T> {
         return new Promise((resolve, reject) => {
-            const URL = this.SERVER_URL + this.CARGO_END_POINT + '/' + this._params.get('id')!;
+            const URL = this.SERVER_URL + this.CAR_END_POINT + '/' + this._params.get('id')!;
             this._options.method = 'PUT';
             this._options.body = JSON.stringify({
                 user_id: Number(this._params.get('user_id')!),

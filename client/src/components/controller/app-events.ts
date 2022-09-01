@@ -11,6 +11,8 @@ export const enum AppEvents {
     LOCALE_SET = 'localeSet',//установлен язык локализации
     LOCALE_GET = 'localeGet',//получить язык локализации
     LOCALE_GET_NAME = 'localeGetName',//получить название языка локализации
+    USER_GET_ALL = 'userGetAll',//получить всех пользователей
+    USER_GET_BY_ID = 'userGetById',//получить пользователя по id
     //Index page events
     AUTH_CLICK_BUTTON = 'clickAuthButton',//клик кнопки LogIn
     AUTH_CLICK_LOGOUT_BUTTON = 'clickLogOutButton',//клик кнопки LogOut
@@ -38,19 +40,29 @@ export const enum AppEvents {
     NEWS_GET_DATA = 'newsGetData',//получить данные новостной ленты
     //Main page events
     MAIN_CARGO_CREATE = 'mainCargoCreate',//создать груз
+    MAIN_CARGO_CREATE_SUCCESS = 'mainCargoCreateSuccess',//груз создан успешно
     MAIN_CARGO_DELETE = 'mainCargoDelete',//удалить груз
+    MAIN_CARGO_DELETE_SUCCESS = 'mainCargoDeleteSuccess',//груз удален успешно
     MAIN_CARGO_CHANGE = 'mainCargoChange',//редактировать груз
+    MAIN_CARGO_CHANGE_SUCCESS = 'mainCargoChangeSuccess',//груз отредактирован успешно
     MAIN_CARGO_GET_ALL = 'mainCargoGetAll',//получить все доступные грузы
-    // MAIN_CARGO_GET_ALL_USER = 'mainCargoGetAllUser',//получить все доступные грузы пользователя
+    MAIN_CARGO_GET_BY_USER = 'mainCargoGetByUser',//получить все доступные грузы пользователя
+    MAIN_CARGO_BY_USER_RECEIVED = 'mainCargoByUserReceived',//получены все доступные грузы пользователя
+    MAIN_CARGO_GET_BY_CAR = 'mainCargoGetByCar',//получить все доступные грузы в машине
     MAIN_CARGO_GET_BY_ID = 'mainCargoGetById',//получить груз по ID груза
     // MAIN_CARGO_UPDATE = 'mainCargoUpdate',//обновить список грузов
 
     MAIN_CAR_CREATE = 'mainCarCreate',//создать машину
+    MAIN_CAR_CREATE_SUCCESS = 'mainCargoCreateSuccess',//машина создан успешно
     MAIN_CAR_DELETE = 'mainCarDelete',//удалить машину
+    MAIN_CAR_DELETE_SUCCESS = 'mainCargoDeleteSuccess',//машина удален успешно
     MAIN_CAR_CHANGE = 'mainCarChange',//редактировать машину
+    MAIN_CAR_CHANGE_SUCCESS = 'mainCargoChangeSuccess',//машина отредактирован успешно
     MAIN_CAR_GET_ALL = 'mainCarGetAll',//получить все доступные машину
-    // MAIN_CAR_GET_ALL_USER = 'mainCarGetAllUser',//получить все доступные машину пользователя
+    MAIN_CAR_GET_BY_USER = 'mainCarGetByUser',//получить все доступные машины пользователя
+    MAIN_CAR_BY_USER_RECEIVED = 'mainCarByUserReceived',//получены все доступные машины пользователя
     MAIN_CAR_GET_BY_ID = 'mainCarGetById',//получить машину по ID машины
     // MAIN_CAR_UPDATE = 'mainCarUpdate',//обновить список машин
 
+    MAIN_USER_SAVE_INFO = 'mainUserSaveInfo',//сохранение персональных данных пользователя
 }

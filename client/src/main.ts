@@ -32,6 +32,7 @@ observer.addListener(AppEvents.AUTH_CLICK_LOGOUT_BUTTON, authController)
     .addListener(AppEvents.AUTH_GET_AUTH_USER, authController)
     .addListener(AppEvents.AUTH_LOGOUT_USER, authController)
     .addListener(AppEvents.AUTH_HIDE_BUTTON, authController)
+    .addListener(AppEvents.MAIN_USER_SAVE_INFO, authController)
     .addListener(AppEvents.REGISTER_HIDE_BUTTON, registerController)
     .addListener(AppEvents.LOCALE_CHANGE, localeController)
     .addListener(AppEvents.LOCALE_SET, localeController)
@@ -41,10 +42,13 @@ observer.addListener(AppEvents.AUTH_CLICK_LOGOUT_BUTTON, authController)
     .addListener(AppEvents.MAIN_CARGO_CHANGE, cargoController)
     .addListener(AppEvents.MAIN_CARGO_GET_ALL, cargoController)
     .addListener(AppEvents.MAIN_CARGO_GET_BY_ID, cargoController)
+    .addListener(AppEvents.MAIN_CARGO_GET_BY_USER, cargoController)
+    .addListener(AppEvents.MAIN_CARGO_GET_BY_CAR, cargoController)
     .addListener(AppEvents.MAIN_CAR_CREATE, carController)
     .addListener(AppEvents.MAIN_CAR_DELETE, carController)
     .addListener(AppEvents.MAIN_CAR_CHANGE, carController)
     .addListener(AppEvents.MAIN_CAR_GET_ALL, carController)
-    .addListener(AppEvents.MAIN_CAR_GET_BY_ID, carController);
+    .addListener(AppEvents.MAIN_CAR_GET_BY_ID, carController)
+    .addListener(AppEvents.MAIN_CAR_GET_BY_USER, carController);
 
 const app = new MainView(observer);

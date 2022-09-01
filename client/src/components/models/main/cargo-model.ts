@@ -21,7 +21,7 @@ export default class CargoModel {
                 });
         });
     }
-    deleteCargo(nameEvent: AppEvents, cargo: Cargo): Promise<boolean> {
+    deleteCargo(nameEvent: AppEvents, cargo: Cargo): Promise<Cargo> {
         return new Promise((resolve, reject) => {
             this._dataMapper.delete(nameEvent, this.setCargoToMap(cargo))
                 .then(() => {
@@ -31,11 +31,10 @@ export default class CargoModel {
                             break;
                         }
                     }
-                    console.log(true);
-                    resolve(true);
+                    resolve(cargo);
                 })
                 .catch((result) => {
-                    reject(false);
+                    reject(cargo);
                 });
         });
     }
@@ -87,7 +86,28 @@ export default class CargoModel {
                 });
         });
     }
-
+    getCargoByUser(nameEvent: AppEvents, param: Map<string, string>): Promise<Array<Cargo>> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.read(nameEvent, param)
+                .then((result) => {
+                    resolve(result as Array<Cargo>);
+                })
+                .catch((result) => {
+                    reject(false);
+                });
+        });
+    }
+    getCargoByCar(nameEvent: AppEvents, param: Map<string, string>): Promise<Array<Cargo>> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.read(nameEvent, param)
+                .then((result) => {
+                    resolve(result as Array<Cargo>);
+                })
+                .catch((result) => {
+                    reject(false);
+                });
+        });
+    }
     private setMapToCagro(result: Map<string, string>): Cargo {
         return {
             id: Number(result.get('id')!),
@@ -98,7 +118,7 @@ export default class CargoModel {
             point_end_lon: Number(result.get('point_end_lon')!),
             price: Number(result.get('price')!),
             currency: result.get('currency')!,
-            date_from: new Date(result.get('date_from')!),
+            // date_from: new Date(result.get('date_from')!),
             volume: Number(result.get('volume')!),
             weigth: Number(result.get('weigth')!),
             finished: (result.get('finished')! === 'true' ? true : false),
@@ -115,7 +135,7 @@ export default class CargoModel {
         result.set('point_end_lon', cargo.point_end_lon);
         result.set('price', cargo.price);
         result.set('currency', cargo.currency);
-        result.set('date_from', cargo.date_from);
+        // result.set('date_from', cargo.date_from);
         result.set('volume', cargo.volume);
         result.set('weigth', cargo.weigth);
         result.set('finished', cargo.finished);

@@ -1,0 +1,35 @@
+.map__wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+.map__popup_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    margin: 5px;
+}
+
+.map__popup_small-button {
+    font-size: $font-size-small;
+    border: 0px;
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin: 5px;
+
+    &:hover {
+        background: $background-color-accent;
+    }
+
+    cursor: pointer;
+}
+
+@media screen and (max-width: 640px) {
+    .map__popup_small-button {
+        border: 0px;
+        border-radius: 8px;
+        padding: 3px 4px;
+        margin: 5px;
+    }
+}

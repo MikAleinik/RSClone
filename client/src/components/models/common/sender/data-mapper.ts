@@ -9,17 +9,22 @@ import DeleteCarHandler from "./handler/delete/delete-car";
 import DeleteCargoHandler from "./handler/delete/delete-cargo";
 import GetAllCarHandler from "./handler/read/get-all-car";
 import GetAllCargoHandler from "./handler/read/get-all-cargo";
+import GetAllUserHandler from "./handler/read/get-all-user";
 import GetCarHandler from "./handler/read/get-car";
+import GetCarByUserCarHandler from "./handler/read/get-car-by-user-car";
 import GetCargoHandler from "./handler/read/get-cargo";
+import GetCargoByUserCarHandler from "./handler/read/get-cargo-by-user-car";
 import GetUserHandler from "./handler/read/get-user";
 import ReadNewsHandler from "./handler/read/read-news";
 import ChangeCarHandler from "./handler/update/change-car";
 import ChangeCargoHandler from "./handler/update/change-cargo";
+import ChangeUserHandler from "./handler/update/change-user";
 import LogInUserHandler from "./handler/update/login";
 import LogOutUserHandler from "./handler/update/logout";
 import { HttpCodes } from "./http-codes";
 
 export default class DataMapper {
+    private readonly KEY_EVENT = 'event';
     constructor() {
 
     }
@@ -112,6 +117,68 @@ export default class DataMapper {
     read<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
+                case AppEvents.USER_GET_ALL: {
+                    const handler = new GetAllUserHandler();
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    // delete ((data as unknown) as answer<T>).statusCode;
+                                    // const result = new Map<string, string>();
+                                    // for (const [key, value] of Object.entries(((data as unknown) as user))) {
+                                    //     result.set(key, value.toString());
+                                    // }
+                                    // resolve(result);
+                                    resolve(((data as unknown) as answer<T>).users!);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_UNAUTHORIZED: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка получения всех пользователей');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            const result = new Map<string, string>();
+                            result.set('message', data.message);
+                            reject(result);
+                        });
+                    break;
+                }
+                case AppEvents.USER_GET_BY_ID: {
+                    const handler = new GetUserHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    delete ((data as unknown) as answer<T>).statusCode;
+                                    const result = new Map<string, string>();
+                                    for (const [key, value] of Object.entries(((data as unknown) as user))) {
+                                        result.set(key, value.toString());
+                                    }
+                                    resolve(result);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_UNAUTHORIZED:
+                                case HttpCodes.CODE_FORBIDDEN: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка получения пользователя по id');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            const result = new Map<string, string>();
+                            result.set('message', data.message);
+                            reject(result);
+                        });
+                    break;
+                }
                 case AppEvents.MAIN_CAR_GET_ALL: {
                     const handler = new GetAllCarHandler(params);
                     handler.send()
@@ -164,6 +231,30 @@ export default class DataMapper {
                         });
                     break;
                 }
+                case AppEvents.MAIN_CAR_GET_BY_USER: {
+                    params.set(this.KEY_EVENT, nameEvent);
+                    const handler = new GetCarByUserCarHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    resolve(((data as unknown) as answer<T>).items!);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_UNAUTHORIZED: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка получения всех машин по id пользователя или груза');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
                 case AppEvents.MAIN_CARGO_GET_ALL: {
                     const handler = new GetAllCargoHandler(params);
                     handler.send()
@@ -206,6 +297,31 @@ export default class DataMapper {
                                 case HttpCodes.CODE_NOT_FOUND: {
                                     const result = new Map<string, string>();
                                     result.set('message', 'TODO Ошибка получения груза по ID');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
+                case AppEvents.MAIN_CARGO_GET_BY_CAR:
+                case AppEvents.MAIN_CARGO_GET_BY_USER: {
+                    params.set(this.KEY_EVENT, nameEvent);
+                    const handler = new GetCargoByUserCarHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    resolve(((data as unknown) as answer<T>).items!);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_UNAUTHORIZED: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка получения всех грузов по id пользователя или машины');
                                     reject(result);
                                     break;
                                 }
@@ -270,6 +386,29 @@ export default class DataMapper {
     update<T>(nameEvent: AppEvents, params: Map<string, string> = new Map()): Promise<Map<string, string> | Array<T>> {
         return new Promise((resolve, reject) => {
             switch (nameEvent) {
+                case AppEvents.MAIN_USER_SAVE_INFO: {
+                    const handler = new ChangeUserHandler(params);
+                    handler.send()
+                        .then((data) => {
+                            switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_OK: {
+                                    resolve(params);
+                                    break;
+                                }
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_NOT_FOUND: {
+                                    const result = new Map<string, string>();
+                                    result.set('message', 'TODO Ошибка редактирования пользователя');
+                                    reject(result);
+                                    break;
+                                }
+                            }
+                        })
+                        .catch((data) => {
+                            reject();
+                        });
+                    break;
+                }
                 case AppEvents.MAIN_CAR_CHANGE: {
                     const handler = new ChangeCarHandler(params);
                     handler.send()

@@ -29,7 +29,7 @@
 }
 
 .window-auth__header {
-    font-size: 16px;
+    font-size: $font-size-medium;
 }
 
 .window-auth__row-container {
@@ -55,7 +55,7 @@
 .window-auth__field {
     height: 12px;
 
-    font-size    : 16px;
+    font-size    : $font-size-medium;
     border       : 1px solid;
     border-radius: 18px;
     padding      : 5px 15px;
@@ -65,9 +65,4 @@
 
 .window-auth__field_invalid {
     border       : 1px solid $border-color-error;
-}
-@media screen and (max-width: 640px){
-    .window-auth__header {
-        font-size: 14px;
-    }
 }

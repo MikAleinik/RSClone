@@ -1,4 +1,6 @@
 export const enum LocaleKeys {
+    LOCALE = 'locale',
+
     BUTTON_LOCALE = 'buttonLocale',
     BUTTON_LOGIN = 'buttonLogin',
     BUTTON_LOGOUT = 'buttonLogOut',
@@ -8,6 +10,7 @@ export const enum LocaleKeys {
     AUTH_HEADER = 'authHeader',
     AUTH_EMAIL = 'authEmail',
     AUTH_PASSWORD = 'authPassword',
+    AUTH_ERROR = 'authError',
 
     REGISTER_HEADER = 'registerHeader',
     REGISTER_LOGIN = 'registerLogin',
@@ -70,6 +73,14 @@ export const enum LocaleKeys {
     MAIN_ASIDE_CHAT = 'mainAsideChat',
     MAIN_ASIDE_NEWS = 'mainAsideNews',
 
+    MAIN_FILTER_PANEL_HEADER = 'mainFilterPanelHeader',
+    MAIN_FILTER_PANEL_SEARCH = 'mainFilterPanelHeaderSearch',
+    MAIN_FILTER_PANEL_PRICE = 'mainFilterPanelHeaderPrice',
+    MAIN_FILTER_PANEL_WEIGHT = 'mainFilterPanelHeaderWeight',
+    MAIN_FILTER_PANEL_VOLUME = 'mainFilterPanelHeaderVolume',
+    MAIN_FILTER_PANEL_LOAD = 'mainFilterPanelHeaderLoad',
+
+    MAIN_OVERVIEW_HEADER_PERSONAL = 'mainOverviewPersonal',
     MAIN_OVERVIEW_HEADER_RATING = 'mainOverviewRating',
     MAIN_OVERVIEW_HEADER_TRANSPORT = 'mainOverviewTransport',
     MAIN_OVERVIEW_HEADER_CARGO = 'mainOverviewCargo',
@@ -80,7 +91,10 @@ export const enum LocaleKeys {
     MAIN_OVERVIEW_COMPANY_ADDRESS = 'mainOverviewCompanyAddress',
     MAIN_OVERVIEW_COMPANY_PHONE = 'mainOverviewCompanyPhone',
     MAIN_OVERVIEW_EMAIL = 'mainOverviewEmail',
+    MAIN_OVERVIEW_PASSWORD = 'mainOverviewPassword',
+    MAIN_OVERVIEW_ACCEPT = 'mainOverviewAccept',
 
+    MAIN_TRANSPORT_PANEL_HEADER = 'mainTransportPanelHeader',
     MAIN_TRANSPORT_NEW = 'mainTransportAddNew',
     MAIN_TRANSPORT_CHANGE = 'mainTransportChange',
     MAIN_TRANSPORT_NUMBER = 'mainTransportNumber',
@@ -95,9 +109,12 @@ export const enum LocaleKeys {
     MAIN_TRANSPORT_STATUS_STOPPED = 'mainTransportStatusStopped',
     MAIN_TRANSPORT_STATUS_DRIVED = 'mainTransportStatusDrived',
     MAIN_TRANSPORT_FILLING = 'mainTransportFilling',
+    MAIN_TRANSPORT_ADD_NEW = 'mainTransportAddNew',
+    MAIN_TRANSPORT_DELETE = 'mainTransportDelete',
+    MAIN_TRANSPORT_SAVE = 'mainTransportSave',
+    MAIN_TRANSPORT_CLEAR = 'mainTransportClear',
 
-    MAIN_CARGO_NEW = 'mainCargoNew',
-    MAIN_CARGO_CHANGE = 'mainCargoChange',
+    MAIN_CARGO_PANEL_HEADER = 'mainCargoPanelHeader',
     MAIN_CARGO_NAME = 'mainCargoName',
     MAIN_CARGO_COMPANY = 'mainCargoCompany',
     MAIN_CARGO_Weight = 'mainCargoWeight',
@@ -112,9 +129,14 @@ export const enum LocaleKeys {
     MAIN_CARGO_STATUS_STOPPED = 'mainCargoStatusStopped',
     MAIN_CARGO_STATUS_DRIVED = 'mainCargoStatusDrived',
     MAIN_CARGO_STATUS_DELIVERED = 'mainCargoStatusDelivered',
+    MAIN_CARGO_ADD_NEW = 'mainCargoAddNew',
+    MAIN_CARGO_DELETE = 'mainCargoDelete',
+    MAIN_CARGO_SAVE = 'mainCargoSave',
+    MAIN_CARGO_CLEAR = 'mainCargoClear',
 
     MAIN_EXCHANGE_TRANSPORT_NUMBER = 'mainExchangeTransportNumber',
     MAIN_EXCHANGE_TRANSPORT_COMPANY = 'mainExchangeTransportCompany',
+    MAIN_EXCHANGE_TRANSPORT_USER = 'mainExchangeCargoUser',
     MAIN_EXCHANGE_TRANSPORT_VOLUME = 'mainExchangeTransportVolume',
     MAIN_EXCHANGE_TRANSPORT_Weight = 'mainExchangeTransportWeight',
     MAIN_EXCHANGE_TRANSPORT_PRICE = 'mainExchangeTransportPrice',
@@ -123,6 +145,7 @@ export const enum LocaleKeys {
     MAIN_EXCHANGE_TRANSPORT_LOCATION = 'mainExchangeTransportLocation',
 
     MAIN_EXCHANGE_CARGO_COMPANY = 'mainExchangeCargoCompany',
+    MAIN_EXCHANGE_CARGO_USER = 'mainExchangeCargoUser',
     MAIN_EXCHANGE_CARGO_NAME = 'mainExchangeCargoName',
     MAIN_EXCHANGE_CARGO_Weight = 'mainExchangeCargoWeight',
     MAIN_EXCHANGE_CARGO_VOLUME = 'mainExchangeCargoVolume',
@@ -138,4 +161,12 @@ export const enum LocaleKeys {
     MAIN_COMPANY_PHONE = 'mainCompanyPhone',
     MAIN_COMPANY_OWNER = 'mainCompanyOwner',
     MAIN_COMPANY_RATING = 'mainCompanyRating',
+
+    MAIN_MAP_POINT_FROM = 'mainMapPointFrom',
+    MAIN_MAP_POINT_TO = 'mainMapPointTo',
+    MAIN_MAP_POINT_CLEAR = 'mainMapPointClear',
+    MAIN_MAP_SEARCH_FAILED = 'mainMapSearchFailed',
+    MAIN_MAP_SEARCH_FIELD = 'mainMapSearchField',
+
+    COMMON_ERROR_SAVE = 'commonErrorSave'
 }
