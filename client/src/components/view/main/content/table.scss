@@ -65,8 +65,21 @@
 		border-radius: .5rem;
 	}
 }
+@mixin column__icon {
+	display: inline-block;
+	background-image: url('../../../../assets/icons/from.png');
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	content: '';
+	width: 2rem;
+	height: 2rem;
+	margin-right: 1rem;
+}
 .table__data {
 	width: 14%;
+	display: flex;
+	align-items: center;
 }
 @media screen and (max-width: 640px){
 	.item_form {
@@ -74,19 +87,57 @@
 		gap: .5rem;
 	}
 	.table__header{
-		top: 40px;
-		// display: none;
+		// top: 40px;
+		display: none;
 	}
-	/* .table__row {
+	.table__row {
 		flex-direction: column;
 	}
 	.table__data {
 		width: auto;
 		display: flex;
+		margin: .5rem 0;
+	}
+	.table__data_from{
 		&::before {
-			content: attr(title);
-			display: inline-block;
-			width: 8rem;
+			@include column__icon;
+			background-image: url('../../../../assets/icons/from.png');
 		}
-	} */
+	}
+	.table__data_to{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/to.png');
+		}
+	}
+	.table__data_price{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/price.png');
+		}
+	}
+	.table__data_currency{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/currency.png');
+		}
+	}
+	.table__data_volume{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/volume.png');
+		}
+	}
+	.table__data_weight{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/weight.png');
+		}
+	}
+	.table__data_description{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/description.png');
+		}
+	}
 }
