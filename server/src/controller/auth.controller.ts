@@ -17,7 +17,7 @@ export class AuthController {
     } as SignOptions;
     private static COOKIE_OPTIONS = {
         path: '/',
-        httpOnly: true,
+        // httpOnly: true,
         domain: '185.68.21.238, localhost:8080',
         // secure: true,
         // sameSite: <boolean>(<unknown>'none'),
