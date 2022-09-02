@@ -21,6 +21,7 @@ export default class CargoView extends AsideItemView {
     private readonly TAG_TABLE_CONTAINER = 'div';
     private readonly TAG_TABLE_ROW = 'div';
     private readonly TAG_TABLE_ROW_DATA = 'span';
+    private readonly TAG_WAIT_IMAGE = 'img';
 
     private readonly CLASS_FIELDSET = 'item_form';
     private readonly CLASS_FIELDSET_ITEM = 'field__container';
@@ -31,6 +32,7 @@ export default class CargoView extends AsideItemView {
     private readonly CLASS_TABLE_HEADER = 'table__header';
     private readonly CLASS_TABLE_ROW = 'table__row';
     private readonly CLASS_TABLE_DATA = 'table__data';
+    private readonly CLASS_WAIT_IMAGE = 'table__wait';
 
     private readonly CURRENCY = new Array('USD', 'EUR', 'BYN', 'RUB');
     private readonly ID_ROLE_CUSTOMER = '1';
@@ -193,12 +195,30 @@ export default class CargoView extends AsideItemView {
         const rowElement = document.createElement(this.TAG_TABLE_ROW);
         rowElement.className = this.CLASS_TABLE_ROW
         let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
+        let waitElement = document.createElement(this.TAG_WAIT_IMAGE);
+        waitElement.classList.add(this.CLASS_WAIT_IMAGE);
+        waitElement.src = './assets/icons/loading.gif';
+        rowItem.appendChild(waitElement);
+        // rowItem.textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
+        let params = new Map();
+        params.set('lat', cargo.point_start_lat);
+        params.set('lon', cargo.point_start_lon);
+        params.set('element', rowItem);
+        this._observer.notify(AppEvents.MAP_GET_NAME, this, params);
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_from');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
+        waitElement = document.createElement(this.TAG_WAIT_IMAGE);
+        waitElement.classList.add(this.CLASS_WAIT_IMAGE);
+        waitElement.src = './assets/icons/loading.gif';
+        rowItem.appendChild(waitElement);
+        // rowItem.textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
+        params = new Map();
+        params.set('lat', cargo.point_end_lat);
+        params.set('lon', cargo.point_end_lon);
+        params.set('element', rowItem);
+        this._observer.notify(AppEvents.MAP_GET_NAME, this, params);
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_to');
         rowElement.appendChild(rowItem);

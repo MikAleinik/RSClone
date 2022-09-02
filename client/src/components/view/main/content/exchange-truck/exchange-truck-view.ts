@@ -17,7 +17,7 @@ export default class ExchangeTruckView extends AsideItemView {
     private readonly TAG_TABLE_CONTAINER = 'div';
     private readonly TAG_TABLE_ROW = 'div';
     private readonly TAG_TABLE_ROW_DATA = 'span';
-
+    private readonly TAG_WAIT_IMAGE = 'img';
 
     private readonly CLASS_FIELDSET = 'item_form';
     private readonly CLASS_FIELDSET_ITEM = 'field__container';
@@ -29,6 +29,7 @@ export default class ExchangeTruckView extends AsideItemView {
     private readonly CLASS_TABLE_HEADER = 'table__header';
     private readonly CLASS_TABLE_ROW = 'table__row';
     private readonly CLASS_TABLE_DATA = 'table__data';
+    private readonly CLASS_WAIT_IMAGE = 'table__wait';
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
     private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
@@ -173,7 +174,16 @@ export default class ExchangeTruckView extends AsideItemView {
         rowItem.classList.add('table__data_model');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = car.point_current_lat + ' ' + car.point_current_lon;
+        const waitElement = document.createElement(this.TAG_WAIT_IMAGE);
+        waitElement.classList.add(this.CLASS_WAIT_IMAGE);
+        waitElement.src = './assets/icons/loading.gif';
+        rowItem.appendChild(waitElement);
+        // rowItem.textContent = car.point_current_lat + ' ' + car.point_current_lon;
+        const params = new Map();
+        params.set('lat', car.point_current_lat);
+        params.set('lon', car.point_current_lon);
+        params.set('element', rowItem);
+        // this._observer.notify(AppEvents.MAP_GET_NAME, this, params);
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_to');
         rowElement.appendChild(rowItem);

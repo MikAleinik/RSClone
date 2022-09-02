@@ -17,6 +17,7 @@ export default class TruckView extends AsideItemView {
     private readonly TAG_FIELDSET_SELECT = 'select';
     private readonly TAG_FIELDSET_OPTION = 'option';
     private readonly TAG_FIELDSET_BUTTON = 'button';
+    private readonly TAG_WAIT_IMAGE = 'img';
 
     private readonly TAG_TABLE_CONTAINER = 'div';
     private readonly TAG_TABLE_ROW = 'div';
@@ -31,6 +32,7 @@ export default class TruckView extends AsideItemView {
     private readonly CLASS_TABLE_HEADER = 'table__header';
     private readonly CLASS_TABLE_ROW = 'table__row';
     private readonly CLASS_TABLE_DATA = 'table__data';
+    private readonly CLASS_WAIT_IMAGE = 'table__wait';
 
     private readonly CURRENCY = new Array('USD', 'EUR', 'BYN', 'RUB');
     private readonly ID_ROLE_CUSTOMER = '1';
@@ -198,7 +200,15 @@ export default class TruckView extends AsideItemView {
         rowItem.classList.add('table__data_from');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = (car.point_current_lat !== undefined && car.point_current_lon !== undefined ? car.point_current_lat + ', ' + car.point_current_lon : '');
+        const waitElement = document.createElement(this.TAG_WAIT_IMAGE);
+        waitElement.classList.add(this.CLASS_WAIT_IMAGE);
+        waitElement.src = './assets/icons/loading.gif';
+        rowItem.appendChild(waitElement);
+        const params = new Map();
+        params.set('lat', car.point_current_lat);
+        params.set('lon', car.point_current_lon);
+        params.set('element', rowItem);
+        this._observer.notify(AppEvents.MAP_GET_NAME, this, params);
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_to');
         rowElement.appendChild(rowItem);
