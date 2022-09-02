@@ -140,4 +140,16 @@
 			background-image: url('../../../../assets/icons/description.png');
 		}
 	}
+	.table__data_company{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/company.png');
+		}
+	}
+	.table__data_contacts{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/contacts.png');
+		}
+	}
 }
