@@ -18,7 +18,7 @@ export class AuthController {
     private static COOKIE_OPTIONS = {
         path: '/',
         // httpOnly: true,
-        domain: '185.68.21.238, localhost:8080',
+        domain: '185.68.21.238',
         // secure: true,
         // sameSite: <boolean>(<unknown>'none'),
     };
