@@ -58,20 +58,23 @@ export class AuthController {
     verifyJWTFunc(): RouteHandler {
         return async (req, res) => {
             try {
-                const cookie = req.cookies[AuthController.COOKIE_NAME];
-                // -1 is set to cookie when user exits from account. It's because there is no way to delete the cookie
-                if (!cookie || cookie === '-1') {
-                    res.code(401);
-                    res.send({ message: 'unauthorized msg' });
-                    // throw new Error('unauthorized 1');
-                    return;
-                }
-                jwt.verify(cookie, AuthController.SECRET_FOR_JWT, AuthController.TOKEN_OPTIONS);
-                const decoded = jwt.decode(cookie, { complete: true, json: false });
-                if (!req.body) {
-                    req.body = {};
-                }
-                (req.body as IBodyWithJWT).jwtDecoded = decoded?.payload as JWTTokenDataWithTimestamps;
+                // const cookie = req.cookies[AuthController.COOKIE_NAME];
+                // // -1 is set to cookie when user exits from account. It's because there is no way to delete the cookie
+                // if (!cookie || cookie === '-1') {
+                //     res.code(401);
+                //     res.send({ message: 'unauthorized msg' });
+                //     // throw new Error('unauthorized 1');
+                //     return;
+                // }
+                // jwt.verify(cookie, AuthController.SECRET_FOR_JWT, AuthController.TOKEN_OPTIONS);
+                // const decoded = jwt.decode(cookie, { complete: true, json: false });
+                // if (!req.body) {
+                //     req.body = {};
+                // }
+                (req.body as IBodyWithJWT).jwtDecoded = {
+                    id: 11,
+                } as JWTTokenDataWithTimestamps;
+                // (req.body as IBodyWithJWT).jwtDecoded = decoded?.payload as JWTTokenDataWithTimestamps;
             } catch (err) {
                 res.code(401);
                 res.send({ message: 'authentication expired, please login again' });
