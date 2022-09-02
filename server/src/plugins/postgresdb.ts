@@ -1,5 +1,5 @@
 import fp from 'fastify-plugin';
-import { appConfig } from '../config/app.config';
+import { AppConfig } from '../config/app.config';
 import pgPromise from 'pg-promise';
 import pg from 'pg-promise/typescript/pg-subset';
 // const pgp = require('pg-promise');
@@ -12,8 +12,8 @@ declare module 'fastify' {
 }
 
 export default fp(async (fastify) => {
-    fastify.log.info(appConfig.postgresURI);
+    fastify.log.info(AppConfig.config.POSTGRES_URI);
     const pgp = pgPromise();
-    const db = pgp(appConfig.postgresURI);
+    const db = pgp(AppConfig.config.POSTGRES_URI);
     fastify.decorate('db', db);
 });

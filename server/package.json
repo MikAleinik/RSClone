@@ -13,8 +13,14 @@
     "watch:ts": "tsc -w",
     "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
     "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/server.js",
-    "start:dev": "nodemon",
-    "lint": "node node_modules/eslint/bin/eslint.js ./src" 
+    "lint": "node node_modules/eslint/bin/eslint.js ./src",
+    "start:local_dev": "SET NODE_ENV=local_dev& nodemon",
+    "start:deploy_test": "SET NODE_ENV=deploy_test& nodemon",
+    "start:deploy_dev": "SET NODE_ENV=deploy_dev& nodemon",
+    "start:deploy_prod": "SET NODE_ENV=deploy_prod& nodemon",
+    "build:deploy_test": "SET NODE_ENV=deploy_test& tsc",
+    "build:deploy_dev": "SET NODE_ENV=deploy_dev& tsc",
+    "build:deploy_prod": "SET NODE_ENV=deploy_prod& tsc"
   },
   "keywords": [],
   "author": "",
