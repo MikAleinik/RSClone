@@ -72,7 +72,8 @@ export class AuthController {
                 //     req.body = {};
                 // }
                 (req.body as IBodyWithJWT).jwtDecoded = {
-                    id: 11,
+                    id: 21,
+                    email: 'mik@tut.by',
                 } as JWTTokenDataWithTimestamps;
                 // (req.body as IBodyWithJWT).jwtDecoded = decoded?.payload as JWTTokenDataWithTimestamps;
             } catch (err) {
