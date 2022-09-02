@@ -56,6 +56,13 @@ export default class ExchangeTruckView extends AsideItemView {
     private _tableHeaderPoint = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableContainer = document.createElement(this.TAG_TABLE_CONTAINER);
 
+    private _minPrice = 0;
+    private _minVolume = 0;
+    private _minWeight = 0;
+    private _maxPrice = 20000;
+    private _maxVolume = 100;
+    private _maxWeight = 50;
+
     private _cars = new Map<HTMLElement, Car>();
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
@@ -237,12 +244,16 @@ export default class ExchangeTruckView extends AsideItemView {
 
         tableHeader.appendChild(this._tableHeaderModel);
         this._tableHeaderModel.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderModel.classList.add('table__data_model');
         tableHeader.appendChild(this._tableHeaderPoint);
         this._tableHeaderPoint.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderPoint.classList.add('table__data_to');
         tableHeader.appendChild(this._tableHeaderCompany);
         this._tableHeaderCompany.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderCompany.classList.add('table__data_company');
         tableHeader.appendChild(this._tableHeaderUser);
         this._tableHeaderUser.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderUser.classList.add('table__data_contacts');
         tableHeader.appendChild(this._tableHeaderPrice);
         this._tableHeaderPrice.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderCurrency);
@@ -253,6 +264,7 @@ export default class ExchangeTruckView extends AsideItemView {
         this._tableHeaderWeight.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderDescription);
         this._tableHeaderDescription.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderDescription.classList.add('table__data_description');
         
         tableWrapper.appendChild(tableHeader);
         this._tableContainer.className = this.CLASS_TABLE_CONTAINER;
@@ -280,10 +292,10 @@ export default class ExchangeTruckView extends AsideItemView {
         containerItem.appendChild(this._formItemPrice);
         this._formItemPrice.setAttribute('type', 'number')
         this._formItemPrice.id = 'price'
-        this._formItemPrice.value = '20000'
+        this._formItemPrice.value = this._maxPrice.toString();
         formElement.appendChild(containerItem);
         this._formItemPriceRange.setAttribute('type', 'range');
-        this._formItemPriceRange.min = '0';
+        this._formItemPriceRange.min = this._minPrice.toString();
         this._formItemPriceRange.max = this._formItemPrice.value;
         this._formItemPriceRange.value = this._formItemPrice.value;
         containerItem.appendChild(this._formItemPriceRange);
@@ -296,10 +308,10 @@ export default class ExchangeTruckView extends AsideItemView {
         containerItem.appendChild(this._formItemVolume);
         this._formItemVolume.setAttribute('type', 'number');
         this._formItemVolume.id = 'volume';
-        this._formItemVolume.value = '300';
+        this._formItemVolume.value = this._maxVolume.toString();
         formElement.appendChild(containerItem);
         this._formItemVolumeRange.setAttribute('type', 'range')
-        this._formItemVolumeRange.min = '0';
+        this._formItemVolumeRange.min = this._minVolume.toString();
         this._formItemVolumeRange.max = this._formItemVolume.value;
         this._formItemVolumeRange.value = this._formItemVolume.value;
         containerItem.appendChild(this._formItemVolumeRange);
@@ -312,10 +324,10 @@ export default class ExchangeTruckView extends AsideItemView {
         containerItem.appendChild(this._formItemLoad);
         this._formItemLoad.setAttribute('type', 'number')
         this._formItemLoad.id = 'weight'
-        this._formItemLoad.value = '100'
+        this._formItemLoad.value = this._maxWeight.toString();
         formElement.appendChild(containerItem);
         this._formItemLoadRange.setAttribute('type', 'range')
-        this._formItemLoadRange.min = '0';
+        this._formItemLoadRange.min = this._minWeight.toString();
         this._formItemLoadRange.max = this._formItemLoad.value;
         this._formItemLoadRange.value = this._formItemLoad.value;
         containerItem.appendChild(this._formItemLoadRange);
@@ -328,9 +340,9 @@ export default class ExchangeTruckView extends AsideItemView {
 
         this._formItemButtonClear.addEventListener('click', (e) => {
             this._formItemSearch.value = '';
-            this._formItemPrice.value = '20000';
-            this._formItemLoad.value = '11000';
-            this._formItemVolume.value = '3000';
+            this._formItemPrice.value = this._maxPrice.toString();
+            this._formItemLoad.value = this._maxWeight.toString();
+            this._formItemVolume.value = this._maxVolume.toString();
             const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
             for (const r of allRows){
                 r.style.display = 'flex'

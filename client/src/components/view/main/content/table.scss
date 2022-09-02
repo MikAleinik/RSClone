@@ -7,13 +7,27 @@
   padding: 1rem;
   margin: 2rem 0;
 	gap: 1rem;
-	input,
+	input {
+		@include input_border;
+		&[type=range]{
+			-webkit-appearance: none;
+			// background: $background-color-accent;
+			height: 1rem;
+			&::-webkit-slider-thumb,
+			&::-moz-range-thumb {
+				height: 1rem;
+				width: 1rem;
+				background: $background-color-middle;
+			}
+		}
+	}
 	select {
 		@include input_border;
+		background-color: $background-color-light;
+		width: 100%;
+		min-width: 20rem;
+		text-align: center
 	}
-	/* input[type=number]{
-		width: 6rem;
-	} */
 	button {
 		@include input_border;
 		border: 0;
@@ -23,11 +37,18 @@
 			box-shadow: .1rem .1rem .3rem $background-color-middle;
     	transform: translateY(-0.1rem);
 		}
-	};
+	}
 }
 .field__container {
   display: flex;
   flex-direction: column;
+	align-items: center;
+	&:first-of-type{
+		width: 100%;
+		input {
+			width: 80%;
+		}
+	}
 }
 .field__button_container{
 	display: flex;
@@ -51,10 +72,12 @@
 	padding: 1rem;
 	border-radius: 1rem;
 	box-shadow: .1rem .1rem .2rem $background-color-dark;
+	gap: 1rem;
 }
 .table__row {
 	display: flex;
-	padding: 5px 10px;
+	padding: .5rem 1rem;
+	gap: 1rem;
 	&:nth-child(even){
 		background: $background-color-accent;
 		border-radius: .5rem;
@@ -72,9 +95,17 @@
 	margin-right: 1rem;
 }
 .table__data {
-	width: 14%;
+	width: 10%;
 	display: flex;
 	align-items: center;
+}
+.table__data_from,
+.table__data_to,
+.table__data_company,
+.table__data_contacts,
+.table__data_model,
+.table__data_description {
+	width: 25%;
 }
 @media screen and (max-width: 640px){
 	.item_form {
@@ -87,7 +118,6 @@
 		gap: 1rem;
 	}
 	.table__header{
-		// top: 40px;
 		display: none;
 	}
 	.table__row {
@@ -156,5 +186,5 @@
 	}
 }
 .table__wait {
-    width: 40px;
+    width: 4rem;
 }

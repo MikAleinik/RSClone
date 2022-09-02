@@ -15,7 +15,6 @@
     width: 30%;
     min-width: 35rem;
     max-height: 85vh;
-    overflow-y: scroll;
     padding: .5rem;
 }
 
@@ -28,8 +27,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
-    width: 100%;
+    width: 95%;
 
     input {
         @include input_border;
@@ -80,16 +78,26 @@
         height: 100%;
         overflow-y: scroll;
         padding: .5rem;
+        min-width: 100%;
+        max-height: 100%;
     }
     .user__container {
         .map__wrapper {
             display: none;
         }
     }
+    h3 {
+        padding: 0 1rem;
+    }
     .user__row_name {
+        padding: 0 1rem;
         input {
-            width: 75%;
+            width: 60%;
         };
+    }
+    .user__table {
+        max-height: 100%;
+        overflow-y: auto;
     }
 }
 @media screen and (max-width: 360px){

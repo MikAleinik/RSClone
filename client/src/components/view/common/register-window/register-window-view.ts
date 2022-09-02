@@ -84,8 +84,10 @@ export default class RegisterWindowView extends View implements INotify, ILocale
     setWindowVisibilityState(state: boolean): void {
         if (state) {
             this._windowElement.style.visibility = 'visible';
+            document.body.style.overflow = 'hidden';
         } else {
             this._windowElement.style.visibility = 'hidden';
+            document.body.style.overflow = 'auto'
         }
     }
     successRegistrationHandler() {
