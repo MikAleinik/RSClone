@@ -13,15 +13,9 @@ export default class LogInUserHandler extends Handler {
                 email: this._params.get('auth_email')!,
                 password: this._params.get('auth_password')!,
             };
-            fetch(URL, {
-                method: 'POST',
-                credentials: 'include',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify(userData)
-            })
+            this._options.method = 'POST';
+            this._options.body = JSON.stringify(userData);
+            fetch(URL, this._options)
                 .then((response) => {
                     return response.json()
                         .then((data) => {

@@ -15,15 +15,9 @@ export default class CreateUserHandler extends Handler {
                 password: this._params.get('password')!,
                 role_id: this._params.get('role_id')!,
             };
-            fetch(URL, {
-                method: 'POST',
-                credentials: 'include',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: JSON.stringify(userData)
-            })
+            this._options.method = 'POST';
+            this._options.body = JSON.stringify(userData);
+            fetch(URL, this._options)
                 .then((response) => {
                     return response.json()
                         .then((data) => {
