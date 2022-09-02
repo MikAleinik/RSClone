@@ -75,5 +75,18 @@
 	}
 	.table__header{
 		top: 40px;
+		// display: none;
 	}
+	/* .table__row {
+		flex-direction: column;
+	}
+	.table__data {
+		width: auto;
+		display: flex;
+		&::before {
+			content: attr(title);
+			display: inline-block;
+			width: 8rem;
+		}
+	} */
 }

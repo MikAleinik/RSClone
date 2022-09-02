@@ -26,7 +26,7 @@ html {
 body {
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 220px auto 300px;
+    grid-template-columns: 180px auto 200px;
     grid-template-rows: 50px minmax(calc(100vh - 80px), auto) 30px;
     grid-template-areas:
         'header nav auth'
