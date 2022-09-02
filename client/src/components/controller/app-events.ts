@@ -65,4 +65,6 @@ export const enum AppEvents {
     // MAIN_CAR_UPDATE = 'mainCarUpdate',//обновить список машин
 
     MAIN_USER_SAVE_INFO = 'mainUserSaveInfo',//сохранение персональных данных пользователя
+
+    MAP_GET_NAME = 'mapGetName',//получение названия места по координатам
 }

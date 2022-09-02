@@ -6,7 +6,6 @@ import view from "../../view";
 import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 import Car from '../../../../../types/car';
-import '../../../common/table.scss';
 
 export default class ExchangeTruckView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
@@ -18,7 +17,7 @@ export default class ExchangeTruckView extends AsideItemView {
     private readonly TAG_TABLE_CONTAINER = 'div';
     private readonly TAG_TABLE_ROW = 'div';
     private readonly TAG_TABLE_ROW_DATA = 'span';
-
+    private readonly TAG_WAIT_IMAGE = 'img';
 
     private readonly CLASS_FIELDSET = 'item_form';
     private readonly CLASS_FIELDSET_ITEM = 'field__container';
@@ -30,6 +29,7 @@ export default class ExchangeTruckView extends AsideItemView {
     private readonly CLASS_TABLE_HEADER = 'table__header';
     private readonly CLASS_TABLE_ROW = 'table__row';
     private readonly CLASS_TABLE_DATA = 'table__data';
+    private readonly CLASS_WAIT_IMAGE = 'table__wait';
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
     private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
@@ -171,14 +171,26 @@ export default class ExchangeTruckView extends AsideItemView {
         let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = car.model;
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_model');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = car.point_current_lat + ' ' + car.point_current_lon;
+        const waitElement = document.createElement(this.TAG_WAIT_IMAGE);
+        waitElement.classList.add(this.CLASS_WAIT_IMAGE);
+        waitElement.src = './assets/icons/loading.gif';
+        rowItem.appendChild(waitElement);
+        // rowItem.textContent = car.point_current_lat + ' ' + car.point_current_lon;
+        const params = new Map();
+        params.set('lat', car.point_current_lat);
+        params.set('lon', car.point_current_lon);
+        params.set('element', rowItem);
+        // this._observer.notify(AppEvents.MAP_GET_NAME, this, params);
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_to');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = (car.user_company !== undefined ? car.user_company : '');
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_company');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         const firstname = (car.user_firstname !== undefined ? car.user_firstname : '');
@@ -186,26 +198,32 @@ export default class ExchangeTruckView extends AsideItemView {
         const phone = (car.user_phone !== undefined ? car.user_phone : '');
         rowItem.textContent = firstname + ' ' + lasttname + ' ' + phone;
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_contacts');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = car.price.toString();
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_price');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = car.currency;
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_currency');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = car.volume_max.toString();
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_volume');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = (car.weight_max !== undefined ? car.weight_max.toString() : '');
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_weight');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = car.description;
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_description');
         rowElement.appendChild(rowItem);
 
         return rowElement;
@@ -337,11 +355,11 @@ export default class ExchangeTruckView extends AsideItemView {
             
             for (const r of allRows){
                 const textData = [
-                    r.childNodes[0].textContent,
-                    r.childNodes[2].textContent,
-                    r.childNodes[3].textContent,
-                    r.childNodes[8].textContent
-                ].toString().includes(search);
+                    r.childNodes[0].textContent?.toLocaleLowerCase(),
+                    r.childNodes[2].textContent?.toLocaleLowerCase(),
+                    r.childNodes[3].textContent?.toLocaleLowerCase(),
+                    r.childNodes[8].textContent?.toLocaleLowerCase()
+                ].toString().includes(search?.toLocaleLowerCase());
                 const priceData = Number(r.childNodes[4].textContent) <= Number(price);
                 const volumeData = Number(r.childNodes[6].textContent) <= Number(volume);
                 const loadData = Number(r.childNodes[7].textContent) <= Number(load);

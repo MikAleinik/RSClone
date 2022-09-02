@@ -17,6 +17,7 @@ export default class ExchangeCargoView extends AsideItemView {
     private readonly TAG_TABLE_CONTAINER = 'div';
     private readonly TAG_TABLE_ROW = 'div';
     private readonly TAG_TABLE_ROW_DATA = 'span';
+    private readonly TAG_WAIT_IMAGE = 'img';
 
     private readonly CLASS_FIELDSET = 'item_form';
     private readonly CLASS_FIELDSET_ITEM = 'field__container';
@@ -28,6 +29,7 @@ export default class ExchangeCargoView extends AsideItemView {
     private readonly CLASS_TABLE_HEADER = 'table__header';
     private readonly CLASS_TABLE_ROW = 'table__row';
     private readonly CLASS_TABLE_DATA = 'table__data';
+    private readonly CLASS_WAIT_IMAGE = 'table__wait';
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
     private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
@@ -167,16 +169,37 @@ export default class ExchangeCargoView extends AsideItemView {
         const rowElement = document.createElement(this.TAG_TABLE_ROW);
         rowElement.className = this.CLASS_TABLE_ROW
         let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
+        let waitElement = document.createElement(this.TAG_WAIT_IMAGE);
+        waitElement.classList.add(this.CLASS_WAIT_IMAGE);
+        waitElement.src = './assets/icons/loading.gif';
+        rowItem.appendChild(waitElement);
+        // rowItem.textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
+        let params = new Map();
+        params.set('lat', cargo.point_start_lat);
+        params.set('lon', cargo.point_start_lon);
+        params.set('element', rowItem);
+        this._observer.notify(AppEvents.MAP_GET_NAME, this, params);
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_from');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
+        waitElement = document.createElement(this.TAG_WAIT_IMAGE);
+        waitElement.classList.add(this.CLASS_WAIT_IMAGE);
+        waitElement.src = './assets/icons/loading.gif';
+        rowItem.appendChild(waitElement);
+        // rowItem.textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
+        params = new Map();
+        params.set('lat', cargo.point_end_lat);
+        params.set('lon', cargo.point_end_lon);
+        params.set('element', rowItem);
+        this._observer.notify(AppEvents.MAP_GET_NAME, this, params);
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_to');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = (cargo.user_company !== undefined ? cargo.user_company : '');
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_company');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         const firstname = (cargo.user_firstname !== undefined ? cargo.user_firstname : '');
@@ -184,26 +207,32 @@ export default class ExchangeCargoView extends AsideItemView {
         const phone = (cargo.user_phone !== undefined ? cargo.user_phone : '');
         rowItem.textContent = firstname + ' ' + lasttname + ' ' + phone;
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_contacts');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.price.toString();
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_price');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.currency;
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_currency');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.volume.toString();
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_volume');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.weigth.toString();
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_weight');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.description;
         rowItem.className = this.CLASS_TABLE_DATA;
+        rowItem.classList.add('table__data_description');
         rowElement.appendChild(rowItem);
         return rowElement;
     }
@@ -334,10 +363,10 @@ export default class ExchangeCargoView extends AsideItemView {
             
             for (const r of allRows){
                 const textData = [
-                    r.childNodes[2].textContent,
-                    r.childNodes[3].textContent,
-                    r.childNodes[8].textContent
-                ].toString().includes(search);
+                    r.childNodes[2].textContent?.toLocaleLowerCase(),
+                    r.childNodes[3].textContent?.toLocaleLowerCase(),
+                    r.childNodes[8].textContent?.toLocaleLowerCase()
+                ].toString().includes(search.toLocaleLowerCase());
                 const priceData = Number(r.childNodes[4].textContent) <= Number(price);
                 const volumeData = Number(r.childNodes[6].textContent) <= Number(volume);
                 const weightData = Number(r.childNodes[7].textContent) <= Number(weight);

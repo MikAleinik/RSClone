@@ -1,6 +1,7 @@
 @import './color.scss';
 @import './fonts.scss';
 @import './button.scss';
+@import './aside.scss';
 
 html {
     scroll-behavior: smooth;
@@ -25,7 +26,7 @@ html {
 body {
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 220px auto 300px;
+    grid-template-columns: 180px auto 200px;
     grid-template-rows: 50px minmax(calc(100vh - 80px), auto) 30px;
     grid-template-areas:
         'header nav auth'
@@ -37,70 +38,21 @@ body {
 
 main {
     grid-area: main;
-    padding: 20px 10px;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
 }
 
-h2 {
-    font-size: $font-size-big;
-    color: $font-color-light;
-}
-
-a {
-    text-decoration: none;
-    color: $font-color-dark;
-}
-
-a:visited {
-    color: $font-color-dark;
-}
-
-aside {
-    grid-area: aside;
-    color: $font-color-light;
-    background: $background-color-middle;
-
-    a {
-        color: $font-color-light;
-
-        &:visited {
-            color: $font-color-light;
-        }
-    }
-
-    ul {
-        margin: 0;
-        padding: 0;
-    }
-
-    li {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 30px 20px;
-        cursor: pointer;
-
-        &:hover {
-            background: $background-color-accent;
-        }
-    }
-
-    img {
-        width: 20px;
-        filter: invert(1);
-    }
-
-    .active {
-        background: $background-color-accent;
-        font-weight: 600;
-        text-shadow: .5px .5px $background-color-middle;
-    }
+@mixin input_border {
+	border: .1rem solid $background-color-dark;
+	border-radius: 1.5rem;
+	padding: .5rem 1rem;
+    margin: .5rem;
 }
 
 @media screen and (max-width: 640px) {
     body {
-        grid-template-columns: 40px 1fr 1fr;
+        grid-template-columns: 6rem 1fr 1fr;
         grid-template-rows: 30px 30px auto 30px;
         grid-template-areas:
             'header header auth'

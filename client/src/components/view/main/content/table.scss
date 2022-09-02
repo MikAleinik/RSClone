@@ -1,0 +1,160 @@
+.item_form {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  border: .1rem solid $border-color-dark;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 2rem 0;
+	gap: 1rem;
+	input,
+	select {
+		@include input_border;
+	}
+	/* input[type=number]{
+		width: 6rem;
+	} */
+	button {
+		@include input_border;
+		border: 0;
+		background: $background-color-middle;
+		&:hover {
+			background: $background-color-accent;
+			box-shadow: .1rem .1rem .3rem $background-color-middle;
+    	transform: translateY(-0.1rem);
+		}
+	};
+}
+.field__container {
+  display: flex;
+  flex-direction: column;
+}
+.field__button_container{
+	display: flex;
+	justify-content: center;
+	gap: 1.5rem;
+	width: 100%;
+	flex: 1 0 auto;
+}
+.invisible {
+	display: none;
+}
+.table__wrapper {
+	display: flex;
+	flex-direction: column;
+}
+.table__header {
+	display: flex;
+	background: $background-color-middle;
+	position: sticky;
+	top: 60px;
+	padding: 1rem;
+	border-radius: 1rem;
+	box-shadow: .1rem .1rem .2rem $background-color-dark;
+}
+.table__row {
+	display: flex;
+	padding: 5px 10px;
+	&:nth-child(even){
+		background: $background-color-accent;
+		border-radius: .5rem;
+	}
+}
+@mixin column__icon {
+	display: inline-block;
+	background-image: url('../../../../assets/icons/from.png');
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	content: '';
+	width: 2rem;
+	height: 2rem;
+	margin-right: 1rem;
+}
+.table__data {
+	width: 14%;
+	display: flex;
+	align-items: center;
+}
+@media screen and (max-width: 640px){
+	.item_form {
+		padding: 1rem;
+		gap: .5rem;
+	}
+	.table__container {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	.table__header{
+		// top: 40px;
+		display: none;
+	}
+	.table__row {
+		flex-direction: column;
+		box-shadow: .1rem .1rem .3rem $background-color-middle;
+		border-radius: .5rem;
+	}
+	.table__data {
+		width: auto;
+		display: flex;
+		margin: .5rem 0;
+	}
+	.table__data_from{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/from.png');
+		}
+	}
+	.table__data_to{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/to.png');
+		}
+	}
+	.table__data_price{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/price.png');
+		}
+	}
+	.table__data_currency{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/currency.png');
+		}
+	}
+	.table__data_volume{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/volume.png');
+		}
+	}
+	.table__data_weight{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/weight.png');
+		}
+	}
+	.table__data_description{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/description.png');
+		}
+	}
+	.table__data_company{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/company.png');
+		}
+	}
+	.table__data_contacts{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/contacts.png');
+		}
+	}
+}
+.table__wait {
+    width: 40px;
+}

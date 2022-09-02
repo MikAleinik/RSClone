@@ -58,7 +58,9 @@ export default class ContentView extends View implements INotify {
         const routesItem = new RoutesView(this._observer, this._mainElement, this.PATH_IMAGE_ROUTES);
 
         const listItemElement = document.createElement(this.TAG_ASIDE_LIST);
-        listItemElement.appendChild(overviewItem.getCurrentElement());
+        const overviewListItem = overviewItem.getCurrentElement();
+        overviewListItem.classList.add('active');
+        listItemElement.appendChild(overviewListItem);
         listItemElement.appendChild(cargoItem.getCurrentElement());
         listItemElement.appendChild(truckItem.getCurrentElement());
         listItemElement.appendChild(cargoExchangeItem.getCurrentElement());

@@ -1,12 +1,12 @@
 .window-auth__wrapper {
     visibility: hidden;
 
-    position: absolute;
+    position: fixed;
     z-index : 1000;
     left    : 0;
-    right   : 0;
 
     height: 100%;
+    width: 100%;
 
     background: $modal_background-color;
 }

@@ -9,14 +9,7 @@ export default class LogOutUserHandler extends Handler {
     send<T>(): Promise<T> {
         return new Promise((resolve, reject) => {
             const URL = this.SERVER_URL + this.UNAUTH_END_POINT;
-            fetch(URL, {
-                method: 'GET',
-                credentials: 'include',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-            })
+            fetch(URL, this._options)
                 .then((response) => {
                     return response.json()
                         .then((data) => {

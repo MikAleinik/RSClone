@@ -1,29 +1,29 @@
 .big__button {
-  font-size    : $font-size-medium;
-  border       : 0px;
-  border-radius: 18px;
-  padding      : 5px 10px;
-  margin       : 10px;
-
+  font-size : $font-size-medium;
+  border: 0;
+  border-radius: 1.5rem;
+  padding: .5rem 1rem;
+  margin: 1rem;
+  
   &:not(:disabled):hover {
     background: $background-color-accent;
+    box-shadow: .1rem .1rem .3rem $background-color-ultra-light;
+    transform: translateY(-0.1rem);
     cursor: pointer;
   }
 }
 
 .big__button_hidden {
-  visibility: hidden;
+  // visibility: hidden;
+  display: none;
 }
 
 .wide__button {
-    min-width: 120px;
-}
-
-@media screen and (max-width: 640px){
-  .big__button{
-    border       : 0px;
-    border-radius: 14px;
-    padding      : 3px 7px;
-    margin       : 5px;
+  width: 12rem;
+  position: relative;
+  left: calc(50% - 6rem);
+  &:hover {
+    box-shadow: .1rem .1rem .3rem $background-color-dark;
+    transform: translateY(-0.1rem);
   }
 }

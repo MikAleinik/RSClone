@@ -6,7 +6,7 @@
 
     main {
       height: 100%;
-      padding: 20px 0px;
+      padding: 0;
     }
     header,
     nav,
@@ -57,20 +57,6 @@
             margin: 15px 5px;
         }
     }
-}
-
-.user__overview {
-    display: flex;
-    justify-content: space-between;
-    height: 100%;
-}
-
-.user__data {
-    width: 30%;
-}
-
-.user__map {
-    width: 70%;
 }
 
 @media screen and (max-width: 640px){

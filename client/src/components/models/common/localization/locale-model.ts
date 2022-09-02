@@ -34,6 +34,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.LOCALE, new Array('en', 'ru'));
 
         this._localeDictionary.set(LocaleKeys.COMMON_ERROR_SAVE, new Array('An error occurred while saving data. Please try again later.', 'Произошла ошибка сохранения данных. Попробуйте еще раз позже.'));
+        this._localeDictionary.set(LocaleKeys.COMMON_ERROR_ROUTE, new Array('There was an error getting route data. Please try again later.', 'Произошла ошибка получения данных маршрута. Попробуйте еще раз позже.'));
 
         this._localeDictionary.set(LocaleKeys.BUTTON_LOCALE, new Array('En', 'Ru'));
         this._localeDictionary.set(LocaleKeys.BUTTON_LOGIN, new Array('LogIn', 'Вход'));
@@ -54,7 +55,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.PAGE_LINK_CONTACT, new Array('Contact', 'Контакты'));
         this._localeDictionary.set(LocaleKeys.PAGE_LINK_ABOUT, new Array('About', 'О проекте'));
         this._localeDictionary.set(LocaleKeys.PAGE_LINK_MAIN, new Array('Personal area', 'Личный кабинет'));
-        this._localeDictionary.set(LocaleKeys.PAGE_LINK_INDEX, new Array('Main page', 'На главную'));
+        this._localeDictionary.set(LocaleKeys.PAGE_LINK_INDEX, new Array('Main', 'Главная'));
         this._localeDictionary.set(LocaleKeys.PROMO_HEADER, new Array('Freight exchange', 'Портал грузоперевозок'));
         this._localeDictionary.set(LocaleKeys.PROMO_FIRST, new Array('unite carriers and cargo owners', 'объединяем перевозчиков и грузовладельцев'));
         this._localeDictionary.set(LocaleKeys.PROMO_SECOND, new Array('show the position of transport and cargo', 'показываем положение транспорта и груза'));
@@ -145,13 +146,13 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_OVERVIEW_ACCEPT, new Array('Save', 'Сохранить'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_PANEL_HEADER, new Array('Car panel', 'Панель транспорта'));
-        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_COMPANY, new Array('Car owner', 'Владелец машины'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_COMPANY, new Array('Car owner', 'Владелец'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_NUMBER, new Array('Plate number', 'Номерной знак'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_VOLUME, new Array('Volume capacity', 'Объем кузова'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_Weight, new Array('Load capacity', 'Грузоподьемность'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_PRICE, new Array('Price', 'Цена'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_CURRENCY, new Array('Currency', 'Валюта'));
-        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION, new Array('Description', 'Описание машины'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION, new Array('Description', 'Описание'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_LOCATION, new Array('Location', 'Местоположение'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_STATUS, new Array('Status', 'Состояние'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_STATUS_DRIVED, new Array('On the way', 'В пути'));
@@ -164,7 +165,7 @@ export default class LocaleModel {
 
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_PANEL_HEADER, new Array('Cargo panel', 'Панель груза'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_NAME, new Array('Name', 'Название'));
-        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_COMPANY, new Array('Cargo owner', 'Владелец груза'));
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_COMPANY, new Array('Cargo owner', 'Владелец'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_Weight, new Array('Weight', 'Вес'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_VOLUME, new Array('Volume', 'Объем'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_PRICE, new Array('Price', 'Цена'));
@@ -172,7 +173,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_LOCATION_FROM, new Array('From', 'Откуда'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_LOCATION_TO, new Array('To', 'Куда'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_DATE, new Array('Date', 'Дата'));
-        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_DESCRIPTION, new Array('Description', 'Описание груза'));
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_DESCRIPTION, new Array('Description', 'Описание'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_STATUS, new Array('Status', 'Состояние'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_STATUS_STOPPED, new Array('Waiting', 'Ожидает машину'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_STATUS_DRIVED, new Array('On the way', 'В пути'));
@@ -182,7 +183,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_SAVE, new Array('Save', 'Сохранить'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_CLEAR, new Array('Clear', 'Очистить'));
 
-        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_COMPANY, new Array('Cargo owner', 'Владелец груза'));
+        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_COMPANY, new Array('Cargo owner', 'Владелец'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_USER, new Array('Contact', 'Контакты'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_NAME, new Array('Name', 'Название'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_Weight, new Array('Weight', 'Вес'));
@@ -192,9 +193,9 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_LOCATION_FROM, new Array('From', 'Откуда'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_LOCATION_TO, new Array('To', 'Куда'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_DATE, new Array('Date', 'Дата'));
-        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION, new Array('Description', 'Описание груза'));
+        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION, new Array('Description', 'Описание'));
 
-        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_COMPANY, new Array('Car owner', 'Владелец машины'));
+        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_COMPANY, new Array('Car owner', 'Владелец'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_USER, new Array('Contact', 'Контакты'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_NUMBER, new Array('Plate number', 'Номерной знак'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_Weight, new Array('Load capacity', 'Грузоподьемность'));
@@ -202,7 +203,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_PRICE, new Array('Price', 'Цена'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_CURRENCY, new Array('Currency', 'Валюта'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_LOCATION, new Array('Location', 'Местоположение'));
-        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_DESCRIPTION, new Array('Description', 'Описание машины'));
+        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_DESCRIPTION, new Array('Description', 'Описание'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_COMPANY_NAME, new Array('Company name', 'Название компании'));
         this._localeDictionary.set(LocaleKeys.MAIN_COMPANY_ADDRESS, new Array('Address', 'Адрес'));
