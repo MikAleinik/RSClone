@@ -15,14 +15,7 @@ export default class GetUserHandler extends Handler {
                 id = this.HANDSHAKE_END_POINT;
             }
             const URL = this.SERVER_URL + id;
-            fetch(URL, {
-                method: 'GET',
-                credentials: 'include',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-            })
+            fetch(URL, this._options)
                 .then((response) => {
                     return response.json()
                         .then((data) => {
