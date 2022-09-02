@@ -39,7 +39,7 @@ server
     .register(app)
     .then(() => server.ready())
     .then(() =>
-        server.listen({ port: 3000, host: '0.0.0.0' }, (err) => {
+        server.listen({ port: 4000, host: '0.0.0.0' }, (err) => {
             if (err) {
                 server.log.error(err);
                 process.exit(1);
