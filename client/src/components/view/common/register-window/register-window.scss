@@ -1,30 +1,23 @@
 .window-register__wrapper {
     visibility: hidden;
-
     position: fixed;
     z-index : 1000;
-    left    : 0;
-
+    left: 0;
     height: 100%;
     width: 100%;
-
     background: $modal_background-color;
 }
 
 .window-register {
     margin: 100px auto;
-
-    display        : flex;
-    flex-direction : column;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items    : center;
-
-    width     : 30%;
+    align-items: center;
+    width: 30%;
     min-width: 300px;
-
     background-color: $window_background-color;
     border-radius: 10px;
-
     padding: 20px 10px;
 }
 

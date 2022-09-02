@@ -39,6 +39,8 @@ export default class CargoView extends AsideItemView {
     private readonly ID_ROLE_CARRIER = '2';
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
+    private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemSearchLabel = document.createElement(this.TAG_FIELDSET_LABEL);
     private _tableHeaderPrice = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_DATA);
@@ -160,7 +162,7 @@ export default class CargoView extends AsideItemView {
         this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_CARGO);
 
         this._formFilterLegend.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PANEL_HEADER);
-
+        this._formItemSearchLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
         this._formItemPriceLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PRICE);
         this._formItemCurrencyLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CURRENCY);
         this._formItemWeightLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_Weight);
@@ -257,8 +259,10 @@ export default class CargoView extends AsideItemView {
         tableHeader.className = this.CLASS_TABLE_HEADER;
         tableHeader.appendChild(this._tableHeaderPointStart);
         this._tableHeaderPointStart.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderPointStart.classList.add('table__data_from');
         tableHeader.appendChild(this._tableHeaderPointEnd);
         this._tableHeaderPointEnd.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderPointEnd.classList.add('table__data_to');
         tableHeader.appendChild(this._tableHeaderPrice);
         this._tableHeaderPrice.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderCurrency);
@@ -269,6 +273,7 @@ export default class CargoView extends AsideItemView {
         this._tableHeaderWeight.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderDescription);
         this._tableHeaderDescription.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderDescription.classList.add('table__data_description')
 
         tableWrapper.appendChild(tableHeader);
         this._tableContainer.className = this.CLASS_TABLE_CONTAINER;
@@ -281,6 +286,14 @@ export default class CargoView extends AsideItemView {
         formElement.appendChild(this._formFilterLegend);
 
         let containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        this._formItemSearch.setAttribute('type', 'search')
+        this._formItemSearch.id = 'search';
+        containerItem.appendChild(this._formItemSearchLabel);
+        containerItem.appendChild(this._formItemSearch);
+        formElement.appendChild(containerItem);
+        
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
         containerItem.appendChild(this._formItemPointStartLabel);
         containerItem.appendChild(this._formItemPointStart);
@@ -342,6 +355,26 @@ export default class CargoView extends AsideItemView {
         this._formItemButtonSave.addEventListener('click', this.saveCargoHandler.bind(this));
         this._formItemButtonDelete.addEventListener('click', this.deleteCargoHandler.bind(this));
         this._formItemButtonClear.addEventListener('click', this.clearCargoHandler.bind(this));
+
+        formElement.addEventListener('input', (e) => {
+            const inputField = e.target  as HTMLInputElement;
+            const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
+
+            const search = inputField.id === 'search' ? inputField.value : '';
+            
+            for (const r of allRows){
+                const textData = [
+                    r.childNodes[0].textContent?.toLocaleLowerCase(),
+                    r.childNodes[1].textContent?.toLocaleLowerCase(),
+                    r.childNodes[6].textContent?.toLocaleLowerCase()
+                ].toString().includes(search.toLocaleLowerCase());
+                if (textData){
+                    r.style.display = 'flex'
+                } else {
+                    r.style.display = 'none'
+                }
+            }
+        })
 
         return formElement;
     }
