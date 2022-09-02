@@ -43,6 +43,13 @@ main {
     flex-direction: column;
 }
 
+@mixin input_border {
+	border: .1rem solid $background-color-dark;
+	border-radius: 1.5rem;
+	padding: .5rem 1rem;
+    margin: .5rem;
+}
+
 @media screen and (max-width: 640px) {
     body {
         grid-template-columns: 6rem 1fr 1fr;

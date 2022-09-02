@@ -345,11 +345,11 @@ export default class ExchangeTruckView extends AsideItemView {
             
             for (const r of allRows){
                 const textData = [
-                    r.childNodes[0].textContent,
-                    r.childNodes[2].textContent,
-                    r.childNodes[3].textContent,
-                    r.childNodes[8].textContent
-                ].toString().includes(search);
+                    r.childNodes[0].textContent?.toLocaleLowerCase(),
+                    r.childNodes[2].textContent?.toLocaleLowerCase(),
+                    r.childNodes[3].textContent?.toLocaleLowerCase(),
+                    r.childNodes[8].textContent?.toLocaleLowerCase()
+                ].toString().includes(search?.toLocaleLowerCase());
                 const priceData = Number(r.childNodes[4].textContent) <= Number(price);
                 const volumeData = Number(r.childNodes[6].textContent) <= Number(volume);
                 const loadData = Number(r.childNodes[7].textContent) <= Number(load);
