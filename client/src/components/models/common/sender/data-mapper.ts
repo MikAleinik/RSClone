@@ -129,7 +129,7 @@ export default class DataMapper {
                                     //     result.set(key, value.toString());
                                     // }
                                     // resolve(result);
-                                    resolve(((data as unknown) as answer<T>).users!);
+                                    resolve(((data as unknown) as answer<T>).items!);
                                     break;
                                 }
                                 case HttpCodes.CODE_BAD_REQUEST:

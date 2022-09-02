@@ -101,6 +101,7 @@ export default class OverviewView extends AsideItemView {
                 break;
             }
             case AppEvents.MAIN_CARGO_BY_USER_RECEIVED: {
+                //TODO данные могут придти до получения текущего юзера
                 this.setAllCargo(params as Array<Cargo>);
                 break;
             }
@@ -117,6 +118,7 @@ export default class OverviewView extends AsideItemView {
                 break;
             }
             case AppEvents.MAIN_CAR_BY_USER_RECEIVED: {
+                //TODO данные могут придти до получения текущего юзера
                 this.setAllCar(params as Array<Car>);
                 break;
             }
