@@ -102,6 +102,7 @@
 .table__data_from,
 .table__data_to,
 .table__data_company,
+.table__data_user,
 .table__data_contacts,
 .table__data_model,
 .table__data_description {
@@ -176,6 +177,12 @@
 		&::before {
 			@include column__icon;
 			background-image: url('../../../../assets/icons/company.png');
+		}
+	}
+	.table__data_contacts{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/user.png');
 		}
 	}
 	.table__data_contacts{

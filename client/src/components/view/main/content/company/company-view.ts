@@ -114,13 +114,13 @@ export default class CompanyView extends AsideItemView {
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = user.address;
         rowItem.className = this.CLASS_TABLE_DATA;
-        rowItem.classList.add('table__data_address');
+        rowItem.classList.add('table__data_to');
         rowElement.appendChild(rowItem);
 
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = `${user.first_name} ${user.last_name}`;
         rowItem.className = this.CLASS_TABLE_DATA;
-        rowItem.classList.add('table__data_contacts');
+        rowItem.classList.add('table__data_user');
         rowElement.appendChild(rowItem);
 
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
@@ -166,12 +166,17 @@ export default class CompanyView extends AsideItemView {
         tableHeader.className = this.CLASS_TABLE_HEADER;
         tableHeader.appendChild(this._tableHeaderCompany);
         this._tableHeaderCompany.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderCompany.classList.add('table__data_company');
         tableHeader.appendChild(this._tableHeaderAddress);
         this._tableHeaderAddress.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderAddress.classList.add('table__data_to');
         tableHeader.appendChild(this._tableHeaderUserName);
         this._tableHeaderUserName.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderUserName.classList.add('table__data_user');
         tableHeader.appendChild(this._tableHeaderPhone);
         this._tableHeaderPhone.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderPhone.classList.add('table__data_contacts');
+
         tableHeader.appendChild(this._tableHeaderRating);
         this._tableHeaderRating.className = this.CLASS_TABLE_DATA;
 
@@ -187,6 +192,8 @@ export default class CompanyView extends AsideItemView {
 
         let containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        this._formItemSearch.setAttribute('type', 'search')
+        this._formItemSearch.id = 'search';
         containerItem.appendChild(this._formItemSearchLabel);
         containerItem.appendChild(this._formItemSearch);
         formElement.appendChild(containerItem);
@@ -206,6 +213,26 @@ export default class CompanyView extends AsideItemView {
         this._formItemRatingRange.value = this._formItemRating.value;
         containerItem.appendChild(this._formItemRatingRange);
         formElement.appendChild(containerItem);
+
+        formElement.addEventListener('input', (e) => {
+            const inputField = e.target  as HTMLInputElement;
+            const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
+
+            const search = inputField.id === 'search' ? inputField.value : '';
+            
+            for (const r of allRows){
+                const textData = [
+                    r.childNodes[0].textContent?.toLocaleLowerCase(),
+                    r.childNodes[2].textContent?.toLocaleLowerCase(),
+                    r.childNodes[3].textContent?.toLocaleLowerCase()
+                ].toString().includes(search.toLocaleLowerCase());
+                if (textData){
+                    r.style.display = 'flex'
+                } else {
+                    r.style.display = 'none'
+                }
+            }
+        })
 
         return formElement;
     }
