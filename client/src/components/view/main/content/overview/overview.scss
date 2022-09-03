@@ -7,7 +7,6 @@
 .user__container {
     display: flex;
     flex-direction: row;
-    height: 100%;
     width: 100%;
 }
 
@@ -69,8 +68,6 @@
 @media screen and (max-width: 640px){
     .user__container {
         flex-direction: column;
-        height: 100%;
-        width: 100%;
     }
     .user__data {
         width: 100%;
