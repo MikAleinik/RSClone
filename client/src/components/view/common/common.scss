@@ -50,6 +50,28 @@ main {
     margin: .5rem;
 }
 
+@mixin modal_window {
+    margin: 10rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30rem;
+    background-color: $window_background-color;
+    border-radius: 1rem;
+    padding: 1.5rem 2.5rem;
+}
+
+@mixin shadow {
+    visibility: hidden;
+    position: fixed;
+    z-index : 1000;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: $modal_background-color;
+}
+
 @media screen and (max-width: 640px) {
     body {
         grid-template-columns: 6rem 1fr 1fr;

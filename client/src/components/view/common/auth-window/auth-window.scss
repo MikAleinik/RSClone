@@ -1,61 +1,25 @@
 .window-auth__wrapper {
-    visibility: hidden;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: $modal_background-color;
+    @include shadow;
 }
 
 .window-auth {
-    margin: 100px auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 30%;
-    min-width: 300px;
-    background-color: $window_background-color;
-    border-radius: 10px;
-    padding: 20px 10px;
-}
-
-.window-auth__header {
-    font-size: $font-size-medium;
+    @include modal_window;
 }
 
 .window-auth__row-container {
-    display        : flex;
-    flex-direction : row;
-    align-items    : center;
-    justify-content: center;
-
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-
-    label{
-        width: 20%
-    }
-    input{
-        width: 60%;
-    }
-}
-
-.window-auth__info {
-    text-align: right;
 }
 
 .window-auth__field {
-    height: 12px;
-
-    font-size    : $font-size-medium;
-    border       : 1px solid;
-    border-radius: 18px;
-    padding      : 5px 15px;
-    margin       : 5px 10px;
-    cursor       : pointer;
+    @include input_border;
+    width: 20rem;
+    text-align: center;
 }
 
 .window-auth__field_invalid {
-    border       : 1px solid $border-color-error;
+    border: .1rem solid $border-color-error;
 }
