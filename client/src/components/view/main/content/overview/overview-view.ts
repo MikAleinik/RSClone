@@ -188,14 +188,18 @@ export default class OverviewView extends AsideItemView {
         }
     }
     setAllCargo(cargoes: Array<Cargo>): void {
-        this.clearTableCargo();
-        for (let i = 0; i < cargoes.length; i += 1) {
-            if (this._user.id === cargoes[i].user_id) {
-                const rowElement = this.createRowCargo(cargoes[i])
-                this._tableContainerCargo.appendChild(rowElement);
-                this._cargoes.set(rowElement, cargoes[i]);
-                this.addItemToMap(cargoes[i]);
-            }
+        if (this._user !== undefined) {
+            this.clearTableCargo();
+            for (let i = 0; i < cargoes.length; i += 1) {
+                if (this._user.id === cargoes[i].user_id) {
+                    const rowElement = this.createRowCargo(cargoes[i])
+                    this._tableContainerCargo.appendChild(rowElement);
+                    this._cargoes.set(rowElement, cargoes[i]);
+                    this.addItemToMap(cargoes[i]);
+                }
+            }    
+        } else {
+            this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
         }
     }
     cargoCreatedHandler(cargo: Cargo) {
@@ -235,14 +239,18 @@ export default class OverviewView extends AsideItemView {
         });
     }
     setAllCar(cars: Array<Car>): void {
-        this.clearTableCar();
-        for (let i = 0; i < cars.length; i += 1) {
-            if (this._user.id === cars[i].user_id) {
-                const rowElement = this.createRowCar(cars[i])
-                this._tableContainerCar.appendChild(rowElement);
-                this._cars.set(rowElement, cars[i]);
-                this.addItemToMap(cars[i]);
+        if (this._user !== undefined) {
+            this.clearTableCar();
+            for (let i = 0; i < cars.length; i += 1) {
+                if (this._user.id === cars[i].user_id) {
+                    const rowElement = this.createRowCar(cars[i])
+                    this._tableContainerCar.appendChild(rowElement);
+                    this._cars.set(rowElement, cars[i]);
+                    this.addItemToMap(cars[i]);
+                }
             }
+        } else {
+            this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
         }
     }
     carCreatedHandler(car: Car) {
