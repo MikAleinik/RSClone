@@ -490,6 +490,7 @@ export default class DataMapper {
                     handler.send()
                         .then((data) => {
                             switch (((data as unknown) as answer<T>).statusCode) {
+                                case HttpCodes.CODE_UNAUTHORIZED:
                                 case HttpCodes.CODE_OK: {
                                     delete ((data as unknown) as answer<T>).statusCode;
                                     const result = new Map<string, string>();
@@ -499,7 +500,8 @@ export default class DataMapper {
                                     resolve(result);
                                     break;
                                 }
-                                case HttpCodes.CODE_UNAUTHORIZED: {
+                                case HttpCodes.CODE_BAD_REQUEST:
+                                case HttpCodes.CODE_NOT_FOUND: {
                                     const result = new Map<string, string>();
                                     result.set('message', 'TODO Ошибка выхода пользователя');
                                     reject(result);
