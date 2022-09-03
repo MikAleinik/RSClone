@@ -6,6 +6,7 @@ import view from "../../view";
 import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 import Car from '../../../../../types/car';
+import CargoToCar from '../../../../../types/cargotocar';
 
 export default class ExchangeTruckView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
@@ -163,6 +164,27 @@ export default class ExchangeTruckView extends AsideItemView {
             console.log(message.get('message'));
         }
     }
+    setAllCargoToCar(cargoToCars: Array<CargoToCar>): void {
+
+    }
+    deleteCargoToCarSuccess(cargoToCar: CargoToCar) {
+        this._observer.notify(AppEvents.CARGO_TO_CAR_DELETE_SUCCESS, this, cargoToCar);
+    }
+    deleteCargoToCarFail(cargoToCar: CargoToCar) {
+
+    }
+    changeCargoToCarSuccess(cargoToCar: CargoToCar) {
+        this._observer.notify(AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS, this, cargoToCar);
+    }
+    changeCargoToCarFail(cargoToCar: CargoToCar) {
+
+    }
+    createCargoToCarSuccess(cargoToCar: CargoToCar) {
+        this._observer.notify(AppEvents.CARGO_TO_CAR_CREATE_SUCCESS, this, cargoToCar);
+    }
+    createCargoToCarFail(cargoToCar: CargoToCar) {
+
+    }
     protected createMainElement(): void {
         this._mainElement.appendChild(this.createFilterForm());
         this._mainElement.appendChild(this.createTable());
@@ -264,7 +286,7 @@ export default class ExchangeTruckView extends AsideItemView {
         tableHeader.appendChild(this._tableHeaderDescription);
         this._tableHeaderDescription.className = this.CLASS_TABLE_DATA;
         this._tableHeaderDescription.classList.add('table__data_description');
-        
+
         tableWrapper.appendChild(tableHeader);
         this._tableContainer.className = this.CLASS_TABLE_CONTAINER;
         tableWrapper.appendChild(this._tableContainer);
@@ -283,7 +305,7 @@ export default class ExchangeTruckView extends AsideItemView {
         containerItem.appendChild(this._formItemSearchLabel);
         containerItem.appendChild(this._formItemSearch);
         formElement.appendChild(containerItem);
-        
+
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_RANGE);
@@ -315,7 +337,7 @@ export default class ExchangeTruckView extends AsideItemView {
         this._formItemVolumeRange.value = this._formItemVolume.value;
         containerItem.appendChild(this._formItemVolumeRange);
         formElement.appendChild(containerItem);
-        
+
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_RANGE);
@@ -343,16 +365,16 @@ export default class ExchangeTruckView extends AsideItemView {
             this._formItemLoad.value = this._maxWeight.toString();
             this._formItemVolume.value = this._maxVolume.toString();
             const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
-            for (const r of allRows){
+            for (const r of allRows) {
                 r.style.display = 'flex'
             }
         })
-        
+
         formElement.addEventListener('input', (e) => {
-            const inputField = e.target  as HTMLInputElement;
+            const inputField = e.target as HTMLInputElement;
             const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
 
-            if (inputField.type === 'range'){
+            if (inputField.type === 'range') {
                 const field = inputField.previousSibling as HTMLInputElement;
                 field.value = inputField.value;
             }
@@ -363,8 +385,8 @@ export default class ExchangeTruckView extends AsideItemView {
             const price = inputField.id === 'price' ? inputField.value : this._formItemPrice.value;
             const volume = inputField.id === 'volume' ? inputField.value : this._formItemVolume.value;
             const load = inputField.id === 'load' ? inputField.value : this._formItemLoad.value;
-            
-            for (const r of allRows){
+
+            for (const r of allRows) {
                 const textData = [
                     r.childNodes[0].textContent?.toLocaleLowerCase(),
                     r.childNodes[1].textContent?.toLocaleLowerCase(),
@@ -375,7 +397,7 @@ export default class ExchangeTruckView extends AsideItemView {
                 const priceData = Number(r.childNodes[4].textContent) <= Number(price);
                 const volumeData = Number(r.childNodes[6].textContent) <= Number(volume);
                 const loadData = Number(r.childNodes[7].textContent) <= Number(load);
-                if (textData && priceData && volumeData && loadData){
+                if (textData && priceData && volumeData && loadData) {
                     r.style.display = 'flex'
                 } else {
                     r.style.display = 'none'
