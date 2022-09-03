@@ -4,6 +4,8 @@
   border-radius: 1.5rem;
   padding: .5rem 1rem;
   margin: 1rem;
+  width: 9rem;
+  flex: 1 0 auto;
   
   &:not(:disabled):hover {
     background: $background-color-accent;
@@ -15,6 +17,13 @@
 
 .big__button_hidden {
   display: none;
+}
+
+.auth__button_locale {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    padding: .2rem 0;
 }
 
 .wide__button {

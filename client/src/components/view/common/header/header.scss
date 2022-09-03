@@ -12,3 +12,8 @@ h1 {
     font-size: $font-size-big;
     text-transform: uppercase;
 }
+@media screen and (max-width: 640px) {
+    header {
+        padding: 1rem;
+    }
+}
