@@ -1,3 +1,10 @@
+@mixin thumb {
+	height: 1.3rem;
+	width: 1.3rem;
+	background: $background-color-middle;
+	border: 0;
+	border-radius: 50%;
+}
 .item_form {
   display: flex;
   justify-content: center;
@@ -13,11 +20,15 @@
 			-webkit-appearance: none;
 			background: $background-color-accent;
 			height: 1rem;
-			&::-webkit-slider-thumb,
+			&::-ms-thumb {
+				@include thumb;
+			}
+			&::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				@include thumb;
+			}
 			&::-moz-range-thumb {
-				height: 1rem;
-				width: 1rem;
-				background: $background-color-middle;
+				@include thumb;
 			}
 		}
 		&.field__invalid {
