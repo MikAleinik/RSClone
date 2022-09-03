@@ -180,7 +180,6 @@ export default class ExchangeCargoView extends AsideItemView {
         waitElement.classList.add(this.CLASS_WAIT_IMAGE);
         waitElement.src = './assets/icons/loading.gif';
         rowItem.appendChild(waitElement);
-        // rowItem.textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
         let params = new Map();
         params.set('lat', cargo.point_start_lat);
         params.set('lon', cargo.point_start_lon);
@@ -194,7 +193,6 @@ export default class ExchangeCargoView extends AsideItemView {
         waitElement.classList.add(this.CLASS_WAIT_IMAGE);
         waitElement.src = './assets/icons/loading.gif';
         rowItem.appendChild(waitElement);
-        // rowItem.textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
         params = new Map();
         params.set('lat', cargo.point_end_lat);
         params.set('lon', cargo.point_end_lon);
