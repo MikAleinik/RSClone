@@ -12,6 +12,10 @@ export default abstract class Handler {
     protected readonly CARGO_CREATE_END_POINT = '/cargo/create';
     protected readonly CAR_END_POINT = '/cars';
     protected readonly CAR_CREATE_END_POINT = '/cars/create';
+    protected readonly CARGO_TO_CAR_END_POINT = '/cargotocar';
+    protected readonly CARGO_TO_CAR_CREATE_END_POINT = '/cargotocar/create';
+    protected readonly CARGO_TO_CAR_BY_CAR_POINT = '/cargotocar/getcarbycargo';
+    protected readonly CARGO_TO_CAR_BY_CARGO_POINT = '/cargotocar/getcargosbycar';
 
     protected _params: Map<string, string>;
     protected _headers: Headers;
