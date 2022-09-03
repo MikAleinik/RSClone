@@ -8,7 +8,7 @@ import AsideItemView from '../aside-item-view';
 import Cargo from '../../../../../types/cargo';
 import User from '../../../../../types/user';
 import Geopoint from '../../../../../types/geopoint';
-import './cargo.scss';
+import '../search.scss';
 
 export default class CargoView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';

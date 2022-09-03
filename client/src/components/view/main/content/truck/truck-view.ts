@@ -7,6 +7,8 @@ import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 import Car from '../../../../../types/car';
 import User from '../../../../../types/user';
+import Geopoint from '../../../../../types/geopoint';
+import '../search.scss';
 
 export default class TruckView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
@@ -33,6 +35,10 @@ export default class TruckView extends AsideItemView {
     private readonly CLASS_TABLE_ROW = 'table__row';
     private readonly CLASS_TABLE_DATA = 'table__data';
     private readonly CLASS_WAIT_IMAGE = 'table__wait';
+    private readonly CLASS_FIELDSET_SEARCH = 'search';
+    private readonly CLASS_FIELDSET_SEARCH_FIELD = 'search__field';
+    private readonly CLASS_FIELDSET_SEARCH_RESULT = 'search__result';
+    private readonly CLASS_FIELDSET_INVALID = 'field__invalid';
 
     private readonly CURRENCY = new Array('USD', 'EUR', 'BYN', 'RUB');
     private readonly ID_ROLE_CUSTOMER = '1';
@@ -55,6 +61,7 @@ export default class TruckView extends AsideItemView {
     private _formItemVolume = document.createElement(this.TAG_FIELDSET_INPUT);
     private _formItemDescription = document.createElement(this.TAG_FIELDSET_INPUT);
     private _formItemPoint = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemPointResultSearch = document.createElement(this.TAG_FIELDSET_ITEM);
 
     private _formItemModelLabel = document.createElement(this.TAG_FIELDSET_LABEL);
     private _formItemPriceLabel = document.createElement(this.TAG_FIELDSET_LABEL);
@@ -68,9 +75,12 @@ export default class TruckView extends AsideItemView {
     private _formItemButtonSave = document.createElement(this.TAG_FIELDSET_BUTTON);
     private _formItemButtonDelete = document.createElement(this.TAG_FIELDSET_BUTTON);
     private _formItemButtonClear = document.createElement(this.TAG_FIELDSET_BUTTON);
+    private _formItemButtonPointShow = document.createElement(this.TAG_FIELDSET_BUTTON);
 
     private _cars = new Map<HTMLElement, Car>();
     private _selectedCar: Car | false;
+    private _createCar = false;
+    private _changeCar = false;
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
@@ -112,7 +122,7 @@ export default class TruckView extends AsideItemView {
             if (value.id === car.id) {
                 key.remove();
                 this.clearCarHandler();
-                this._observer.notify(AppEvents.MAIN_CARGO_DELETE_SUCCESS, this, car);
+                this._observer.notify(AppEvents.MAIN_CAR_DELETE_SUCCESS, this, car);
             }
         });
     }
@@ -124,14 +134,14 @@ export default class TruckView extends AsideItemView {
             if (value.id === car.id) {
                 value = car;
                 key.children[0].textContent = car.model;
-                key.children[1].textContent = car.point_current_lat + ' ' + car.point_current_lon;
+                key.children[1].textContent = this._formItemPoint.value;
                 key.children[4].textContent = car.price.toString();
                 key.children[5].textContent = car.currency;
                 key.children[6].textContent = car.volume_max.toString();
                 key.children[7].textContent = car.weight_max.toString();
                 key.children[8].textContent = car.description;
                 this.clearCarHandler();
-                this._observer.notify(AppEvents.MAIN_CARGO_CHANGE_SUCCESS, this, car);
+                this._observer.notify(AppEvents.MAIN_CAR_CHANGE_SUCCESS, this, car);
             }
         });
     }
@@ -144,7 +154,7 @@ export default class TruckView extends AsideItemView {
         this._cars.set(rowElement, car);
         this._tableContainer.appendChild(rowElement);
         this.clearCarHandler();
-        this._observer.notify(AppEvents.MAIN_CARGO_CREATE_SUCCESS, this, car);
+        this._observer.notify(AppEvents.MAIN_CAR_CREATE_SUCCESS, this, car);
     }
     createCarFail(car: Car) {
         this.clearCarHandler();
@@ -181,6 +191,75 @@ export default class TruckView extends AsideItemView {
         this._formItemButtonSave.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_SAVE);
         this._formItemButtonDelete.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DELETE);
         this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_CLEAR);
+        this._formItemButtonPointShow.textContent = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
+    }
+    setNamePoint(result: Map<string, Array<Geopoint> | HTMLElement>) {
+        const element: HTMLElement = <HTMLElement>result.get('element')!;
+        const points: Array<Geopoint> = <Array<Geopoint>>result.get('points')!;
+        for (let i = 0; i < points.length; i += 1) {
+            const itemSearch = document.createElement('option');
+            itemSearch.innerText = points[i].name;
+            itemSearch.addEventListener('click', (event: Event) => {
+                const selectedItem = <HTMLElement>event.target;
+                const inputField = <HTMLInputElement>selectedItem.parentElement?.parentElement?.firstElementChild;
+                inputField.value = <string>selectedItem.textContent;
+                this.closeAllSearchResult();
+            });
+            element.appendChild(itemSearch);
+        }
+    }
+    checkNameResult(result: Map<string, Array<Geopoint> | HTMLElement>) {
+        let checkStart = true;
+        const pointsStart: Array<Geopoint> = <Array<Geopoint>>result.get('points_start')!;
+        const elementInputStart: HTMLInputElement = <HTMLInputElement>result.get('element_start')!
+        if (pointsStart.length === 0) {
+            elementInputStart.classList.add(this.CLASS_FIELDSET_INVALID);
+            checkStart = false;
+        } else {
+            elementInputStart.classList.remove(this.CLASS_FIELDSET_INVALID);
+        }
+        if (checkStart) {
+            if (this._changeCar) {
+                const selectedCar = <Car>this._selectedCar;
+                const car = {
+                    id: selectedCar.id,
+                    user_id: selectedCar.user_id,
+                    point_current_lat: Number(pointsStart[0].lat),
+                    point_current_lon: Number(pointsStart[0].lon),
+                    model: this._formItemModel.value,
+                    price: Number(this._formItemPrice.value),
+                    currency: this._formItemCurrency.value,
+                    volume_max: Number(this._formItemVolume.value),
+                    weight_max: Number(this._formItemWeight.value),
+                    date_start: new Date,
+                    speed: 80,
+                    drived: false,
+                    description: this._formItemDescription.value
+                }
+                this._observer.notify(AppEvents.MAIN_CAR_CHANGE, this, car);
+                this._changeCar = false;
+            }
+            if (this._createCar) {
+                const car = {
+                    id: 0,
+                    user_id: 0,
+                    point_current_lat: Number(pointsStart[0].lat),
+                    point_current_lon: Number(pointsStart[0].lon),
+                    model: this._formItemModel.value,
+                    price: Number(this._formItemPrice.value),
+                    currency: this._formItemCurrency.value,
+                    volume_max: Number(this._formItemVolume.value),
+                    weight_max: Number(this._formItemWeight.value),
+                    date_start: new Date,
+                    speed: 80,
+                    drived: false,
+                    description: this._formItemDescription.value
+                }
+                this._observer.notify(AppEvents.MAIN_CAR_CREATE, this, car);
+
+                this._createCar = false;
+            }
+        }
     }
     protected createMainElement(): void {
         this._mainElement.appendChild(this.createForm());
@@ -285,6 +364,22 @@ export default class TruckView extends AsideItemView {
 
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
+        containerItem.appendChild(this._formItemPointLabel);
+        let searchContainer = document.createElement(this.TAG_FIELDSET_ITEM);
+        searchContainer.classList.add(this.CLASS_FIELDSET_SEARCH);
+        let searchItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        searchItem.classList.add(this.CLASS_FIELDSET_SEARCH_FIELD);
+        searchItem.appendChild(this._formItemPoint);
+        this._formItemPointResultSearch.classList.add(this.CLASS_FIELDSET_SEARCH_RESULT);
+        searchItem.appendChild(this._formItemPointResultSearch);
+        searchContainer.appendChild(searchItem);
+        searchContainer.appendChild(this._formItemButtonPointShow);
+        this._formItemButtonPointShow.addEventListener('click', this.clickButtonPointShowHandler.bind(this));
+        containerItem.appendChild(searchContainer);
+        formElement.appendChild(containerItem);
+
+        containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
+        containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
         containerItem.appendChild(this._formItemPriceLabel);
         containerItem.appendChild(this._formItemPrice);
         formElement.appendChild(containerItem);
@@ -335,42 +430,70 @@ export default class TruckView extends AsideItemView {
 
         return formElement;
     }
-    private createNewCarHandler() {
-        const car = {
-            id: 0,
-            user_id: 0,
-            point_current_lat: Number(this._formItemPoint.value),
-            point_current_lon: Number(this._formItemPoint.value),
-            model: this._formItemModel.value,
-            price: Number(this._formItemPrice.value),
-            currency: this._formItemCurrency.value,
-            volume_max: Number(this._formItemVolume.value),
-            weight_max: Number(this._formItemWeight.value),
-            date_start: new Date,
-            speed: 80,
-            drived: false,
-            description: this._formItemDescription.value
+    private closeAllSearchResult() {
+        const allResultElement = document.getElementsByClassName(this.CLASS_FIELDSET_SEARCH_RESULT);
+        for (let i = 0; i < allResultElement.length; i += 1) {
+            allResultElement[i].innerHTML = '';
         }
-        this._observer.notify(AppEvents.MAIN_CAR_CREATE, this, car);
+    }
+    private clickButtonPointShowHandler() {
+        const params = new Map();
+        params.set('name', this._formItemPoint.value);
+        params.set('element', this._formItemPointResultSearch);
+        this._observer.notify(AppEvents.MAP_GET_LATLON, this, params);
+    }
+    private createNewCarHandler() {
+        if (this.checkCarFields()) {
+            this._createCar = true;
+            const params = new Map();
+            params.set('name_start', this._formItemPoint.value);
+            params.set('element_start', this._formItemPoint);
+            this._observer.notify(AppEvents.MAP_CHECK_NAME, this, params);
+        }
     }
     private saveCarHandler() {
-        const selectedCar = <Car>this._selectedCar;
-        const car = {
-            id: selectedCar.id,
-            user_id: selectedCar.user_id,
-            point_current_lat: Number(this._formItemPoint.value),
-            point_current_lon: Number(this._formItemPoint.value),
-            model: this._formItemModel.value,
-            price: Number(this._formItemPrice.value),
-            currency: this._formItemCurrency.value,
-            volume_max: Number(this._formItemVolume.value),
-            weight_max: Number(this._formItemWeight.value),
-            date_start: new Date,
-            speed: 80,
-            drived: false,
-            description: this._formItemDescription.value
+        if (this.checkCarFields()) {
+            this._changeCar = true;
+            const params = new Map();
+            params.set('name_start', this._formItemPoint.value);
+            params.set('element_start', this._formItemPoint);
+            this._observer.notify(AppEvents.MAP_CHECK_NAME, this, params);
         }
-        this._observer.notify(AppEvents.MAIN_CAR_CHANGE, this, car);
+    }
+    private checkCarFields(): boolean {
+        let result = new Array<boolean>();
+        if (this._formItemModel.value === '') {
+            this._formItemModel.classList.add(this.CLASS_FIELDSET_INVALID);
+            result.push(false);
+        } else {
+            this._formItemModel.classList.remove(this.CLASS_FIELDSET_INVALID);
+            result.push(true);
+        }
+        if (this._formItemPrice.value === '' || !this.isNumber(this._formItemPrice.value)) {
+            this._formItemPrice.classList.add(this.CLASS_FIELDSET_INVALID);
+            result.push(false);
+        } else {
+            this._formItemPrice.classList.remove(this.CLASS_FIELDSET_INVALID);
+            result.push(true);
+        }
+        if (this._formItemVolume.value === '' || !this.isNumber(this._formItemVolume.value)) {
+            this._formItemVolume.classList.add(this.CLASS_FIELDSET_INVALID);
+            result.push(false);
+        } else {
+            this._formItemVolume.classList.remove(this.CLASS_FIELDSET_INVALID);
+            result.push(true);
+        }
+        if (this._formItemWeight.value === '' || !this.isNumber(this._formItemWeight.value)) {
+            this._formItemWeight.classList.add(this.CLASS_FIELDSET_INVALID);
+            result.push(false);
+        } else {
+            this._formItemWeight.classList.remove(this.CLASS_FIELDSET_INVALID);
+            result.push(true);
+        }
+        return !result.includes(false);
+    }
+    private isNumber(value: string): boolean {
+        return /^[-]?\d+$/.test(value);
     }
     private deleteCarHandler() {
         this._observer.notify(AppEvents.MAIN_CAR_DELETE, this, <Car>this._selectedCar);
@@ -404,7 +527,7 @@ export default class TruckView extends AsideItemView {
             this._formItemWeight.value = car.weight_max.toString();
             this._formItemVolume.value = car.volume_max.toString();
             this._formItemDescription.value = car.description;
-            this._formItemPoint.value = car.point_current_lat.toString();
+            this._formItemPoint.value = <string>parent.children[1].textContent;
             this._formItemModel.value = car.model.toString();
         }
     }
