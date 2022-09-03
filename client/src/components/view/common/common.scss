@@ -75,7 +75,7 @@ main {
 @media screen and (max-width: 640px) {
     body {
         grid-template-columns: 6rem 1fr 1fr;
-        grid-template-rows: 30px 30px auto 30px;
+        grid-template-rows: 30px 30px minmax(calc(100vh - 90px), auto) 30px;
         grid-template-areas:
             'header header auth'
             'nav nav nav'
