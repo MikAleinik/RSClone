@@ -82,6 +82,7 @@ export default class CompanyView extends AsideItemView {
         this._formItemRatingLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_RATING);
     }
     setAllUser(users: Array<User> | false) {
+        console.log(users);
         this.clearTable();
         this._users.clear();
         if (users !== false) {
