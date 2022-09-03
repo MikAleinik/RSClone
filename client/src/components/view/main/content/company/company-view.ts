@@ -21,7 +21,6 @@ export default class CompanyView extends AsideItemView {
 
     private readonly CLASS_FIELDSET = 'item_form';
     private readonly CLASS_FIELDSET_ITEM = 'field__container';
-    private readonly CLASS_FIELDSET_RANGE = 'field__range';
     private readonly CLASS_TABLE_WRAPPER = 'table__wrapper';
     private readonly CLASS_TABLE_CONTAINER = 'table__container';
     private readonly CLASS_TABLE_HEADER = 'table__header';
@@ -40,9 +39,8 @@ export default class CompanyView extends AsideItemView {
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
     private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
     private _formItemSearchLabel = document.createElement(this.TAG_FIELDSET_LABEL);
-    private _formItemRating = document.createElement(this.TAG_FIELDSET_INPUT);
     private _formItemRatingLabel = document.createElement(this.TAG_FIELDSET_LABEL);
-    private _formItemRatingRange = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemRatingSelect = document.createElement(this.TAG_FIELDSET_ITEM);
 
     private _tableHeaderCompany = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderAddress = document.createElement(this.TAG_TABLE_ROW_DATA);
@@ -82,7 +80,6 @@ export default class CompanyView extends AsideItemView {
         this._formItemRatingLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_RATING);
     }
     setAllUser(users: Array<User> | false) {
-        console.log(users);
         this.clearTable();
         this._users.clear();
         if (users !== false) {
@@ -155,6 +152,7 @@ export default class CompanyView extends AsideItemView {
 
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_rating');
+        rowItem.dataset.rating = rating.toString();
         rowElement.appendChild(rowItem);
 
         return rowElement;
@@ -201,33 +199,67 @@ export default class CompanyView extends AsideItemView {
 
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_ITEM);
-        containerItem.classList.add(this.CLASS_FIELDSET_RANGE);
         containerItem.appendChild(this._formItemRatingLabel)
-        containerItem.appendChild(this._formItemRating);
-        this._formItemRating.setAttribute('type', 'number');
-        this._formItemRating.id = 'rating';
-        this._formItemRating.value = '5';
+        for (let i = 0; i < 5; i++){
+            const star = document.createElement(this.TAG_FIELD_IMG);
+            star.src = this.PATH_IMAGE_STAR;
+            star.classList.add('star_active')
+            this._formItemRatingSelect.appendChild(star);
+        }
+        containerItem.appendChild(this._formItemRatingSelect);
         formElement.appendChild(containerItem);
-        this._formItemRatingRange.setAttribute('type', 'range')
-        this._formItemRatingRange.min = '0';
-        this._formItemRatingRange.max = this._formItemRating.value;
-        this._formItemRatingRange.value = this._formItemRating.value;
-        containerItem.appendChild(this._formItemRatingRange);
-        formElement.appendChild(containerItem);
-
+        
+        const stars = this._formItemRatingSelect.querySelectorAll(this.TAG_FIELD_IMG);
+        let currentRating = 5;
+        
+        for (let s = 0; s < 5; s++){
+            stars[s].addEventListener('click', (e)=>{
+                for (let a = 0; a <= s; a++){
+                    stars[a].classList.add('star_active')
+                    for (let u = a + 1; u < 5; u++){
+                        stars[u].classList.remove('star_active')
+                    }
+                    currentRating = a + 1;
+                }
+                const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
+                const inputField = e.target as HTMLInputElement;
+                const search = inputField.id === 'search' ? inputField.value : '';
+                        
+                for (const r of allRows){
+                    const textData = [
+                        r.childNodes[0].textContent?.toLocaleLowerCase(),
+                        r.childNodes[2].textContent?.toLocaleLowerCase(),
+                        r.childNodes[3].textContent?.toLocaleLowerCase()
+                    ].toString().includes(search.toLocaleLowerCase());
+                    const rRating = r.lastChild as HTMLElement;
+                    const ratingData = Number(rRating.dataset.rating) <= currentRating;
+                    if (textData && ratingData){
+                        r.style.display = 'flex'
+                    } else {
+                        r.style.display = 'none'
+                    }
+                }
+            })
+        }
+        function companySearch(){
+            
+        }
+        
         formElement.addEventListener('input', (e) => {
-            const inputField = e.target  as HTMLInputElement;
             const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
+            const inputField = e.target as HTMLInputElement;
 
             const search = inputField.id === 'search' ? inputField.value : '';
-            
+
             for (const r of allRows){
                 const textData = [
                     r.childNodes[0].textContent?.toLocaleLowerCase(),
                     r.childNodes[2].textContent?.toLocaleLowerCase(),
                     r.childNodes[3].textContent?.toLocaleLowerCase()
                 ].toString().includes(search.toLocaleLowerCase());
-                if (textData){
+                const rRating = r.lastChild as HTMLElement;
+                const ratingData = Number(rRating.dataset.rating) <= currentRating;
+                if (textData && ratingData){
                     r.style.display = 'flex'
                 } else {
                     r.style.display = 'none'
