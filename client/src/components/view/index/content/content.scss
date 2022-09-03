@@ -38,7 +38,7 @@
     width: auto;
     color: $font-color-light;
     font-size: $font-size-big;
-    padding: 4rem;
+    padding: 2rem;
     
     h3 {
         text-align: center;
@@ -46,9 +46,9 @@
     ul {
         margin: 0 auto;
         width: 70%;
-        min-height: 55rem;
+        min-height: 30rem;
         background: $background-color-ultra-light;
-        padding: 3rem 4rem;
+        padding: 2rem 4rem;
         color: $font-color-dark;
         border-radius: 1rem;
         font-size: $font-size-big;
@@ -62,7 +62,7 @@
 @media screen and (max-width: 640px){
     .promo {    
         ul {
-            min-height: 30rem;
+            min-height: 20rem;
         }
     }
 }
