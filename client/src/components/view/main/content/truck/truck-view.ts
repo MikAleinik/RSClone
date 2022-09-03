@@ -490,6 +490,13 @@ export default class TruckView extends AsideItemView {
             this._formItemWeight.classList.remove(this.CLASS_FIELDSET_INVALID);
             result.push(true);
         }
+        if (this._formItemDescription.value === '') {
+            this._formItemDescription.classList.add(this.CLASS_FIELDSET_INVALID);
+            result.push(false);
+        } else {
+            this._formItemDescription.classList.remove(this.CLASS_FIELDSET_INVALID);
+            result.push(true);
+        }
         return !result.includes(false);
     }
     private isNumber(value: string): boolean {
@@ -511,6 +518,12 @@ export default class TruckView extends AsideItemView {
         this._formItemVolume.value = '';
         this._formItemDescription.value = '';
         this._formItemPoint.value = '';
+        this._formItemModel.classList.remove(this.CLASS_FIELDSET_INVALID);
+        this._formItemPrice.classList.remove(this.CLASS_FIELDSET_INVALID);
+        this._formItemVolume.classList.remove(this.CLASS_FIELDSET_INVALID);
+        this._formItemWeight.classList.remove(this.CLASS_FIELDSET_INVALID);
+        this._formItemDescription.classList.remove(this.CLASS_FIELDSET_INVALID);
+        this._formItemPoint.classList.remove(this.CLASS_FIELDSET_INVALID);
     }
     private rowClickHandler(event: Event) {
         const element: HTMLElement = <HTMLElement>event.target;
