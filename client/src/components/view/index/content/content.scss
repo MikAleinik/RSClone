@@ -20,7 +20,7 @@
 
     main {
         display: flex;
-        gap: 10px;
+        gap: 1rem;
     }
 
     aside {
@@ -38,7 +38,7 @@
     width: auto;
     color: $font-color-light;
     font-size: $font-size-big;
-    padding: 40px;
+    padding: 4rem;
     
     h3 {
         text-align: center;
@@ -46,30 +46,23 @@
     ul {
         margin: 0 auto;
         width: 70%;
-        min-height: 550px;
+        min-height: 55rem;
         background: $background-color-ultra-light;
-        padding: 30px 40px;
+        padding: 3rem 4rem;
         color: $font-color-dark;
-        border-radius: 10px;
+        border-radius: 1rem;
         font-size: $font-size-big;
 
         li {
-            margin: 15px 5px;
+            margin: 1.5rem .5rem;
         }
     }
 }
 
 @media screen and (max-width: 640px){
-    main {
-        padding: 10px 15px;
-    }
-
     .promo {    
         ul {
-            min-height: 300px;
-            li {
-                margin: 10px 5px;
-            }
+            min-height: 30rem;
         }
     }
 }

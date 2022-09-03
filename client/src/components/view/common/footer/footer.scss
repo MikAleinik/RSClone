@@ -1,28 +1,22 @@
 .footer {
-    grid-area      : footer;
-    display        : flex;
+    grid-area: footer;
+    display: flex;
     justify-content: center;
-    gap            : 40px;
-    background     : $background-color_dark;
+    gap: 4rem;
+    background: $background-color_dark;
 }
 
 .footer__item {
-    display    : flex;
+    display: flex;
     align-items: center;
 
     img {
-        height : 20px;
-        padding: 0px 10px;
+        height: 2rem;
+        padding: 0 .1rem;
     }
 }
 @media screen and (max-width: 640px){
     .footer {
-        gap: 10px;
-    }
-    .footer__item{
-        img {
-            height: 15px;
-            padding: 0px 5px;
-        }
+        gap: 2rem;
     }
 }

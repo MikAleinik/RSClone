@@ -11,7 +11,7 @@
 		@include input_border;
 		&[type=range]{
 			-webkit-appearance: none;
-			// background: $background-color-accent;
+			background: $background-color-accent;
 			height: 1rem;
 			&::-webkit-slider-thumb,
 			&::-moz-range-thumb {
@@ -20,7 +20,7 @@
 				background: $background-color-middle;
 			}
 		}
-	}
+	}	
 	select {
 		@include input_border;
 		background-color: $background-color-light;
