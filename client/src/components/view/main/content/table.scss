@@ -20,6 +20,9 @@
 				background: $background-color-middle;
 			}
 		}
+        &.field__invalid {
+            border: 1px solid $border-color-error;
+        }
 	}	
 	select {
 		@include input_border;

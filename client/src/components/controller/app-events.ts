@@ -67,4 +67,6 @@ export const enum AppEvents {
     MAIN_USER_SAVE_INFO = 'mainUserSaveInfo',//сохранение персональных данных пользователя
 
     MAP_GET_NAME = 'mapGetName',//получение названия места по координатам
+    MAP_GET_LATLON = 'mapGetLatLon',//получение координат по названию места
+    MAP_CHECK_NAME = 'mapCheckname',//проверка существования названия места
 }

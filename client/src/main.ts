@@ -55,6 +55,8 @@ observer.addListener(AppEvents.AUTH_CLICK_LOGOUT_BUTTON, authController)
     .addListener(AppEvents.MAIN_CAR_GET_ALL, carController)
     .addListener(AppEvents.MAIN_CAR_GET_BY_ID, carController)
     .addListener(AppEvents.MAIN_CAR_GET_BY_USER, carController)
-    .addListener(AppEvents.MAP_GET_NAME, mapController);
+    .addListener(AppEvents.MAP_GET_NAME, mapController)
+    .addListener(AppEvents.MAP_GET_LATLON, mapController)
+    .addListener(AppEvents.MAP_CHECK_NAME, mapController);
 
 const app = new MainView(observer);

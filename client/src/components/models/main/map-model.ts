@@ -1,3 +1,4 @@
+import Geopoint from "../../../types/geopoint";
 import { AppEvents } from "../../controller/app-events";
 import Observer from "../../controller/observer";
 import ILocale from "../../interfaces/i-locale";
@@ -9,6 +10,15 @@ import localeModel from "../common/localization/locale-model";
 export default class MapModel implements INotify, ILocale {
     private readonly EVENT_NAME_BY_LAT_LON_SETTED = 'eventNameByLatLonSetted';
     private readonly EVENT_NAME_BY_LAT_LON_ADDED = 'eventNameByLatLonAdded';
+
+    private readonly URL = 'https://nominatim.openstreetmap.org';
+    private readonly END_POINT_LAT_LON = '/reverse?';
+    private readonly END_POINT_NAME = '/search?';
+    private readonly FORMAT_MGS = 'format=json';
+    private readonly PARAM_LAT = 'lat=';
+    private readonly PARAM_LON = 'lon=';
+    private readonly PARAM_NAME = 'q=';
+    private readonly PARAM_LANGUAGE = 'accept-language=';
 
     private _observer;
     private _currentLanguage = '';
@@ -35,9 +45,68 @@ export default class MapModel implements INotify, ILocale {
         this._currentLanguage = localeModel.getPhrase(LocaleKeys.LOCALE);
         this.start();
     }
-    setNameByLatLon(param: Map<string, string | HTMLElement>) {
+    getNameByLatLon(param: Map<string, string | HTMLElement>) {
         this._queueNameByLatLon.push(param);
         document.dispatchEvent(new CustomEvent(this.EVENT_NAME_BY_LAT_LON_ADDED));
+    }
+    getLatLonByName(param: Map<string, string | HTMLElement>): Promise<Map<string, Array<Geopoint> | HTMLElement>> {
+        return new Promise((resolve, reject) => {
+            this.getPointLatLon(<string>param.get('name')!)
+                .then((data) => {
+                    const result = new Map<string, Array<Geopoint> | HTMLElement>();
+                    result.set('points', data);
+                    result.set('element', <HTMLElement>param.get('element')!);
+                    resolve(result);
+                })
+                .catch(() => {
+                    reject(new Array<Geopoint>());
+                });
+        });
+    }
+    checkName(param: Map<string, string | HTMLElement>): Promise<Map<string, Array<Geopoint> | HTMLElement>> {
+        return new Promise((resolve) => {
+            this.getPointLatLon(<string>param.get('name_start')!)
+                .then((data) => {
+                    const result = new Map<string, Array<Geopoint> | HTMLElement>();
+                    result.set('points_start', data);
+                    result.set('element_start', <HTMLElement>param.get('element_start')!);
+                    if (param.has('name_end')) {
+                        this.getPointLatLon(<string>param.get('name_end')!)
+                            .then((data) => {
+                                result.set('points_end', data);
+                                result.set('element_end', <HTMLElement>param.get('element_end')!);
+                                resolve(result);
+                            })
+                            .catch(() => {
+                                result.set('points_end', new Array<Geopoint>());
+                                result.set('element_end', <HTMLElement>param.get('element_end')!);
+                                resolve(result);
+                            });
+                    } else {
+                        resolve(result);
+                    }
+                })
+                .catch(() => {
+                    const result = new Map<string, Array<Geopoint> | HTMLElement>();
+                    result.set('points_start', new Array<Geopoint>());
+                    result.set('element_start', <HTMLElement>param.get('element_start')!);
+                    if (param.has('name_end')) {
+                        this.getPointLatLon(<string>param.get('name_end')!)
+                            .then((data) => {
+                                result.set('points_end', data);
+                                result.set('element_end', <HTMLElement>param.get('element_end')!);
+                                resolve(result);
+                            })
+                            .catch(() => {
+                                result.set('points_end', new Array<Geopoint>());
+                                result.set('element_end', <HTMLElement>param.get('element_end')!);
+                                resolve(result);
+                            });
+                    } else {
+                        resolve(result);
+                    }
+                });
+        });
     }
     private start() {
         document.addEventListener(this.EVENT_NAME_BY_LAT_LON_SETTED, () => {
@@ -59,21 +128,32 @@ export default class MapModel implements INotify, ILocale {
             }
         });
     }
-    // private testFunc(lat: string, lon: string, element: HTMLElement) {
-    //     this._statusWorkNameByLatLon = true;
-    //     setTimeout(() => {
-    //         console.log(`${lat}, ${lon}`);
-    //         this._statusWorkNameByLatLon = false;
-    //         document.dispatchEvent(new CustomEvent(this.EVENT_NAME_BY_LAT_LON_SETTED));
-    //     }, 1000);
-    // }
+    private getPointLatLon(name: string): Promise<Array<Geopoint>> {
+        return new Promise((resolve, reject) => {
+            const infoLanguage = `${this.PARAM_LANGUAGE}${this._currentLanguage}"`;
+            fetch(`${this.URL}${this.END_POINT_NAME}&${this.FORMAT_MGS}&${this.PARAM_NAME}${name}&${infoLanguage}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    const result = new Array<Geopoint>();
+                    for (let i = 0; i < data.length; i += 1) {
+                        result.push({
+                            lat: data[i].lat,
+                            lon: data[i].lon,
+                            name: data[i].display_name
+                        });
+                    }
+                    resolve(result);
+                })
+                .catch((error) => {
+                    reject();
+                });
+        });
+    }
     private getPointInfo(lat: string, lon: string, element: HTMLElement) {
         this._statusWorkNameByLatLon = true;
-        const infoUrl = 'https://nominatim.openstreetmap.org/reverse?';
-        const infoFormat = 'format=json';
-        const infoCoordinates = `lat=${lat}&lon=${lon}`
-        const infoLanguage = `accept-language="${this._currentLanguage}"`;
-        fetch(`${infoUrl}${infoFormat}&${infoCoordinates}&${infoLanguage}`)
+        const infoCoordinates = `${this.PARAM_LAT}${lat}&${this.PARAM_LON}${lon}`
+        const infoLanguage = `${this.PARAM_LANGUAGE}${this._currentLanguage}"`;
+        fetch(`${this.URL}${this.END_POINT_LAT_LON}&${this.FORMAT_MGS}&${infoCoordinates}&${infoLanguage}`)
             .then((response) => response.json())
             .then((data) => {
                 if (this._currentLanguage === 'ru') {
