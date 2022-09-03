@@ -185,12 +185,11 @@ export default class ExchangeTruckView extends AsideItemView {
         waitElement.classList.add(this.CLASS_WAIT_IMAGE);
         waitElement.src = './assets/icons/loading.gif';
         rowItem.appendChild(waitElement);
-        // rowItem.textContent = car.point_current_lat + ' ' + car.point_current_lon;
         const params = new Map();
         params.set('lat', car.point_current_lat);
         params.set('lon', car.point_current_lon);
         params.set('element', rowItem);
-        // this._observer.notify(AppEvents.MAP_GET_NAME, this, params);
+        this._observer.notify(AppEvents.MAP_GET_NAME, this, params);
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_to');
         rowElement.appendChild(rowItem);
