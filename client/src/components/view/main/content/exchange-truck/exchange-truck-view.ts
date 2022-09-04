@@ -36,6 +36,9 @@ export default class ExchangeTruckView extends AsideItemView {
     private readonly CLASS_MENU = 'menu__context';
     private readonly CLASS_MENU_HIDDEN = 'menu__context_hidden';
 
+    private readonly ID_ROLE_CUSTOMER = '1';
+    private readonly ID_ROLE_CARRIER = '2';
+
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
     private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
     private _formItemSearchLabel = document.createElement(this.TAG_FIELDSET_LABEL);
@@ -531,18 +534,20 @@ export default class ExchangeTruckView extends AsideItemView {
         this._observer.notify(AppEvents.CARGO_TO_CAR_CREATE, this, newCargoToCar);
     }
     private tableContainerClickHandler(event: Event) {
-        this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
-        const targetElement = <HTMLElement>event.target;
-        if (targetElement.closest('.' + this.CLASS_TABLE_CONTAINER)) {
-            this._carSelected = this._cars.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
-
-            const eventCurrent = event as MouseEvent;
-            this._menuElement.style.top = `${eventCurrent.pageY}px`;
-            this._menuElement.style.left = `${eventCurrent.pageX}px`;
-
-            this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);
-        } else {
-            this._carSelected = undefined;
+        if(this._user !== undefined && this._user.role_id === this.ID_ROLE_CUSTOMER) {
+            this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
+            const targetElement = <HTMLElement>event.target;
+            if (targetElement.closest('.' + this.CLASS_TABLE_CONTAINER)) {
+                this._carSelected = this._cars.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
+    
+                const eventCurrent = event as MouseEvent;
+                this._menuElement.style.top = `${eventCurrent.pageY}px`;
+                this._menuElement.style.left = `${eventCurrent.pageX}px`;
+    
+                this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);
+            } else {
+                this._carSelected = undefined;
+            }
         }
     }
 }
