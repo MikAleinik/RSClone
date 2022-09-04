@@ -163,6 +163,7 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_DELETE, new Array('Delete', 'Удалить'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_SAVE, new Array('Save', 'Сохранить'));
         this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_CLEAR, new Array('Clear', 'Очистить'));
+        this._localeDictionary.set(LocaleKeys.MAIN_TRANSPORT_CONTEXT_HEADER, new Array('Requests to add cargo', 'Запросы на добавление груза'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_PANEL_HEADER, new Array('Cargo panel', 'Панель груза'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_NAME, new Array('Name', 'Название'));
@@ -213,6 +214,8 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_PENDING, new Array('Pending', 'Ожидает'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_SUBMITTED, new Array('Submitted', 'Подтвержден'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_CANCELED, new Array('Canceled', 'Отказано'));
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_REFUSE, new Array('Refuse', 'Отказать'));
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_CONFIRM, new Array('Confirm', 'Подтвердить'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_COMPANY_NAME, new Array('Company name', 'Название компании'));
         this._localeDictionary.set(LocaleKeys.MAIN_COMPANY_ADDRESS, new Array('Address', 'Адрес'));

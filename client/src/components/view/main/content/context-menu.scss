@@ -20,11 +20,11 @@
     max-height: 150px;
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 200px;
+    width: 215px;
 }
 
 .menu__context .table__wrapper .table__row {
-    width: 100%;
+    width: 90%;
 }
 
 .menu__context .table__wrapper .table__row .table__data {
@@ -32,6 +32,14 @@
 }
 
 .menu__context .table__wrapper .table__row:hover{
-    cursor: pointer;
     background-color: $background-color-middle;
+}
+
+.menu__context .button__image {
+    height: 15px;
+}
+
+.menu__context .button__image:hover {
+    cursor: pointer;
+    transform: scale(1.1);
 }
