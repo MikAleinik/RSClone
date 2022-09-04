@@ -205,6 +205,10 @@ export default class LocaleModel {
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_CURRENCY, new Array('Currency', 'Валюта'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_LOCATION, new Array('Location', 'Местоположение'));
         this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_DESCRIPTION, new Array('Description', 'Описание'));
+        this._localeDictionary.set(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_CONTEXT_HEADER, new Array('Select cargo to add', 'Выберите груз для добавления'));
+
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_ADD_SENDED, new Array('The request has been sent to the owner of the car, please wait for confirmation', 'Запрос владельцу машины отправлен, ожидайте подтверждения'));
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_REMOVE_SENDED, new Array('Your cargo has been removed from the vehicle', 'Ваш груз удален из машины'));
 
         this._localeDictionary.set(LocaleKeys.MAIN_COMPANY_NAME, new Array('Company name', 'Название компании'));
         this._localeDictionary.set(LocaleKeys.MAIN_COMPANY_ADDRESS, new Array('Address', 'Адрес'));
