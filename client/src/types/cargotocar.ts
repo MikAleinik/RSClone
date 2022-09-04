@@ -4,7 +4,7 @@
  type CargoToCar = {
     id: number;
     id_cargo: number;
-    id_car: number;
+    id_cars: number;
     agree: string;
 };
 

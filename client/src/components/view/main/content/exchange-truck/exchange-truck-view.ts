@@ -7,7 +7,9 @@ import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
 import AsideItemView from '../aside-item-view';
 import Car from '../../../../../types/car';
 import CargoToCar from '../../../../../types/cargotocar';
-
+import Cargo from '../../../../../types/cargo';
+import User from '../../../../../types/user';
+import './exchange-truck.scss';
 export default class ExchangeTruckView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
     private readonly TAG_LEGEND = 'legend';
@@ -31,6 +33,8 @@ export default class ExchangeTruckView extends AsideItemView {
     private readonly CLASS_TABLE_ROW = 'table__row';
     private readonly CLASS_TABLE_DATA = 'table__data';
     private readonly CLASS_WAIT_IMAGE = 'table__wait';
+    private readonly CLASS_MENU = 'menu__context';
+    private readonly CLASS_MENU_HIDDEN = 'menu__context_hidden';
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
     private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
@@ -57,6 +61,10 @@ export default class ExchangeTruckView extends AsideItemView {
     private _tableHeaderPoint = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableContainer = document.createElement(this.TAG_TABLE_CONTAINER);
 
+    private _menuElement = document.createElement(this.TAG_DIV);
+    private _headerContextMenu = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableContextMenu = document.createElement(this.TAG_TABLE_CONTAINER);
+
     private _minPrice = 0;
     private _minVolume = 0;
     private _minWeight = 0;
@@ -64,7 +72,14 @@ export default class ExchangeTruckView extends AsideItemView {
     private _maxVolume = 100;
     private _maxWeight = 50;
 
+    private _messageError = '';
+    private _messageSended = '';
+    private _messageRemoved = '';
+
     private _cars = new Map<HTMLElement, Car>();
+    private _carSelected: Car | undefined = undefined;
+    private _cargoes = new Map<HTMLElement, Cargo>();
+    private _user!: User;
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
@@ -75,10 +90,18 @@ export default class ExchangeTruckView extends AsideItemView {
         this._observer.addSender(AppEvents.MAIN_CAR_DELETE_SUCCESS, this);
         this._observer.addSender(AppEvents.MAIN_CAR_CHANGE_SUCCESS, this);
 
+        this._observer.addSender(AppEvents.MAIN_CARGO_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_DELETE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_CHANGE_SUCCESS, this);
+
+        this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
+        this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
+
+        document.addEventListener('click', this.tableContainerClickHandler.bind(this));
     }
-    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Car): void {
+    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Car | Cargo | Array<Cargo>): void {
         switch (nameEvent) {
             case AppEvents.LOCALE_SET: {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
@@ -94,6 +117,22 @@ export default class ExchangeTruckView extends AsideItemView {
             }
             case AppEvents.MAIN_CAR_CHANGE_SUCCESS: {
                 this.carChangedHandler(params as Car);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_BY_USER_RECEIVED: {
+                this.setAllCargo(params as Array<Cargo>);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_CREATE_SUCCESS: {
+                this.cargoCreatedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_DELETE_SUCCESS: {
+                this.cargoDeletedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_CHANGE_SUCCESS: {
+                this.cargoChangedHandler(params as Cargo);
                 break;
             }
         }
@@ -129,6 +168,52 @@ export default class ExchangeTruckView extends AsideItemView {
             }
         });
     }
+    setAuthorizedUser(authUser: User | false) {
+        if (authUser !== false) {
+            this._user = authUser;
+        } else {
+            // alert(this._errorMessage);
+        }
+    }
+    setAllCargo(cargoes: Array<Cargo>): void {
+        if (this._user !== undefined) {
+            this.clearContextTable();
+            for (let i = 0; i < cargoes.length; i += 1) {
+                if (this._user.id === cargoes[i].user_id) {
+                    const rowElement = this.createRowContextMenu(cargoes[i])
+                    this._tableContextMenu.appendChild(rowElement);
+                    this._cargoes.set(rowElement, cargoes[i]);
+                }
+            }
+        } else {
+            this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
+        }
+    }
+    cargoCreatedHandler(cargo: Cargo) {
+        const rowElement = this.createRowContextMenu(cargo)
+        this._cargoes.set(rowElement, cargo);
+        this._tableContextMenu.appendChild(rowElement);
+    }
+    cargoDeletedHandler(cargo: Cargo) {
+        this._cargoes.forEach((value, key) => {
+            if (value.id === cargo.id) {
+                key.remove();
+            }
+        });     
+    }
+    cargoChangedHandler(cargo: Cargo) {
+        this._cargoes.forEach((value, key) => {
+            if (value.id === cargo.id) {
+                value = cargo;
+                key.children[0].textContent = cargo.description;
+            }
+        });
+    }
+    private clearContextTable(): void {
+        while (this._tableContextMenu.firstElementChild) {
+            this._tableContextMenu.firstElementChild.remove();
+        }
+    }
     setLocale(localeModel: localeModel): void {
         this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_TRANSPORT);
         this._formFilterLegend.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_HEADER);
@@ -146,6 +231,10 @@ export default class ExchangeTruckView extends AsideItemView {
         this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_Weight);
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION);
         this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
+        this._headerContextMenu.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_CONTEXT_HEADER);
+        this._messageError = localeModel.getPhrase(LocaleKeys.COMMON_ERROR_SAVE);
+        this._messageSended = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_ADD_SENDED);
+        this._messageRemoved = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_REMOVE_SENDED);
     }
     setAllCar(cars: Array<Car>): void {
         this._observer.notify(AppEvents.MAIN_CAR_BY_USER_RECEIVED, this, cars);
@@ -168,26 +257,30 @@ export default class ExchangeTruckView extends AsideItemView {
 
     }
     deleteCargoToCarSuccess(cargoToCar: CargoToCar) {
+        alert(this._messageRemoved);
         this._observer.notify(AppEvents.CARGO_TO_CAR_DELETE_SUCCESS, this, cargoToCar);
     }
     deleteCargoToCarFail(cargoToCar: CargoToCar) {
-
+        alert(this._messageError);
     }
     changeCargoToCarSuccess(cargoToCar: CargoToCar) {
+        alert(this._messageSended);
         this._observer.notify(AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS, this, cargoToCar);
     }
     changeCargoToCarFail(cargoToCar: CargoToCar) {
-
+        alert(this._messageError);
     }
     createCargoToCarSuccess(cargoToCar: CargoToCar) {
+        alert(this._messageSended);
         this._observer.notify(AppEvents.CARGO_TO_CAR_CREATE_SUCCESS, this, cargoToCar);
     }
     createCargoToCarFail(cargoToCar: CargoToCar) {
-
+        alert(this._messageError);
     }
     protected createMainElement(): void {
         this._mainElement.appendChild(this.createFilterForm());
         this._mainElement.appendChild(this.createTable());
+        this._mainElement.appendChild(this.createContextMenu());
     }
     private clearTable(): void {
         while (this._tableContainer.firstElementChild) {
@@ -408,5 +501,56 @@ export default class ExchangeTruckView extends AsideItemView {
         // this._formItemButtonClear.addEventListener('click', this.clearCargoHandler.bind(this));
 
         return formElement;
+    }
+    private createContextMenu(): HTMLElement {
+        this._menuElement = document.createElement(this.TAG_DIV);
+        this._menuElement.classList.add(this.CLASS_MENU);
+        this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
+
+        this._headerContextMenu.classList.add(this.CLASS_TABLE_HEADER);
+        this._tableContextMenu.classList.add(this.CLASS_TABLE_WRAPPER);
+
+        this._menuElement.appendChild(this._headerContextMenu);
+        this._menuElement.appendChild(this._tableContextMenu);
+
+        return this._menuElement;
+    }
+    private createRowContextMenu(cargo: Cargo): HTMLElement {
+        const rowElement = document.createElement(this.TAG_TABLE_ROW);
+        rowElement.className = this.CLASS_TABLE_ROW
+
+        let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
+        rowItem.textContent = cargo.description;
+        rowItem.className = this.CLASS_TABLE_DATA;
+        rowElement.appendChild(rowItem);
+        rowElement.addEventListener('click', this.tableContextClickItemHandler.bind(this));
+
+        return rowElement;
+    }
+    private tableContextClickItemHandler(event: Event) {
+        const targetElement = <HTMLElement>event.target;
+        const contextItem = this._cargoes.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
+        const newCargoToCar: CargoToCar = {
+            id: 0,
+            id_cargo: Number(contextItem?.id),
+            id_cars: Number(this._carSelected?.id),
+            agree: ''
+        }
+        this._observer.notify(AppEvents.CARGO_TO_CAR_CREATE, this, newCargoToCar);
+    }
+    private tableContainerClickHandler(event: Event) {
+        this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
+        const targetElement = <HTMLElement>event.target;
+        if (targetElement.closest('.' + this.CLASS_TABLE_CONTAINER)) {
+            this._carSelected = this._cars.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
+
+            const eventCurrent = event as MouseEvent;
+            this._menuElement.style.top = `${eventCurrent.pageY}px`;
+            this._menuElement.style.left = `${eventCurrent.pageX}px`;
+
+            this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);
+        } else {
+            this._carSelected = undefined;
+        }
     }
 }

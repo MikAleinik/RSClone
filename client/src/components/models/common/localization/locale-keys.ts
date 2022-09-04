@@ -144,6 +144,7 @@ export const enum LocaleKeys {
     MAIN_EXCHANGE_TRANSPORT_CURRENCY = 'mainExchangeTransportCurrency',
     MAIN_EXCHANGE_TRANSPORT_DESCRIPTION = 'mainExchangeTransportDescription',
     MAIN_EXCHANGE_TRANSPORT_LOCATION = 'mainExchangeTransportLocation',
+    MAIN_EXCHANGE_TRANSPORT_CONTEXT_HEADER = 'mainExchangeTransportContextHeader',
 
     MAIN_EXCHANGE_CARGO_COMPANY = 'mainExchangeCargoCompany',
     MAIN_EXCHANGE_CARGO_USER = 'mainExchangeCargoUser',
@@ -169,6 +170,9 @@ export const enum LocaleKeys {
     MAIN_MAP_SEARCH_FAILED = 'mainMapSearchFailed',
     MAIN_MAP_SEARCH_FIELD = 'mainMapSearchField',
     MAIN_MAP_SEARCH_BUTTON = 'mainMapSearchButton',
+
+    MAIN_CARGO_TO_CAR_ADD_SENDED = 'mainCargoToCarAddSended',
+    MAIN_CARGO_TO_CAR_REMOVE_SENDED = 'mainCargoToCarRemoveSended',
 
     COMMON_ERROR_SAVE = 'commonErrorSave',
     COMMON_ERROR_ROUTE = 'commonErrorRoute'

@@ -1,0 +1,28 @@
+.menu__context {
+    position: absolute;
+    top: 77px;
+    left: 30%;
+
+    background: $background-color-light;
+    box-shadow: 0px 0px 1px;
+    border-radius: 5px;
+}
+
+.menu__context_hidden {
+    visibility: hidden;
+}
+
+.menu__context>span {
+    background: $background-color-middle;
+}
+
+.menu__context .table__wrapper {
+    max-height: 150px;
+    overflow-y: scroll;
+    width: 200px;
+}
+
+.menu__context .table__wrapper .table__row:hover{
+    cursor: pointer;
+    background-color: $background-color-middle;
+}

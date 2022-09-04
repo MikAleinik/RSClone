@@ -93,7 +93,7 @@ export default class CargoToCarModel {
     private setToCagro(result: Map<string, string>): CargoToCar {
         return {
             id: Number(result.get('id')!),
-            id_car: Number(result.get('id_car')!),
+            id_cars: Number(result.get('id_cars')!),
             id_cargo: Number(result.get('id_cargo')!),
             agree: result.get('agree')!,
         };
@@ -101,7 +101,7 @@ export default class CargoToCarModel {
     private setToMap(cargo: CargoToCar): Map<string, string> {
         const result = new Map();
         result.set('id', cargo.id);
-        result.set('id_car', cargo.id_car);
+        result.set('id_cars', cargo.id_cars);
         result.set('id_cargo', cargo.id_cargo);
         result.set('agree', cargo.agree);
         return result;
