@@ -689,6 +689,7 @@ export default class CargoView extends AsideItemView {
         this._menuElement = document.createElement(this.TAG_DIV);
         this._menuElement.classList.add(this.CLASS_MENU);
         this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
+        document.body.style.overflow = 'auto';
 
         this._headerContextMenu.classList.add(this.CLASS_TABLE_HEADER);
         this._tableContextMenu.classList.add(this.CLASS_TABLE_WRAPPER);
@@ -744,6 +745,7 @@ export default class CargoView extends AsideItemView {
     }
     private tableContainerClickHandler(event: Event) {
         this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
+        document.body.style.overflow = 'auto';
         const targetElement = <HTMLElement>event.target;
         if (targetElement.closest('.' + this.CLASS_TABLE_CONTAINER)) {
             this._selectedCargo = this._cargoes.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
@@ -753,6 +755,7 @@ export default class CargoView extends AsideItemView {
             this._menuElement.style.left = `${eventCurrent.pageX}px`;
 
             this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);
+            document.body.style.overflow = 'hidden';
         } else {
             this._selectedCargo = undefined;
         }
