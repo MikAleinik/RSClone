@@ -7,9 +7,9 @@ export default class NewsModel {
     constructor() {
 
     }
-    getNews(nameEvent: AppEvents): Promise<Array<news>> {
+    getNews(nameEvent: AppEvents, params: Map<string, string> = new Map<string, string>()): Promise<Array<news>> {
         return new Promise((resolve, reject) => {
-            this._dataMapper.read(nameEvent)
+            this._dataMapper.read(nameEvent, params)
                 .then((data) => {
                     resolve(data as Array<news>);
                 })
