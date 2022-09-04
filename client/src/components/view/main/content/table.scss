@@ -14,8 +14,18 @@
   padding: 1rem;
   margin: 2rem 0;
 	gap: 1rem;
+	// remove spinner for type=number
 	input {
 		@include input_border;
+		&[type=number]{
+			-moz-appearance: textfield;
+		}
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+	// change defaul style for type=range
 		&[type=range]{
 			-webkit-appearance: none;
 			background: $background-color-accent;

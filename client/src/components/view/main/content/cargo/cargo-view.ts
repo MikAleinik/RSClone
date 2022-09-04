@@ -78,8 +78,8 @@ export default class CargoView extends AsideItemView {
     private _formItemButtonSave = document.createElement(this.TAG_FIELDSET_BUTTON);
     private _formItemButtonDelete = document.createElement(this.TAG_FIELDSET_BUTTON);
     private _formItemButtonClear = document.createElement(this.TAG_FIELDSET_BUTTON);
-    private _formItemButtonPointFromShow = document.createElement(this.TAG_FIELDSET_BUTTON);
-    private _formItemButtonPointToShow = document.createElement(this.TAG_FIELDSET_BUTTON);
+    private _formItemButtonPointFromShow = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemButtonPointToShow = document.createElement(this.TAG_FIELDSET_INPUT);
 
     private _cargoes = new Map<HTMLElement, Cargo>();
     private _selectedCargo: Cargo | false;
@@ -195,8 +195,6 @@ export default class CargoView extends AsideItemView {
         this._formItemButtonSave.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_SAVE);
         this._formItemButtonDelete.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DELETE);
         this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
-        this._formItemButtonPointFromShow.textContent = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
-        this._formItemButtonPointToShow.textContent = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
     }
     setNamePoint(result: Map<string, Array<Geopoint> | HTMLElement>) {
         const element: HTMLElement = <HTMLElement>result.get('element')!;
@@ -391,6 +389,8 @@ export default class CargoView extends AsideItemView {
         this._formItemPointStartResultSearch.classList.add(this.CLASS_FIELDSET_SEARCH_RESULT);
         searchItem.appendChild(this._formItemPointStartResultSearch);
         searchContainer.appendChild(searchItem);
+        this._formItemButtonPointFromShow.type = 'image';
+        this._formItemButtonPointFromShow.src = './assets/icons/search.png';
         searchContainer.appendChild(this._formItemButtonPointFromShow);
         this._formItemButtonPointFromShow.addEventListener('click', this.clickButtonPointFromShowHandler.bind(this));
         containerItem.appendChild(searchContainer);
@@ -405,9 +405,12 @@ export default class CargoView extends AsideItemView {
         searchItem.classList.add(this.CLASS_FIELDSET_SEARCH_FIELD);
         searchItem.appendChild(this._formItemPointEnd);
         this._formItemPointEndResultSearch.classList.add(this.CLASS_FIELDSET_SEARCH_RESULT);
+        
         searchItem.appendChild(this._formItemPointEndResultSearch);
         searchContainer.appendChild(searchItem);
         searchContainer.appendChild(this._formItemButtonPointToShow);
+        this._formItemButtonPointToShow.type = 'image';
+        this._formItemButtonPointToShow.src = './assets/icons/search.png';
         this._formItemButtonPointToShow.addEventListener('click', this.clickButtonPointToShowHandler.bind(this));
         containerItem.appendChild(searchContainer);
         formElement.appendChild(containerItem);
@@ -451,6 +454,10 @@ export default class CargoView extends AsideItemView {
 
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_BUTTON_CONTAINER);
+        this._formItemButtonCreate.classList.add('big__button');
+        this._formItemButtonDelete.classList.add('big__button');
+        this._formItemButtonClear.classList.add('big__button');
+        this._formItemButtonSave.classList.add('big__button');
         containerItem.appendChild(this._formItemButtonCreate);
         containerItem.appendChild(this._formItemButtonDelete);
         containerItem.appendChild(this._formItemButtonClear);

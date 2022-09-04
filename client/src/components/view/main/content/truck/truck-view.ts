@@ -193,7 +193,6 @@ export default class TruckView extends AsideItemView {
         this._formItemButtonSave.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_SAVE);
         this._formItemButtonDelete.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DELETE);
         this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_CLEAR);
-        // this._formItemButtonPointShow.textContent = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
     }
     setNamePoint(result: Map<string, Array<Geopoint> | HTMLElement>) {
         const element: HTMLElement = <HTMLElement>result.get('element')!;
@@ -328,8 +327,10 @@ export default class TruckView extends AsideItemView {
         tableHeader.className = this.CLASS_TABLE_HEADER;
         tableHeader.appendChild(this._tableHeaderModel);
         this._tableHeaderModel.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderModel.classList.add('table__data_from');
         tableHeader.appendChild(this._tableHeaderPoint);
         this._tableHeaderPoint.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderPoint.classList.add('table__data_from');
         tableHeader.appendChild(this._tableHeaderPrice);
         this._tableHeaderPrice.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderCurrency);
@@ -340,6 +341,7 @@ export default class TruckView extends AsideItemView {
         this._tableHeaderWeight.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderDescription);
         this._tableHeaderDescription.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderDescription.classList.add('table__data_from');
         
         tableWrapper.appendChild(tableHeader);
         this._tableContainer.className = this.CLASS_TABLE_CONTAINER;
@@ -386,7 +388,7 @@ export default class TruckView extends AsideItemView {
         searchContainer.appendChild(searchItem);
         searchContainer.appendChild(this._formItemButtonPointShow);
         this._formItemButtonPointShow.type = 'image';
-        this._formItemButtonPointShow.src = './assets/icons/search.png'
+        this._formItemButtonPointShow.src = './assets/icons/search.png';
         this._formItemButtonPointShow.addEventListener('click', this.clickButtonPointShowHandler.bind(this));
         containerItem.appendChild(searchContainer);
         formElement.appendChild(containerItem);
@@ -428,6 +430,10 @@ export default class TruckView extends AsideItemView {
 
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_BUTTON_CONTAINER);
+        this._formItemButtonCreate.classList.add('big__button');
+        this._formItemButtonDelete.classList.add('big__button');
+        this._formItemButtonClear.classList.add('big__button');
+        this._formItemButtonSave.classList.add('big__button');
         containerItem.appendChild(this._formItemButtonCreate);
         containerItem.appendChild(this._formItemButtonDelete);
         containerItem.appendChild(this._formItemButtonClear);
