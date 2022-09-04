@@ -504,7 +504,7 @@ export default class TruckView extends AsideItemView {
                 const textData = [
                     r.childNodes[0].textContent?.toLocaleLowerCase(),
                     r.childNodes[1].textContent?.toLocaleLowerCase(),
-                    r.childNodes[6].textContent?.toLocaleLowerCase()
+                    r.childNodes[5].textContent?.toLocaleLowerCase()
                 ].toString().includes(search.toLocaleLowerCase());
                 if (textData) {
                     r.style.display = 'flex'
