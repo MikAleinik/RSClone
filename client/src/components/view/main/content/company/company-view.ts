@@ -68,16 +68,16 @@ export default class CompanyView extends AsideItemView {
         }
     }
     setLocale(localeModel: localeModel): void {
-        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_COMPANIES);
+        this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_COMPANIES);
 
-        this._tableHeaderCompany.textContent = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_NAME);
-        this._tableHeaderAddress.textContent = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_ADDRESS);
-        this._tableHeaderUserName.textContent = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_OWNER);
-        this._tableHeaderPhone.textContent = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_PHONE);
-        this._tableHeaderRating.textContent = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_RATING);
+        this._tableHeaderCompany.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_NAME);
+        this._tableHeaderAddress.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_ADDRESS);
+        this._tableHeaderUserName.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_OWNER);
+        this._tableHeaderPhone.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_PHONE);
+        this._tableHeaderRating.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_COMPANY_RATING);
 
-        this._formItemSearchLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
-        this._formItemRatingLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_RATING);
+        this._formItemSearchLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
+        this._formItemRatingLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_RATING);
     }
     setAllUser(users: Array<User> | false) {
         this.clearTable();
