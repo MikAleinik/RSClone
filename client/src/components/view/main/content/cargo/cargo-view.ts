@@ -186,7 +186,6 @@ export default class CargoView extends AsideItemView {
         this._tableHeaderPointStart.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_FROM);
         this._tableHeaderPointEnd.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_TO);
         this._tableHeaderPrice.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PRICE);
-        this._tableHeaderCurrency.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CURRENCY);
         this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_VOLUME);
         this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_Weight);
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DESCRIPTION);
@@ -310,14 +309,10 @@ export default class CargoView extends AsideItemView {
         rowItem.classList.add('table__data_to');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.price.toString();
+        rowItem.textContent = `${cargo.price.toString()} ${cargo.currency}`;
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_price');
         rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.currency;
-        rowItem.className = this.CLASS_TABLE_DATA;
-        rowItem.classList.add('table__data_currency');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.volume.toString();
@@ -350,8 +345,6 @@ export default class CargoView extends AsideItemView {
         this._tableHeaderPointEnd.classList.add('table__data_to');
         tableHeader.appendChild(this._tableHeaderPrice);
         this._tableHeaderPrice.className = this.CLASS_TABLE_DATA;
-        tableHeader.appendChild(this._tableHeaderCurrency);
-        this._tableHeaderCurrency.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderVolume);
         this._tableHeaderVolume.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderWeight);

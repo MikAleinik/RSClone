@@ -49,7 +49,6 @@ export default class TruckView extends AsideItemView {
     private _formItemSearchLabel = document.createElement(this.TAG_FIELDSET_LABEL);
     private _tableHeaderModel = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderPrice = document.createElement(this.TAG_TABLE_ROW_DATA);
-    private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderVolume = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderDescription = document.createElement(this.TAG_TABLE_ROW_DATA);
@@ -183,7 +182,6 @@ export default class TruckView extends AsideItemView {
 
         this._tableHeaderModel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_NUMBER);
         this._tableHeaderPrice.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_PRICE);
-        this._tableHeaderCurrency.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_CURRENCY);
         this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_Weight);
         this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_VOLUME);
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION);
@@ -293,14 +291,9 @@ export default class TruckView extends AsideItemView {
         rowItem.classList.add('table__data_to');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = (car.price !== undefined ? car.price.toString() : '');
+        rowItem.textContent = (car.price !== undefined ? `${car.price.toString()} ${car.currency}` : '');
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_price');
-        rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = (car.currency !== undefined ? car.currency : '');
-        rowItem.className = this.CLASS_TABLE_DATA;
-        rowItem.classList.add('table__data_currency');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = (car.volume_max !== undefined ? car.volume_max.toString() : '');
@@ -333,8 +326,6 @@ export default class TruckView extends AsideItemView {
         this._tableHeaderPoint.classList.add('table__data_from');
         tableHeader.appendChild(this._tableHeaderPrice);
         this._tableHeaderPrice.className = this.CLASS_TABLE_DATA;
-        tableHeader.appendChild(this._tableHeaderCurrency);
-        this._tableHeaderCurrency.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderVolume);
         this._tableHeaderVolume.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderWeight);

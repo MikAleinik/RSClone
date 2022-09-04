@@ -53,7 +53,6 @@ export default class ExchangeCargoView extends AsideItemView {
     private _formItemButtonClear = document.createElement(this.TAG_FIELDSET_BUTTON);
 
     private _tableHeaderPrice = document.createElement(this.TAG_TABLE_ROW_DATA);
-    private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderVolume = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderDescription = document.createElement(this.TAG_TABLE_ROW_DATA);
@@ -140,7 +139,6 @@ export default class ExchangeCargoView extends AsideItemView {
         this._tableHeaderCompany.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_COMPANY);
         this._tableHeaderContact.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_USER);
         this._tableHeaderPrice.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_PRICE);
-        this._tableHeaderCurrency.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_CURRENCY);
         this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_VOLUME);
         this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_Weight);
         this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION);
@@ -215,14 +213,9 @@ export default class ExchangeCargoView extends AsideItemView {
         rowItem.classList.add('table__data_contacts');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.price.toString();
+        rowItem.textContent = `${cargo.price.toString()} ${cargo.currency}`;
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_price');
-        rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.currency;
-        rowItem.className = this.CLASS_TABLE_DATA;
-        rowItem.classList.add('table__data_currency');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.volume.toString();
@@ -262,8 +255,6 @@ export default class ExchangeCargoView extends AsideItemView {
         this._tableHeaderContact.classList.add('table__data_contacts');
         tableHeader.appendChild(this._tableHeaderPrice);
         this._tableHeaderPrice.className = this.CLASS_TABLE_DATA;
-        tableHeader.appendChild(this._tableHeaderCurrency);
-        this._tableHeaderCurrency.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderVolume);
         this._tableHeaderVolume.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderWeight);
