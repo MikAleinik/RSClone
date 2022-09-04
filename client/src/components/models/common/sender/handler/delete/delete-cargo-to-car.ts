@@ -8,7 +8,7 @@ export default class DeleteCargoToCarHandler extends Handler {
 
     send<T>(): Promise<T> {
         return new Promise((resolve, reject) => {
-            const URL = this.SERVER_URL + this.CARGO_TO_CAR_END_POINT + '/' + this._params.get('id_cargotocar')!;
+            const URL = this.SERVER_URL + this.CARGO_TO_CAR_END_POINT + '/' + this._params.get('id')!;
             this._options.method = 'DELETE';
             this._headers.delete('Content-Type');
             fetch(URL, this._options)
