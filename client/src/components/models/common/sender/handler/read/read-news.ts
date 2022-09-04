@@ -2,7 +2,10 @@ import news from "../../../../../../types/news";
 import Handler from "../handler";
 
 export default class ReadNewsHandler extends Handler {
-    private readonly NEWS_URL = 'https://saurav.tech/NewsAPI/top-headlines/category/business/ru.json';
+    private readonly NEWS_URL_RU = 'https://saurav.tech/NewsAPI/top-headlines/category/business/ru.json';
+    private readonly NEWS_URL_EN = 'https://saurav.tech/NewsAPI/top-headlines/category/business/us.json';
+    private readonly LOCALE_KEY = 'locale';
+    private readonly LOCALE_VALUE_RU = 'ru';
 
     constructor(params: Map<string, string> = new Map()) {
         super(params);
@@ -10,7 +13,11 @@ export default class ReadNewsHandler extends Handler {
 
     send <T>(): Promise<Array<T>> {
         return new Promise((resolve, reject) => {
-            fetch(this.NEWS_URL, { method: 'GET' })
+            let newsUrl = this.NEWS_URL_RU;
+            if (this._params.has(this.LOCALE_KEY) && this._params.get(this.LOCALE_KEY) !== this.LOCALE_VALUE_RU) {
+                newsUrl = this.NEWS_URL_EN;
+            }
+            fetch(newsUrl, { method: 'GET' })
                 .then((response) => response.json())
                 .then((data) => {
                     const answer = (data.articles as unknown) as Array<news>;
