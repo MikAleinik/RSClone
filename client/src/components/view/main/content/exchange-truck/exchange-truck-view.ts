@@ -9,7 +9,7 @@ import Car from '../../../../../types/car';
 import CargoToCar from '../../../../../types/cargotocar';
 import Cargo from '../../../../../types/cargo';
 import User from '../../../../../types/user';
-import './exchange-truck.scss';
+import '../context-menu.scss';
 export default class ExchangeTruckView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
     private readonly TAG_LEGEND = 'legend';

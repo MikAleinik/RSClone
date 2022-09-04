@@ -19,7 +19,16 @@
 .menu__context .table__wrapper {
     max-height: 150px;
     overflow-y: scroll;
+    overflow-x: hidden;
     width: 200px;
+}
+
+.menu__context .table__wrapper .table__row {
+    width: 100%;
+}
+
+.menu__context .table__wrapper .table__row .table__data {
+    width: 100%;
 }
 
 .menu__context .table__wrapper .table__row:hover{
