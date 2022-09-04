@@ -134,6 +134,7 @@ export const enum LocaleKeys {
     MAIN_CARGO_DELETE = 'mainCargoDelete',
     MAIN_CARGO_SAVE = 'mainCargoSave',
     MAIN_CARGO_CLEAR = 'mainCargoClear',
+    MAIN_CARGO_CONTEXT_HEADER = 'mainCargoContextHeader',
 
     MAIN_EXCHANGE_TRANSPORT_NUMBER = 'mainExchangeTransportNumber',
     MAIN_EXCHANGE_TRANSPORT_COMPANY = 'mainExchangeTransportCompany',
@@ -173,6 +174,9 @@ export const enum LocaleKeys {
 
     MAIN_CARGO_TO_CAR_ADD_SENDED = 'mainCargoToCarAddSended',
     MAIN_CARGO_TO_CAR_REMOVE_SENDED = 'mainCargoToCarRemoveSended',
+    MAIN_CARGO_TO_CAR_PENDING = 'mainCargoToCarPending',
+    MAIN_CARGO_TO_CAR_SUBMITTED = 'mainCargoToCarSubmitted',
+    MAIN_CARGO_TO_CAR_CANCELED = 'mainCargoToCarCanceled',
 
     COMMON_ERROR_SAVE = 'commonErrorSave',
     COMMON_ERROR_ROUTE = 'commonErrorRoute'

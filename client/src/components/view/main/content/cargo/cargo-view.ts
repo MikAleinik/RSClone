@@ -9,7 +9,9 @@ import Cargo from '../../../../../types/cargo';
 import User from '../../../../../types/user';
 import Geopoint from '../../../../../types/geopoint';
 import '../search.scss';
-
+import Car from '../../../../../types/car';
+import CargoToCar from '../../../../../types/cargotocar';
+import '../context-menu.scss';
 export default class CargoView extends AsideItemView {
     private readonly TAG_FIELDSET = 'fieldset';
     private readonly TAG_FIELDSET_ITEM = 'div';
@@ -39,10 +41,15 @@ export default class CargoView extends AsideItemView {
     private readonly CLASS_FIELDSET_SEARCH_FIELD = 'search__field';
     private readonly CLASS_FIELDSET_SEARCH_RESULT = 'search__result';
     private readonly CLASS_FIELDSET_INVALID = 'field__invalid';
+    private readonly CLASS_MENU = 'menu__context';
+    private readonly CLASS_MENU_HIDDEN = 'menu__context_hidden';
 
     private readonly CURRENCY = new Array('USD', 'EUR', 'BYN', 'RUB');
     private readonly ID_ROLE_CUSTOMER = '1';
     private readonly ID_ROLE_CARRIER = '2';
+    private readonly STATUS_CANCEL = 'Cancelled';
+    private readonly STATUS_SUBMIT = 'Submitted';
+    private readonly STATUS_PENDING = 'Pending';
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
     private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
@@ -81,10 +88,25 @@ export default class CargoView extends AsideItemView {
     private _formItemButtonPointFromShow = document.createElement(this.TAG_FIELDSET_INPUT);
     private _formItemButtonPointToShow = document.createElement(this.TAG_FIELDSET_INPUT);
 
+    private _menuElement = document.createElement(this.TAG_DIV);
+    private _headerContextMenu = document.createElement(this.TAG_TABLE_ROW_DATA);
+    private _tableContextMenu = document.createElement(this.TAG_TABLE_CONTAINER);
+
+    private _messageError = '';
+    private _messageSended = '';
+    private _messageRemoved = '';
+    private _statusPending = '';
+    private _statusSubmitted = '';
+    private _statusCanceled = '';
+    
+    private _cargoToCarInMenu = new Map<HTMLElement, CargoToCar>();
     private _cargoes = new Map<HTMLElement, Cargo>();
-    private _selectedCargo: Cargo | false;
+    private _selectedCargo: Cargo | undefined = undefined;
+    private _cargoToCar: Array<CargoToCar> | undefined = undefined;
+    private _cars: Array<Car> | undefined = undefined;
     private _createCargo = false;
     private _changeCargo = false;
+    private _user!: User;
 
     constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
         super(observer, mainElement, iconPath);
@@ -94,7 +116,11 @@ export default class CargoView extends AsideItemView {
         this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.MAIN_CARGO_GET_BY_USER, this);
-        this._selectedCargo = false;
+        this._observer.notify(AppEvents.CARGO_TO_CAR_GET_ALL, this);
+        this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
+        this._selectedCargo = undefined;
+
+        document.addEventListener('click', this.tableContainerClickHandler.bind(this));
     }
     notify(nameEvent: AppEvents, sender: INotify | view): void {
         switch (nameEvent) {
@@ -105,8 +131,11 @@ export default class CargoView extends AsideItemView {
         }
     }
     setAuthorizedUser(authUser: User | false) {
-        if (authUser !== false && authUser.role_id !== this.ID_ROLE_CUSTOMER) {
-            this._itemElement.style.display = 'none';
+        if (authUser !== false) {
+            this._user = authUser;
+            if (authUser.role_id !== this.ID_ROLE_CUSTOMER) {
+                this._itemElement.style.display = 'none';
+            }
         } else {
             //TODO
         }
@@ -163,6 +192,25 @@ export default class CargoView extends AsideItemView {
     createCargoFail(cargo: Cargo) {
         this.clearCargoHandler();
     }
+    setAllCargoToCar(cargoToCars: Array<CargoToCar>): void {
+        this._cargoToCar = cargoToCars;
+    }
+    deleteCargoToCarSuccess(cargoToCar: CargoToCar) {
+        alert(this._messageRemoved);
+        this._observer.notify(AppEvents.CARGO_TO_CAR_DELETE_SUCCESS, this, cargoToCar);
+    }
+    deleteCargoToCarFail(cargoToCar: CargoToCar) {
+        alert(this._messageError);
+    }
+    changeCargoToCarSuccess(cargoToCar: CargoToCar) {
+        console.log('changeCargoToCarSuccess');
+    }
+    createCargoToCarSuccess(cargoToCar: CargoToCar) {
+        console.log('createCargoToCarSuccess');
+    }
+    setAllCar(cars: Array<Car>): void {
+        this._cars = cars;
+    }
     showErrorMessage(message: Map<string, string> | false) {
         if (!message) {
             console.log('TODO Ошибка получения грузов пользователя');
@@ -194,6 +242,17 @@ export default class CargoView extends AsideItemView {
         this._formItemButtonSave.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_SAVE);
         this._formItemButtonDelete.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DELETE);
         this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
+
+        this._formItemButtonPointFromShow.textContent = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
+        this._formItemButtonPointToShow.textContent = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
+        this._headerContextMenu.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CONTEXT_HEADER);
+
+        this._messageError = localeModel.getPhrase(LocaleKeys.COMMON_ERROR_SAVE);
+        this._messageSended = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_ADD_SENDED);
+        this._messageRemoved = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_REMOVE_SENDED);
+        this._statusCanceled = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_CANCELED);
+        this._statusPending = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_PENDING);
+        this._statusSubmitted = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_SUBMITTED);
     }
     setNamePoint(result: Map<string, Array<Geopoint> | HTMLElement>) {
         const element: HTMLElement = <HTMLElement>result.get('element')!;
@@ -273,6 +332,7 @@ export default class CargoView extends AsideItemView {
     protected createMainElement(): void {
         this._mainElement.appendChild(this.createForm());
         this._mainElement.appendChild(this.createTable());
+        this._mainElement.appendChild(this.createContextMenu());
     }
     private clearTable(): void {
         while (this._tableContainer.firstElementChild) {
@@ -570,7 +630,7 @@ export default class CargoView extends AsideItemView {
         this._formItemButtonSave.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
         this._formItemButtonClear.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
         this._formItemButtonDelete.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
-        this._selectedCargo = false;
+        this._selectedCargo = undefined;
         this._formItemPrice.value = '';
         this._formItemCurrency.value = '';
         this._formItemWeight.value = '';
@@ -604,6 +664,91 @@ export default class CargoView extends AsideItemView {
             this._formItemDescription.value = cargo.description;
             this._formItemPointStart.value = <string>parent.children[0].textContent;
             this._formItemPointEnd.value = <string>parent.children[1].textContent;
+
+            const cargoToCar = (this._cargoToCar !== undefined ? this._cargoToCar : new Array<CargoToCar>());
+            const cars = (this._cars !== undefined ? this._cars : new Array<Car>());
+            while (this._tableContextMenu.firstElementChild) {
+                this._tableContextMenu.firstElementChild.remove();
+            }
+            this._cargoToCarInMenu.clear();
+            for (let i = 0; i < cargoToCar.length; i += 1) {
+                if (cargoToCar[i].id_cargo === this._selectedCargo.id) {
+                    for (let j = 0; j < cars.length; j += 1) {
+                        if (cargoToCar[i].id_cars === cars[j].id) {
+                            const row = this.createRowContextMenu(cargoToCar[i], cars[j]);
+                            this._tableContextMenu.appendChild(row);
+                            this._cargoToCarInMenu.set(row, cargoToCar[i]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private createContextMenu(): HTMLElement {
+        this._menuElement = document.createElement(this.TAG_DIV);
+        this._menuElement.classList.add(this.CLASS_MENU);
+        this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
+
+        this._headerContextMenu.classList.add(this.CLASS_TABLE_HEADER);
+        this._tableContextMenu.classList.add(this.CLASS_TABLE_WRAPPER);
+
+        this._menuElement.appendChild(this._headerContextMenu);
+        this._menuElement.appendChild(this._tableContextMenu);
+
+        return this._menuElement;
+    }
+    private createRowContextMenu(cargoToCar: CargoToCar, car: Car): HTMLElement {
+        const rowElement = document.createElement(this.TAG_TABLE_ROW);
+        rowElement.className = this.CLASS_TABLE_ROW
+
+        let status = '';
+        switch (cargoToCar.agree) {
+            case this.STATUS_CANCEL: {
+                status = this._statusCanceled;
+                break;
+            }
+            case this.STATUS_PENDING: {
+                status = this._statusPending;
+                break;
+            }
+            case this.STATUS_SUBMIT: {
+                status = this._statusSubmitted;
+                break;
+            }
+        }
+
+        let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
+        rowItem.textContent = `${car.model} ${status}`;
+        rowItem.className = this.CLASS_TABLE_DATA;
+        rowElement.appendChild(rowItem);
+        rowElement.addEventListener('click', this.tableContextClickItemHandler.bind(this));
+
+        return rowElement;
+    }
+    private tableContextClickItemHandler(event: Event) {
+        const targetElement = <HTMLElement>event.target;
+        const contextItem = this._cargoToCarInMenu.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
+        const newCargoToCar: CargoToCar = {
+            id: Number(contextItem?.id),
+            id_cargo: 0,
+            id_cars: 0,
+            agree: ''
+        }
+        this._observer.notify(AppEvents.CARGO_TO_CAR_DELETE, this, newCargoToCar);
+    }
+    private tableContainerClickHandler(event: Event) {
+        this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
+        const targetElement = <HTMLElement>event.target;
+        if (targetElement.closest('.' + this.CLASS_TABLE_CONTAINER)) {
+            this._selectedCargo = this._cargoes.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
+
+            const eventCurrent = event as MouseEvent;
+            this._menuElement.style.top = `${eventCurrent.pageY}px`;
+            this._menuElement.style.left = `${eventCurrent.pageX}px`;
+
+            this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);
+        } else {
+            this._selectedCargo = undefined;
         }
     }
 }
