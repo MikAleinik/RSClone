@@ -33,7 +33,8 @@ export default class CompanyView extends AsideItemView {
     private readonly CLASS_USER_STAR = 'user__star-item';
 
     private readonly PATH_IMAGE_STAR = './assets/icons/star-empty.png'
-    private readonly PATH_IMAGE_STAR_COLOR = './assets/icons/star-empty-color.png'
+    // private readonly PATH_IMAGE_STAR_COLOR = './assets/icons/star-empty-color.png'
+    private readonly PATH_IMAGE_STAR_COLOR = './assets/icons/star-empty.png'
     private readonly MAX_RATING = 5;
 
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);

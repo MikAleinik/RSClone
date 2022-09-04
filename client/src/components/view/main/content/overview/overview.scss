@@ -93,8 +93,12 @@
     }
     .user__table {
         max-height: 100%;
-        overflow-y: auto;
+        overflow-y: auto; 
     }
+}
+.user__table .table__row {
+    margin: .3rem auto;
+    width: 90%;
 }
 @media screen and (max-width: 360px){
     h3 {
