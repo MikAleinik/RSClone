@@ -219,33 +219,33 @@ export default class CargoView extends AsideItemView {
         }
     }
     setLocale(localeModel: localeModel): void {
-        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_CARGO);
+        this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_CARGO);
 
-        this._formFilterLegend.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PANEL_HEADER);
-        this._formItemSearchLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
-        this._formItemPriceLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PRICE);
-        this._formItemCurrencyLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CURRENCY);
-        this._formItemWeightLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_Weight);
-        this._formItemVolumeLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_VOLUME);
-        this._formItemDescriptionLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DESCRIPTION);
-        this._formItemPointStartLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_FROM);
-        this._formItemPointEndLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_TO);
+        this._formFilterLegend.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PANEL_HEADER);
+        this._formItemSearchLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
+        this._formItemPriceLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PRICE);
+        this._formItemCurrencyLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CURRENCY);
+        this._formItemWeightLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_Weight);
+        this._formItemVolumeLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_VOLUME);
+        this._formItemDescriptionLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DESCRIPTION);
+        this._formItemPointStartLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_FROM);
+        this._formItemPointEndLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_TO);
 
-        this._tableHeaderPointStart.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_FROM);
-        this._tableHeaderPointEnd.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_TO);
-        this._tableHeaderPrice.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PRICE);
-        this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_VOLUME);
-        this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_Weight);
-        this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DESCRIPTION);
+        this._tableHeaderPointStart.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_FROM);
+        this._tableHeaderPointEnd.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_LOCATION_TO);
+        this._tableHeaderPrice.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_PRICE);
+        this._tableHeaderVolume.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_VOLUME);
+        this._tableHeaderWeight.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_Weight);
+        this._tableHeaderDescription.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DESCRIPTION);
 
-        this._formItemButtonCreate.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_ADD_NEW);
-        this._formItemButtonSave.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_SAVE);
-        this._formItemButtonDelete.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DELETE);
-        this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
+        this._formItemButtonCreate.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_ADD_NEW);
+        this._formItemButtonSave.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_SAVE);
+        this._formItemButtonDelete.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_DELETE);
+        this._formItemButtonClear.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
 
-        this._formItemButtonPointFromShow.textContent = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
-        this._formItemButtonPointToShow.textContent = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
-        this._headerContextMenu.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CONTEXT_HEADER);
+        this._formItemButtonPointFromShow.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
+        this._formItemButtonPointToShow.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_MAP_SEARCH_BUTTON);
+        this._headerContextMenu.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CONTEXT_HEADER);
 
         this._messageError = localeModel.getPhrase(LocaleKeys.COMMON_ERROR_SAVE);
         this._messageSended = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_ADD_SENDED);

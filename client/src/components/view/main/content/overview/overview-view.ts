@@ -137,20 +137,20 @@ export default class OverviewView extends AsideItemView {
         }
     }
     setLocale(localeModel: localeModel): void {
-        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_OVERVIEW);
-        this._headerUser.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_PERSONAL);
-        this._firstNameLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_NAME);
-        this._lastNameLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_FAMILY);
-        this._phoneLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_PHONE);
-        this._emailLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_EMAIL);
-        this._passwordLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_PASSWORD);
-        this._headerCompany.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_COMPANY);
-        this._companyNameLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_NAME);
-        this._companyAddressLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_ADDRESS);
-        this._companyRatingLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING);
-        this._buttonAccept.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_ACCEPT);
-        this._headerStatisticCar.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_TRANSPORT);
-        this._headerStatisticCargo.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO);
+        this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_OVERVIEW);
+        this._headerUser.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_PERSONAL);
+        this._firstNameLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_NAME);
+        this._lastNameLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_FAMILY);
+        this._phoneLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_PHONE);
+        this._emailLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_EMAIL);
+        this._passwordLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_PASSWORD);
+        this._headerCompany.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_COMPANY);
+        this._companyNameLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_NAME);
+        this._companyAddressLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_ADDRESS);
+        this._companyRatingLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING);
+        this._buttonAccept.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_ACCEPT);
+        this._headerStatisticCar.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_TRANSPORT);
+        this._headerStatisticCargo.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO);
         this._errorMessage = localeModel.getPhrase(LocaleKeys.COMMON_ERROR_SAVE);;
     }
     setMap(map: MapLeaflet) {

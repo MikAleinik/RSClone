@@ -217,22 +217,22 @@ export default class ExchangeTruckView extends AsideItemView {
         }
     }
     setLocale(localeModel: localeModel): void {
-        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_TRANSPORT);
-        this._formFilterLegend.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_HEADER);
-        this._formItemSearchLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
-        this._formItemPriceLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_PRICE);
-        this._formItemLoadLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_LOAD);
-        this._formItemVolumeLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_VOLUME);
-        this._tableHeaderModel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_NUMBER);
-        this._tableHeaderPoint.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_LOCATION);
-        this._tableHeaderCompany.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_COMPANY);
-        this._tableHeaderUser.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_USER);
-        this._tableHeaderPrice.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_PRICE);
-        this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_VOLUME);
-        this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_Weight);
-        this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION);
-        this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
-        this._headerContextMenu.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_CONTEXT_HEADER);
+        this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_TRANSPORT);
+        this._formFilterLegend.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_HEADER);
+        this._formItemSearchLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
+        this._formItemPriceLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_PRICE);
+        this._formItemLoadLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_LOAD);
+        this._formItemVolumeLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_VOLUME);
+        this._tableHeaderModel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_NUMBER);
+        this._tableHeaderPoint.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_LOCATION);
+        this._tableHeaderCompany.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_COMPANY);
+        this._tableHeaderUser.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_USER);
+        this._tableHeaderPrice.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_PRICE);
+        this._tableHeaderVolume.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_VOLUME);
+        this._tableHeaderWeight.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_Weight);
+        this._tableHeaderDescription.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_TRANSPORT_DESCRIPTION);
+        this._formItemButtonClear.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
+        this._headerContextMenu.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_TRANSPORT_CONTEXT_HEADER);
         this._messageError = localeModel.getPhrase(LocaleKeys.COMMON_ERROR_SAVE);
         this._messageSended = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_ADD_SENDED);
         this._messageRemoved = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_REMOVE_SENDED);
