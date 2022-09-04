@@ -83,7 +83,7 @@ export default class TruckView extends AsideItemView {
     private _formItemButtonCreate = document.createElement(this.TAG_FIELDSET_BUTTON);
     private _formItemButtonSave = document.createElement(this.TAG_FIELDSET_BUTTON);
     private _formItemButtonDelete = document.createElement(this.TAG_FIELDSET_BUTTON);
-    private _formItemButtonClear = document.createElement(this.TAG_FIELDSET_INPUT);
+    private _formItemButtonClear = document.createElement(this.TAG_FIELDSET_BUTTON);
     private _formItemButtonPointShow = document.createElement(this.TAG_FIELDSET_INPUT);
 
     private _menuElement = document.createElement(this.TAG_DIV);
