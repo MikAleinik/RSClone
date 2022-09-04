@@ -4,6 +4,12 @@
     box-shadow: .1rem .1rem .3rem $background-color-middle;
     border-radius: 1rem;
     padding-bottom: 1rem;
+    & .button__close {
+        height: 1.5rem;
+        position: absolute;
+        right: .5rem;
+        top: .5rem;
+    }
     & .table__header {
         position: sticky;
         top: 0;
@@ -18,18 +24,20 @@
         overflow-y: scroll;
         width: 40rem;
     }
-    & .table__row:hover{
-        background-color: $background-color-accent;
+    & .table__row {
+        &:hover{
+            background-color: $background-color-accent;
+        }
+        & img {
+            display: block;
+            height: 1.5rem;
+            flex: 0 0 auto;
+        }
     }
-    & img {
-        display: block;
-        height: 1.5rem;
-        flex: 0 0 auto;
-    }    
-    & .button__image:hover {
-        cursor: pointer;
-        transform: scale(1.1);
-    }
+}
+.button__image:hover {
+    cursor: pointer;
+    transform: scale(1.1);
 }
 .menu__context_hidden {
     visibility: hidden;

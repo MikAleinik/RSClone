@@ -694,7 +694,17 @@ export default class CargoView extends AsideItemView {
         this._headerContextMenu.classList.add(this.CLASS_TABLE_HEADER);
         this._tableContextMenu.classList.add(this.CLASS_TABLE_WRAPPER);
 
+        const buttonClose = document.createElement(this.TAG_IMAGE);
+        buttonClose.classList.add('button__image');
+        buttonClose.classList.add('button__close');
+        buttonClose.src = './assets/icons/cancel.png';
+        buttonClose.addEventListener('click', ()=> {
+            this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
+            document.body.style.overflow = 'auto';
+        });        
+
         this._menuElement.appendChild(this._headerContextMenu);
+        this._menuElement.appendChild(buttonClose);
         this._menuElement.appendChild(this._tableContextMenu);
 
         return this._menuElement;
