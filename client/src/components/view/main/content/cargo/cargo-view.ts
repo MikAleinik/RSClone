@@ -25,7 +25,7 @@ export default class CargoView extends AsideItemView {
     private readonly TAG_TABLE_CONTAINER = 'div';
     private readonly TAG_TABLE_ROW = 'div';
     private readonly TAG_TABLE_ROW_DATA = 'span';
-    private readonly TAG_WAIT_IMAGE = 'img';
+    private readonly TAG_IMAGE = 'img';
 
     private readonly CLASS_FIELDSET = 'item_form';
     private readonly CLASS_FIELDSET_ITEM = 'field__container';
@@ -43,6 +43,7 @@ export default class CargoView extends AsideItemView {
     private readonly CLASS_FIELDSET_INVALID = 'field__invalid';
     private readonly CLASS_MENU = 'menu__context';
     private readonly CLASS_MENU_HIDDEN = 'menu__context_hidden';
+    private readonly CLASS_MENU_BUTTON = 'button__image';
 
     private readonly CURRENCY = new Array('USD', 'EUR', 'BYN', 'RUB');
     private readonly ID_ROLE_CUSTOMER = '1';
@@ -343,7 +344,7 @@ export default class CargoView extends AsideItemView {
         const rowElement = document.createElement(this.TAG_TABLE_ROW);
         rowElement.className = this.CLASS_TABLE_ROW
         let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        let waitElement = document.createElement(this.TAG_WAIT_IMAGE);
+        let waitElement = document.createElement(this.TAG_IMAGE);
         waitElement.classList.add(this.CLASS_WAIT_IMAGE);
         waitElement.src = './assets/icons/loading.gif';
         rowItem.appendChild(waitElement);
@@ -356,7 +357,7 @@ export default class CargoView extends AsideItemView {
         rowItem.classList.add('table__data_from');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        waitElement = document.createElement(this.TAG_WAIT_IMAGE);
+        waitElement = document.createElement(this.TAG_IMAGE);
         waitElement.classList.add(this.CLASS_WAIT_IMAGE);
         waitElement.src = './assets/icons/loading.gif';
         rowItem.appendChild(waitElement);
@@ -721,7 +722,12 @@ export default class CargoView extends AsideItemView {
         rowItem.textContent = `${car.model} ${status}`;
         rowItem.className = this.CLASS_TABLE_DATA;
         rowElement.appendChild(rowItem);
-        rowElement.addEventListener('click', this.tableContextClickItemHandler.bind(this));
+
+        const buttonRefuse = document.createElement(this.TAG_IMAGE);
+        buttonRefuse.classList.add(this.CLASS_MENU_BUTTON);
+        buttonRefuse.src = './assets/icons/cancel.png';
+        buttonRefuse.addEventListener('click', this.tableContextClickItemHandler.bind(this));
+        rowElement.appendChild(buttonRefuse);
 
         return rowElement;
     }
