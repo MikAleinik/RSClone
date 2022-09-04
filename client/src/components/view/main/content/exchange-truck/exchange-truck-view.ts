@@ -480,11 +480,11 @@ export default class ExchangeTruckView extends AsideItemView {
                     r.childNodes[1].textContent?.toLocaleLowerCase(),
                     r.childNodes[2].textContent?.toLocaleLowerCase(),
                     r.childNodes[3].textContent?.toLocaleLowerCase(),
-                    r.childNodes[8].textContent?.toLocaleLowerCase()
+                    r.childNodes[7].textContent?.toLocaleLowerCase()
                 ].toString().includes(search?.toLocaleLowerCase());
-                const priceData = Number(r.childNodes[4].textContent) <= Number(price);
-                const volumeData = Number(r.childNodes[6].textContent) <= Number(volume);
-                const loadData = Number(r.childNodes[7].textContent) <= Number(load);
+                const priceData = Number(r.childNodes[4].textContent?.slice(0, r.childNodes[4].textContent.length-4)) <= Number(price);
+                const volumeData = Number(r.childNodes[5].textContent) <= Number(volume);
+                const loadData = Number(r.childNodes[6].textContent) <= Number(load);
                 if (textData && priceData && volumeData && loadData) {
                     r.style.display = 'flex'
                 } else {
