@@ -341,6 +341,7 @@ export default class ExchangeCargoView extends AsideItemView {
         
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_BUTTON_CONTAINER);
+        this._formItemButtonClear.classList.add('big__button');
         containerItem.appendChild(this._formItemButtonClear);
         formElement.appendChild(containerItem);
 
