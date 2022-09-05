@@ -76,15 +76,15 @@
     }
     .user__header:nth-child(even){
         position: absolute;
-        left: 60%;
+        right: 1rem;
         top: 6.6rem;
-        width: 40%;
+        width: 35%;
     }
     .user__table {
         position: absolute;
         top: 12rem;
-        left: 60%;
-        width: 40%;
+        right: 1rem;
+        width: 35%;
         min-height: 40rem;
     }
     .map__wrapper {
