@@ -13,7 +13,7 @@ export default class NewsController implements INotify {
     notify(nameEvent: AppEvents, sender: View, params?: Map<string, string> | undefined): void {
         switch (nameEvent) {
             case AppEvents.NEWS_GET_DATA: {
-                this.getNews(nameEvent, sender);
+                this.getNews(nameEvent, sender, params);
                 break;
             }
             default: {
@@ -21,8 +21,8 @@ export default class NewsController implements INotify {
             }
         }
     }
-    private getNews(nameEvent: AppEvents, sender: View): void {
-        this._newsModel.getNews(nameEvent)
+    private getNews(nameEvent: AppEvents, sender: View, params?: Map<string, string>): void {
+        this._newsModel.getNews(nameEvent, params)
             .then((data) => {
                 let verifySender = sender as NewsView;
                 verifySender.createNews(data);

@@ -10,6 +10,8 @@ import './overview.scss';
 import User from '../../../../../types/user';
 import Cargo from '../../../../../types/cargo';
 import Car from '../../../../../types/car';
+import CargoToCar from '../../../../../types/cargotocar';
+import Geopoint from '../../../../../types/geopoint';
 
 export default class OverviewView extends AsideItemView {
     private readonly TAG_USER_DATA = 'div';
@@ -42,6 +44,9 @@ export default class OverviewView extends AsideItemView {
 
     private readonly ID_ROLE_CUSTOMER = '1';
     private readonly ID_ROLE_CARRIER = '2';
+    private readonly STATUS_CANCEL = 'Cancelled';
+    private readonly STATUS_SUBMIT = 'Submitted';
+    private readonly STATUS_PENDING = 'Pending';
 
     private _headerUser = document.createElement(this.TAG_USER_HEADER);
     private _firstNameLabel = document.createElement(this.TAG_FIELD_LABEL);
@@ -71,7 +76,10 @@ export default class OverviewView extends AsideItemView {
     private _map!: MapLeaflet;
     private _user!: User;
     private _cargoes = new Map<HTMLElement, Cargo>();
+    private _cargoesAll: Array<Cargo> | undefined = undefined;
     private _cars = new Map<HTMLElement, Car>();
+    private _carsAll: Array<Car> | undefined = undefined;
+    private _cargoToCar: Array<CargoToCar> | undefined = undefined;
 
     private _errorMessage = '';
 
@@ -91,16 +99,23 @@ export default class OverviewView extends AsideItemView {
         this._observer.addSender(AppEvents.MAIN_CAR_DELETE_SUCCESS, this);
         this._observer.addSender(AppEvents.MAIN_CAR_CHANGE_SUCCESS, this);
 
+        this._observer.addSender(AppEvents.CARGO_TO_CAR_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS, this);
+        this._observer.addSender(AppEvents.CARGO_TO_CAR_DELETE_SUCCESS, this);
+
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
+
+        this._observer.notify(AppEvents.CARGO_TO_CAR_GET_ALL, this);
     }
-    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car>): void {
+    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car> | CargoToCar | Array<CargoToCar>): void {
         switch (nameEvent) {
             case AppEvents.LOCALE_SET: {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
                 break;
             }
             case AppEvents.MAIN_CARGO_BY_USER_RECEIVED: {
+                //TODO данные могут придти до получения текущего юзера
                 this.setAllCargo(params as Array<Cargo>);
                 break;
             }
@@ -117,6 +132,7 @@ export default class OverviewView extends AsideItemView {
                 break;
             }
             case AppEvents.MAIN_CAR_BY_USER_RECEIVED: {
+                //TODO данные могут придти до получения текущего юзера
                 this.setAllCar(params as Array<Car>);
                 break;
             }
@@ -132,23 +148,37 @@ export default class OverviewView extends AsideItemView {
                 this.carChangedHandler(params as Car);
                 break;
             }
+            case AppEvents.CARGO_TO_CAR_CREATE_SUCCESS: {
+                
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS: {
+                this.updateAllCargoToCar(params as CargoToCar);
+                this.setItemsToMap();
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_DELETE_SUCCESS: {
+                this.updateAllCargoToCar(params as CargoToCar);
+                this.setItemsToMap();
+                break;
+            }
         }
     }
     setLocale(localeModel: localeModel): void {
-        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_OVERVIEW);
-        this._headerUser.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_PERSONAL);
-        this._firstNameLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_NAME);
-        this._lastNameLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_FAMILY);
-        this._phoneLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_PHONE);
-        this._emailLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_EMAIL);
-        this._passwordLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_PASSWORD);
-        this._headerCompany.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_COMPANY);
-        this._companyNameLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_NAME);
-        this._companyAddressLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_ADDRESS);
-        this._companyRatingLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING);
-        this._buttonAccept.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_ACCEPT);
-        this._headerStatisticCar.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_TRANSPORT);
-        this._headerStatisticCargo.textContent = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO);
+        this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_OVERVIEW);
+        this._headerUser.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_PERSONAL);
+        this._firstNameLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_NAME);
+        this._lastNameLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_FAMILY);
+        this._phoneLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_PHONE);
+        this._emailLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_EMAIL);
+        this._passwordLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_PASSWORD);
+        this._headerCompany.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_COMPANY);
+        this._companyNameLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_NAME);
+        this._companyAddressLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_ADDRESS);
+        this._companyRatingLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING);
+        this._buttonAccept.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_ACCEPT);
+        this._headerStatisticCar.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_TRANSPORT);
+        this._headerStatisticCargo.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO);
         this._errorMessage = localeModel.getPhrase(LocaleKeys.COMMON_ERROR_SAVE);;
     }
     setMap(map: MapLeaflet) {
@@ -180,20 +210,30 @@ export default class OverviewView extends AsideItemView {
                 this._headerStatisticCar.classList.remove(this.CLASS_HIDDEN);
                 this._tableContainerCar.classList.remove(this.CLASS_HIDDEN);
             }
-    
+
         } else {
             alert(this._errorMessage);
         }
     }
-    setAllCargo(cargoes: Array<Cargo>): void {
-        this.clearTableCargo();
-        for (let i = 0; i < cargoes.length; i += 1) {
-            if (this._user.id === cargoes[i].user_id) {
-                const rowElement = this.createRowCargo(cargoes[i])
-                this._tableContainerCargo.appendChild(rowElement);
-                this._cargoes.set(rowElement, cargoes[i]);
-                this.addItemToMap(cargoes[i]);
+    setAllCargoToCar(cargoToCars: Array<CargoToCar>): void {
+        this._cargoToCar = cargoToCars;
+        this.setItemsToMap();
+    }
+    updateAllCargoToCar(updatedCargoToCars: CargoToCar){
+        let cargoToCar = (this._cargoToCar !== undefined ? this._cargoToCar : new Array<CargoToCar>());
+        for (let i = 0; i < cargoToCar.length; i += 1) {
+            if (cargoToCar[i].id === updatedCargoToCars.id) {
+                cargoToCar[i] = updatedCargoToCars;
+                break;
             }
+        }
+    }
+    setAllCargo(cargoes: Array<Cargo>): void {
+        this._cargoesAll = cargoes;
+        if (this._user !== undefined) {
+            this.setItemsToMap();
+        } else {
+            this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
         }
     }
     cargoCreatedHandler(cargo: Cargo) {
@@ -233,14 +273,11 @@ export default class OverviewView extends AsideItemView {
         });
     }
     setAllCar(cars: Array<Car>): void {
-        this.clearTableCar();
-        for (let i = 0; i < cars.length; i += 1) {
-            if (this._user.id === cars[i].user_id) {
-                const rowElement = this.createRowCar(cars[i])
-                this._tableContainerCar.appendChild(rowElement);
-                this._cars.set(rowElement, cars[i]);
-                this.addItemToMap(cars[i]);
-            }
+        this._carsAll = cars;
+        if (this._user !== undefined) {
+            this.setItemsToMap();
+        } else {
+            this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
         }
     }
     carCreatedHandler(car: Car) {
@@ -279,6 +316,34 @@ export default class OverviewView extends AsideItemView {
             }
         });
     }
+    private setItemsToMap() {
+        if (this._user !== undefined && this._cargoToCar !== undefined && this._cargoesAll !== undefined && this._carsAll !== undefined) {
+            const cargoesAll = (this._cargoesAll !== undefined ? this._cargoesAll : new Array<Cargo>());
+            const carsAll = (this._carsAll !== undefined ? this._carsAll : new Array<Car>());
+            this.clearTableCargo();
+            for (let i = 0; i < cargoesAll.length; i += 1) {
+                if (this._user.id === cargoesAll[i].user_id) {
+                    const rowElement = this.createRowCargo(cargoesAll[i])
+                    this._tableContainerCargo.appendChild(rowElement);
+                    this._cargoes.set(rowElement, cargoesAll[i]);
+                    this.addItemToMap(cargoesAll[i]);
+                }
+            }
+            this.clearTableCar();
+            for (let i = 0; i < carsAll.length; i += 1) {
+                if (this._user.id === carsAll[i].user_id) {
+                    const rowElement = this.createRowCar(carsAll[i])
+                    this._tableContainerCar.appendChild(rowElement);
+                    this._cars.set(rowElement, carsAll[i]);
+                    this.addItemToMap(carsAll[i]);
+                }
+            }
+        } else {
+            this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
+            this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
+            this._observer.notify(AppEvents.CARGO_TO_CAR_GET_ALL, this);
+        }
+    }
     private clearTableCargo(): void {
         this._cargoes.forEach((cargo) => {
             this.removeItemFromMap(cargo);
@@ -298,7 +363,90 @@ export default class OverviewView extends AsideItemView {
         }
     }
     private addItemToMap(item: Cargo | Car): void {
-        this._map.addItemToMap(item);
+        let route = new Array<Geopoint>;
+        const cargoToCar = (this._cargoToCar !== undefined ? this._cargoToCar : new Array<CargoToCar>());
+        const cargoesAll = (this._cargoesAll !== undefined ? this._cargoesAll : new Array<Cargo>());
+        const carsAll = (this._carsAll !== undefined ? this._carsAll : new Array<Car>());
+        const car = item as Car;
+        if (car.point_current_lat !== undefined) {
+            route.push({
+                lat: car.point_current_lat,
+                lon: car.point_current_lon,
+                name: car.model,
+            });
+            for (let i = 0; i < cargoToCar.length; i += 1) {
+                if (cargoToCar[i].id_cars === car.id) {
+                    for (let j = 0; j < cargoesAll.length; j += 1) {
+                        if (cargoesAll[j].id === cargoToCar[i].id_cargo && cargoToCar[i].agree === this.STATUS_SUBMIT) {
+                            route.push({
+                                lat: cargoesAll[j].point_start_lat,
+                                lon: cargoesAll[j].point_start_lon,
+                                name: cargoesAll[j].description,
+                            });
+                            route.push({
+                                lat: cargoesAll[j].point_end_lat,
+                                lon: cargoesAll[j].point_end_lon,
+                                name: cargoesAll[j].description,
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        const cargo = item as Cargo;
+        if (cargo.point_start_lat !== undefined) {
+            let submitted = false;
+            let carSubmittedIndex = -1;
+            for (let i = 0; i < cargoToCar.length; i += 1) {
+                if (cargoToCar[i].id_cargo === cargo.id) {
+                    submitted = true;
+                    for (let j = 0; j < carsAll.length; j += 1) {
+                        if (carsAll[j].id === cargoToCar[i].id_cars) {
+                            carSubmittedIndex = j;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (submitted) {
+                route.push({
+                    lat: carsAll[carSubmittedIndex].point_current_lat,
+                    lon: carsAll[carSubmittedIndex].point_current_lon,
+                    name: carsAll[carSubmittedIndex].model,
+                });
+                for (let i = 0; i < cargoToCar.length; i += 1) {
+                    if (cargoToCar[i].id_cars === carsAll[carSubmittedIndex].id) {
+                        for (let j = 0; j < cargoesAll.length; j += 1) {
+                            if (cargoesAll[j].id === cargoToCar[i].id_cargo && cargoToCar[i].agree === this.STATUS_SUBMIT) {
+                                route.push({
+                                    lat: cargoesAll[j].point_start_lat,
+                                    lon: cargoesAll[j].point_start_lon,
+                                    name: cargoesAll[j].description,
+                                });
+                                route.push({
+                                    lat: cargoesAll[j].point_end_lat,
+                                    lon: cargoesAll[j].point_end_lon,
+                                    name: cargoesAll[j].description,
+                                });
+                            }
+                        }
+                    }
+                }
+            } else {
+                route.push({
+                    lat: cargo.point_start_lat,
+                    lon: cargo.point_start_lon,
+                    name: cargo.description,
+                });
+                route.push({
+                    lat: cargo.point_end_lat,
+                    lon: cargo.point_end_lon,
+                    name: cargo.description,
+                });
+            }
+        }
+        this._map.removerItemFromMap();
+        this._map.addItemToMap(item, route);
     }
     private removeItemFromMap(item: Cargo | Car): void {
 

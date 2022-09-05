@@ -8,6 +8,7 @@ import View from "../../view/index/view";
 import user from "../../../types/user";
 import User from "../../../types/user";
 import OverviewView from "../../view/main/content/overview/overview-view";
+import CompanyView from "../../view/main/content/company/company-view";
 
 export default class AuthController implements INotify {
     private readonly LINK_INDEX_PAGE = '/';
@@ -76,10 +77,25 @@ export default class AuthController implements INotify {
                 this.saveUserInfoHandler(nameEvent, sender, params as User);
                 break;
             }
+            case AppEvents.USER_GET_ALL: {
+                this.getAllUser(nameEvent, sender);
+                break;
+            }
             default: {
 
             }
         }
+    }
+    private getAllUser(nameEvent: AppEvents, sender: View) {
+        this._userModel.getUserAll(nameEvent)
+            .then((result) => {
+                let verifySender = sender as CompanyView;
+                verifySender.setAllUser(result);
+            })
+            .catch(() => {
+                let verifySender = sender as CompanyView;
+                verifySender.setAllUser(false);
+            });
     }
     private saveUserInfoHandler(nameEvent: AppEvents, sender: View, user: User): void {
         this._userModel.save(nameEvent, user)

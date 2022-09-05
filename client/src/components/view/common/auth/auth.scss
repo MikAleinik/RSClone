@@ -7,6 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    padding-right: 1rem;
 }
 
 .auth__login {
@@ -15,33 +16,6 @@
 
 .auth__registration {
     background: #85685f;
-}
-
-form[name=login] {
-    position: absolute;
-    right: 0;
-    top: 30px;
-    background: $background-color-middle;
-    margin: 4rem;
-    padding: 3rem 2rem;
-    border-radius: 2rem;
-    display: flex;
-    flex-direction: column;
-
-    input {
-        border: 0px;
-        border-radius: .5rem;
-        margin: 1rem 0;
-        padding: .5rem;
-
-        &:invalid {
-            border: 1px solid $border-color-error;
-        }
-
-        &:disabled {
-            opacity: 0.3;
-        }
-    }
 }
 
 .auth__name {
@@ -62,5 +36,11 @@ form[name=login] {
         background-image: url(../../../../assets/icons/user.png);
         background-size: contain;
         margin-right: 1rem;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .auth {
+        padding: 1rem 0;
     }
 }

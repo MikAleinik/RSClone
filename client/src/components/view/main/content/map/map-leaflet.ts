@@ -1,4 +1,4 @@
-import Leaflet from 'leaflet';
+import Leaflet, { LatLng } from 'leaflet';
 import * as GeoSearch from 'leaflet-geosearch';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css'
@@ -14,6 +14,8 @@ import INotify from '../../../../interfaces/i-notify';
 import Car from '../../../../../types/car';
 import Cargo from '../../../../../types/cargo';
 import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
+import CargoToCar from '../../../../../types/cargotocar';
+import Geopoint from '../../../../../types/geopoint';
 
 export default class MapLeaflet implements INotify, ILocale {
     private readonly TAG_MAP_WRAPPER = 'div';
@@ -32,7 +34,7 @@ export default class MapLeaflet implements INotify, ILocale {
     private readonly DEFAULT_LAT = 53.90332;
     private readonly DEFAULT_LON = 27.608643;
     private readonly DEFAULT_ZOOM = 7;
-    private readonly CLICK_ITEM_ZOOM = 12;
+    private readonly CLICK_ITEM_ZOOM = 9;
 
     private readonly ICON_NAMES: Array<string> = ['marker-color.png', 'truck-color.png', 'storage-color.png'];
     private readonly ICON_DEFAULT: string = './assets/icons/marker-color.png';
@@ -52,6 +54,8 @@ export default class MapLeaflet implements INotify, ILocale {
     private _popup = Leaflet.popup();
     private _search = GeoSearch.GeoSearchControl({ provider: new GeoSearch.OpenStreetMapProvider() });
     private _route: Leaflet.Routing.Control | null = null;
+    private _currentRoute: Leaflet.Routing.Control | null = null;
+
     private _routeMode = true;
 
     private _errorRoute = '';
@@ -107,15 +111,18 @@ export default class MapLeaflet implements INotify, ILocale {
             }
         }
     }
-    addItemToMap(item: Cargo | Car) {
+    addItemToMap(item: Cargo | Car, route: Array<Geopoint>) {
         const car = item as Car;
         if (car.point_current_lat !== undefined) {
-            this.addMarkerToMap(car.point_current_lat, car.point_current_lon, item);
+            this.addMarkerToMap(car.point_current_lat, car.point_current_lon, item, route);
         }
         const cargo = item as Cargo;
         if (cargo.point_start_lat !== undefined) {
-            this.addMarkerToMap(cargo.point_start_lat, cargo.point_start_lon, item);
+            this.addMarkerToMap(cargo.point_start_lat, cargo.point_start_lon, item, route);
         }
+    }
+    removerItemFromMap() {
+        this._marker.clear();
     }
     openItemOnMap(clickedItem: Cargo | Car) {
         this._marker.forEach((item, marker) => {
@@ -186,7 +193,7 @@ export default class MapLeaflet implements INotify, ILocale {
                     .openOn(this._map);
             });
     }
-    private addMarkerToMap(lat: number, lon: number, item: Car | Cargo | string): Leaflet.Marker {
+    private addMarkerToMap(lat: number, lon: number, item: Car | Cargo | string, route?: Array<Geopoint>): Leaflet.Marker {
         let iconPath = '';
         if (typeof item === 'string') {
             iconPath = this.ICON_DEFAULT;
@@ -208,6 +215,9 @@ export default class MapLeaflet implements INotify, ILocale {
         marker.addTo(this._map);
         marker.addEventListener('click', () => {
             this.itemClickHandler(marker);
+            if (route !== undefined) {
+                this.createRouteGeopoint(route, this._map);
+            }
         });
         return marker;
     }
@@ -242,6 +252,26 @@ export default class MapLeaflet implements INotify, ILocale {
                 .openOn(this._map);
         }
     }
+    private createRouteGeopoint(route: Array<Geopoint>, map: Leaflet.Map) {
+        if (this._currentRoute !== null) {
+            this._currentRoute.remove();
+        }
+        const points = new Array<Leaflet.LatLng>();
+        for (let i = 0; i < route.length; i += 1) {
+            points.push(new LatLng(route[i].lat, route[i].lon));
+        }
+        try {
+            this._currentRoute = Leaflet.Routing.control({
+                waypoints: points,
+                router: Leaflet.Routing.mapbox(this.MAP_BOX_KEY, { timeout: 7000 }),
+                routeWhileDragging: (this._routeMode === true ? true : false),
+            });
+            this._currentRoute.addTo(map);
+        }
+        catch (error) {
+            alert(this._errorRoute);
+        }
+    }
     private createRoute(items: Array<Leaflet.Marker>) {
         if (this._route !== null) {
             this._route.remove();
@@ -255,6 +285,7 @@ export default class MapLeaflet implements INotify, ILocale {
                 waypoints: points,
                 router: Leaflet.Routing.mapbox(this.MAP_BOX_KEY, { timeout: 3000 }),
                 routeWhileDragging: (this._routeMode === true ? true : false),
+                collapsible: true
             });
             this._route.addTo(this._map);
         }
@@ -317,7 +348,7 @@ export default class MapLeaflet implements INotify, ILocale {
         }
         return result;
     }
-    createMapSearch(): void {
+    private createMapSearch(): void {
         this._search = GeoSearch.GeoSearchControl({
             provider: new GeoSearch.OpenStreetMapProvider(),
             notFoundMessage: '',

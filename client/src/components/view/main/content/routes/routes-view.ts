@@ -29,7 +29,7 @@ export default class RoutesView extends AsideItemView {
         }
     }
     setLocale(localeModel: localeModel): void {
-        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_ROUTES);;        
+        this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_ROUTES);;        
     }
     setMap(map: MapLeaflet) {
         this._map = map;

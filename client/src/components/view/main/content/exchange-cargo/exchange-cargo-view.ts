@@ -31,6 +31,13 @@ export default class ExchangeCargoView extends AsideItemView {
     private readonly CLASS_TABLE_DATA = 'table__data';
     private readonly CLASS_WAIT_IMAGE = 'table__wait';
 
+    private _minPrice = 0;
+    private _minVolume = 0;
+    private _minWeight = 0;
+    private _maxPrice = 20000;
+    private _maxVolume = 100;
+    private _maxWeight = 30;
+
     private _formFilterLegend = document.createElement(this.TAG_LEGEND);
     private _formItemSearch = document.createElement(this.TAG_FIELDSET_INPUT);
     private _formItemSearchLabel = document.createElement(this.TAG_FIELDSET_LABEL);
@@ -46,7 +53,6 @@ export default class ExchangeCargoView extends AsideItemView {
     private _formItemButtonClear = document.createElement(this.TAG_FIELDSET_BUTTON);
 
     private _tableHeaderPrice = document.createElement(this.TAG_TABLE_ROW_DATA);
-    private _tableHeaderCurrency = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderWeight = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderVolume = document.createElement(this.TAG_TABLE_ROW_DATA);
     private _tableHeaderDescription = document.createElement(this.TAG_TABLE_ROW_DATA);
@@ -122,22 +128,21 @@ export default class ExchangeCargoView extends AsideItemView {
         });
     }
     setLocale(localeModel: localeModel): void {
-        this._asideItemSpan.textContent = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_CARGO);
-        this._formFilterLegend.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_HEADER);
-        this._formItemSearchLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
-        this._formItemPriceLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_PRICE);
-        this._formItemWeightLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_WEIGHT);
-        this._formItemVolumeLabel.textContent = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_VOLUME);
-        this._tableHeaderPointStart.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_LOCATION_FROM);
-        this._tableHeaderPointEnd.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_LOCATION_TO);
-        this._tableHeaderCompany.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_COMPANY);
-        this._tableHeaderContact.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_USER);
-        this._tableHeaderPrice.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_PRICE);
-        this._tableHeaderCurrency.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_CURRENCY);
-        this._tableHeaderVolume.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_VOLUME);
-        this._tableHeaderWeight.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_Weight);
-        this._tableHeaderDescription.textContent = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION);
-        this._formItemButtonClear.textContent = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
+        this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_EXCHANGE_CARGO);
+        this._formFilterLegend.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_HEADER);
+        this._formItemSearchLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_SEARCH);
+        this._formItemPriceLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_PRICE);
+        this._formItemWeightLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_WEIGHT);
+        this._formItemVolumeLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_FILTER_PANEL_VOLUME);
+        this._tableHeaderPointStart.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_LOCATION_FROM);
+        this._tableHeaderPointEnd.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_LOCATION_TO);
+        this._tableHeaderCompany.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_COMPANY);
+        this._tableHeaderContact.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_USER);
+        this._tableHeaderPrice.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_PRICE);
+        this._tableHeaderVolume.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_VOLUME);
+        this._tableHeaderWeight.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_Weight);
+        this._tableHeaderDescription.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_EXCHANGE_CARGO_DESCRIPTION);
+        this._formItemButtonClear.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_CLEAR);
     }
     setAllCargo(cargoes: Array<Cargo>): void {
         this._observer.notify(AppEvents.MAIN_CARGO_BY_USER_RECEIVED, this, cargoes);
@@ -173,7 +178,6 @@ export default class ExchangeCargoView extends AsideItemView {
         waitElement.classList.add(this.CLASS_WAIT_IMAGE);
         waitElement.src = './assets/icons/loading.gif';
         rowItem.appendChild(waitElement);
-        // rowItem.textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
         let params = new Map();
         params.set('lat', cargo.point_start_lat);
         params.set('lon', cargo.point_start_lon);
@@ -187,7 +191,6 @@ export default class ExchangeCargoView extends AsideItemView {
         waitElement.classList.add(this.CLASS_WAIT_IMAGE);
         waitElement.src = './assets/icons/loading.gif';
         rowItem.appendChild(waitElement);
-        // rowItem.textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
         params = new Map();
         params.set('lat', cargo.point_end_lat);
         params.set('lon', cargo.point_end_lon);
@@ -210,14 +213,9 @@ export default class ExchangeCargoView extends AsideItemView {
         rowItem.classList.add('table__data_contacts');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.price.toString();
+        rowItem.textContent = `${cargo.price.toString()} ${cargo.currency}`;
         rowItem.className = this.CLASS_TABLE_DATA;
         rowItem.classList.add('table__data_price');
-        rowElement.appendChild(rowItem);
-        rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
-        rowItem.textContent = cargo.currency;
-        rowItem.className = this.CLASS_TABLE_DATA;
-        rowItem.classList.add('table__data_currency');
         rowElement.appendChild(rowItem);
         rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
         rowItem.textContent = cargo.volume.toString();
@@ -245,22 +243,25 @@ export default class ExchangeCargoView extends AsideItemView {
        
         tableHeader.appendChild(this._tableHeaderPointStart);
         this._tableHeaderPointStart.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderPointStart.classList.add('table__data_from');
         tableHeader.appendChild(this._tableHeaderPointEnd);
         this._tableHeaderPointEnd.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderPointEnd.classList.add('table__data_to');
         tableHeader.appendChild(this._tableHeaderCompany);
         this._tableHeaderCompany.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderCompany.classList.add('table__data_company');
         tableHeader.appendChild(this._tableHeaderContact);
         this._tableHeaderContact.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderContact.classList.add('table__data_contacts');
         tableHeader.appendChild(this._tableHeaderPrice);
         this._tableHeaderPrice.className = this.CLASS_TABLE_DATA;
-        tableHeader.appendChild(this._tableHeaderCurrency);
-        this._tableHeaderCurrency.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderVolume);
         this._tableHeaderVolume.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderWeight);
         this._tableHeaderWeight.className = this.CLASS_TABLE_DATA;
         tableHeader.appendChild(this._tableHeaderDescription);
         this._tableHeaderDescription.className = this.CLASS_TABLE_DATA;
+        this._tableHeaderDescription.classList.add('table__data_description');
         
         tableWrapper.appendChild(tableHeader);
         this._tableContainer.className = this.CLASS_TABLE_CONTAINER;
@@ -288,10 +289,10 @@ export default class ExchangeCargoView extends AsideItemView {
         containerItem.appendChild(this._formItemPrice);
         this._formItemPrice.setAttribute('type', 'number')
         this._formItemPrice.id = 'price'
-        this._formItemPrice.value = '20000'
+        this._formItemPrice.value = this._maxPrice.toString()
         formElement.appendChild(containerItem);
         this._formItemPriceRange.setAttribute('type', 'range');
-        this._formItemPriceRange.min = '0';
+        this._formItemPriceRange.min = this._minPrice.toString();
         this._formItemPriceRange.max = this._formItemPrice.value;
         this._formItemPriceRange.value = this._formItemPrice.value;
         containerItem.appendChild(this._formItemPriceRange);
@@ -304,10 +305,10 @@ export default class ExchangeCargoView extends AsideItemView {
         containerItem.appendChild(this._formItemVolume);
         this._formItemVolume.setAttribute('type', 'number');
         this._formItemVolume.id = 'volume';
-        this._formItemVolume.value = '3000';
+        this._formItemVolume.value = this._maxVolume.toString();
         formElement.appendChild(containerItem);
         this._formItemVolumeRange.setAttribute('type', 'range')
-        this._formItemVolumeRange.min = '0';
+        this._formItemVolumeRange.min = this._minVolume.toString();
         this._formItemVolumeRange.max = this._formItemVolume.value;
         this._formItemVolumeRange.value = this._formItemVolume.value;
         containerItem.appendChild(this._formItemVolumeRange);
@@ -320,10 +321,10 @@ export default class ExchangeCargoView extends AsideItemView {
         containerItem.appendChild(this._formItemWeight);
         this._formItemWeight.setAttribute('type', 'number')
         this._formItemWeight.id = 'weight'
-        this._formItemWeight.value = '11000'
+        this._formItemWeight.value = this._maxWeight.toString();
         formElement.appendChild(containerItem);
         this._formItemWeightRange.setAttribute('type', 'range')
-        this._formItemWeightRange.min = '0';
+        this._formItemWeightRange.min = this._minWeight.toString();
         this._formItemWeightRange.max = this._formItemWeight.value;
         this._formItemWeightRange.value = this._formItemWeight.value;
         containerItem.appendChild(this._formItemWeightRange);
@@ -331,14 +332,15 @@ export default class ExchangeCargoView extends AsideItemView {
         
         containerItem = document.createElement(this.TAG_FIELDSET_ITEM);
         containerItem.classList.add(this.CLASS_FIELDSET_BUTTON_CONTAINER);
+        this._formItemButtonClear.classList.add('big__button');
         containerItem.appendChild(this._formItemButtonClear);
         formElement.appendChild(containerItem);
 
         this._formItemButtonClear.addEventListener('click', (e) => {
             this._formItemSearch.value = '';
-            this._formItemPrice.value = '20000';
-            this._formItemWeight.value = '11000';
-            this._formItemVolume.value = '3000';
+            this._formItemPrice.value = this._maxPrice.toString();
+            this._formItemWeight.value = this._maxVolume.toString();
+            this._formItemVolume.value = this._maxWeight.toString();
             const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
             for (const r of allRows){
                 r.style.display = 'flex'
@@ -354,8 +356,6 @@ export default class ExchangeCargoView extends AsideItemView {
                 field.value = inputField.value;
             }
 
-            console.log(e.target)
-
             const search = inputField.id === 'search' ? inputField.value : '';
             const price = inputField.id === 'price' ? inputField.value : this._formItemPrice.value;
             const weight = inputField.id === 'weight' ? inputField.value : this._formItemWeight.value;
@@ -363,13 +363,15 @@ export default class ExchangeCargoView extends AsideItemView {
             
             for (const r of allRows){
                 const textData = [
+                    r.childNodes[0].textContent?.toLocaleLowerCase(),
+                    r.childNodes[1].textContent?.toLocaleLowerCase(),
                     r.childNodes[2].textContent?.toLocaleLowerCase(),
                     r.childNodes[3].textContent?.toLocaleLowerCase(),
-                    r.childNodes[8].textContent?.toLocaleLowerCase()
+                    r.childNodes[7].textContent?.toLocaleLowerCase()
                 ].toString().includes(search.toLocaleLowerCase());
-                const priceData = Number(r.childNodes[4].textContent) <= Number(price);
-                const volumeData = Number(r.childNodes[6].textContent) <= Number(volume);
-                const weightData = Number(r.childNodes[7].textContent) <= Number(weight);
+                const priceData = Number(r.childNodes[4].textContent?.slice(0, r.childNodes[4].textContent.length-4)) <= Number(price);
+                const volumeData = Number(r.childNodes[5].textContent) <= Number(volume);
+                const weightData = Number(r.childNodes[6].textContent) <= Number(weight);
                 if (textData && priceData && volumeData && weightData){
                     r.style.display = 'flex'
                 } else {

@@ -7,9 +7,10 @@
 }
 
 .team__image {
-    height: 150px;
-    margin: 5px;
-    border-radius: 10px;
+    height: 15rem;
+    margin: .5rem;
+    border-radius: 1rem;
+    box-shadow: .1rem .1rem .3rem $background-color-dark;
 }
 
 .team__info {
@@ -17,11 +18,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-
-    width: 70%;
-
-    box-sizing: border-box;
-    padding: 0% 5%;
+    margin: 2rem;
 }
 @media screen and (max-width: 640px){
     body {
@@ -33,7 +30,7 @@
             'footer footer';
       }
     .team__image {
-        height: 100px;
+        height: 10rem;
     }
     aside {
         display: none;

@@ -79,6 +79,7 @@ export const enum LocaleKeys {
     MAIN_FILTER_PANEL_WEIGHT = 'mainFilterPanelHeaderWeight',
     MAIN_FILTER_PANEL_VOLUME = 'mainFilterPanelHeaderVolume',
     MAIN_FILTER_PANEL_LOAD = 'mainFilterPanelHeaderLoad',
+    MAIN_FILTER_PANEL_RATING = 'mainFilterPanelHeaderRating',
 
     MAIN_OVERVIEW_HEADER_PERSONAL = 'mainOverviewPersonal',
     MAIN_OVERVIEW_HEADER_RATING = 'mainOverviewRating',
@@ -113,6 +114,7 @@ export const enum LocaleKeys {
     MAIN_TRANSPORT_DELETE = 'mainTransportDelete',
     MAIN_TRANSPORT_SAVE = 'mainTransportSave',
     MAIN_TRANSPORT_CLEAR = 'mainTransportClear',
+    MAIN_TRANSPORT_CONTEXT_HEADER = 'mainTransportContextHeader',
 
     MAIN_CARGO_PANEL_HEADER = 'mainCargoPanelHeader',
     MAIN_CARGO_NAME = 'mainCargoName',
@@ -133,6 +135,7 @@ export const enum LocaleKeys {
     MAIN_CARGO_DELETE = 'mainCargoDelete',
     MAIN_CARGO_SAVE = 'mainCargoSave',
     MAIN_CARGO_CLEAR = 'mainCargoClear',
+    MAIN_CARGO_CONTEXT_HEADER = 'mainCargoContextHeader',
 
     MAIN_EXCHANGE_TRANSPORT_NUMBER = 'mainExchangeTransportNumber',
     MAIN_EXCHANGE_TRANSPORT_COMPANY = 'mainExchangeTransportCompany',
@@ -143,6 +146,7 @@ export const enum LocaleKeys {
     MAIN_EXCHANGE_TRANSPORT_CURRENCY = 'mainExchangeTransportCurrency',
     MAIN_EXCHANGE_TRANSPORT_DESCRIPTION = 'mainExchangeTransportDescription',
     MAIN_EXCHANGE_TRANSPORT_LOCATION = 'mainExchangeTransportLocation',
+    MAIN_EXCHANGE_TRANSPORT_CONTEXT_HEADER = 'mainExchangeTransportContextHeader',
 
     MAIN_EXCHANGE_CARGO_COMPANY = 'mainExchangeCargoCompany',
     MAIN_EXCHANGE_CARGO_USER = 'mainExchangeCargoUser',
@@ -167,6 +171,16 @@ export const enum LocaleKeys {
     MAIN_MAP_POINT_CLEAR = 'mainMapPointClear',
     MAIN_MAP_SEARCH_FAILED = 'mainMapSearchFailed',
     MAIN_MAP_SEARCH_FIELD = 'mainMapSearchField',
+    MAIN_MAP_SEARCH_BUTTON = 'mainMapSearchButton',
+
+    MAIN_CARGO_TO_CAR_ADD_SENDED = 'mainCargoToCarAddSended',
+    MAIN_CARGO_TO_CAR_REMOVE_SENDED = 'mainCargoToCarRemoveSended',
+    MAIN_CARGO_TO_CAR_SUCCESS = 'mainCargoToCarRemoveSuccess',
+    MAIN_CARGO_TO_CAR_PENDING = 'mainCargoToCarPending',
+    MAIN_CARGO_TO_CAR_SUBMITTED = 'mainCargoToCarSubmitted',
+    MAIN_CARGO_TO_CAR_CANCELED = 'mainCargoToCarCanceled',
+    MAIN_CARGO_TO_CAR_REFUSE = 'mainCargoToCarRefuse',
+    MAIN_CARGO_TO_CAR_CONFIRM = 'mainCargoToCarConfirm',
 
     COMMON_ERROR_SAVE = 'commonErrorSave',
     COMMON_ERROR_ROUTE = 'commonErrorRoute'

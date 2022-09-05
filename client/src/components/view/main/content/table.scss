@@ -1,3 +1,10 @@
+@mixin thumb {
+	height: 1.3rem;
+	width: 1.3rem;
+	background: $background-color-middle;
+	border: 0;
+	border-radius: 50%;
+}
 .item_form {
   display: flex;
   justify-content: center;
@@ -7,13 +14,44 @@
   padding: 1rem;
   margin: 2rem 0;
 	gap: 1rem;
-	input,
+	// remove spinner for type=number
+	input {
+		@include input_border;
+		&[type=number]{
+			-moz-appearance: textfield;
+		}
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+	// change defaul style for type=range
+		&[type=range]{
+			-webkit-appearance: none;
+			background: $background-color-accent;
+			height: 1rem;
+			&::-ms-thumb {
+				@include thumb;
+			}
+			&::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				@include thumb;
+			}
+			&::-moz-range-thumb {
+				@include thumb;
+			}
+		}
+		&.field__invalid {
+			border: 1px solid $border-color-error;
+		}
+	}	
 	select {
 		@include input_border;
+		background-color: $background-color-light;
+		width: 100%;
+		min-width: 20rem;
+		text-align: center
 	}
-	/* input[type=number]{
-		width: 6rem;
-	} */
 	button {
 		@include input_border;
 		border: 0;
@@ -23,11 +61,21 @@
 			box-shadow: .1rem .1rem .3rem $background-color-middle;
     	transform: translateY(-0.1rem);
 		}
-	};
+	}
 }
 .field__container {
   display: flex;
   flex-direction: column;
+	align-items: center;
+	&:first-of-type{
+		width: 100%;
+		input {
+			width: 80%;
+		}
+	}
+	img {
+		width: 2.5rem;
+	}
 }
 .field__button_container{
 	display: flex;
@@ -42,6 +90,7 @@
 .table__wrapper {
 	display: flex;
 	flex-direction: column;
+	gap: 1rem;
 }
 .table__header {
 	display: flex;
@@ -51,14 +100,22 @@
 	padding: 1rem;
 	border-radius: 1rem;
 	box-shadow: .1rem .1rem .2rem $background-color-dark;
+	gap: 1rem;
+}
+.table__container {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
 }
 .table__row {
 	display: flex;
-	padding: 5px 10px;
-	&:nth-child(even){
-		background: $background-color-accent;
-		border-radius: .5rem;
-	}
+	padding: .5rem 1rem;
+	gap: 1rem;
+	border: .1rem dotted $border-color-middle;
+	border-radius: .5rem;
+}
+.table__accent {
+	border: .2rem dotted $border-color-accent;
 }
 @mixin column__icon {
 	display: inline-block;
@@ -72,33 +129,54 @@
 	margin-right: 1rem;
 }
 .table__data {
-	width: 14%;
 	display: flex;
 	align-items: center;
+	flex: 1 0 auto;
+	width: 6%;
+	hyphens: manual;
 }
-@media screen and (max-width: 640px){
-	.item_form {
-		padding: 1rem;
-		gap: .5rem;
-	}
+.table__data_from,
+.table__data_to,
+.table__data_contacts {
+	width: 17%;
+}
+.table__data_company,
+.table__data_user,
+.table__data_description {
+	width: 9%;
+}
+.table__data_contacts {
+	overflow: hidden;
+}
+@media screen and (max-width: 1000px){
 	.table__container {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-around;
+		align-items: center;
 	}
 	.table__header{
-		// top: 40px;
 		display: none;
 	}
 	.table__row {
 		flex-direction: column;
 		box-shadow: .1rem .1rem .3rem $background-color-middle;
 		border-radius: .5rem;
+		width: 43%;
 	}
 	.table__data {
 		width: auto;
 		display: flex;
 		margin: .5rem 0;
+		&:last-child {
+			align-self: center;
+		}
+	}
+	.table__data_model {
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/truck.png');
+		}
 	}
 	.table__data_from{
 		&::before {
@@ -148,6 +226,12 @@
 			background-image: url('../../../../assets/icons/company.png');
 		}
 	}
+	.table__data_user{
+		&::before {
+			@include column__icon;
+			background-image: url('../../../../assets/icons/user.png');
+		}
+	}
 	.table__data_contacts{
 		&::before {
 			@include column__icon;
@@ -155,6 +239,18 @@
 		}
 	}
 }
+@media screen and (max-width: 640px){
+	.table__row {
+		width: 95%;
+	}
+	.item_form {
+		padding: 1rem;
+		gap: .5rem;
+	}
+	.table__container {
+		flex-direction: column;
+	}
+}
 .table__wait {
-    width: 40px;
+    width: 4rem;
 }

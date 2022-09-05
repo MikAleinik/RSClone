@@ -10,6 +10,9 @@ h2 {
   font-size: $font-size-big;
   color: $font-color-light;
 }
+h5 {
+  font-size: 1.8rem;
+}
 
 a {
   text-decoration: none;
@@ -22,6 +25,12 @@ a:visited {
 
 @media screen and (max-width: 640px){
   html{
-    font-size: 8px;
+    font-size: 9px;
+  }
+}
+
+@media screen and (max-width: 480px){
+  html{
+    font-size: 7px;
   }
 }
