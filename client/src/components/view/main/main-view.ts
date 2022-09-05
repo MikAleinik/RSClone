@@ -1,4 +1,3 @@
-import './main.scss';
 import FooterView from "../common/footer/footer-view";
 import HeaderView from "../common/header/header-view";
 import PageNavigationView from "../common/page-navigation/page-navigation-view";
@@ -34,7 +33,7 @@ export default class MainView extends View {
         this._mainElement.appendChild(headerElement.getCurrentElement());
         this._mainElement.appendChild(navigationElement.getCurrentElement());
         this._mainElement.appendChild(authElement.getCurrentElement());
-        // this._mainElement.appendChild(contentElement.getCurrentElement()); // 
+        this._mainElement.appendChild(contentElement.getCurrentElement());
         this._mainElement.appendChild(footerElement.getCurrentElement());
     }
 }

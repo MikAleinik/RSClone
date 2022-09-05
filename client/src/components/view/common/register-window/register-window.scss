@@ -1,85 +1,26 @@
 .window-register__wrapper {
-    visibility: hidden;
-
-    position: absolute;
-    z-index : 1000;
-    left    : 0;
-    right   : 0;
-
-    height: 100vh;
-    // width : 100vw;
-
-    background: $modal_background-color;
+    @include shadow;
 }
 
 .window-register {
-    position: absolute;
-    left    : 35%;
-    top     : 40%;
-
-    display        : flex;
-    flex-direction : column;
-    justify-content: center;
-    align-items    : center;
-
-    height    : 30%;
-    min-height: 260px;
-    width     : 30%;
-
-    background-color: $window_background-color;
-}
-
-.window-register__header {
-    font-size: 1rem;
-    margin   : 1rem;
+    @include modal_window;
 }
 
 .window-register__row-container {
-    display        : flex;
-    flex-direction : row;
-    align-items    : center;
-    justify-content: center;
-
-    width: 100%;
-
-    box-sizing: border-box;
-    padding: 0% 10%;
-}
-
-.window-register__info {
-    width: 40%;
-    text-align: right;
-}
-
-.window-register__field {
-    height: 12px;
-    width: 40%;
-
-    font-size    : 16px;
-    border       : 1px solid;
-    border-radius: 18px;
-    padding      : 5px 15px;
-    margin       : 5px 10px;
-    cursor       : pointer;
-}
-
-.window-register__field_select {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    
-    height: 12px;
-    width: 40%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
 
-    font-size    : 16px;
-    border       : 1px solid;
-    border-radius: 18px;
-    padding      : 5px 15px;
-    margin       : 5px 10px;
-    cursor       : pointer;
+.window-register__field,
+.window-register__field_select {
+    @include input_border;
+    width: 20rem;
+    text-align: center;
 }
 
 .window-register__field_invalid {
-    border       : 1px solid $border-color-error;
+    border: .1rem solid $border-color-error;
 }

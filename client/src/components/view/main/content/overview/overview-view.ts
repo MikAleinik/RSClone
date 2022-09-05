@@ -1,78 +1,627 @@
-import { loadUserData, userRoleContent } from '../../user-adapter'
-import { loadMap, applyItemsLocation } from '../map/map-view'
+import localeModel from '../../../../models/common/localization/locale-model';
+import { AppEvents } from "../../../../controller/app-events";
+import Observer from "../../../../controller/observer";
+import INotify from "../../../../interfaces/i-notify";
+import view from "../../view";
+import { LocaleKeys } from '../../../../models/common/localization/locale-keys';
+import AsideItemView from '../aside-item-view';
+import MapLeaflet from '../map/map-leaflet';
+import './overview.scss';
+import User from '../../../../../types/user';
+import Cargo from '../../../../../types/cargo';
+import Car from '../../../../../types/car';
+import CargoToCar from '../../../../../types/cargotocar';
+import Geopoint from '../../../../../types/geopoint';
 
-/*  user__overview
-      user__data
-        user__name --> name & surname
-        user__rating --> rating
-        user__transport --> transport
-        user__cargoes --> cargo
-      user__map
-*/
+export default class OverviewView extends AsideItemView {
+    private readonly TAG_USER_DATA = 'div';
+    private readonly TAG_USER_HEADER = 'h3';
+    private readonly TAG_FIELD_ROW = 'div';
+    private readonly TAG_FIELD_LABEL = 'label';
+    private readonly TAG_FIELD_INPUT = 'input';
+    private readonly TAG_FIELD_IMG = 'img';
+    private readonly TAG_BUTTON = 'button';
+    private readonly TAG_TABLE_CONTAINER = 'div';
+    private readonly TAG_TABLE_ROW = 'div';
+    private readonly TAG_TABLE_ROW_DATA = 'span';
+    // private readonly TAG_FIELD_INPUT = 'input';
 
-function loadOverview(place: HTMLElement){
-  place.innerHTML = '';
-  place.appendChild(createOverview())
-  loadMap('99%', '99%', '.user__map', 'insert');
-  applyItemsLocation('transport');
-  applyItemsLocation('logistic');
+    private readonly CLASS_USER_CONTAINER = 'user__container';
+    private readonly CLASS_USER_DATA = 'user__data';
+    private readonly CLASS_USER_HEADER = 'user__header';
+    private readonly CLASS_USER_FIELD = 'user__row_name';
+    private readonly CLASS_USER_FIELD_STAR = 'user__star';
+    private readonly CLASS_USER_STAR = 'user__star-item';
+    private readonly CLASS_BUTTON = 'big__button';
+    private readonly CLASS_BUTTON_WIDE = 'wide__button';
+    private readonly CLASS_TABLE = 'user__table';
+    private readonly CLASS_TABLE_ROW = 'table__row';
+    private readonly CLASS_TABLE_DATA = 'table__data';
+    private readonly CLASS_HIDDEN = 'user__hidden';
+    private readonly CLASS_UNVISIBLE = 'user__unvisible';
+
+    private readonly PATH_IMAGE_STAR = './assets/icons/star-empty.png'
+
+    private readonly ID_ROLE_CUSTOMER = '1';
+    private readonly ID_ROLE_CARRIER = '2';
+    private readonly STATUS_CANCEL = 'Cancelled';
+    private readonly STATUS_SUBMIT = 'Submitted';
+    private readonly STATUS_PENDING = 'Pending';
+
+    private _headerUser = document.createElement(this.TAG_USER_HEADER);
+    private _firstNameLabel = document.createElement(this.TAG_FIELD_LABEL);
+    private _lastNameLabel = document.createElement(this.TAG_FIELD_LABEL);
+    private _phoneLabel = document.createElement(this.TAG_FIELD_LABEL);
+    private _emailLabel = document.createElement(this.TAG_FIELD_LABEL);
+    private _passwordLabel = document.createElement(this.TAG_FIELD_LABEL);
+    private _headerCompany = document.createElement(this.TAG_USER_HEADER);
+    private _companyNameLabel = document.createElement(this.TAG_FIELD_LABEL);
+    private _companyAddressLabel = document.createElement(this.TAG_FIELD_LABEL);
+    private _companyRatingLabel = document.createElement(this.TAG_FIELD_LABEL);
+    private _starContainer = document.createElement(this.TAG_FIELD_ROW);
+    private _headerStatisticCar = document.createElement(this.TAG_USER_HEADER);
+    private _headerStatisticCargo = document.createElement(this.TAG_USER_HEADER);
+
+    private _firstNameInput = document.createElement(this.TAG_FIELD_INPUT);
+    private _lastNameInput = document.createElement(this.TAG_FIELD_INPUT);
+    private _phoneInput = document.createElement(this.TAG_FIELD_INPUT);
+    private _emailInput = document.createElement(this.TAG_FIELD_INPUT);
+    private _passwordInput = document.createElement(this.TAG_FIELD_INPUT);
+    private _companyNameInput = document.createElement(this.TAG_FIELD_INPUT);
+    private _companyAddressInput = document.createElement(this.TAG_FIELD_INPUT);
+    private _buttonAccept = document.createElement(this.TAG_BUTTON);
+    private _tableContainerCar = document.createElement(this.TAG_TABLE_CONTAINER);
+    private _tableContainerCargo = document.createElement(this.TAG_TABLE_CONTAINER);
+
+    private _map!: MapLeaflet;
+    private _user!: User;
+    private _cargoes = new Map<HTMLElement, Cargo>();
+    private _cargoesAll: Array<Cargo> | undefined = undefined;
+    private _cars = new Map<HTMLElement, Car>();
+    private _carsAll: Array<Car> | undefined = undefined;
+    private _cargoToCar: Array<CargoToCar> | undefined = undefined;
+
+    private _errorMessage = '';
+
+    constructor(observer: Observer, mainElement: HTMLElement, iconPath: string) {
+        super(observer, mainElement, iconPath);
+
+        this.createMainElement();
+        this._observer.addSender(AppEvents.LOCALE_SET, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_BY_USER_RECEIVED, this);
+        this._observer.addSender(AppEvents.MAIN_CAR_BY_USER_RECEIVED, this);
+
+        this._observer.addSender(AppEvents.MAIN_CARGO_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_DELETE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CARGO_CHANGE_SUCCESS, this);
+
+        this._observer.addSender(AppEvents.MAIN_CAR_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CAR_DELETE_SUCCESS, this);
+        this._observer.addSender(AppEvents.MAIN_CAR_CHANGE_SUCCESS, this);
+
+        this._observer.addSender(AppEvents.CARGO_TO_CAR_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS, this);
+        this._observer.addSender(AppEvents.CARGO_TO_CAR_DELETE_SUCCESS, this);
+
+        this._observer.notify(AppEvents.LOCALE_GET, this);
+        this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
+
+        this._observer.notify(AppEvents.CARGO_TO_CAR_GET_ALL, this);
+    }
+    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car> | CargoToCar | Array<CargoToCar>): void {
+        switch (nameEvent) {
+            case AppEvents.LOCALE_SET: {
+                this._observer.notify(AppEvents.LOCALE_GET, this);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_BY_USER_RECEIVED: {
+                //TODO данные могут придти до получения текущего юзера
+                this.setAllCargo(params as Array<Cargo>);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_CREATE_SUCCESS: {
+                this.cargoCreatedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_DELETE_SUCCESS: {
+                this.cargoDeletedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CARGO_CHANGE_SUCCESS: {
+                this.cargoChangedHandler(params as Cargo);
+                break;
+            }
+            case AppEvents.MAIN_CAR_BY_USER_RECEIVED: {
+                //TODO данные могут придти до получения текущего юзера
+                this.setAllCar(params as Array<Car>);
+                break;
+            }
+            case AppEvents.MAIN_CAR_CREATE_SUCCESS: {
+                this.carCreatedHandler(params as Car);
+                break;
+            }
+            case AppEvents.MAIN_CAR_DELETE_SUCCESS: {
+                this.carDeletedHandler(params as Car);
+                break;
+            }
+            case AppEvents.MAIN_CAR_CHANGE_SUCCESS: {
+                this.carChangedHandler(params as Car);
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_CREATE_SUCCESS: {
+                
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS: {
+                this.updateAllCargoToCar(params as CargoToCar);
+                this.setItemsToMap();
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_DELETE_SUCCESS: {
+                this.updateAllCargoToCar(params as CargoToCar);
+                this.setItemsToMap();
+                break;
+            }
+        }
+    }
+    setLocale(localeModel: localeModel): void {
+        this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_OVERVIEW);
+        this._headerUser.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_PERSONAL);
+        this._firstNameLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_NAME);
+        this._lastNameLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_USER_FAMILY);
+        this._phoneLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_PHONE);
+        this._emailLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_EMAIL);
+        this._passwordLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_PASSWORD);
+        this._headerCompany.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_COMPANY);
+        this._companyNameLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_NAME);
+        this._companyAddressLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_COMPANY_ADDRESS);
+        this._companyRatingLabel.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_RATING);
+        this._buttonAccept.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_ACCEPT);
+        this._headerStatisticCar.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_TRANSPORT);
+        this._headerStatisticCargo.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_OVERVIEW_HEADER_CARGO);
+        this._errorMessage = localeModel.getPhrase(LocaleKeys.COMMON_ERROR_SAVE);;
+    }
+    setMap(map: MapLeaflet) {
+        this._map = map;
+        this._mainElement.appendChild(this._map.getMap());
+        this._map.setRouteMode(false);
+    }
+    setAuthorizedUser(authUser: User | false) {
+        if (authUser !== false) {
+            this._user = authUser;
+            this._firstNameInput.value = authUser.first_name;
+            this._lastNameInput.value = authUser.last_name;
+            this._phoneInput.value = authUser.phone;
+            this._emailInput.value = authUser.email;
+            this._passwordInput.value = '';
+            this._companyNameInput.value = authUser.company;
+            this._companyAddressInput.value = authUser.address;
+            const rating = authUser.rating / authUser.rating_count;
+            this._starContainer.style.background = `linear-gradient(to right, #4c577abd ${rating * 2 * 10}%, white ${100 - rating * 2 * 10}%)`;
+
+            if (this._user.role_id === this.ID_ROLE_CUSTOMER) {
+                this._headerStatisticCar.classList.add(this.CLASS_UNVISIBLE);
+                this._tableContainerCar.classList.add(this.CLASS_UNVISIBLE);
+                this._headerStatisticCargo.classList.remove(this.CLASS_HIDDEN);
+                this._tableContainerCargo.classList.remove(this.CLASS_HIDDEN);
+            } else {
+                this._headerStatisticCargo.classList.add(this.CLASS_UNVISIBLE);
+                this._tableContainerCargo.classList.add(this.CLASS_UNVISIBLE);
+                this._headerStatisticCar.classList.remove(this.CLASS_HIDDEN);
+                this._tableContainerCar.classList.remove(this.CLASS_HIDDEN);
+            }
+
+        } else {
+            alert(this._errorMessage);
+        }
+    }
+    setAllCargoToCar(cargoToCars: Array<CargoToCar>): void {
+        this._cargoToCar = cargoToCars;
+        this.setItemsToMap();
+    }
+    updateAllCargoToCar(updatedCargoToCars: CargoToCar){
+        let cargoToCar = (this._cargoToCar !== undefined ? this._cargoToCar : new Array<CargoToCar>());
+        for (let i = 0; i < cargoToCar.length; i += 1) {
+            if (cargoToCar[i].id === updatedCargoToCars.id) {
+                cargoToCar[i] = updatedCargoToCars;
+                break;
+            }
+        }
+    }
+    setAllCargo(cargoes: Array<Cargo>): void {
+        this._cargoesAll = cargoes;
+        if (this._user !== undefined) {
+            this.setItemsToMap();
+        } else {
+            this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
+        }
+    }
+    cargoCreatedHandler(cargo: Cargo) {
+        if (cargo !== undefined) {
+            const rowElement = this.createRowCargo(cargo);
+            this._cargoes.set(rowElement, cargo);
+            this._tableContainerCargo.appendChild(rowElement);
+            this.addItemToMap(cargo);
+        }
+    }
+    cargoDeletedHandler(cargo: Cargo) {
+        this._cargoes.forEach((value, key) => {
+            if (value.id === cargo.id) {
+                key.remove();
+                this.removeItemFromMap(cargo);
+            }
+        });
+    }
+    cargoChangedHandler(cargo: Cargo) {
+        this._cargoes.forEach((value, key) => {
+            if (value.id === cargo.id) {
+                value = cargo;
+                key.children[0].textContent = cargo.point_start_lat + ', ' + cargo.point_start_lon;
+                key.children[1].textContent = cargo.point_end_lat + ', ' + cargo.point_end_lon;
+                key.children[2].textContent = (cargo.user_company !== undefined ? cargo.user_company : '');
+                const firstname = (cargo.user_firstname !== undefined ? cargo.user_firstname : '');
+                const lasttname = (cargo.user_lastname !== undefined ? cargo.user_lastname : '');
+                const phone = (cargo.user_phone !== undefined ? cargo.user_phone : '');
+                key.children[3].textContent = firstname + ' ' + lasttname + ' ' + phone;
+                key.children[4].textContent = cargo.price.toString();
+                key.children[5].textContent = cargo.currency;
+                key.children[6].textContent = cargo.volume.toString();
+                key.children[7].textContent = cargo.weigth.toString();
+                key.children[8].textContent = cargo.description;
+                this.changeItemOnMap(cargo);
+            }
+        });
+    }
+    setAllCar(cars: Array<Car>): void {
+        this._carsAll = cars;
+        if (this._user !== undefined) {
+            this.setItemsToMap();
+        } else {
+            this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
+        }
+    }
+    carCreatedHandler(car: Car) {
+        if (car !== undefined) {
+            const rowElement = this.createRowCar(car);
+            this._cars.set(rowElement, car);
+            this._tableContainerCar.appendChild(rowElement);
+            this.addItemToMap(car);
+        }
+    }
+    carDeletedHandler(car: Car) {
+        this._cars.forEach((value, key) => {
+            if (value.id === car.id) {
+                key.remove();
+                this.removeItemFromMap(car);
+            }
+        });
+    }
+    carChangedHandler(car: Car) {
+        this._cars.forEach((value, key) => {
+            if (value.id === car.id) {
+                value = car;
+                key.children[0].textContent = car.model;
+                key.children[1].textContent = car.point_current_lat + ' ' + car.point_current_lon;
+                key.children[2].textContent = (car.user_company !== undefined ? car.user_company : '');
+                const firstname = (car.user_firstname !== undefined ? car.user_firstname : '');
+                const lasttname = (car.user_lastname !== undefined ? car.user_lastname : '');
+                const phone = (car.user_phone !== undefined ? car.user_phone : '');
+                key.children[3].textContent = firstname + ' ' + lasttname + ' ' + phone;
+                key.children[4].textContent = car.price.toString();
+                key.children[5].textContent = car.currency;
+                key.children[6].textContent = car.volume_max.toString();
+                key.children[7].textContent = car.weight_max.toString();
+                key.children[8].textContent = car.description;
+                this.changeItemOnMap(car);
+            }
+        });
+    }
+    private setItemsToMap() {
+        if (this._user !== undefined && this._cargoToCar !== undefined && this._cargoesAll !== undefined && this._carsAll !== undefined) {
+            const cargoesAll = (this._cargoesAll !== undefined ? this._cargoesAll : new Array<Cargo>());
+            const carsAll = (this._carsAll !== undefined ? this._carsAll : new Array<Car>());
+            this.clearTableCargo();
+            for (let i = 0; i < cargoesAll.length; i += 1) {
+                if (this._user.id === cargoesAll[i].user_id) {
+                    const rowElement = this.createRowCargo(cargoesAll[i])
+                    this._tableContainerCargo.appendChild(rowElement);
+                    this._cargoes.set(rowElement, cargoesAll[i]);
+                    this.addItemToMap(cargoesAll[i]);
+                }
+            }
+            this.clearTableCar();
+            for (let i = 0; i < carsAll.length; i += 1) {
+                if (this._user.id === carsAll[i].user_id) {
+                    const rowElement = this.createRowCar(carsAll[i])
+                    this._tableContainerCar.appendChild(rowElement);
+                    this._cars.set(rowElement, carsAll[i]);
+                    this.addItemToMap(carsAll[i]);
+                }
+            }
+        } else {
+            this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
+            this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
+            this._observer.notify(AppEvents.CARGO_TO_CAR_GET_ALL, this);
+        }
+    }
+    private clearTableCargo(): void {
+        this._cargoes.forEach((cargo) => {
+            this.removeItemFromMap(cargo);
+        });
+        this._cargoes.clear();
+        while (this._tableContainerCargo.firstElementChild) {
+            this._tableContainerCargo.firstElementChild.remove();
+        }
+    }
+    private clearTableCar(): void {
+        this._cars.forEach((car) => {
+            this.removeItemFromMap(car);
+        });
+        this._cars.clear();
+        while (this._tableContainerCar.firstElementChild) {
+            this._tableContainerCar.firstElementChild.remove();
+        }
+    }
+    private addItemToMap(item: Cargo | Car): void {
+        let route = new Array<Geopoint>;
+        const cargoToCar = (this._cargoToCar !== undefined ? this._cargoToCar : new Array<CargoToCar>());
+        const cargoesAll = (this._cargoesAll !== undefined ? this._cargoesAll : new Array<Cargo>());
+        const carsAll = (this._carsAll !== undefined ? this._carsAll : new Array<Car>());
+        const car = item as Car;
+        if (car.point_current_lat !== undefined) {
+            route.push({
+                lat: car.point_current_lat,
+                lon: car.point_current_lon,
+                name: car.model,
+            });
+            for (let i = 0; i < cargoToCar.length; i += 1) {
+                if (cargoToCar[i].id_cars === car.id) {
+                    for (let j = 0; j < cargoesAll.length; j += 1) {
+                        if (cargoesAll[j].id === cargoToCar[i].id_cargo && cargoToCar[i].agree === this.STATUS_SUBMIT) {
+                            route.push({
+                                lat: cargoesAll[j].point_start_lat,
+                                lon: cargoesAll[j].point_start_lon,
+                                name: cargoesAll[j].description,
+                            });
+                            route.push({
+                                lat: cargoesAll[j].point_end_lat,
+                                lon: cargoesAll[j].point_end_lon,
+                                name: cargoesAll[j].description,
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        const cargo = item as Cargo;
+        if (cargo.point_start_lat !== undefined) {
+            let submitted = false;
+            let carSubmittedIndex = -1;
+            for (let i = 0; i < cargoToCar.length; i += 1) {
+                if (cargoToCar[i].id_cargo === cargo.id) {
+                    submitted = true;
+                    for (let j = 0; j < carsAll.length; j += 1) {
+                        if (carsAll[j].id === cargoToCar[i].id_cars) {
+                            carSubmittedIndex = j;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (submitted) {
+                route.push({
+                    lat: carsAll[carSubmittedIndex].point_current_lat,
+                    lon: carsAll[carSubmittedIndex].point_current_lon,
+                    name: carsAll[carSubmittedIndex].model,
+                });
+                for (let i = 0; i < cargoToCar.length; i += 1) {
+                    if (cargoToCar[i].id_cars === carsAll[carSubmittedIndex].id) {
+                        for (let j = 0; j < cargoesAll.length; j += 1) {
+                            if (cargoesAll[j].id === cargoToCar[i].id_cargo && cargoToCar[i].agree === this.STATUS_SUBMIT) {
+                                route.push({
+                                    lat: cargoesAll[j].point_start_lat,
+                                    lon: cargoesAll[j].point_start_lon,
+                                    name: cargoesAll[j].description,
+                                });
+                                route.push({
+                                    lat: cargoesAll[j].point_end_lat,
+                                    lon: cargoesAll[j].point_end_lon,
+                                    name: cargoesAll[j].description,
+                                });
+                            }
+                        }
+                    }
+                }
+            } else {
+                route.push({
+                    lat: cargo.point_start_lat,
+                    lon: cargo.point_start_lon,
+                    name: cargo.description,
+                });
+                route.push({
+                    lat: cargo.point_end_lat,
+                    lon: cargo.point_end_lon,
+                    name: cargo.description,
+                });
+            }
+        }
+        this._map.removerItemFromMap();
+        this._map.addItemToMap(item, route);
+    }
+    private removeItemFromMap(item: Cargo | Car): void {
+
+    }
+    private changeItemOnMap(item: Cargo | Car): void {
+
+    }
+    private createRowCar(car: Car): HTMLElement {
+        const rowElement = document.createElement(this.TAG_TABLE_ROW);
+        rowElement.className = this.CLASS_TABLE_ROW
+        let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
+        rowItem.textContent = car.model;
+        rowItem.className = this.CLASS_TABLE_DATA;
+        rowElement.appendChild(rowItem);
+        rowElement.addEventListener('click', (event) => {
+            const clickedElement = <HTMLDivElement>event.target;
+            const rowElement = clickedElement.closest(this.TAG_TABLE_ROW);
+            if (rowElement !== null) {
+                this._map.openItemOnMap(this._cars.get(rowElement) as Car);
+            }
+        });
+        return rowElement;
+    }
+    private createRowCargo(cargo: Cargo): HTMLElement {
+        const rowElement = document.createElement(this.TAG_TABLE_ROW);
+        rowElement.className = this.CLASS_TABLE_ROW
+        let rowItem = document.createElement(this.TAG_TABLE_ROW_DATA);
+        rowItem.textContent = cargo.description;
+        rowItem.className = this.CLASS_TABLE_DATA;
+        rowElement.appendChild(rowItem);
+        rowElement.addEventListener('click', (event) => {
+            const clickedElement = <HTMLDivElement>event.target;
+            const rowElement = clickedElement.closest(this.TAG_TABLE_ROW);
+            if (rowElement !== null) {
+                this._map.openItemOnMap(this._cargoes.get(rowElement) as Cargo);
+            }
+        });
+        return rowElement;
+    }
+    protected itemClickedHandler(): void {
+        this._mainContainer.firstElementChild?.remove();
+        this._mainContainer.appendChild(this._mainElement);
+        this._map.createMap();
+    }
+    protected createMainElement(): void {
+        this._mainElement.classList.add(this.CLASS_USER_CONTAINER);
+
+        const userElement = document.createElement(this.TAG_USER_DATA);
+        userElement.classList.add(this.CLASS_USER_DATA);
+        this._mainElement.appendChild(userElement);
+
+        this._headerUser.classList.add(this.CLASS_USER_HEADER);
+        userElement.appendChild(this._headerUser);
+
+        let nameRow = document.createElement(this.TAG_FIELD_ROW);
+        nameRow.classList.add(this.CLASS_USER_FIELD);
+        nameRow.appendChild(this._firstNameLabel);
+        nameRow.appendChild(this._firstNameInput);
+        this._firstNameInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
+        userElement.appendChild(nameRow);
+
+        nameRow = document.createElement(this.TAG_FIELD_ROW);
+        nameRow.classList.add(this.CLASS_USER_FIELD);
+        nameRow.appendChild(this._lastNameLabel);
+        nameRow.appendChild(this._lastNameInput);
+        this._lastNameInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
+        userElement.appendChild(nameRow);
+
+        nameRow = document.createElement(this.TAG_FIELD_ROW);
+        nameRow.classList.add(this.CLASS_USER_FIELD);
+        nameRow.appendChild(this._phoneLabel);
+        nameRow.appendChild(this._phoneInput);
+        this._phoneInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
+        userElement.appendChild(nameRow);
+
+        nameRow = document.createElement(this.TAG_FIELD_ROW);
+        nameRow.classList.add(this.CLASS_USER_FIELD);
+        nameRow.appendChild(this._emailLabel);
+        nameRow.appendChild(this._emailInput);
+        this._emailInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
+        userElement.appendChild(nameRow);
+
+        nameRow = document.createElement(this.TAG_FIELD_ROW);
+        nameRow.classList.add(this.CLASS_USER_FIELD);
+        nameRow.appendChild(this._passwordLabel);
+        nameRow.appendChild(this._passwordInput);
+        this._passwordInput.setAttribute('type', 'password');
+        this._passwordInput.setAttribute('autocomplete', 'off');
+        this._passwordInput.style.userSelect = 'none';
+        this._passwordInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
+        userElement.appendChild(nameRow);
+
+        this._headerCompany.classList.add(this.CLASS_USER_HEADER);
+        userElement.appendChild(this._headerCompany);
+
+        nameRow = document.createElement(this.TAG_FIELD_ROW);
+        nameRow.classList.add(this.CLASS_USER_FIELD);
+        nameRow.appendChild(this._companyNameLabel);
+        nameRow.appendChild(this._companyNameInput);
+        this._companyNameInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
+        userElement.appendChild(nameRow);
+
+        nameRow = document.createElement(this.TAG_FIELD_ROW);
+        nameRow.classList.add(this.CLASS_USER_FIELD);
+        nameRow.appendChild(this._companyAddressLabel);
+        nameRow.appendChild(this._companyAddressInput);
+        this._companyAddressInput.addEventListener('keydown', () => {
+            this._buttonAccept.removeAttribute('disabled');
+        });
+        userElement.appendChild(nameRow);
+
+        nameRow = document.createElement(this.TAG_FIELD_ROW);
+        nameRow.classList.add(this.CLASS_USER_FIELD);
+        nameRow.appendChild(this._companyRatingLabel);
+        this._starContainer = document.createElement(this.TAG_FIELD_ROW);
+        this._starContainer.classList.add(this.CLASS_USER_FIELD_STAR);
+        for (let i = 0; i < 5; i += 1) {
+            const starElement = document.createElement(this.TAG_FIELD_IMG);
+            starElement.classList.add(this.CLASS_USER_STAR);
+            starElement.src = this.PATH_IMAGE_STAR;
+            this._starContainer.appendChild(starElement);
+        }
+        nameRow.appendChild(this._starContainer);
+        userElement.appendChild(nameRow);
+
+        this._buttonAccept.classList.add(this.CLASS_BUTTON);
+        this._buttonAccept.classList.add(this.CLASS_BUTTON_WIDE);
+        this._buttonAccept.addEventListener('click', this.buttonAcceptClickHandler.bind(this));
+        this._buttonAccept.setAttribute('disabled', 'true');
+        userElement.appendChild(this._buttonAccept);
+
+        this._headerStatisticCargo.classList.add(this.CLASS_USER_HEADER);
+        this._headerStatisticCargo.classList.add(this.CLASS_HIDDEN);
+        userElement.appendChild(this._headerStatisticCargo);
+        this._tableContainerCargo.classList.add(this.CLASS_TABLE);
+        this._tableContainerCargo.classList.add(this.CLASS_HIDDEN);
+        userElement.appendChild(this._tableContainerCargo);
+
+        this._headerStatisticCar.classList.add(this.CLASS_USER_HEADER);
+        this._headerStatisticCar.classList.add(this.CLASS_HIDDEN);
+        userElement.appendChild(this._headerStatisticCar);
+        this._tableContainerCar.classList.add(this.CLASS_TABLE);
+        this._tableContainerCar.classList.add(this.CLASS_HIDDEN);
+        userElement.appendChild(this._tableContainerCar);
+    }
+    private buttonAcceptClickHandler() {
+        this._buttonAccept.setAttribute('disabled', 'true');
+        const user: User = {
+            id: this._user.id,
+            login: this._user.login,
+            email: this._emailInput.value,
+            password: (this._passwordInput.value !== '' ? this._passwordInput.value : ''),
+            role_id: this._user.role_id,
+            first_name: this._firstNameInput.value,
+            last_name: this._lastNameInput.value,
+            phone: this._phoneInput.value,
+            company: this._companyNameInput.value,
+            address: this._companyAddressInput.value,
+            rating: this._user.rating,
+            rating_count: this._user.rating_count,
+            point_lat: 0,
+            point_lon: 0,
+        }
+        this._observer.notify(AppEvents.MAIN_USER_SAVE_INFO, this, user as User);
+    }
 }
-
-function userDataBlocks() {
-  const user__data = document.createElement('div');
-  user__data.className = 'user__data';
-  for (const el of userRoleContent.user__data){
-    const block = document.createElement('div');
-    block.className = el;
-    block.textContent = 'Test'
-    user__data.appendChild(block)
-  }
-  return user__data;
-}
-
-function generateItemsList(obj: {[index: string]: number}){
-  const list = document.createElement('ul');
-  for (const el in obj){
-    const item = document.createElement('li');
-    item.textContent = `${el}: ${obj[el].toString()}`;
-    list.appendChild(item);
-  }
-  return list;
-}
-
-const userData = loadUserData(); // load fake user data
-
-function createOverview(){
-  const user__overview = document.createElement('div');
-  user__overview.className = 'user__overview';
-  
-  const user__data = userDataBlocks()  
-  user__overview.appendChild(user__data);
-  
-  const user__name = user__data.querySelector('.user__name') as HTMLElement;
-  user__name.innerHTML = `<h3>${userData.name} ${userData.surname}</h3>`
-
-  const user__rating = user__data.querySelector('.user__rating') as HTMLElement;
-  user__rating.innerHTML = `Rating: ${userData.rating}`
-
-  const user__transport = user__data.querySelector('.user__transport') as HTMLElement;
-  user__transport.innerHTML = '<h4>Your transport</h4>'
-  user__transport.appendChild(generateItemsList(userData.transport))
-
-  const user__cargo = user__data.querySelector('.user__cargo') as HTMLElement;
-  user__cargo.innerHTML = '<h4>Your cargoes</h4>'
-  user__cargo.appendChild(generateItemsList(userData.cargo))
-
-  const user__company = user__data.querySelector('.user__company') as HTMLElement;
-  user__company.innerHTML = '<h4>Your companies</h4>'
-  user__company.appendChild(generateItemsList(userData.company))
-  
-  const user__map = document.createElement('div');
-  user__map.className = 'user__map';
- 
-  user__overview.appendChild(user__map);
-
-  return user__overview
-}
-
-export { loadOverview }

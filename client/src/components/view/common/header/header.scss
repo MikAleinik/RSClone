@@ -5,18 +5,15 @@ header {
     top: 0;
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 1rem;
 }
 
 h1 {
-    font-size: 20px;
+    font-size: $font-size-big;
     text-transform: uppercase;
 }
-@media screen and (max-width: 640px){
-    header{
-        padding: 10px;
-    }
-    h1 {
-        font-size: 16px;
+@media screen and (max-width: 640px) {
+    header {
+        padding: 1rem;
     }
 }

@@ -1,123 +1,81 @@
 import './content.scss'
-import View from "../view";
-import Observer from "../../../controller/observer";
 import INotify from "../../../interfaces/i-notify";
-import { loadCargo } from "./cargo/cargo-view";
-import { loadCompany } from "./company/company-view";
-import { loadMap, applyCurrentPosition, getPointCoordinates } from "./map/map-view";
-import { routeStart } from "./map/map-routes";
-import { loadNews } from "./news/news-view";
-import { loadTruck } from "./truck/truck-view";
-import { loadOverview } from "./overview/overview-view";
-import { userRoleActions } from "../user-adapter";
-import ILocale from "../../../interfaces/i-locale";
-import { AppEvents } from "../../../controller/app-events";
-import LocaleModel from "../../../models/common/localization/locale-model";
-import { LocaleKeys } from "../../../models/common/localization/locale-keys";
+import View from "../view";
+import { AppEvents } from '../../../controller/app-events';
+import view from '../../index/view';
+import Observer from '../../../controller/observer';
+import OverviewView from './overview/overview-view';
+import CargoView from './cargo/cargo-view';
+import CompanyView from './company/company-view';
+import TruckView from './truck/truck-view';
+import RoutesView from './routes/routes-view';
+import ExchangeTruckView from './exchange-truck/exchange-truck-view';
+import ExchangeCargoView from './exchange-cargo/exchange-cargo-view';
+import MapLeaflet from './map/map-leaflet';
 
-export default class ContentView extends View implements INotify, ILocale {
-    private _rootContainer = document.body;
+export default class ContentView extends View implements INotify {
+    private readonly TAG_MAIN_CONTAINER = 'main';
+    private readonly TAG_ASIDE_CONTAINER = 'aside';
+    private readonly TAG_ASIDE_LIST = 'ul';
 
-    private readonly ASIDE_CONTAINER = 'aside';
-    private readonly ASIDE_LIST = 'ul';
-    private readonly ASIDE_LIST_ITEM = 'li';
-    private _asideElement = document.createElement(this.ASIDE_CONTAINER);
+    private readonly PATH_IMAGE_OVERVIEW = './assets/icons/overview.png';
+    private readonly PATH_IMAGE_CARGO = './assets/icons/cargo.png';
+    private readonly PATH_IMAGE_TRUCK = './assets/icons/truck.png';
+    private readonly PATH_IMAGE_EXCHANGE_CARGO = './assets/icons/exchange-cargo.png';
+    private readonly PATH_IMAGE_EXCHANGE_TRUCK = './assets/icons/exchange-truck.png';
+    private readonly PATH_IMAGE_COMPANY = './assets/icons/company.png';
+    private readonly PATH_IMAGE_ROUTES = './assets/icons/map.png';
 
-    private readonly MAIN_CONTAINER = 'main';
-    private _contentElement = document.createElement(this.MAIN_CONTAINER);
+    private _mainElement = document.createElement(this.TAG_MAIN_CONTAINER);
+    private _asideElement = document.createElement(this.TAG_ASIDE_CONTAINER);
 
     constructor(observer: Observer) {
         super(observer);
         this.createMainContent();
-        this._observer.addSender(AppEvents.LOCALE_SET, this);
-        this._observer.notify(AppEvents.LOCALE_GET, this);
     }
-    
-    getCurrentElement(): HTMLElement {
-        return this._rootContainer;
-    }
-    notify(nameEvent: AppEvents): AppEvents | void {
+
+    notify(nameEvent: AppEvents, sender: INotify | view): void {
         switch (nameEvent) {
-            case AppEvents.LOCALE_SET: {
-                this._observer.notify(AppEvents.LOCALE_GET, this);
+            default: {
                 break;
             }
         }
     }
-    private createMainContent(): void {
-        this._rootContainer.appendChild(this._asideElement);
-        this._rootContainer.appendChild(this._contentElement);
-        const asideList = document.createElement(this.ASIDE_LIST);
-        for (const el in userRoleActions){
-            const asideItem = document.createElement(this.ASIDE_LIST_ITEM);
-            const asideItemImg = document.createElement('img');
-            asideItemImg.src = `./assets/icons/${el}.png`
-            const asideItemSpan = document.createElement('span');
-            asideItemSpan.textContent = userRoleActions[el];
-            asideItem.dataset.link = el;
-            asideItem.appendChild(asideItemImg);
-            asideItem.appendChild(asideItemSpan);
-            asideList.appendChild(asideItem);
-        }
-        this._asideElement.appendChild(asideList);
-        loadOverview(this._contentElement)
-
-        asideList.addEventListener('click', (event) => {
-            const tag = event.target as HTMLElement;
-            const li = tag.closest('li');
-            
-            function switchActive(target: HTMLElement){
-                const list = asideList.querySelectorAll('li') as NodeListOf<HTMLElement>;
-                for (const l of list){
-                    l.classList.remove('active')
-                }
-                target.classList.add('active')
-            }
-            
-            if (li !== null) {
-                switch (li.dataset.link) {
-                    case 'mainAsideCargo':
-                        switchActive(li);
-                        loadCargo(this._contentElement);
-                        break;
-                    case 'mainAsideCompanies':
-                        switchActive(li)
-                        li.classList.add('active')
-                        loadCompany(this._contentElement);
-                        break;
-                    case 'mainAsideRoutes':
-                        switchActive(li)
-                        loadMap('auto', 'auto', this.MAIN_CONTAINER, 'replace')
-                        applyCurrentPosition();
-                        getPointCoordinates();
-                        routeStart();
-                        break;
-                    case 'mainAsideNews':
-                        switchActive(li)
-                        loadNews();
-                        break;
-                    case 'mainAsideOverview':
-                        switchActive(li)
-                        loadOverview(this._contentElement)
-                        break;
-                    case 'mainAsideTransport':
-                        switchActive(li)
-                        loadTruck(this._contentElement);
-                        // const trucks = new TruckContentView(this._observer)
-                        break;
-                }
-            }
-        })
+    getCurrentElement(): HTMLElement {
+        return this._asideElement;
     }
-    setLocale(locale: LocaleModel): void {
-        const asideList = this._asideElement.querySelectorAll('li') as NodeListOf<HTMLElement>;
-        for (const i of asideList){
-            i.textContent = locale.getPhrase(i.dataset.link as LocaleKeys)
-        }
-        
-        const mainList = this._contentElement.querySelectorAll('[data-ln]') as NodeListOf<HTMLElement>;
-        for (const ln of mainList){
-            ln.textContent = locale.getPhrase(ln.dataset.ln as LocaleKeys);
-        }
+    private createMainContent(): void {
+        const rootContainer = document.body;
+        rootContainer.appendChild(this._mainElement);
+        rootContainer.appendChild(this._asideElement);
+
+        const overviewItem = new OverviewView(this._observer, this._mainElement, this.PATH_IMAGE_OVERVIEW);
+        const cargoItem = new CargoView(this._observer, this._mainElement, this.PATH_IMAGE_CARGO);
+        const truckItem = new TruckView(this._observer, this._mainElement, this.PATH_IMAGE_TRUCK);
+        const truckExchangeItem = new ExchangeTruckView(this._observer, this._mainElement, this.PATH_IMAGE_EXCHANGE_TRUCK);
+        const cargoExchangeItem = new ExchangeCargoView(this._observer, this._mainElement, this.PATH_IMAGE_EXCHANGE_CARGO);
+        const companyItem = new CompanyView(this._observer, this._mainElement, this.PATH_IMAGE_COMPANY);
+        const routesItem = new RoutesView(this._observer, this._mainElement, this.PATH_IMAGE_ROUTES);
+
+        const listItemElement = document.createElement(this.TAG_ASIDE_LIST);
+        const overviewListItem = overviewItem.getCurrentElement();
+        overviewListItem.classList.add('active');
+        listItemElement.appendChild(overviewListItem);
+        listItemElement.appendChild(cargoItem.getCurrentElement());
+        listItemElement.appendChild(truckItem.getCurrentElement());
+        listItemElement.appendChild(cargoExchangeItem.getCurrentElement());
+        listItemElement.appendChild(truckExchangeItem.getCurrentElement());
+        listItemElement.appendChild(companyItem.getCurrentElement());
+        listItemElement.appendChild(routesItem.getCurrentElement());
+
+        this._asideElement.appendChild(listItemElement);
+
+        const mapOverview = new MapLeaflet(this._observer);
+        overviewItem.setMap(mapOverview);
+
+        const mapRoute = new MapLeaflet(this._observer);
+        routesItem.setMap(mapRoute);
+
+        overviewItem.selectElement();
     }
 }

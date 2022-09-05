@@ -11,6 +11,7 @@ type answer<T> = {
     message: string;
     body?: Map<string, string>;
     items?: Array<T>;
+    users?: Array<T>;
 };
 
 export default answer;

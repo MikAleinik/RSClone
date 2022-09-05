@@ -67,7 +67,7 @@ const config = {
             loader: 'sass-resources-loader',
             options: {
               resources: [
-                './src/components/view/common/color.scss'
+                './src/components/view/common/common.scss'
               ]
             },
           },

@@ -6,6 +6,9 @@ import AuthView from "../../view/common/auth/auth-view";
 import AuthWindowView from "../../view/common/auth-window/auth-window-view";
 import View from "../../view/index/view";
 import user from "../../../types/user";
+import User from "../../../types/user";
+import OverviewView from "../../view/main/content/overview/overview-view";
+import CompanyView from "../../view/main/content/company/company-view";
 
 export default class AuthController implements INotify {
     private readonly LINK_INDEX_PAGE = '/';
@@ -19,7 +22,7 @@ export default class AuthController implements INotify {
         this._authModel = authModel;
         this._userModel = userModel;
     }
-    notify(nameEvent: AppEvents, sender: View, params?: Map<string, string>): AppEvents | void {
+    notify(nameEvent: AppEvents, sender: View, params?: Map<string, string> | user): AppEvents | void {
         switch (nameEvent) {
             case AppEvents.AUTH_CLICK_BUTTON: {
                 this.clickButtonHandler(sender);
@@ -58,7 +61,7 @@ export default class AuthController implements INotify {
             }
             case AppEvents.AUTH_LOGIN_USER: {
                 if (params !== undefined) {
-                    this.logInUserHandler(nameEvent, sender, params);
+                    this.logInUserHandler(nameEvent, sender, params as Map<string, string>);
                 } else {
                     //TODO возврат ошибки если не передались параметры? избыточная проверка после view?
                 }
@@ -70,10 +73,40 @@ export default class AuthController implements INotify {
                 }
                 break;
             }
+            case AppEvents.MAIN_USER_SAVE_INFO: {
+                this.saveUserInfoHandler(nameEvent, sender, params as User);
+                break;
+            }
+            case AppEvents.USER_GET_ALL: {
+                this.getAllUser(nameEvent, sender);
+                break;
+            }
             default: {
 
             }
         }
+    }
+    private getAllUser(nameEvent: AppEvents, sender: View) {
+        this._userModel.getUserAll(nameEvent)
+            .then((result) => {
+                let verifySender = sender as CompanyView;
+                verifySender.setAllUser(result);
+            })
+            .catch(() => {
+                let verifySender = sender as CompanyView;
+                verifySender.setAllUser(false);
+            });
+    }
+    private saveUserInfoHandler(nameEvent: AppEvents, sender: View, user: User): void {
+        this._userModel.save(nameEvent, user)
+            .then(() => {
+                let verifySender = (sender as unknown) as OverviewView;
+                verifySender.setAuthorizedUser(user);
+            })
+            .catch(() => {
+                let verifySender = sender as OverviewView;
+                verifySender.setAuthorizedUser(false);
+            });
     }
     private logInUserHandler(nameEvent: AppEvents, sender: View, params: Map<string, string>): AppEvents | void {
         this._userModel.logIn(nameEvent, params)
@@ -93,9 +126,10 @@ export default class AuthController implements INotify {
                 verifySender.setAuthorizedUser(data);
             })
             .catch((data) => {
-                if (document.location.pathname === this.LINK_MAIN_PAGE) {
-                    document.location.href = this.LINK_INDEX_PAGE;
-                }
+                //TODO включить после переноса БД
+                // if (document.location.pathname === this.LINK_MAIN_PAGE) {
+                //     document.location.href = this.LINK_INDEX_PAGE;
+                // }
                 let verifySender = sender as AuthView;
                 verifySender.setAuthorizedUser(false);
             });

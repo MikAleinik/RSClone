@@ -21,7 +21,7 @@ export default class CarModel {
                 });
         });
     }
-    deleteCar(nameEvent: AppEvents, car: Car): Promise<boolean> {
+    deleteCar(nameEvent: AppEvents, car: Car): Promise<Car> {
         return new Promise((resolve, reject) => {
             this._dataMapper.delete(nameEvent, this.setCarToMap(car))
                 .then(() => {
@@ -31,10 +31,10 @@ export default class CarModel {
                             break;
                         }
                     }
-                    resolve(true);
+                    resolve(car);
                 })
                 .catch((result) => {
-                    reject(false);
+                    reject(car);
                 });
         });
     }
@@ -86,7 +86,17 @@ export default class CarModel {
                 });
         });
     }
-
+    getCarByUser(nameEvent: AppEvents, param: Map<string, string>): Promise<Array<Car>> {
+        return new Promise((resolve, reject) => {
+            this._dataMapper.read(nameEvent, param)
+                .then((result) => {
+                    resolve(result as Array<Car>);
+                })
+                .catch((result) => {
+                    reject(false);
+                });
+        });
+    }
     private setMapToCar(result: Map<string, string>): Car {
         return {
             id: Number(result.get('id')!),
@@ -98,7 +108,7 @@ export default class CarModel {
             price: Number(result.get('price')!),
             currency: result.get('currency')!,
             volume_max: Number(result.get('volume_max')!),
-            weigth_max: Number(result.get('weigth_max')!),
+            weight_max: Number(result.get('weight_max')!),
             speed: Number(result.get('speed')!),
             drived: (result.get('drived')! === 'true' ? true : false),
             description: result.get('description')!
@@ -115,7 +125,7 @@ export default class CarModel {
         result.set('price', car.price);
         result.set('currency', car.currency);
         result.set('volume_max', car.volume_max);
-        result.set('weigth_max', car.weigth_max);
+        result.set('weigth_max', car.weight_max);
         result.set('speed', car.speed);
         result.set('drived', car.drived);
         result.set('description', car.description);

@@ -2,23 +2,23 @@ nav {
     grid-area: nav;
     background: $background-color-dark;
     position: sticky;
+    z-index: 1000;
     top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-
+    ul {
+        margin: 0;
+        padding: 0;
+    }
     li {
         display: inline-block;
-        padding: 0px 5px;
-        font-size: 14px;
+        padding: 0 .5rem;
+        font-size: $font-size-medium;
     }
 }
 @media screen and (max-width: 640px){
     nav {
-        li {
-            display: inline-block;
-            padding: 0px 3px;
-            font-size: 12px;
-        }
+        top: 40px;
     }
 }

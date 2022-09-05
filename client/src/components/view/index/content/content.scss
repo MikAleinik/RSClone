@@ -1,13 +1,31 @@
-main {
-    grid-area: main;
-    padding: 20px 10px;
-    display: flex;
-    flex-direction: column;
-}
+.index {
+    grid-template-areas:
+        'header nav auth'
+        'main main main'
+        'footer footer footer';
 
-h2 {
-    font-size: 20px;
-    color: $font-color-light;
+    main {
+      height: 100%;
+      padding: 0;
+    }
+    header,
+    nav,
+    .auth {
+        background: $background-color-light;
+    }
+
+    footer {
+        background: $background-color-middle;
+    }
+
+    main {
+        display: flex;
+        gap: 1rem;
+    }
+
+    aside {
+        display: none;
+    }
 }
 
 .promo {
@@ -19,8 +37,8 @@ h2 {
     
     width: auto;
     color: $font-color-light;
-    font-size: 22px;
-    padding: 40px;
+    font-size: $font-size-big;
+    padding: 2rem;
     
     h3 {
         text-align: center;
@@ -28,51 +46,23 @@ h2 {
     ul {
         margin: 0 auto;
         width: 70%;
-        min-height: 550px;
+        min-height: 30rem;
         background: $background-color-ultra-light;
-        padding: 30px 40px;
+        padding: 2rem 4rem;
         color: $font-color-dark;
-        border-radius: 10px;
-        font-size: 20px;
+        border-radius: 1rem;
+        font-size: $font-size-big;
 
         li {
-            margin: 15px 5px;
+            margin: 1.5rem .5rem;
         }
     }
 }
 
-.user__overview {
-    display: flex;
-    justify-content: space-between;
-    height: 100%;
-}
-
-.user__data {
-    width: 30%;
-}
-
-.user__map {
-    width: 70%;
-}
-
 @media screen and (max-width: 640px){
-    main {
-        padding: 10px 15px;
-    }
-    
-    h2 {
-        font-size: 16px;
-    }
-
-    .promo {
-        font-size: 16px;
-    
+    .promo {    
         ul {
-            font-size: 14px;
-            min-height: 300px;
-            li {
-                margin: 10px 5px;
-            }
+            min-height: 20rem;
         }
     }
 }
