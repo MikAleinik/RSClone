@@ -19,7 +19,14 @@ export class AuthController {
         path: '/',
         httpOnly: true,
         // secure: true,
+        sameSite: <boolean>(<unknown>'none'),
     };
+    // private static COOKIE_OPTIONS = {
+    //     path: '/',
+    //     httpOnly: true,
+    //     secure: true,
+    //     sameSite: <boolean>(<unknown>'none'),
+    // };
     private static COOKIE_NAME = 'authCookie';
     private static COOKIE_UNAUTH = '-1';
     private static instance: AuthController;

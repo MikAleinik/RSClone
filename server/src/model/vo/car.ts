@@ -3,6 +3,7 @@ export class Car {
     date_change = new Date();
     user_id = 0;
     model = 'MAZ';
+    description = '';
     point_current_lat = 0;
     point_current_lon = 0;
     route_lat: number[] | null = [];

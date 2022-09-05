@@ -22,8 +22,17 @@ const server = Fastify({
 });
 
 server
+    // .register(cors, {
+    //     origin: '*',
+    // })
+    // .register(cors, {
+    //     origin: 'http://localhost:8080/',
+    //     credentials: true,
+    // })
     .register(cors, {
-        origin: '*',
+        strictPreflight: false,
+        origin: true,
+        credentials: true,
     })
     .register(cookie)
     .register(fastifyAuth)

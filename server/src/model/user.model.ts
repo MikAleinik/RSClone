@@ -21,11 +21,6 @@ export class UsersModel {
         res.send({ message: error.message });
     }
 
-    async checkUniqueEmail(email: string) {
-        //TODO add check
-        return true;
-    }
-
     async getUserByEmail(email: string) {
         const user = await UsersModel.getMapperWithWarning().getUserByEmail(email);
         if (!user) {
@@ -35,7 +30,7 @@ export class UsersModel {
     }
 
     async getUserById(id: number) {
-        return await UsersModel.getMapperWithWarning().getUserById(id);
+        return await UsersModel.getMapperWithWarning().getById(id);
     }
 
     validatePassword(password: string, user: User) {
@@ -47,7 +42,15 @@ export class UsersModel {
     }
 
     async processCreateNewUser(body: RegisterUserSchemaType) {
-        return await UsersModel.mapper.createUser(body);
+        return await UsersModel.mapper.createUser({ ...body });
+    }
+
+    async updateCargo(body: RegisterUserSchemaType, id: number) {
+        const { jwtDecoded } = body;
+        if (id !== jwtDecoded.id) {
+            throw new Error("You can't modify other users");
+        }
+        return await UsersModel.mapper.changeUser(id, body);
     }
 
     checkMapper() {

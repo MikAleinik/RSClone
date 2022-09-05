@@ -1,17 +1,16 @@
 import pgPromise from 'pg-promise';
 import pg from 'pg-promise/typescript/pg-subset';
-import { CreateCargoSchemaType } from '../../routes/v1/cargo.router';
+import { ChangeCargoToCarsSchemaType } from '../../routes/v1/cargotocar.router';
 import { RecordStringUnknown } from '../../types/types';
 import { createColumnSet } from '../util/pg.helper';
 import { Cargo } from '../vo/cargo';
+import { CargoToCars } from '../vo/cargotocar';
 import { DBDataVO } from '../vo/db.data';
 
-export class CargoMapper {
-    private TABLE_NAME = 'cargos';
-    private ALL_FIELDS_GET =
-        'id, date_change, user_id, point_start_lat, point_start_lon, point_end_lat, point_end_lon, weigth, price, currency, volume, finished, description';
-    private ALL_FIELDS_GET_BUT_NO_ID =
-        'date_change, user_id, point_start_lat, point_start_lon, point_end_lat, point_end_lon, weigth, price, currency, volume, finished, description';
+export class CargoToCarsMapper {
+    private TABLE_NAME = 'cargos_to_cars';
+    private ALL_FIELDS_GET = 'id, id_cargo, id_cars, agree';
+    private ALL_FIELDS_GET_BUT_NO_ID = 'id_cargo, id_cars, agree';
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     private _db: pgPromise.IDatabase<{}, pg.IClient>;
@@ -24,65 +23,35 @@ export class CargoMapper {
         this._db = db;
         this._pgp = pgPromise();
 
-        this._columnSet = createColumnSet(
-            this.TABLE_NAME,
-            ['currency', 'description'],
-            ['point_start_lat', 'point_start_lon', 'point_end_lat', 'point_end_lon', 'volume', 'weigth', 'price'],
-            ['finished']
-        );
+        this._columnSet = createColumnSet(this.TABLE_NAME, ['agree'], ['id_cargo', 'id_cars']);
     }
 
-    async createCargo<T extends RecordStringUnknown>(cargoData: T) {
-        const dbData = new DBDataVO(Cargo, cargoData);
+    async createCargoToCar<T extends RecordStringUnknown>(cargoData: T) {
+        const dbData = new DBDataVO(CargoToCars, cargoData);
         const dataCargo = dbData.getData();
-        dbData.setProp('date_changed', new Date());
         const { id } = await this._db.one(
             `INSERT INTO ${this.TABLE_NAME} (
-                user_id,
-                point_start_lat,
-                point_start_lon,
-                point_end_lat,
-                point_end_lon,
-                price,
-                currency,
-                volume,
-                weigth,
-                finished,
-                description,
-                date_change) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`,
-            [
-                dataCargo.user_id,
-                dataCargo.point_start_lat,
-                dataCargo.point_start_lon,
-                dataCargo.point_end_lat,
-                dataCargo.point_end_lon,
-                dataCargo.price,
-                dataCargo.currency,
-                dataCargo.volume,
-                dataCargo.weigth,
-                dataCargo.finished,
-                dataCargo.description,
-                dataCargo.date_changed,
-            ]
+                id_cargo,
+                id_cars,
+                agree) VALUES ($1, $2, $3) RETURNING id`,
+            [dataCargo.id_cargo, dataCargo.id_cars, dataCargo.agree]
         );
         dbData.setProp('id', id);
         return dbData;
     }
 
-    async changeCargo(cargoId: number, body: CreateCargoSchemaType) {
-        const update = `${this._pgp.helpers.update(body, this._columnSet)}, "date_change" = ${this._pgp.as.date(
-            new Date()
-        )} WHERE id = ${cargoId}`;
+    async changeCargoToCar(cargoToCarId: number, body: ChangeCargoToCarsSchemaType) {
+        const update = `${this._pgp.helpers.update(body, this._columnSet)} WHERE id = ${cargoToCarId}`;
         try {
             await this._db.none(update);
-            return this.getById(cargoId);
+            return this.getById(cargoToCarId);
         } catch (err) {
             throw new Error((err as Error).message);
         }
     }
 
-    async deleteCargo(cargoId: number) {
-        await this._db.none(`DELETE FROM ${this.TABLE_NAME} WHERE id = ${cargoId};`);
+    async deleteCargoToCars(id: number) {
+        await this._db.none(`DELETE FROM ${this.TABLE_NAME} WHERE id = ${id};`);
     }
 
     async getById(idNum: number) {
@@ -90,7 +59,7 @@ export class CargoMapper {
             idNum,
         ]);
         if (!item) return null;
-        return new DBDataVO(Cargo, item);
+        return new DBDataVO(CargoToCars, item);
     }
 
     async getByPropValue<T>(prop: string, value: T) {
@@ -114,7 +83,15 @@ WHERE id_cars = ${id};`);
         return (items as RecordStringUnknown[]).map((item) => new DBDataVO(Cargo, item));
     }
 
-    async getAllCargo() {
+    async getAllCargoToCars() {
+        const items = await this._db.manyOrNone(`SELECT ${this.ALL_FIELDS_GET} FROM ${this.TABLE_NAME}`);
+        if (!items) {
+            return null;
+        }
+        return (items as RecordStringUnknown[]).map((item) => new DBDataVO(CargoToCars, item));
+    }
+
+    async getAllCargoByAgree() {
         const items = await this._db.manyOrNone(
             `SELECT ${this.ALL_FIELDS_GET} FROM ${this.TABLE_NAME} WHERE finished = 'false'`
         );

@@ -43,11 +43,23 @@ function bool(column: string) {
     };
 }
 
+function noValidation(column: string) {
+    return {
+        name: column,
+        skip: (c: { value: unknown }) => {
+            c;
+            return false;
+        },
+        init: (c: { value: unknown }) => c.value,
+    };
+}
+
 export const createColumnSet = (
     tableName: string,
     strIds: Array<string> | null = null,
     numIds: Array<string> | null = null,
-    boolIds: Array<string> | null = null
+    boolIds: Array<string> | null = null,
+    otherIds: Array<string> | null = null
 ) => {
     let resArr: (HelpObjString | HelpObjNum | HelpObjBool)[] = [];
     if (strIds !== null) {
@@ -58,6 +70,9 @@ export const createColumnSet = (
     }
     if (boolIds !== null) {
         resArr = resArr.concat(boolIds.map((nId) => bool(nId)));
+    }
+    if (otherIds !== null) {
+        resArr = resArr.concat(otherIds.map((nId) => noValidation(nId)));
     }
 
     return new pgp.helpers.ColumnSet(resArr, { table: tableName });
