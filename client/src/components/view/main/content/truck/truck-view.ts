@@ -93,6 +93,7 @@ export default class TruckView extends AsideItemView {
     private _messageError = '';
     private _messageSended = '';
     private _messageRemoved = '';
+    private _messageSuccess = '';
     private _textRefuse = '';
     private _textApprove = '';
 
@@ -193,17 +194,24 @@ export default class TruckView extends AsideItemView {
         this._cargoToCar = cargoToCars;
     }
     deleteCargoToCarSuccess(cargoToCar: CargoToCar) {
+        console.log('deleteCargoToCarSuccess');
         alert(this._messageRemoved);
-        this._observer.notify(AppEvents.CARGO_TO_CAR_DELETE_SUCCESS, this, cargoToCar);
+        this._cargoToCarInMenu.forEach((value, key) => {
+            if (value.id === cargoToCar.id) {
+                key.remove();
+                this.clearCarHandler();
+                this._observer.notify(AppEvents.CARGO_TO_CAR_DELETE_SUCCESS, this, cargoToCar);
+            }
+        });
     }
     deleteCargoToCarFail(cargoToCar: CargoToCar) {
         alert(this._messageError);
     }
     changeCargoToCarSuccess(cargoToCar: CargoToCar) {
-        console.log('changeCargoToCarSuccess');
+        alert(this._messageSuccess);
     }
     createCargoToCarSuccess(cargoToCar: CargoToCar) {
-        console.log('createCargoToCarSuccess');
+        alert(this._messageSuccess);
     }
     setAllCargo(cargoes: Array<Cargo>): void {
         this._cargoes = cargoes;
@@ -244,6 +252,7 @@ export default class TruckView extends AsideItemView {
         this._messageError = localeModel.getPhrase(LocaleKeys.COMMON_ERROR_SAVE);
         this._messageSended = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_ADD_SENDED);
         this._messageRemoved = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_REMOVE_SENDED);
+        this._messageSuccess = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_SUCCESS);
         this._textRefuse = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_REFUSE);
         this._textApprove = localeModel.getPhrase(LocaleKeys.MAIN_CARGO_TO_CAR_CONFIRM);
     }

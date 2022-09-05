@@ -175,6 +175,7 @@ export const enum LocaleKeys {
 
     MAIN_CARGO_TO_CAR_ADD_SENDED = 'mainCargoToCarAddSended',
     MAIN_CARGO_TO_CAR_REMOVE_SENDED = 'mainCargoToCarRemoveSended',
+    MAIN_CARGO_TO_CAR_SUCCESS = 'mainCargoToCarRemoveSuccess',
     MAIN_CARGO_TO_CAR_PENDING = 'mainCargoToCarPending',
     MAIN_CARGO_TO_CAR_SUBMITTED = 'mainCargoToCarSubmitted',
     MAIN_CARGO_TO_CAR_CANCELED = 'mainCargoToCarCanceled',
