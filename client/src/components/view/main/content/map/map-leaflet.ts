@@ -34,7 +34,7 @@ export default class MapLeaflet implements INotify, ILocale {
     private readonly DEFAULT_LAT = 53.90332;
     private readonly DEFAULT_LON = 27.608643;
     private readonly DEFAULT_ZOOM = 7;
-    private readonly CLICK_ITEM_ZOOM = 12;
+    private readonly CLICK_ITEM_ZOOM = 9;
 
     private readonly ICON_NAMES: Array<string> = ['marker-color.png', 'truck-color.png', 'storage-color.png'];
     private readonly ICON_DEFAULT: string = './assets/icons/marker-color.png';
@@ -120,6 +120,9 @@ export default class MapLeaflet implements INotify, ILocale {
         if (cargo.point_start_lat !== undefined) {
             this.addMarkerToMap(cargo.point_start_lat, cargo.point_start_lon, item, route);
         }
+    }
+    removerItemFromMap() {
+        this._marker.clear();
     }
     openItemOnMap(clickedItem: Cargo | Car) {
         this._marker.forEach((item, marker) => {
