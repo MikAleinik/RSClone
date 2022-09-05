@@ -5,8 +5,10 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
+const { merge } = require('webpack-merge');
 
 const isProduction = process.env.NODE_ENV == "production";
+const outDir = isProduction ? "../../../../var/www/html" : "dist";
 
 const stylesHandler = "style-loader";
 
@@ -16,8 +18,9 @@ const config = {
     main: './src/main.ts',
     about: './src/about.ts',
   },
+  // moved to ./webpack.dev.config
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, outDir),
   },
   devServer: {
     open: true,
@@ -41,7 +44,7 @@ const config = {
     }),
       new CopyWebpackPlugin({
         patterns: [
-          { from: path.resolve(__dirname, "src", "assets"), to: path.resolve(__dirname, "dist", "assets") },
+          { from: path.resolve(__dirname, "src", "assets"), to: path.resolve(__dirname, outDir, "assets") },
         ]
       }),
     new CleanWebpackPlugin()
@@ -88,7 +91,8 @@ const config = {
   },
 };
 
-module.exports = () => {
+module.exports = (env, argv) => {
+  env;
   if (isProduction) {
     config.mode = "production";
 
@@ -97,5 +101,10 @@ module.exports = () => {
     config.mode = "development";
     config.devtool = "inline-source-map";
   }
+
+  const envConfig = isProduction ? require('./webpack.prod.config') : require('./webpack.dev.config');
+
+  return merge(config, envConfig);
+
   return config;
 };
