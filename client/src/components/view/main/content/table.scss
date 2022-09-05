@@ -114,6 +114,9 @@
 	border: .1rem dotted $border-color-middle;
 	border-radius: .5rem;
 }
+.table__accent {
+	border: .2rem dotted $border-color-accent;
+}
 @mixin column__icon {
 	display: inline-block;
 	background-image: url('../../../../assets/icons/from.png');
