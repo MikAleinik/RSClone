@@ -8,10 +8,10 @@ export default class ChangeCargoToCarHandler extends Handler {
 
     send<T>(): Promise<T> {
         return new Promise((resolve, reject) => {
-            const URL = this.SERVER_URL + this.CARGO_TO_CAR_END_POINT + '/' + this._params.get('id_cargotocar')!;
+            const URL = this.SERVER_URL + this.CARGO_TO_CAR_END_POINT + '/' + this._params.get('id')!;
             this._options.method = 'PUT';
             this._options.body = JSON.stringify({
-                argree: this._params.get('argree')!,
+                agree: this._params.get('agree')!,
             });
             fetch(URL, this._options)
                 .then((response) => {
