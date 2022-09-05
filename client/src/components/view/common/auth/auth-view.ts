@@ -121,6 +121,9 @@ export default class AuthView extends View implements INotify, ILocale {
             this._observer.notify(AppEvents.AUTH_ENABLE_BUTTON, this);
             this._observer.notify(AppEvents.AUTH_HIDE_BUTTON, this);
             this.showUserName(authUser);
+        } else {
+            this.setAuthButtonVisibility(true);
+            this.setRegisterButtonVisibility(true);
         }
     }
     showUserName(authUser: user) {
@@ -147,9 +150,11 @@ export default class AuthView extends View implements INotify, ILocale {
     private createAuthElement(): void {
         this._authElement.classList.add(this.CLASS_CONTAINER);
         this._logInButton = this.createButtonElement(this.CLASS_BUTTON_LOGIN);
+        this._logInButton.classList.add(this.CLASS_BUTTON_HIDDEN);
         this._logInButton.addEventListener('click', this.logInButtonClickHandler.bind(this));
         this._registerButton = this.createButtonElement(this.CLASS_BUTTON_REGISTRATION);
         this._registerButton.addEventListener('click', this.registerButtonClickHandler.bind(this));
+        this._registerButton.classList.add(this.CLASS_BUTTON_HIDDEN);
         this._nameElement.classList.add(this.CLASS_NAME);
         this._logOutButton = this.createButtonElement(this.CLASS_BUTTON_LOGIN);
         this._logOutButton.classList.add(this.CLASS_BUTTON_HIDDEN);

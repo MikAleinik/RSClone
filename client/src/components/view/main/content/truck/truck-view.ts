@@ -705,7 +705,7 @@ export default class TruckView extends AsideItemView {
             id_cars: 0,
             agree: this.STATUS_SUBMIT
         }
-        this._observer.notify(AppEvents.CARGO_TO_CAR_DELETE, this, newCargoToCar);
+        this._observer.notify(AppEvents.CARGO_TO_CAR_CHANGE, this, newCargoToCar);
     }
     private tableContextCancelClickItemHandler(event: Event) {
         const targetElement = <HTMLElement>event.target;
@@ -716,7 +716,7 @@ export default class TruckView extends AsideItemView {
             id_cars: 0,
             agree: this.STATUS_CANCEL
         }
-        this._observer.notify(AppEvents.CARGO_TO_CAR_DELETE, this, newCargoToCar);
+        this._observer.notify(AppEvents.CARGO_TO_CAR_CHANGE, this, newCargoToCar);
     }
     private tableContainerClickHandler(event: Event) {
         this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
