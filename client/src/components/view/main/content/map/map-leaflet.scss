@@ -32,6 +32,12 @@
 .leaflet-routing-alt {
     height: 60%;
 }
+.leaflet-routing-container-hide .leaflet-routing-collapse-btn {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 @media screen and (max-width: 1300px){
     .map__popup_buttons {

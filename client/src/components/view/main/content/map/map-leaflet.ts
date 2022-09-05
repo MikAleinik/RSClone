@@ -285,6 +285,7 @@ export default class MapLeaflet implements INotify, ILocale {
                 waypoints: points,
                 router: Leaflet.Routing.mapbox(this.MAP_BOX_KEY, { timeout: 3000 }),
                 routeWhileDragging: (this._routeMode === true ? true : false),
+                collapsible: true
             });
             this._route.addTo(this._map);
         }
