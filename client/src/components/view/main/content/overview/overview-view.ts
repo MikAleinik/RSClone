@@ -10,6 +10,8 @@ import './overview.scss';
 import User from '../../../../../types/user';
 import Cargo from '../../../../../types/cargo';
 import Car from '../../../../../types/car';
+import CargoToCar from '../../../../../types/cargotocar';
+import Geopoint from '../../../../../types/geopoint';
 
 export default class OverviewView extends AsideItemView {
     private readonly TAG_USER_DATA = 'div';
@@ -42,6 +44,9 @@ export default class OverviewView extends AsideItemView {
 
     private readonly ID_ROLE_CUSTOMER = '1';
     private readonly ID_ROLE_CARRIER = '2';
+    private readonly STATUS_CANCEL = 'Cancelled';
+    private readonly STATUS_SUBMIT = 'Submitted';
+    private readonly STATUS_PENDING = 'Pending';
 
     private _headerUser = document.createElement(this.TAG_USER_HEADER);
     private _firstNameLabel = document.createElement(this.TAG_FIELD_LABEL);
@@ -71,7 +76,10 @@ export default class OverviewView extends AsideItemView {
     private _map!: MapLeaflet;
     private _user!: User;
     private _cargoes = new Map<HTMLElement, Cargo>();
+    private _cargoesAll: Array<Cargo> | undefined = undefined;
     private _cars = new Map<HTMLElement, Car>();
+    private _carsAll: Array<Car> | undefined = undefined;
+    private _cargoToCar: Array<CargoToCar> | undefined = undefined;
 
     private _errorMessage = '';
 
@@ -93,6 +101,8 @@ export default class OverviewView extends AsideItemView {
 
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
+
+        this._observer.notify(AppEvents.CARGO_TO_CAR_GET_ALL, this);
     }
     notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car>): void {
         switch (nameEvent) {
@@ -182,22 +192,19 @@ export default class OverviewView extends AsideItemView {
                 this._headerStatisticCar.classList.remove(this.CLASS_HIDDEN);
                 this._tableContainerCar.classList.remove(this.CLASS_HIDDEN);
             }
-    
+
         } else {
             alert(this._errorMessage);
         }
     }
+    setAllCargoToCar(cargoToCars: Array<CargoToCar>): void {
+        this._cargoToCar = cargoToCars;
+        this.setItemsToMap();
+    }
     setAllCargo(cargoes: Array<Cargo>): void {
+        this._cargoesAll = cargoes;
         if (this._user !== undefined) {
-            this.clearTableCargo();
-            for (let i = 0; i < cargoes.length; i += 1) {
-                if (this._user.id === cargoes[i].user_id) {
-                    const rowElement = this.createRowCargo(cargoes[i])
-                    this._tableContainerCargo.appendChild(rowElement);
-                    this._cargoes.set(rowElement, cargoes[i]);
-                    this.addItemToMap(cargoes[i]);
-                }
-            }    
+            this.setItemsToMap();
         } else {
             this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
         }
@@ -239,16 +246,9 @@ export default class OverviewView extends AsideItemView {
         });
     }
     setAllCar(cars: Array<Car>): void {
+        this._carsAll = cars;
         if (this._user !== undefined) {
-            this.clearTableCar();
-            for (let i = 0; i < cars.length; i += 1) {
-                if (this._user.id === cars[i].user_id) {
-                    const rowElement = this.createRowCar(cars[i])
-                    this._tableContainerCar.appendChild(rowElement);
-                    this._cars.set(rowElement, cars[i]);
-                    this.addItemToMap(cars[i]);
-                }
-            }
+            this.setItemsToMap();
         } else {
             this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
         }
@@ -289,6 +289,34 @@ export default class OverviewView extends AsideItemView {
             }
         });
     }
+    private setItemsToMap() {
+        if (this._user !== undefined && this._cargoToCar !== undefined && this._cargoesAll !== undefined && this._carsAll !== undefined) {
+            const cargoesAll = (this._cargoesAll !== undefined ? this._cargoesAll : new Array<Cargo>());
+            const carsAll = (this._carsAll !== undefined ? this._carsAll : new Array<Car>());
+            this.clearTableCargo();
+            for (let i = 0; i < cargoesAll.length; i += 1) {
+                if (this._user.id === cargoesAll[i].user_id) {
+                    const rowElement = this.createRowCargo(cargoesAll[i])
+                    this._tableContainerCargo.appendChild(rowElement);
+                    this._cargoes.set(rowElement, cargoesAll[i]);
+                    this.addItemToMap(cargoesAll[i]);
+                }
+            }
+            this.clearTableCar();
+            for (let i = 0; i < carsAll.length; i += 1) {
+                if (this._user.id === carsAll[i].user_id) {
+                    const rowElement = this.createRowCar(carsAll[i])
+                    this._tableContainerCar.appendChild(rowElement);
+                    this._cars.set(rowElement, carsAll[i]);
+                    this.addItemToMap(carsAll[i]);
+                }
+            }
+        } else {
+            this._observer.notify(AppEvents.MAIN_CAR_GET_ALL, this);
+            this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
+            this._observer.notify(AppEvents.CARGO_TO_CAR_GET_ALL, this);
+        }
+    }
     private clearTableCargo(): void {
         this._cargoes.forEach((cargo) => {
             this.removeItemFromMap(cargo);
@@ -308,7 +336,62 @@ export default class OverviewView extends AsideItemView {
         }
     }
     private addItemToMap(item: Cargo | Car): void {
-        this._map.addItemToMap(item);
+        const route = new Array<Geopoint>;
+        const cargoToCar = (this._cargoToCar !== undefined ? this._cargoToCar : new Array<CargoToCar>());
+        const cargoesAll = (this._cargoesAll !== undefined ? this._cargoesAll : new Array<Cargo>());
+        const carsAll = (this._carsAll !== undefined ? this._carsAll : new Array<Car>());
+        const car = item as Car;
+        if (car.point_current_lat !== undefined) {
+            // this.addMarkerToMap(car.point_current_lat, car.point_current_lon, item);
+            route.push({
+                lat: car.point_current_lat,
+                lon: car.point_current_lon,
+                name: car.model,
+            });
+            for (let i = 0; i < cargoToCar.length; i += 1) {
+                if (cargoToCar[i].id_cars === car.id) {
+                    for (let j = 0; j < cargoesAll.length; j += 1) {
+                        if (cargoesAll[j].id === cargoToCar[i].id_cargo && cargoToCar[i].agree === this.STATUS_SUBMIT) {
+                            route.push({
+                                lat: cargoesAll[j].point_start_lat,
+                                lon: cargoesAll[j].point_start_lon,
+                                name: cargoesAll[j].description,
+                            });
+                            route.push({
+                                lat: cargoesAll[j].point_end_lat,
+                                lon: cargoesAll[j].point_end_lon,
+                                name: cargoesAll[j].description,
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        const cargo = item as Cargo;
+        if (cargo.point_start_lat !== undefined) {
+            // this.addMarkerToMap(cargo.point_start_lat, cargo.point_start_lon, item);
+            route.push({
+                lat: cargo.point_start_lat,
+                lon: cargo.point_start_lon,
+                name: cargo.description,
+            });
+            route.push({
+                lat: cargo.point_end_lat,
+                lon: cargo.point_end_lon,
+                name: cargo.description,
+            });
+            // for(let i = 0; i < cargoToCar.length; i += 1){
+            //     if (cargoToCar[i].id_cargo = cargo.id) {
+            //         for(let j = 0; j < carsAll.length; j += 1) {
+            //             if (carsAll[j].id === cargoToCar[i].id_cars) {
+
+            //             }
+            //         }
+            //     }
+            // }
+        }
+
+        this._map.addItemToMap(item, route);
     }
     private removeItemFromMap(item: Cargo | Car): void {
 

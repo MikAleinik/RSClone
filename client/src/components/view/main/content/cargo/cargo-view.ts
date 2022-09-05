@@ -633,7 +633,7 @@ export default class CargoView extends AsideItemView {
         this._formItemButtonDelete.classList.add(this.CLASS_FIELDSET_BUTTON_HIDDEN);
         this._selectedCargo = undefined;
         this._formItemPrice.value = '';
-        this._formItemCurrency.value = '';
+        // this._formItemCurrency.value = '';
         this._formItemWeight.value = '';
         this._formItemVolume.value = '';
         this._formItemDescription.value = '';
