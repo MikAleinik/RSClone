@@ -13,7 +13,7 @@ export class AppConfig {
     private static baseConfig = {
         COOKIE_OPTIONS: {
             path: '/',
-            // httpOnly: true,
+            httpOnly: true,
             // domain: '185.68.21.238',
             // secure: true,
             // sameSite: <boolean>(<unknown>'none'),
