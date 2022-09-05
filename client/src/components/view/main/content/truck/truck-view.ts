@@ -671,7 +671,6 @@ export default class TruckView extends AsideItemView {
         buttonClose.src = './assets/icons/cancel.png';
         buttonClose.addEventListener('click', ()=> {
             this._menuElement.classList.add(this.CLASS_MENU_HIDDEN);
-            document.body.style.overflow = 'auto';
         });
 
         this._menuElement.appendChild(this._headerContextMenu);
@@ -739,7 +738,6 @@ export default class TruckView extends AsideItemView {
             this._menuElement.style.left = `${eventCurrent.pageX}px`;
 
             this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);
-            document.body.style.overflow = 'hidden';
         } else {
             this._selectedCar = undefined;
         }

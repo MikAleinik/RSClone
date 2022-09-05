@@ -11,8 +11,7 @@
         top: .5rem;
     }
     & .table__header {
-        position: sticky;
-        top: 0;
+        position: static;
         border-radius: 1rem 1rem 0rem 0rem;
         background: $background-color-middle;
         margin-bottom: 1rem;
@@ -40,7 +39,8 @@
     transform: scale(1.1);
 }
 .menu__context_hidden {
-    visibility: hidden;
+    // visibility: hidden;
+    display: none;
 }
 @media screen and (max-width: 1000px){
     .menu__context {
