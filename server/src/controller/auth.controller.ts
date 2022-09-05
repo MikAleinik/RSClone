@@ -8,6 +8,7 @@ import { FastifyReply, FastifyRequest, RouteHandler } from 'fastify';
 import { AuthRequestUserSchemaType } from '../routes/v1/auth.router';
 import { IBodyWithJWT, JWTTokenData, JWTTokenDataWithTimestamps } from '../types/interfaces';
 import { ErrorNoSuchUser } from '../errors/ErrorNoSuchUser';
+import { AppConfig } from '../config/app.config';
 
 export class AuthController {
     private static SECRET_FOR_JWT = 'testSecret123';
@@ -15,12 +16,14 @@ export class AuthController {
         algorithm: 'HS256',
         expiresIn: '1d',
     } as SignOptions;
-    private static COOKIE_OPTIONS = {
-        path: '/',
-        httpOnly: true,
-        // secure: true,
-        sameSite: <boolean>(<unknown>'none'),
-    };
+    private static COOKIE_OPTIONS = AppConfig.config.COOKIE_OPTIONS;
+    //     {
+    //     path: '/',
+    //     // httpOnly: true,
+    //     domain: '185.68.21.238',
+    //     // secure: true,
+    //     // sameSite: <boolean>(<unknown>'none'),
+    // };
     // private static COOKIE_OPTIONS = {
     //     path: '/',
     //     httpOnly: true,
@@ -28,7 +31,7 @@ export class AuthController {
     //     sameSite: <boolean>(<unknown>'none'),
     // };
     private static COOKIE_NAME = 'authCookie';
-    private static COOKIE_UNAUTH = '-1';
+    // private static COOKIE_UNAUTH = '-1';
     private static instance: AuthController;
 
     private constructor() {
@@ -121,7 +124,7 @@ export class AuthController {
     unAuthorizeUserFunc(): RouteHandler {
         return async (req, res) => {
             try {
-                res.setCookie(AuthController.COOKIE_NAME, AuthController.COOKIE_UNAUTH, AuthController.COOKIE_OPTIONS);
+                res.clearCookie(AuthController.COOKIE_NAME, AuthController.COOKIE_OPTIONS);
                 res.code(OkCodes.OK);
                 res.send({});
             } catch (err) {

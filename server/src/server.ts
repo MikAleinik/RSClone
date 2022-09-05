@@ -4,8 +4,10 @@ import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import fastifyAuth from '@fastify/auth';
 import * as dotenv from 'dotenv';
+import { AppConfig } from './config/app.config';
 
 dotenv.config();
+AppConfig.init();
 
 const server = Fastify({
     logger: {
@@ -39,7 +41,7 @@ server
     .register(app)
     .then(() => server.ready())
     .then(() =>
-        server.listen({ port: 3000, host: '0.0.0.0' }, (err) => {
+        server.listen({ port: AppConfig.config.PORT, host: '0.0.0.0' }, (err) => {
             if (err) {
                 server.log.error(err);
                 process.exit(1);
