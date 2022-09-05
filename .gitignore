@@ -1,5 +1,6 @@
+node_modules
+server/node_modules
 /client/node_modules/*
 /client/.vscode/*
-/client/package-lock.json
 /client/package-lock.json
 /client/dist

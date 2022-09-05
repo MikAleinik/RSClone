@@ -153,6 +153,7 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: space-around;
+		align-items: center;
 	}
 	.table__header{
 		display: none;
@@ -240,7 +241,7 @@
 }
 @media screen and (max-width: 640px){
 	.table__row {
-		width: 100%;
+		width: 95%;
 	}
 	.item_form {
 		padding: 1rem;
