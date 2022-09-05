@@ -1,10 +1,9 @@
-.big__button {
+@mixin button {
   font-size : $font-size-medium;
   border: 0;
   border-radius: 1.5rem;
   padding: .5rem;
   margin: .5rem;
-  width: 9.5rem;
   flex: 0 0 auto;
   
   &:not(:disabled):hover {
@@ -13,6 +12,10 @@
     transform: translateY(-0.1rem);
     cursor: pointer;
   }
+}
+.big__button {
+  @include button;
+  width: 9.5rem;
 }
 
 .big__button_hidden {
