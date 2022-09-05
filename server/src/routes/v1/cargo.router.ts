@@ -3,10 +3,10 @@ import { AuthController } from '../../controller/auth.controller';
 import { RouterPath } from '../../types/enums';
 import { ErrorReplySchema } from '../../schema/general.schema';
 import { FromSchema } from 'json-schema-to-ts';
-import { CargoController } from '../../controller/cargo.controller';
 import { IBodyWithJWT } from '../../types/interfaces';
 import { CargosModel } from '../../model/cargo.model';
 import { CargoMapper } from '../../model/mappers/cargo.mapper';
+import { CargoController } from '../../controller/cargo.controller';
 
 // export Schema types
 

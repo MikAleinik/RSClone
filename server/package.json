@@ -13,8 +13,14 @@
     "watch:ts": "tsc -w",
     "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
     "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/server.js",
-    "start:dev": "nodemon",
-    "lint": "node node_modules/eslint/bin/eslint.js ./src" 
+    "lint": "node node_modules/eslint/bin/eslint.js ./src",
+    "start:local_dev": "cross-env NODE_ENV=local_dev& nodemon",
+    "start:deploy_test": "cross-env NODE_ENV=deploy_test& nodemon",
+    "start:deploy_dev": "cross-env NODE_ENV=deploy_dev& nodemon",
+    "start:deploy_prod": "cross-env NODE_ENV=deploy_prod& nodemon",
+    "build:deploy_test": "cross-env NODE_ENV=deploy_test& tsc",
+    "build:deploy_dev": "cross-env NODE_ENV=deploy_dev& tsc",
+    "build:deploy_prod": "cross-env NODE_ENV=deploy_prod& tsc"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +36,7 @@
     "@fastify/type-provider-json-schema-to-ts": "^2.1.0",
     "@fastify/type-provider-typebox": "^2.3.0",
     "@sinclair/typebox": "^0.24.27",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "fastify": "^4.0.0",
     "fastify-auth": "^1.2.0",
@@ -61,6 +68,7 @@
     "tap": "^16.1.0",
     "ts-node": "^10.4.0",
     "tsx": "^3.8.2",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "webpack-merge": "^5.8.0"
   }
 }
