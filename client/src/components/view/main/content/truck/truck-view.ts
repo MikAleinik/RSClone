@@ -111,19 +111,29 @@ export default class TruckView extends AsideItemView {
 
         this.createMainElement();
         this._observer.addSender(AppEvents.LOCALE_SET, this);
+
         this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.MAIN_CAR_GET_BY_USER, this);
         this._observer.notify(AppEvents.CARGO_TO_CAR_GET_ALL, this);
         this._observer.notify(AppEvents.MAIN_CARGO_GET_ALL, this);
+
         this._selectedCar = undefined;
 
         document.addEventListener('click', this.tableContainerClickHandler.bind(this));
     }
-    notify(nameEvent: AppEvents, sender: INotify | view): void {
+    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car> | CargoToCar | Array<CargoToCar>): void {
         switch (nameEvent) {
             case AppEvents.LOCALE_SET: {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS: {
+                this.updateAllCargoToCar(params as CargoToCar);
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_DELETE_SUCCESS: {
+                this.updateAllCargoToCar(params as CargoToCar);
                 break;
             }
         }
@@ -193,8 +203,18 @@ export default class TruckView extends AsideItemView {
     setAllCargoToCar(cargoToCars: Array<CargoToCar>): void {
         this._cargoToCar = cargoToCars;
     }
+    updateAllCargoToCar(updatedCargoToCars: CargoToCar){
+        let cargoToCar = (this._cargoToCar !== undefined ? this._cargoToCar : new Array<CargoToCar>());
+        for (let i = 0; i < cargoToCar.length; i += 1) {
+            if (cargoToCar[i].id === updatedCargoToCars.id) {
+                if (this._cargoToCar !== undefined) {
+                    this._cargoToCar[i] = updatedCargoToCars;
+                }
+                break;
+            }
+        }
+    }
     deleteCargoToCarSuccess(cargoToCar: CargoToCar) {
-        console.log('deleteCargoToCarSuccess');
         alert(this._messageRemoved);
         this._cargoToCarInMenu.forEach((value, key) => {
             if (value.id === cargoToCar.id) {
@@ -209,6 +229,7 @@ export default class TruckView extends AsideItemView {
     }
     changeCargoToCarSuccess(cargoToCar: CargoToCar) {
         alert(this._messageSuccess);
+        this._observer.notify(AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS, this, cargoToCar);
     }
     createCargoToCarSuccess(cargoToCar: CargoToCar) {
         alert(this._messageSuccess);
@@ -217,11 +238,7 @@ export default class TruckView extends AsideItemView {
         this._cargoes = cargoes;
     }
     showErrorMessage(message: Map<string, string> | false) {
-        if (!message) {
-            console.log('TODO Ошибка получения транспорта пользователя');
-        } else {
-            console.log(message.get('message'));
-        }
+        //TODO
     }
     setLocale(localeModel: localeModel): void {
         this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_TRANSPORT);
@@ -710,11 +727,12 @@ export default class TruckView extends AsideItemView {
         const contextItem = this._cargoToCarInMenu.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
         const newCargoToCar: CargoToCar = {
             id: Number(contextItem?.id),
-            id_cargo: 0,
-            id_cars: 0,
+            id_cargo: Number(contextItem?.id_cargo),
+            id_cars: Number(contextItem?.id_cars),
             agree: this.STATUS_SUBMIT
         }
         targetElement.remove();
+        this.updateAllCargoToCar(newCargoToCar);
         this._observer.notify(AppEvents.CARGO_TO_CAR_CHANGE, this, newCargoToCar);
     }
     private tableContextCancelClickItemHandler(event: Event) {
@@ -726,6 +744,7 @@ export default class TruckView extends AsideItemView {
             id_cars: 0,
             agree: this.STATUS_CANCEL
         }
+        this.updateAllCargoToCar(contextItem as CargoToCar);
         this._observer.notify(AppEvents.CARGO_TO_CAR_CHANGE, this, newCargoToCar);
     }
     private tableContainerClickHandler(event: Event) {

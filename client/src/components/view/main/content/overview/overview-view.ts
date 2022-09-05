@@ -99,12 +99,16 @@ export default class OverviewView extends AsideItemView {
         this._observer.addSender(AppEvents.MAIN_CAR_DELETE_SUCCESS, this);
         this._observer.addSender(AppEvents.MAIN_CAR_CHANGE_SUCCESS, this);
 
+        this._observer.addSender(AppEvents.CARGO_TO_CAR_CREATE_SUCCESS, this);
+        this._observer.addSender(AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS, this);
+        this._observer.addSender(AppEvents.CARGO_TO_CAR_DELETE_SUCCESS, this);
+
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.AUTH_GET_AUTH_USER, this);
 
         this._observer.notify(AppEvents.CARGO_TO_CAR_GET_ALL, this);
     }
-    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car>): void {
+    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | Cargo | Array<Cargo> | Car | Array<Car> | CargoToCar | Array<CargoToCar>): void {
         switch (nameEvent) {
             case AppEvents.LOCALE_SET: {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
@@ -142,6 +146,20 @@ export default class OverviewView extends AsideItemView {
             }
             case AppEvents.MAIN_CAR_CHANGE_SUCCESS: {
                 this.carChangedHandler(params as Car);
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_CREATE_SUCCESS: {
+                
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_CHANGE_SUCCESS: {
+                this.updateAllCargoToCar(params as CargoToCar);
+                this.setItemsToMap();
+                break;
+            }
+            case AppEvents.CARGO_TO_CAR_DELETE_SUCCESS: {
+                this.updateAllCargoToCar(params as CargoToCar);
+                this.setItemsToMap();
                 break;
             }
         }
@@ -200,6 +218,15 @@ export default class OverviewView extends AsideItemView {
     setAllCargoToCar(cargoToCars: Array<CargoToCar>): void {
         this._cargoToCar = cargoToCars;
         this.setItemsToMap();
+    }
+    updateAllCargoToCar(updatedCargoToCars: CargoToCar){
+        let cargoToCar = (this._cargoToCar !== undefined ? this._cargoToCar : new Array<CargoToCar>());
+        for (let i = 0; i < cargoToCar.length; i += 1) {
+            if (cargoToCar[i].id === updatedCargoToCars.id) {
+                cargoToCar[i] = updatedCargoToCars;
+                break;
+            }
+        }
     }
     setAllCargo(cargoes: Array<Cargo>): void {
         this._cargoesAll = cargoes;
@@ -336,13 +363,12 @@ export default class OverviewView extends AsideItemView {
         }
     }
     private addItemToMap(item: Cargo | Car): void {
-        const route = new Array<Geopoint>;
+        let route = new Array<Geopoint>;
         const cargoToCar = (this._cargoToCar !== undefined ? this._cargoToCar : new Array<CargoToCar>());
         const cargoesAll = (this._cargoesAll !== undefined ? this._cargoesAll : new Array<Cargo>());
         const carsAll = (this._carsAll !== undefined ? this._carsAll : new Array<Car>());
         const car = item as Car;
         if (car.point_current_lat !== undefined) {
-            // this.addMarkerToMap(car.point_current_lat, car.point_current_lon, item);
             route.push({
                 lat: car.point_current_lat,
                 lon: car.point_current_lon,
@@ -369,28 +395,57 @@ export default class OverviewView extends AsideItemView {
         }
         const cargo = item as Cargo;
         if (cargo.point_start_lat !== undefined) {
-            // this.addMarkerToMap(cargo.point_start_lat, cargo.point_start_lon, item);
-            route.push({
-                lat: cargo.point_start_lat,
-                lon: cargo.point_start_lon,
-                name: cargo.description,
-            });
-            route.push({
-                lat: cargo.point_end_lat,
-                lon: cargo.point_end_lon,
-                name: cargo.description,
-            });
-            // for(let i = 0; i < cargoToCar.length; i += 1){
-            //     if (cargoToCar[i].id_cargo = cargo.id) {
-            //         for(let j = 0; j < carsAll.length; j += 1) {
-            //             if (carsAll[j].id === cargoToCar[i].id_cars) {
-
-            //             }
-            //         }
-            //     }
-            // }
+            let submitted = false;
+            let carSubmittedIndex = -1;
+            for (let i = 0; i < cargoToCar.length; i += 1) {
+                if (cargoToCar[i].id_cargo === cargo.id) {
+                    submitted = true;
+                    for (let j = 0; j < carsAll.length; j += 1) {
+                        if (carsAll[j].id === cargoToCar[i].id_cars) {
+                            carSubmittedIndex = j;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (submitted) {
+                route.push({
+                    lat: carsAll[carSubmittedIndex].point_current_lat,
+                    lon: carsAll[carSubmittedIndex].point_current_lon,
+                    name: carsAll[carSubmittedIndex].model,
+                });
+                for (let i = 0; i < cargoToCar.length; i += 1) {
+                    if (cargoToCar[i].id_cars === carsAll[carSubmittedIndex].id) {
+                        for (let j = 0; j < cargoesAll.length; j += 1) {
+                            if (cargoesAll[j].id === cargoToCar[i].id_cargo && cargoToCar[i].agree === this.STATUS_SUBMIT) {
+                                route.push({
+                                    lat: cargoesAll[j].point_start_lat,
+                                    lon: cargoesAll[j].point_start_lon,
+                                    name: cargoesAll[j].description,
+                                });
+                                route.push({
+                                    lat: cargoesAll[j].point_end_lat,
+                                    lon: cargoesAll[j].point_end_lon,
+                                    name: cargoesAll[j].description,
+                                });
+                            }
+                        }
+                    }
+                }
+            } else {
+                route.push({
+                    lat: cargo.point_start_lat,
+                    lon: cargo.point_start_lon,
+                    name: cargo.description,
+                });
+                route.push({
+                    lat: cargo.point_end_lat,
+                    lon: cargo.point_end_lon,
+                    name: cargo.description,
+                });
+            }
         }
-
+        this._map.removerItemFromMap();
         this._map.addItemToMap(item, route);
     }
     private removeItemFromMap(item: Cargo | Car): void {
