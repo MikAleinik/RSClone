@@ -211,6 +211,7 @@ export default class LocaleModel {
 
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_ADD_SENDED, new Array('The request has been sent to the owner of the car, please wait for confirmation', 'Запрос владельцу машины отправлен, ожидайте подтверждения'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_REMOVE_SENDED, new Array('Your cargo has been removed from the vehicle', 'Ваш груз удален из машины'));
+        this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_SUCCESS, new Array('Load action completed successfully', 'Действие с грузом прошло  успешно'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_PENDING, new Array('Pending', 'Ожидает'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_SUBMITTED, new Array('Submitted', 'Подтвержден'));
         this._localeDictionary.set(LocaleKeys.MAIN_CARGO_TO_CAR_CANCELED, new Array('Canceled', 'Отказано'));
