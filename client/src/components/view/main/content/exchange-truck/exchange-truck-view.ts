@@ -551,7 +551,7 @@ export default class ExchangeTruckView extends AsideItemView {
                 this._carSelected = this._cars.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
     
                 const eventCurrent = event as MouseEvent;
-                this._menuElement.style.top = `${eventCurrent.pageY}px`;
+                this._menuElement.style.top = `${eventCurrent.pageY - 160}px`;
                 this._menuElement.style.left = `${eventCurrent.pageX}px`;
     
                 this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);

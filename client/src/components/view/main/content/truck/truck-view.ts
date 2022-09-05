@@ -714,6 +714,7 @@ export default class TruckView extends AsideItemView {
             id_cars: 0,
             agree: this.STATUS_SUBMIT
         }
+        targetElement.remove();
         this._observer.notify(AppEvents.CARGO_TO_CAR_CHANGE, this, newCargoToCar);
     }
     private tableContextCancelClickItemHandler(event: Event) {
@@ -734,7 +735,7 @@ export default class TruckView extends AsideItemView {
             this._selectedCar = this._cars.get(<HTMLElement>targetElement.closest('.' + this.CLASS_TABLE_ROW));
 
             const eventCurrent = event as MouseEvent;
-            this._menuElement.style.top = `${eventCurrent.pageY}px`;
+            this._menuElement.style.top = `${eventCurrent.pageY - 160}px`;
             this._menuElement.style.left = `${eventCurrent.pageX}px`;
 
             this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);
