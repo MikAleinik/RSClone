@@ -23,8 +23,13 @@
 .leaflet-container {
     font-size: $font-size-medium;
 }
+
 .leaflet-popup-content {
     width: 45rem !important;
+}
+
+.leaflet-routing-alt {
+    height: 60%;
 }
 
 @media screen and (max-width: 640px) {
@@ -33,5 +38,22 @@
         border-radius: 8px;
         padding: 3px 4px;
         margin: 5px;
+    }
+}
+
+@media screen and (max-width: 1300px){
+    .leaflet-routing-container {
+        width: 80%;
+    }
+    .leaflet-routing-alt {
+        height: 15rem;
+    }
+    
+    .leaflet-right {
+        right: 1rem;
+      }
+    .leaflet-top {
+        top: auto;
+        bottom: 2rem;
     }
 }
