@@ -137,7 +137,7 @@ export class CargoToCarsController {
             try {
                 const { id } = req.params;
                 const { jwtDecoded } = req.body as IBodyWithJWT;
-                await CargoToCarModel.getInstance().deleteCargoByUUID(id, jwtDecoded.id);
+                await CargoToCarModel.getInstance().deleteCargoToCarsByUUID(id, jwtDecoded.id);
                 res.code(OkCodes.OK);
                 res.header(ContentTypeJson[0], ContentTypeJson[1]);
                 res.send({});

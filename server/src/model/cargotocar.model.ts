@@ -69,13 +69,18 @@ export class CargoToCarModel {
         await CargosModel.getInstance().checkCargoByIdAndUser(id, userId);
     }
 
-    async deleteCargoByUUID(id: number, userId: number) {
+    async deleteCargoToCarsByUUID(id: number, userId: number) {
+        userId;
         const cargoToCar = await CargoToCarModel.getInstance().getById(id);
         if (!cargoToCar) {
             throw new Error(`${id}`);
         }
-        await CargoToCarModel.getInstance().checkCargoByIdAndUser(cargoToCar.getData().id_cargo, userId);
+        // await CargoToCarModel.getInstance().checkCargoByIdAndUser(cargoToCar.getData().id_cargo, userId);
         await CargoToCarModel.mapper.deleteCargoToCars(id);
+    }
+
+    async deleteAllCargoToCarsWithCarId(id: number) {
+        await CargoToCarModel.mapper.deleteAllCargoToCarsWithCarId(id);
     }
 
     static getInstance() {
