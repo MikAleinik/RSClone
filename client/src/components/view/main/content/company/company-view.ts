@@ -57,13 +57,18 @@ export default class CompanyView extends AsideItemView {
 
         this.createMainElement();
         this._observer.addSender(AppEvents.LOCALE_SET, this);
+        this._observer.addSender(AppEvents.MAIN_USER_SAVE_INFO, this);
         this._observer.notify(AppEvents.LOCALE_GET, this);
         this._observer.notify(AppEvents.USER_GET_ALL, this);
     }
-    notify(nameEvent: AppEvents, sender: INotify | view): void {
+    notify(nameEvent: AppEvents, sender: INotify | view, params?: Map<string, string> | User): void {
         switch (nameEvent) {
             case AppEvents.LOCALE_SET: {
                 this._observer.notify(AppEvents.LOCALE_GET, this);
+                break;
+            }
+            case AppEvents.MAIN_USER_SAVE_INFO: {
+                this.updateUser(params as User);
                 break;
             }
         }
@@ -90,6 +95,17 @@ export default class CompanyView extends AsideItemView {
                 this._tableContainer.appendChild(rowElement);
             }
         }
+    }
+    updateUser(updatedUser: User) {
+        this._users.forEach((value, key) => {
+            if (value.id === updatedUser.id) {
+                value = updatedUser;
+                key.children[0].textContent = updatedUser.company;
+                key.children[1].textContent = updatedUser.address;
+                key.children[2].textContent = updatedUser.first_name + ' ' + updatedUser.last_name;
+                key.children[3].textContent = updatedUser.phone;
+            }
+        });
     }
     private clearTable(): void {
         while (this._tableContainer.firstElementChild) {
