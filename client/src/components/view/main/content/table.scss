@@ -168,9 +168,6 @@
 		width: auto;
 		display: flex;
 		margin: .5rem 0;
-		&:last-child {
-			align-self: center;
-		}
 	}
 	.table__data_model {
 		&::before {
