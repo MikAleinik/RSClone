@@ -2,6 +2,7 @@ import { ContentTypeJson } from '../types/types';
 import { ErrorNoMapper } from '../errors/ErrorNoMapper';
 import { CreateCargoSchemaType } from '../routes/v1/cargo.router';
 import { CargoMapper } from './mappers/cargo.mapper';
+import { CargoToCarModel } from './cargotocar.model';
 
 export class CargosModel {
     private static instance: CargosModel;
@@ -60,6 +61,7 @@ export class CargosModel {
 
     async deleteCargoByUUID(id: number, userId: number) {
         await CargosModel.getInstance().checkCargoByIdAndUser(id, userId);
+        await CargoToCarModel.getInstance().deleteAllCargoToCarsWithCargoId(id);
         await CargosModel.mapper.deleteCargo(id);
     }
 

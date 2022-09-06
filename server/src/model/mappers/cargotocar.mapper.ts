@@ -58,6 +58,10 @@ export class CargoToCarsMapper {
         await this._db.none(`DELETE FROM ${this.TABLE_NAME} WHERE id_cars = ${id};`);
     }
 
+    async deleteAllCargoToCarsWithCargoId(id: number) {
+        await this._db.none(`DELETE FROM ${this.TABLE_NAME} WHERE id_cargo = ${id};`);
+    }
+
     async getById(idNum: number) {
         const item = await this._db.oneOrNone(`SELECT ${this.ALL_FIELDS_GET} FROM ${this.TABLE_NAME} WHERE id = $1`, [
             idNum,

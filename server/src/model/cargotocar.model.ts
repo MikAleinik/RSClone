@@ -83,6 +83,10 @@ export class CargoToCarModel {
         await CargoToCarModel.mapper.deleteAllCargoToCarsWithCarId(id);
     }
 
+    async deleteAllCargoToCarsWithCargoId(id: number) {
+        await CargoToCarModel.mapper.deleteAllCargoToCarsWithCargoId(id);
+    }
+
     static getInstance() {
         if (!CargoToCarModel.instance) {
             CargoToCarModel.instance = new CargoToCarModel();
