@@ -83,7 +83,7 @@ export default class AuthWindowView extends View implements INotify, ILocale {
         this._observer.notify(AppEvents.AUTH_LOGIN_USER_SUCCESS, this);
     }
     failLogInHandler(result: Map<string, string>) {
-        alert(this._errorMessage);
+        // alert(this._errorMessage);
     }
     private logInUser() {
         event?.preventDefault();

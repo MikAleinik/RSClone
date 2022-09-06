@@ -19,7 +19,7 @@ export default class CreateCarHandler extends Handler {
                 price: Number(this._params.get('price')!),
                 currency: this._params.get('currency')!,
                 volume_max: Number(this._params.get('volume_max')!),
-                weigth_max: Number(this._params.get('weigth_max')!),
+                weight_max: Number(this._params.get('weight_max')!),
                 speed: Number(this._params.get('speed')!),
                 drived: this._params.get('drived')!,
                 description: this._params.get('description')!

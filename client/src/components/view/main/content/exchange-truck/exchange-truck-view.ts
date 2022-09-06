@@ -249,14 +249,10 @@ export default class ExchangeTruckView extends AsideItemView {
         }
     }
     showErrorMessage(message: Map<string, string> | false) {
-        if (!message) {
-            console.log('TODO Ошибка получения всех машин');
-        } else {
-            console.log(message.get('message'));
-        }
+        //TODO
     }
     setAllCargoToCar(cargoToCars: Array<CargoToCar>): void {
-
+        //TODO
     }
     deleteCargoToCarSuccess(cargoToCar: CargoToCar) {
         alert(this._messageRemoved);
@@ -467,8 +463,6 @@ export default class ExchangeTruckView extends AsideItemView {
                 const field = inputField.previousSibling as HTMLInputElement;
                 field.value = inputField.value;
             }
-
-            console.log(e.target)
 
             const search = inputField.id === 'search' ? inputField.value : '';
             const price = inputField.id === 'price' ? inputField.value : this._formItemPrice.value;

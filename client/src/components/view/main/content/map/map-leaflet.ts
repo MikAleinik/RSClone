@@ -222,8 +222,6 @@ export default class MapLeaflet implements INotify, ILocale {
         return marker;
     }
     private itemClickHandler(marker: Leaflet.Marker): void {
-        //TODO обработчик вывода информации в окошко / пути и т.п.
-        // console.log(this._marker.get(marker));
         const item = this._marker.get(marker);
         let message = '';
         const car = item as Car;

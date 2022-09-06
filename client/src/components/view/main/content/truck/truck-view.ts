@@ -176,11 +176,10 @@ export default class TruckView extends AsideItemView {
                 value = car;
                 key.children[0].textContent = car.model;
                 key.children[1].textContent = this._formItemPoint.value;
-                key.children[4].textContent = car.price.toString();
-                key.children[5].textContent = car.currency;
-                key.children[6].textContent = car.volume_max.toString();
-                key.children[7].textContent = car.weight_max.toString();
-                key.children[8].textContent = car.description;
+                key.children[2].textContent = `${car.price.toString()} ${car.currency}`;
+                key.children[3].textContent = car.volume_max.toString();
+                key.children[4].textContent = car.weight_max.toString();
+                key.children[5].textContent = car.description;
                 this.clearCarHandler();
                 this._observer.notify(AppEvents.MAIN_CAR_CHANGE_SUCCESS, this, car);
             }
@@ -318,6 +317,7 @@ export default class TruckView extends AsideItemView {
                 }
                 this._observer.notify(AppEvents.MAIN_CAR_CHANGE, this, car);
                 this._changeCar = false;
+                this._selectedCar = undefined;
             }
             if (this._createCar) {
                 const car = {
@@ -525,18 +525,22 @@ export default class TruckView extends AsideItemView {
             const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
 
             const search = inputField.id === 'search' ? inputField.value : '';
-
-            for (const r of allRows) {
-                const textData = [
-                    r.childNodes[0].textContent?.toLocaleLowerCase(),
-                    r.childNodes[1].textContent?.toLocaleLowerCase(),
-                    r.childNodes[5].textContent?.toLocaleLowerCase()
-                ].toString().includes(search.toLocaleLowerCase());
-                if (textData) {
-                    r.style.display = 'flex'
-                } else {
-                    r.style.display = 'none'
+            try {
+                for (const r of allRows) {
+                    const textData = [
+                        r.childNodes[0].textContent?.toLocaleLowerCase(),
+                        r.childNodes[1].textContent?.toLocaleLowerCase(),
+                        r.childNodes[5].textContent?.toLocaleLowerCase()
+                    ].toString().includes(search.toLocaleLowerCase());
+                    if (textData) {
+                        r.style.display = 'flex'
+                    } else {
+                        r.style.display = 'none'
+                    }
                 }
+            }
+            catch{
+
             }
         })
 
@@ -625,7 +629,6 @@ export default class TruckView extends AsideItemView {
         this._selectedCar = undefined;
         this._formItemModel.value = '';
         this._formItemPrice.value = '';
-        this._formItemCurrency.value = '';
         this._formItemWeight.value = '';
         this._formItemVolume.value = '';
         this._formItemDescription.value = '';
@@ -758,8 +761,8 @@ export default class TruckView extends AsideItemView {
             this._menuElement.style.left = `${eventCurrent.pageX}px`;
 
             this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);
-        } else {
-            this._selectedCar = undefined;
+        // } else {
+        //     this._selectedCar = undefined;
         }
     }
 }

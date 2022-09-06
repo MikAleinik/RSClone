@@ -125,7 +125,7 @@ export default class CarModel {
         result.set('price', car.price);
         result.set('currency', car.currency);
         result.set('volume_max', car.volume_max);
-        result.set('weigth_max', car.weight_max);
+        result.set('weight_max', car.weight_max);
         result.set('speed', car.speed);
         result.set('drived', car.drived);
         result.set('description', car.description);

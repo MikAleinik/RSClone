@@ -155,11 +155,7 @@ export default class ExchangeCargoView extends AsideItemView {
         }
     }
     showErrorMessage(message: Map<string, string> | false) {
-        if (!message) {
-            console.log('TODO Ошибка получения всех грузов');
-        } else {
-            console.log(message.get('message'));
-        }
+        //TODO
     }
     protected createMainElement(): void {
         this._mainElement.appendChild(this.createFilterForm());

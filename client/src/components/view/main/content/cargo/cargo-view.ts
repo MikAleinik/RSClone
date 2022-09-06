@@ -169,12 +169,15 @@ export default class CargoView extends AsideItemView {
                 value = cargo;
                 key.children[0].textContent = this._formItemPointStart.value;
                 key.children[1].textContent = this._formItemPointEnd.value;
-                key.children[2].textContent = cargo.price.toString();
-                key.children[3].textContent = cargo.currency;
-                key.children[4].textContent = cargo.volume.toString();
-                key.children[5].textContent = cargo.weigth.toString();
-                key.children[6].textContent = cargo.description;
+                key.children[2].textContent = `${cargo.price.toString()} ${cargo.currency}`;
+                key.children[3].textContent = cargo.volume.toString();
+                key.children[4].textContent = cargo.weigth.toString();
+                key.children[5].textContent = cargo.description;
                 this.clearCargoHandler();
+                cargo.user_company = this._user.company;
+                cargo.user_firstname = this._user.first_name;
+                cargo.user_lastname = this._user.last_name;
+                cargo.user_phone = this._user.phone;
                 this._observer.notify(AppEvents.MAIN_CARGO_CHANGE_SUCCESS, this, cargo);
             }
         });
@@ -188,6 +191,10 @@ export default class CargoView extends AsideItemView {
         this._cargoes.set(rowElement, cargo);
         this._tableContainer.appendChild(rowElement);
         this.clearCargoHandler();
+        cargo.user_company = this._user.company;
+        cargo.user_firstname = this._user.first_name;
+        cargo.user_lastname = this._user.last_name;
+        cargo.user_phone = this._user.phone;
         this._observer.notify(AppEvents.MAIN_CARGO_CREATE_SUCCESS, this, cargo);
     }
     createCargoFail(cargo: Cargo) {
@@ -204,20 +211,16 @@ export default class CargoView extends AsideItemView {
         alert(this._messageError);
     }
     changeCargoToCarSuccess(cargoToCar: CargoToCar) {
-        console.log('changeCargoToCarSuccess');
+        //TODO
     }
     createCargoToCarSuccess(cargoToCar: CargoToCar) {
-        console.log('createCargoToCarSuccess');
+        //TODO
     }
     setAllCar(cars: Array<Car>): void {
         this._cars = cars;
     }
     showErrorMessage(message: Map<string, string> | false) {
-        if (!message) {
-            console.log('TODO Ошибка получения грузов пользователя');
-        } else {
-            console.log(message.get('message'));
-        }
+        //TODO
     }
     setLocale(localeModel: localeModel): void {
         this._asideItemSpan.innerHTML = localeModel.getPhrase(LocaleKeys.MAIN_ASIDE_CARGO);
@@ -308,6 +311,7 @@ export default class CargoView extends AsideItemView {
                 }
                 this._observer.notify(AppEvents.MAIN_CARGO_CHANGE, this, cargo);
                 this._changeCargo = false;
+                this._selectedCargo = undefined;
             }
             if (this._createCargo) {
                 const cargo = {
@@ -531,18 +535,22 @@ export default class CargoView extends AsideItemView {
             const allRows = document.querySelectorAll('.table__row') as NodeListOf<HTMLElement>;
 
             const search = inputField.id === 'search' ? inputField.value : '';
-
-            for (const r of allRows) {
-                const textData = [
-                    r.childNodes[0].textContent?.toLocaleLowerCase(),
-                    r.childNodes[1].textContent?.toLocaleLowerCase(),
-                    r.childNodes[5].textContent?.toLocaleLowerCase()
-                ].toString().includes(search.toLocaleLowerCase());
-                if (textData) {
-                    r.style.display = 'flex'
-                } else {
-                    r.style.display = 'none'
+            try {
+                for (const r of allRows) {
+                    const textData = [
+                        r.childNodes[0].textContent?.toLocaleLowerCase(),
+                        r.childNodes[1].textContent?.toLocaleLowerCase(),
+                        r.childNodes[5].textContent?.toLocaleLowerCase()
+                    ].toString().includes(search.toLocaleLowerCase());
+                    if (textData) {
+                        r.style.display = 'flex'
+                    } else {
+                        r.style.display = 'none'
+                    }
                 }
+            }
+            catch {
+
             }
         })
 
@@ -762,8 +770,8 @@ export default class CargoView extends AsideItemView {
             this._menuElement.style.left = `${eventCurrent.pageX}px`;
 
             this._menuElement.classList.remove(this.CLASS_MENU_HIDDEN);
-        } else {
-            this._selectedCargo = undefined;
+        // } else {
+        //     this._selectedCargo = undefined;
         }
     }
 }

@@ -166,7 +166,7 @@ export default class DataMapper {
                         })
                         .catch((data) => {
                             const result = new Map<string, string>();
-                            result.set('message', data.message);
+                            result.set('message', data);
                             reject(result);
                         });
                     break;
@@ -183,7 +183,7 @@ export default class DataMapper {
                                 case HttpCodes.CODE_BAD_REQUEST:
                                 case HttpCodes.CODE_UNAUTHORIZED: {
                                     const result = new Map<string, string>();
-                                    result.set('message', 'TODO Ошибка получения всех пользователей');
+                                    // result.set('message', 'TODO Ошибка получения всех пользователей');
                                     reject(result);
                                     break;
                                 }
@@ -191,7 +191,7 @@ export default class DataMapper {
                         })
                         .catch((data) => {
                             const result = new Map<string, string>();
-                            result.set('message', data.message);
+                            result.set('message', data);
                             reject(result);
                         });
                     break;
@@ -222,7 +222,7 @@ export default class DataMapper {
                         })
                         .catch((data) => {
                             const result = new Map<string, string>();
-                            result.set('message', data.message);
+                            result.set('message', data);
                             reject(result);
                         });
                     break;
@@ -417,7 +417,7 @@ export default class DataMapper {
                         })
                         .catch((data) => {
                             const result = new Map<string, string>();
-                            result.set('message', data.message);
+                            result.set('message', data);
                             reject(result);
                         });
                     break;
@@ -551,7 +551,7 @@ export default class DataMapper {
                         })
                         .catch((data) => {
                             const result = new Map<string, string>();
-                            result.set('message', data.message);
+                            result.set('message', data);
                             reject(result);
                         });
                     break;
@@ -582,7 +582,7 @@ export default class DataMapper {
                         })
                         .catch((data) => {
                             const result = new Map<string, string>();
-                            result.set('message', data.message);
+                            result.set('message', data);
                             reject(result);
                         });
                     break;

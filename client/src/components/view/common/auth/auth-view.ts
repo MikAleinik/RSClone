@@ -144,8 +144,7 @@ export default class AuthView extends View implements INotify, ILocale {
         this._observer.notify(AppEvents.AUTH_SHOW_BUTTON, this);
     }
     failLogOutHandler(result: Map<string, string>) {
-        //TODO запилить отдельный компонент инфо окна для всех страниц
-        alert(result.get('message'));
+        // alert(result.get('message'));
     }
     private createAuthElement(): void {
         this._authElement.classList.add(this.CLASS_CONTAINER);

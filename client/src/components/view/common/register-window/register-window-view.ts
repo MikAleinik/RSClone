@@ -95,8 +95,7 @@ export default class RegisterWindowView extends View implements INotify, ILocale
         this._observer.notify(AppEvents.REGISTER_USER_SUCCESS, this);
     }
     failRegistrationHandler(result: Map<string, string>) {
-        //TODO запилить отдельный компонент инфо окна для всех страниц
-        alert(result.get('message'));
+        // alert(result.get('message'));
     }
     private closeWindow() {
         event?.preventDefault();
