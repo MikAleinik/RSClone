@@ -1,0 +1,105 @@
+@import './color.scss';
+@import './fonts.scss';
+@import './button.scss';
+@import './aside.scss';
+
+html {
+    scroll-behavior: smooth;
+}
+
+*::-webkit-scrollbar {
+    width: 1rem;
+    background-color: $window_background-color;
+}
+
+*::-webkit-scrollbar-thumb {
+    border-radius: 1rem;
+    background-color: $background-color-middle;
+}
+
+*::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 .6rem rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    background-color: $window_background-color;
+}
+
+body {
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 180px auto 200px;
+    grid-template-rows: 50px minmax(calc(100vh - 80px), auto) 30px;
+    grid-template-areas:
+        'header nav auth'
+        'aside main main'
+        'footer footer footer';
+    color: $font-color-dark;
+    font-size: $font-size-medium;
+}
+
+main {
+    grid-area: main;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin input_border {
+	border: .1rem solid $background-color-dark;
+	border-radius: 1.5rem;
+	padding: .5rem 1rem;
+    margin: .5rem;
+}
+
+@mixin modal_window {
+    margin: 10rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30rem;
+    background-color: $window_background-color;
+    border-radius: 1rem;
+    padding: 1.5rem 2.5rem;
+    font-size: 1.5rem;
+}
+
+@mixin shadow {
+    visibility: hidden;
+    position: fixed;
+    z-index : 1000;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: $modal_background-color;
+}
+
+@media screen and (max-width: 640px) {
+    body {
+        grid-template-columns: 6rem 1fr 1fr;
+        grid-template-rows: 40px 30px minmax(calc(100vh - 90px), auto) 30px;
+        grid-template-areas:
+            'header header auth'
+            'nav nav nav'
+            'aside main main'
+            'footer footer footer';
+    }
+
+    aside {
+        li {
+            padding: 2rem 1rem;
+
+            span {
+                display: none;
+            }
+        }
+    }
+
+    .index {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            'header auth'
+            'nav nav'
+            'main main'
+            'footer footer';
+    }
+}

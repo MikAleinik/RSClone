@@ -1,0 +1,26 @@
+.window-register__wrapper {
+    @include shadow;
+}
+
+.window-register {
+    @include modal_window;
+}
+
+.window-register__row-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.window-register__field,
+.window-register__field_select {
+    @include input_border;
+    width: 20rem;
+    text-align: center;
+}
+
+.window-register__field_invalid {
+    border: .1rem solid $border-color-error;
+}

@@ -1,0 +1,145 @@
+.user__overview {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.user__container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.user__data {
+    width: 30%;
+    min-width: 35rem;
+    padding: .5rem;
+}
+
+.user__map {
+    width: 70%;
+}
+
+.user__row_name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+
+    input {
+        @include input_border;
+        &:invalid {
+            border: .1rem solid $border-color-error;
+        }
+        &:disabled {
+            opacity: 0.3;
+        }
+    }
+    .user__star {
+        height: 2rem;
+        width: 10rem;
+        margin: .5rem;
+    }
+    .user__star-item {
+        width: 20%;
+    }
+}
+.user__table {
+    display: flex;
+    flex-direction: column;
+    max-height: 30rem;
+    overflow-y: scroll;
+    padding-right: 1rem;
+    cursor: pointer;
+    .table__data {
+        width: 100%;
+    }
+    gap: .5rem;
+}
+.user__hidden {
+    visibility: hidden;
+}
+
+.user__unvisible {
+    display: none;
+}
+
+@media screen and (max-width: 1000px){
+    .user__container {
+        flex-direction: column;
+    }
+    .user__data {
+        width: 40%;
+        min-height: 47rem;
+    }
+    .user__header:nth-child(even){
+        position: absolute;
+        right: 1rem;
+        top: 6.6rem;
+        width: 35%;
+    }
+    .user__table {
+        position: absolute;
+        top: 12rem;
+        right: 1rem;
+        width: 35%;
+        min-height: 40rem;
+    }
+    .map__wrapper {
+        width: 100%;
+        min-height: 33rem;
+    }
+}
+
+@media screen and (max-width: 870px){
+    .user__data {
+        width: 100%;
+        overflow-y: scroll;
+        padding: .5rem;
+        min-width: 100%;
+        max-height: 100%;
+    }
+    .user__container {
+        .map__wrapper {
+            display: none;
+        }
+    }
+    h3 {
+        padding: 0 1rem;
+    }
+    .user__row_name {
+        padding: 0 1rem;
+        input {
+            width: 60%;
+        };
+    }
+    .user__header:nth-child(even){
+        position: static;
+        left: auto;
+        top: auto;
+        width: auto;
+    }
+    .user__table {
+        position: static;
+        top: auto;
+        left: auto;
+        width: auto;
+        min-height: auto;
+        max-height: 100%;
+        overflow-y: auto; 
+    }
+}
+.user__table .table__row {
+    margin: .3rem auto;
+    width: 90%;
+}
+@media screen and (max-width: 360px){
+    h3 {
+        text-align: center;
+    }
+    .user__row_name {
+        flex-direction: column;
+    }
+}

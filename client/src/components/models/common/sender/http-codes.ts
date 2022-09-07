@@ -1,0 +1,10 @@
+export const enum HttpCodes {
+    CODE_OK = 200,
+    CODE_CREATED = 201,
+    CODE_BAD_REQUEST = 400,
+    CODE_UNAUTHORIZED = 401,
+    CODE_FORBIDDEN = 403,
+    CODE_NOT_FOUND = 404,
+    CODE_NOT_ALLOWED = 405,
+    CODE_SERVER_DOWN = 500
+}

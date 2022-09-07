@@ -1,0 +1,36 @@
+html {
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+$font-size-big: 2.1rem;
+$font-size-medium: 1.4rem;
+$font-size-small: 1.2rem;
+
+h2 {
+  font-size: $font-size-big;
+  color: $font-color-light;
+}
+h5 {
+  font-size: 1.8rem;
+}
+
+a {
+  text-decoration: none;
+  color: $font-color-dark;
+}
+
+a:visited {
+  color: $font-color-dark;
+}
+
+@media screen and (max-width: 640px){
+  html{
+    font-size: 9px;
+  }
+}
+
+@media screen and (max-width: 480px){
+  html{
+    font-size: 7px;
+  }
+}
