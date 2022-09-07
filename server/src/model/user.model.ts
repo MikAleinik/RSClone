@@ -45,12 +45,20 @@ export class UsersModel {
         return await UsersModel.mapper.createUser({ ...body });
     }
 
-    async updateCargo(body: RegisterUserSchemaType, id: number) {
+    async updateUser(body: RegisterUserSchemaType, id: number) {
         const { jwtDecoded } = body;
         if (id !== jwtDecoded.id) {
             throw new Error("You can't modify other users");
         }
         return await UsersModel.mapper.changeUser(id, body);
+    }
+
+    async deleteUserByUUID(id: number) {
+        const user = await UsersModel.mapper.getById(id);
+        if (!user) {
+            throw new Error(`${id}`);
+        }
+        await UsersModel.mapper.deleteUser(id);
     }
 
     checkMapper() {

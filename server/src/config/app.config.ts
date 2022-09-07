@@ -1,6 +1,7 @@
 import { merge } from 'webpack-merge';
 
 export type AppConfigType = {
+    NEED_CHECK_AUTH: boolean;
     COOKIE_OPTIONS: Record<string, string>;
     POSTGRES_URI: string;
     PORT: number;
@@ -11,6 +12,7 @@ export class AppConfig {
     private static _isInit = false;
 
     private static baseConfig = {
+        NEED_CHECK_AUTH: false,
         COOKIE_OPTIONS: {
             path: '/',
             httpOnly: true,
@@ -31,6 +33,7 @@ export class AppConfig {
     };
 
     private static deployDevConfig = {
+        NEED_CHECK_AUTH: true,
         POSTGRES_URI: 'postgres://ofpofexk:m-80U-8RJaQjdmqeObQkJkwJ7Xcn6BCf@localhost/ofpofexk',
         PORT: 3000,
         COOKIE_OPTIONS: {
@@ -43,6 +46,7 @@ export class AppConfig {
     };
 
     private static deployProdConfig = {
+        NEED_CHECK_AUTH: true,
         POSTGRES_URI: 'postgres://ofpofexk:m-80U-8RJaQjdmqeObQkJkwJ7Xcn6BCf@localhost/ofpofexk',
         PORT: 3000,
         COOKIE_OPTIONS: {

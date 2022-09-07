@@ -105,7 +105,7 @@ export class UsersController {
         return async (req, res) => {
             try {
                 const { id } = req.params;
-                const cargo = await UsersModel.getInstance().updateCargo(req.body, id);
+                const cargo = await UsersModel.getInstance().updateUser(req.body, id);
                 res.code(OkCodes.OK);
                 res.send(cargo?.toJsonResponse());
             } catch (err) {
@@ -116,11 +116,11 @@ export class UsersController {
         };
     }
 
-    deleteUserByUUIDFunc(): RouteHandler<{ Body: UserSchemaType }> {
+    deleteUserByUUIDFunc(): RouteHandler<{ Params: { id: number } }> {
         return async (req, res) => {
-            //TODO add implementation
-            res.code(OkCodes.CREATED);
-            res.header(ContentTypeJson[0], ContentTypeJson[1]);
+            const { id } = req.params;
+            await UsersModel.getInstance().deleteUserByUUID(id);
+            res.code(OkCodes.OK);
             res.send({});
         };
     }

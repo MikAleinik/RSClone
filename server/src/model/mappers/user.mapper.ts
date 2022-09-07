@@ -99,4 +99,8 @@ export class UsersMapper {
             throw new Error((err as Error).message);
         }
     }
+
+    async deleteUser(id: number) {
+        await this._db.none(`DELETE FROM ${this.TABLE_NAME} WHERE id = ${id};`);
+    }
 }

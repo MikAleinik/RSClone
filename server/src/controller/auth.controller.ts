@@ -60,6 +60,10 @@ export class AuthController {
     verifyJWTFunc(): RouteHandler {
         return async (req, res) => {
             try {
+                // for test purposes
+                if (!AppConfig.config.NEED_CHECK_AUTH) {
+                    return;
+                }
                 const cookie = req.cookies[AuthController.COOKIE_NAME];
                 // -1 is set to cookie when user exits from account. It's because there is no way to delete the cookie
                 if (!cookie || cookie === '-1') {
