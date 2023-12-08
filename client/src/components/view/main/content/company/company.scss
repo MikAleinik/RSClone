@@ -1,0 +1,9 @@
+.user__star {
+    display: flex;
+}
+.user__star-item {
+    width: 1.2rem;
+}
+.star_active{
+	background: $background-color-accent;
+}

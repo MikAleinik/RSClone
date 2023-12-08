@@ -1,0 +1,46 @@
+.auth {
+    grid-area: auth;
+    background: $background-color-dark;
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 1rem;
+}
+
+.auth__login {
+    background: #9cb9bd;
+}
+
+.auth__registration {
+    background: #85685f;
+}
+
+.auth__name {
+    visibility: hidden;
+}
+
+.auth__name_visible {
+    visibility: visible;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    &::before{
+        content: ' ';
+        display: inline-block;
+        width: 2rem;
+        height: 2rem;
+        background-image: url(../../../../assets/icons/user.png);
+        background-size: contain;
+        margin-right: 1rem;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .auth {
+        padding: 1rem 0;
+    }
+}

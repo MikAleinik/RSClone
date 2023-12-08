@@ -1,0 +1,25 @@
+.window-auth__wrapper {
+    @include shadow;
+}
+
+.window-auth {
+    @include modal_window;
+}
+
+.window-auth__row-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.window-auth__field {
+    @include input_border;
+    width: 20rem;
+    text-align: center;
+}
+
+.window-auth__field_invalid {
+    border: .1rem solid $border-color-error;
+}

@@ -1,0 +1,22 @@
+.footer {
+    grid-area: footer;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    background: $background-color_dark;
+}
+
+.footer__item {
+    display: flex;
+    align-items: center;
+
+    img {
+        height: 2rem;
+        padding: 0 .1rem;
+    }
+}
+@media screen and (max-width: 640px){
+    .footer {
+        gap: 2rem;
+    }
+}

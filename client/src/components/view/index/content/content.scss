@@ -1,0 +1,68 @@
+.index {
+    grid-template-areas:
+        'header nav auth'
+        'main main main'
+        'footer footer footer';
+
+    main {
+      height: 100%;
+      padding: 0;
+    }
+    header,
+    nav,
+    .auth {
+        background: $background-color-light;
+    }
+
+    footer {
+        background: $background-color-middle;
+    }
+
+    main {
+        display: flex;
+        gap: 1rem;
+    }
+
+    aside {
+        display: none;
+    }
+}
+
+.promo {
+    background-image: url('../../../../assets/images/backgroung-trucks.webp');
+    background-clip: border-box;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    
+    width: auto;
+    color: $font-color-light;
+    font-size: $font-size-big;
+    padding: 2rem;
+    
+    h3 {
+        text-align: center;
+    }
+    ul {
+        margin: 0 auto;
+        width: 70%;
+        min-height: 30rem;
+        background: $background-color-ultra-light;
+        padding: 2rem 4rem;
+        color: $font-color-dark;
+        border-radius: 1rem;
+        font-size: $font-size-big;
+
+        li {
+            margin: 1.5rem .5rem;
+        }
+    }
+}
+
+@media screen and (max-width: 640px){
+    .promo {    
+        ul {
+            min-height: 20rem;
+        }
+    }
+}
